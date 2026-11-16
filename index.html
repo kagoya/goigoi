@@ -1136,10 +1136,20 @@
       #mojiRows .narabe-cell-circle.on {
         background: color-mix(in srgb, #ffd94d 45%, var(--card)); border-color: #f5b301; color: #8a6d1f;
       }
-      /* 五十音ならべの行えらび表: あ行〜な行の塊と は行〜わ行の塊を切り替えるタブ。
-         見た目は ひらがな／カタカナ切り替え（.nazori-tabs）とそろえる */
-      #mojiRows .narabe-block-tabs { margin-bottom: 8px; }
-      #mojiRows .narabe-block-tabs button { padding: 8px 14px; font-size: 15px; }
+      /* 五十音ならべの行えらび表: あ行〜な行の塊と は行〜わ行の塊の切り替えは、
+         塊名のタブではなく、表の左端・右端に置いた矢印ボタンで行う。
+         表（.nazori-table）は右端が あ行の row-reverse 並びなので、
+         右の矢印が あ行側の塊、左の矢印が わ行側の塊に対応する。
+         矢印は表の高さいっぱいに伸ばし、子供が押しやすい大きさにする */
+      #mojiRows .narabe-table-wrap { display: flex; align-items: stretch; gap: 6px; max-width: 680px; margin: 0 auto; }
+      #mojiRows .narabe-table-wrap .nazori-table { flex: 1 1 auto; min-width: 0; max-width: none; margin: 0; }
+      #mojiRows .narabe-arrow {
+        flex: 0 0 auto; min-width: 54px; min-height: 56px; padding: 4px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 14px; border: 2px solid var(--line); background: var(--card);
+        font-size: 26px; font-weight: 800; color: var(--accent-text); box-shadow: var(--shadow); line-height: 1;
+      }
+      #mojiRows .narabe-arrow:disabled { opacity: 0.3; box-shadow: none; }
       /* ===== ことばたんけん ===== */
       .tanken-tray {
         display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center;
@@ -13764,7 +13774,7 @@
          列が縦並びで右端が あ行、各列は上から あいうえお。表の1列が そのまま
          練習する「行」に対応する）。表全体は一度に出さず、塊A（あ・か・さ・
          た・な行）と塊B（は・ま・や・ら・わ行と ん）の2つの塊に分けて、
-         上のタブで切り替えて表示する（濁点の表は行数が少ないので塊には
+         表の左端・右端の矢印で切り替えて表示する（濁点の表は行数が少ないので塊には
          分けず従来どおり全部出す）。ただし文字を全部は見せず、各行で文字が
          見えるのは最初の字だけ。それ以外のマスは「○」で示し（文字は出さない）、
          押せるのは最初の字だけ: 最初の字をタップすると その行を選ぶ。
@@ -13805,34 +13815,38 @@
         var box = document.getElementById("mojiRows");
         box.innerHTML = "";
         var rows = narabeRows();
+        /* 塊の切り替えは塊名のボタンではなく、表の左端・右端に置く矢印で行う。
+           表は右端が あ行の並びなので、右端の矢印（▶）が塊A（あ・か・さ・た・な）、
+           左端の矢印（◀）が塊B（は・ま・や・ら・わ・ん）に対応する。
+           塊は2つだけなので、いま見ている側の矢印は押せなくし、
+           反対側の矢印を押すともう一方の塊に切り替わる。塊を切り替えても、
+           並べかけの行や状態はそのまま（行は表の中の最初の字で選ぶ） */
+        var wrap = null, arrowL = null, arrowR = null;
         if (!narabeDakuOn) {
-          /* 塊の切り替えタブ: タブの文字は各行の最初の字から作るので、
-             カタカナ表示中はタブもカタカナになる。塊を切り替えても、
-             並べかけの行や状態はそのまま（行はタブの中の最初の字で選ぶ）。
-             タブの左右は五十音表の列の並び（右端が あ行）に合わせて、
-             左に塊B（は・ま・や・ら・わ・ん）、右に塊A（あ・か・さ・た・な）を置く */
-          var tabs = document.createElement("div");
-          tabs.className = "nazori-tabs narabe-block-tabs";
-          tabs.setAttribute("role", "group");
-          tabs.setAttribute("aria-label", "五十音表の かたまりを きりかえる");
-          [1, 0].forEach(function (blk) {
+          wrap = document.createElement("div");
+          wrap.className = "narabe-table-wrap";
+          function narabeBlockLabel(blk) {
             var labelRis = blk === 0 ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9];
             var label = labelRis.map(function (ri) { return narabeDispChar(rows[ri].chars[0]); }).join("・");
             if (blk === 1) label += "・" + narabeDispChar("ん");
-            var tb = document.createElement("button");
-            tb.type = "button";
-            tb.textContent = label;
-            if (blk === narabeBlock) tb.className = "on";
-            tb.setAttribute("aria-pressed", blk === narabeBlock ? "true" : "false");
-            tb.setAttribute("aria-label", label + "の かたまりを みる");
-            tb.addEventListener("click", function () {
+            return label;
+          }
+          function narabeMakeArrow(blk, glyph) {
+            var ab = document.createElement("button");
+            ab.type = "button";
+            ab.className = "narabe-arrow";
+            ab.textContent = glyph;
+            ab.setAttribute("aria-label", narabeBlockLabel(blk) + "の かたまりを みる");
+            if (blk === narabeBlock) ab.disabled = true;
+            ab.addEventListener("click", function () {
               if (narabeBlock === blk) return;
               narabeBlock = blk;
               narabeRenderRows();
             });
-            tabs.appendChild(tb);
-          });
-          box.appendChild(tabs);
+            return ab;
+          }
+          arrowL = narabeMakeArrow(1, "◀");
+          arrowR = narabeMakeArrow(0, "▶");
         }
         var table = document.createElement("div");
         table.className = "nazori-table";
@@ -13872,7 +13886,14 @@
           });
           table.appendChild(colEl);
         });
-        box.appendChild(table);
+        if (wrap) {
+          wrap.appendChild(arrowL);
+          wrap.appendChild(table);
+          wrap.appendChild(arrowR);
+          box.appendChild(wrap);
+        } else {
+          box.appendChild(table);
+        }
       }
       function narabeRender(msg) {
         var row = narabeCurrentRow();
