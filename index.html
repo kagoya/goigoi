@@ -1106,6 +1106,21 @@
       @media (prefers-reduced-motion: reduce) { #nazoriSvg .guide.retry { animation: none; } }
       .nazori-step { text-align: center; font-weight: 800; font-size: 15px; color: var(--accent-text); margin-top: 10px; min-height: 1.4em; }
       .nazori-credit { text-align: center; font-size: 11.5px; color: var(--sub); margin: 14px auto 0; max-width: 620px; }
+      /* なぞる場所への移動: 一覧で文字を選ぶと見出しまで自動スクロールし、
+         なぞり終わったあとは下の3ボタンで 前後移動／一覧へ戻れるようにする。
+         前後の移動ではスクロールしないので、なぞる場所から画面は動かない。 */
+      #nazoriHeading, #nazoriTabs { scroll-margin-top: 84px; }
+      .nazori-nav { display: flex; gap: 8px; justify-content: center; margin-top: 14px; }
+      .nazori-nav button {
+        flex: 1 1 0; min-width: 0; min-height: 52px; padding: 10px 6px; border-radius: 999px;
+        border: 2px solid var(--line); background: var(--card);
+        font-weight: 800; font-size: 15.5px; box-shadow: var(--shadow); white-space: nowrap;
+      }
+      .nazori-nav button.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+      .nazori-nav button:active { transform: scale(0.96); }
+      @media (max-width: 420px) {
+        .nazori-nav button { font-size: 13.5px; padding: 10px 3px; }
+      }
       /* ===== おととことば ===== */
       .oto-cats { display: flex; gap: 8px; justify-content: center; margin: 0 auto 12px; flex-wrap: wrap; max-width: 620px; }
       .oto-cats button {
@@ -1940,7 +1955,7 @@
         <button id="nazoriClose" class="play-close" type="button">🏠 ホームへ もどる</button>
       </div>
       <div class="play-stage">
-        <div class="nazori-tabs" role="group" aria-label="ひらがなと カタカナと すうじの きりかえ">
+        <div id="nazoriTabs" class="nazori-tabs" role="group" aria-label="ひらがなと カタカナと すうじの きりかえ">
           <button id="nazoriTabHira" type="button" class="on" aria-pressed="true">あ ひらがな</button>
           <button id="nazoriTabKata" type="button" aria-pressed="false" hidden>ア カタカナ</button>
           <button id="nazoriTabNum" type="button" aria-pressed="false">1 すうじ</button>
@@ -1960,11 +1975,15 @@
         </svg>
         <div id="nazoriStep" class="nazori-step" aria-live="polite"></div>
         <p id="nazoriStatus" class="play-msg" aria-live="polite"></p>
+        <div class="nazori-nav" role="group" aria-label="もじの いどう">
+          <button id="nazoriPrevBtn" type="button" aria-label="まえの もじへ いく">‹ まえの もじ</button>
+          <button id="nazoriPickBtn" type="button" aria-label="もじの いちらんへ もどる">もじを えらぶ</button>
+          <button id="nazoriNextBtn" class="primary" type="button" aria-label="つぎの もじへ いく">つぎの もじ ›</button>
+        </div>
         <div class="play-btns">
           <button id="nazoriHearBtn" type="button">🔊 きく</button>
           <button id="nazoriDemoBtn" type="button">▶ おてほん</button>
           <button id="nazoriResetBtn" type="button">🔄 もういちど</button>
-          <button id="nazoriNextBtn" class="primary" type="button">つぎの もじ ›</button>
         </div>
       </div>
       <p class="bed-note">ばんごうの じゅんばんに、ゆびで おてほんの せんを なぞってね。すこし ずれても だいじょうぶ。おてほんから おおきく はなれた ときは、もういちど なぞってね。さいごまで なぞれたら はなまるだよ。</p>
@@ -3390,15 +3409,15 @@
          本人の意思でない「オフ」が残っていることがある。そのため、大人が
          バッジを明示的に切り替えた記録（firstBadgeChoice）が無い保存データでは、
          保存値にかかわらずオンとして扱い直す（下の v2 復元部を参照）。 */
-      var FEATURE_SIMPLE = { rensou: 1, mission: 1, quiz: 0, sentence: 0, map: 0, today: 1, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 1, nazori: 1, oto: 1, tanken: 0, moji: 1 };
+      var FEATURE_SIMPLE = { rensou: 1, mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 1, nazori: 1, oto: 1, tanken: 0, moji: 1 };
       var FEATURE_FULL = { rensou: 1, mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1, nazori: 1, oto: 1, tanken: 1, moji: 1 };
       /* デフォルト（初期状態・「デフォルトに戻す」の戻し先）: FEATURE_SIMPLE が
          そのままそれにあたる。ホームに並ぶ遊びで初期オンなのは、れんそう・
          しりとり・もじあそび・おととことば・なぞりがき の5つだけ。
          それ以外の遊び（クイズ・ことばたんけん・かずあそび等）は初期オフ。
-         機能側の初期値は従来どおりで、おだい（mission）と今日の言葉（today）は
-         デフォルトでオン: この2つは盤面専用ではなく、ホーム表示＋全ての遊びの
-         図鑑登録で達成が進むため。
+         おだい（mission）と今日の言葉（today）はデフォルトでオフ: この2つは
+         盤面専用ではなく、ホーム表示＋全ての遊びの図鑑登録で達成が進む機能だが、
+         初期状態では出さず、大人用設定でオンにしたときだけ使う。
          れんそう（rensou）は後から追加した項目で、古い保存データには値が無い。
          その場合は初期値（オン）のままになる＝今まで常に出ていた盤面が
          そのまま出る。既存ユーザーの保存済みの個別設定は初期化しない。 */
@@ -8255,10 +8274,35 @@
         nazoriUpdateGuides();
         if (resetMsg !== false) document.getElementById("nazoriStatus").textContent = "";
       }
-      function nazoriSetChar(c, sayIt) {
+      /* なぞりがき画面（#nazoriEl）の中だけをスクロールして target を
+         上の方（固定ヘッダーの下）へ持ってくる。外のページは動かさない。
+         端末の「動きを減らす」設定のときはアニメーションなしで移動する。 */
+      function nazoriScrollToEl(target) {
+        if (!target || !nazoriEl) return;
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var behavior = reduce ? "auto" : "smooth";
+        function doScroll() {
+          if (nazoriEl.hidden) return;
+          var cRect = nazoriEl.getBoundingClientRect();
+          var tRect = target.getBoundingClientRect();
+          var top = nazoriEl.scrollTop + (tRect.top - cRect.top) - 84;
+          nazoriEl.scrollTo({ top: Math.max(0, top), behavior: behavior });
+        }
+        /* 描き直し直後はレイアウトが落ち着くまで2フレーム待つ */
+        if (typeof requestAnimationFrame === "function") {
+          requestAnimationFrame(function () { requestAnimationFrame(doScroll); });
+        } else doScroll();
+      }
+      function nazoriScrollToTrace() { nazoriScrollToEl(document.getElementById("nazoriHeading")); }
+      function nazoriScrollToList() { nazoriScrollToEl(document.getElementById("nazoriTabs")); }
+      /* stay=true のときはスクロールしない（前後の移動用:
+         なぞる場所にいるまま文字だけ切り替える）。
+         一覧で選んだとき（stay なし）は、なぞる場所まで自動スクロールする。 */
+      function nazoriSetChar(c, sayIt, stay) {
         nazoriChar = c;
         nazoriRender();
         if (sayIt) nazoriSpeakCurrent();
+        if (!stay) nazoriScrollToTrace();
       }
       function nazoriSyncTabs() {
         var allowed = nazoriKataAllowed();
@@ -8425,7 +8469,15 @@
       document.getElementById("nazoriNextBtn").addEventListener("click", function () {
         var seq = nazoriSeq();
         var i = seq.indexOf(nazoriChar);
-        nazoriSetChar(seq[(i + 1) % seq.length], true);
+        nazoriSetChar(seq[(i + 1) % seq.length], true, true);
+      });
+      document.getElementById("nazoriPrevBtn").addEventListener("click", function () {
+        var seq = nazoriSeq();
+        var i = seq.indexOf(nazoriChar);
+        nazoriSetChar(seq[(i - 1 + seq.length) % seq.length], true, true);
+      });
+      document.getElementById("nazoriPickBtn").addEventListener("click", function () {
+        nazoriScrollToList();
       });
       document.getElementById("nazoriDemoBtn").addEventListener("click", function () {
         if (nazoriAnim || !nazoriPaths.length) return;
