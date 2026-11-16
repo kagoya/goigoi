@@ -13808,12 +13808,14 @@
         if (!narabeDakuOn) {
           /* 塊の切り替えタブ: タブの文字は各行の最初の字から作るので、
              カタカナ表示中はタブもカタカナになる。塊を切り替えても、
-             並べかけの行や状態はそのまま（行はタブの中の最初の字で選ぶ） */
+             並べかけの行や状態はそのまま（行はタブの中の最初の字で選ぶ）。
+             タブの左右は五十音表の列の並び（右端が あ行）に合わせて、
+             左に塊B（は・ま・や・ら・わ・ん）、右に塊A（あ・か・さ・た・な）を置く */
           var tabs = document.createElement("div");
           tabs.className = "nazori-tabs narabe-block-tabs";
           tabs.setAttribute("role", "group");
           tabs.setAttribute("aria-label", "五十音表の かたまりを きりかえる");
-          [0, 1].forEach(function (blk) {
+          [1, 0].forEach(function (blk) {
             var labelRis = blk === 0 ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9];
             var label = labelRis.map(function (ri) { return narabeDispChar(rows[ri].chars[0]); }).join("・");
             if (blk === 1) label += "・" + narabeDispChar("ん");
