@@ -286,6 +286,41 @@
         padding: 6px 8px;
       }
       .ztabs button.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+      /* 図鑑の見せ方切り替え（子供が自分で押す大きなボタン） */
+      .zview { display: flex; gap: 8px; max-width: 760px; margin: 0 auto 10px; align-items: stretch; }
+      .zview .zview-label { display: flex; align-items: center; font-weight: 800; font-size: 15px; color: var(--sub); padding: 0 2px; flex: none; }
+      .zview button {
+        flex: 1;
+        min-height: 56px;
+        border-radius: 18px;
+        border: 2px solid var(--line);
+        background: var(--card);
+        box-shadow: var(--shadow);
+        font-weight: 800;
+        font-size: 18px;
+        padding: 8px 10px;
+      }
+      .zview button .zv-em { font-size: 24px; }
+      .zview button.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+      .zview button:active { transform: scale(0.97); }
+      /* カード表示: 1つ1つがカードになり、絵が大きく出るグリッド */
+      #zukan.cardview .zgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 12px; }
+      .zchip.card {
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 8px 12px;
+        border-radius: 20px;
+        position: relative;
+        text-align: center;
+      }
+      .zchip.card .em { font-size: 72px; line-height: 1.15; }
+      .zchip.card .zimg { width: 118px; height: 118px; border-radius: 16px; }
+      .zchip.card .ztx { font-size: 20px; }
+      .zchip.card .znum { position: absolute; top: 8px; left: 8px; }
+      .zchip.card .zplay { width: 48px; height: 48px; font-size: 18px; }
+      .zchip.card .favbtn, .zchip.card .stickerbtn { width: 44px; height: 44px; font-size: 19px; }
+      .zacts { display: flex; gap: 8px; align-items: center; justify-content: center; margin-top: 4px; flex-wrap: wrap; }
       #zukanSearchWrap { max-width: 760px; margin: 0 auto 10px; }
       #zukanSearch {
         width: 100%;
@@ -541,8 +576,19 @@
       .bighead .bh-cnt { margin-left: auto; font-size: 13px; color: var(--sub); font-weight: 800; }
       .bighead.done { border-color: #f5b301; background: color-mix(in srgb, #ffd94d 28%, var(--card)); }
       .bighead .progbar { margin-top: 8px; }
-      .stamp-banner { background: #e3f0fb; color: #17507e; border: 2px solid #7fb6d9; border-radius: 14px; padding: 8px 14px; font-weight: 800; font-size: 15px; text-align: center; margin: 6px 0 10px; }
-      :root.night .stamp-banner { background: #274b66; color: #d8ecfa; border-color: #5b93bd; }
+      /* 図鑑側のスタンプ表示も、子供用きろくのスタンプと見た目をそろえる:
+         青インク・二重の枠（太い外枠＋細い内枠）・少し傾けて押した感じ。 */
+      .stamp-banner {
+        display: block; width: fit-content; max-width: 100%; margin: 10px auto 12px;
+        transform: rotate(-2.2deg);
+        background: color-mix(in srgb, #2e6da8 7%, var(--card)); color: #17507e;
+        border: 3px solid #2e6da8; border-radius: 12px;
+        outline: 1.6px solid rgba(46, 109, 168, 0.7); outline-offset: -8px;
+        padding: 13px 22px; font-weight: 800; font-size: 15.5px; text-align: center;
+        box-shadow: 0 0 3px rgba(46, 109, 168, 0.4), var(--shadow);
+        text-shadow: 0 0 1px currentColor;
+      }
+      :root.night .stamp-banner { background: color-mix(in srgb, #8fc3ec 12%, var(--card)); color: #bfe0f7; border-color: #8fc3ec; outline-color: rgba(143, 195, 236, 0.7); box-shadow: 0 0 3px rgba(143, 195, 236, 0.4), var(--shadow); }
       .map-big-title { max-width: 760px; margin: 16px auto 8px; font-size: 18px; font-weight: 800; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
       .map-big-title .cnt { font-size: 13px; color: var(--sub); font-weight: 700; }
       #celSub { font-size: 15px; font-weight: 800; color: var(--accent-text); margin-top: 2px; min-height: 1.2em; }
@@ -858,6 +904,18 @@
       #saveWarn, #saveBlocked { color: #c0392b; font-weight: 800; font-size: 13.5px; line-height: 1.6; }
       .custom-photo-preview { max-width: 120px; max-height: 120px; border-radius: 14px; margin-top: 8px; display: block; object-fit: cover; }
       .custom-item .cimg2 { width: 36px; height: 36px; object-fit: cover; border-radius: 10px; flex: none; }
+      /* ===== 言葉の絵の差し替え（写真） ===== */
+      .photo-thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 12px; flex: none; }
+      .photo-thumb-lg { width: 104px; height: 104px; object-fit: cover; border-radius: 20px; display: block; }
+      .photo-cur-emoji { font-size: 84px; line-height: 1.15; display: block; }
+      .photo-editor-box { background: var(--bg); border: 2px solid var(--line); border-radius: 18px; padding: 14px; margin-top: 12px; }
+      .photo-editor-head { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+      .photo-editor-name { font-size: 22px; font-weight: 800; }
+      .photo-editor-meta { color: var(--sub); font-size: 13px; font-weight: 700; margin-top: 2px; line-height: 1.5; }
+      .photo-badge { display: inline-block; font-size: 11.5px; font-weight: 800; color: var(--accent-text); border: 2px solid var(--accent); border-radius: 999px; padding: 1px 8px; flex: none; }
+      .report-chip .cimg { width: 24px; height: 24px; object-fit: cover; border-radius: 7px; flex: none; }
+      .kazu-item img { width: 46px; height: 46px; object-fit: cover; border-radius: 12px; display: block; }
+      .feat-name .photo-thumb { width: 30px; height: 30px; border-radius: 8px; vertical-align: -8px; margin-right: 6px; }
       #endSignal {
         position: fixed; left: 50%; top: 14px; transform: translateX(-50%);
         z-index: 95; width: min(92vw, 460px);
@@ -1317,17 +1375,91 @@
         background: color-mix(in srgb, var(--card) 82%, transparent);
         border-radius: 999px; padding: 0 0.35em; white-space: nowrap; max-width: 96%; margin-top: 3px;
       }
-      .ck-stamps { display: flex; flex-direction: column; gap: 8px; }
+      /* もらったスタンプ: 本物のスタンプ（はんこ）を押したような見た目にする。
+         丸い形・二重の輪（太い外枠＋細い内枠）・階級ごとのインク色・
+         少し傾けて押した感じ・輪郭のにじみ（ぼかした輪）をCSSだけで付ける。
+         中身は「印（🏅👑🏆）＋分野の絵と名前＋ぜんぶ あつめたよ！」。
+         並んだときの傾きは順番ごとに変えて、押した手触りを出す。 */
+      .ck-stamps { display: flex; flex-wrap: wrap; gap: 16px 14px; justify-content: center; padding: 10px 2px 6px; }
       .ck-stamp {
-        display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
-        min-height: 56px; padding: 8px 14px; border-radius: 18px;
-        border: 2px solid var(--line); background: var(--card); box-shadow: var(--shadow);
-        font-weight: 800; font-size: 17px; color: var(--ink);
+        --stamp-ink: #2e6da8;
+        --tilt: -3deg;
+        position: relative;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+        width: clamp(136px, 42vw, 158px); aspect-ratio: 1 / 1; flex: none;
+        padding: 18px 16px; border-radius: 50%;
+        border: 3.5px solid var(--stamp-ink);
+        background: radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--stamp-ink) 11%, var(--card)), color-mix(in srgb, var(--stamp-ink) 4%, var(--card)) 74%);
+        box-shadow: 0 0 3px color-mix(in srgb, var(--stamp-ink) 45%, transparent), var(--shadow);
+        transform: rotate(var(--tilt));
+        font-weight: 800; text-align: center; color: var(--stamp-ink);
       }
-      .ck-stamp:active { transform: scale(0.98); }
-      .ck-stamp .ck-stamp-em { font-size: 30px; flex: none; line-height: 1.1; }
-      .ck-stamp .ck-stamp-cat { font-size: 22px; flex: none; line-height: 1.1; }
-      .ck-stamp.scope { border-color: #f5b301; background: color-mix(in srgb, #ffd94d 32%, var(--card)); font-size: 18px; }
+      .ck-stamp::before {
+        content: ""; position: absolute; inset: 6px; border-radius: 50%;
+        border: 1.6px solid var(--stamp-ink); opacity: 0.75; pointer-events: none;
+      }
+      .ck-stamp::after {
+        content: ""; position: absolute; inset: -1px; border-radius: 50%;
+        border: 2px solid var(--stamp-ink); opacity: 0.26; filter: blur(1.6px); pointer-events: none;
+      }
+      .ck-stamp:nth-child(3n+2) { --tilt: 2.6deg; }
+      .ck-stamp:nth-child(3n) { --tilt: -1.8deg; }
+      .ck-stamp:nth-child(4n) { --tilt: 3.8deg; }
+      .ck-stamp:active { transform: rotate(var(--tilt)) scale(0.95); }
+      .ck-stamp.tier-medal { --stamp-ink: #2e6da8; }
+      .ck-stamp.tier-crown { --stamp-ink: #b57e04; }
+      .ck-stamp.tier-trophy { --stamp-ink: #c93a2e; width: clamp(146px, 45vw, 170px); }
+      :root.night .ck-stamp.tier-medal { --stamp-ink: #8fc3ec; }
+      :root.night .ck-stamp.tier-crown { --stamp-ink: #f0c44e; }
+      :root.night .ck-stamp.tier-trophy { --stamp-ink: #ff8d7d; }
+      /* 「はじめて」系は緑インク、集めた数の節目は橙インクで、コンプリートと区別する */
+      .ck-stamp.tier-first { --stamp-ink: #2e8b57; }
+      .ck-stamp.tier-mile { --stamp-ink: #c2610f; }
+      :root.night .ck-stamp.tier-first { --stamp-ink: #7fd6a4; }
+      :root.night .ck-stamp.tier-mile { --stamp-ink: #f2a65e; }
+      /* 達成系（第2弾）は青緑インクで区別する */
+      .ck-stamp.tier-achv { --stamp-ink: #0e7c86; }
+      :root.night .ck-stamp.tier-achv { --stamp-ink: #7fd4dc; }
+      /* 新しいスタンプをもらった瞬間の小さなお祝い: 画面の下に、丸いスタンプが
+         「ポン」と押される見た目で短く出る。操作の邪魔をしないよう pointer-events は切る。
+         「動きを減らす」（body.rm）のときはアニメーションが止まり、静止したまま出る */
+      #stampToast {
+        position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
+        z-index: 95; pointer-events: none;
+        display: flex; align-items: center; gap: 12px;
+        background: var(--card); border: 2px solid var(--line); border-radius: 999px;
+        padding: 8px 20px 8px 10px; box-shadow: 0 10px 30px rgba(90, 60, 20, 0.3);
+        max-width: 92vw;
+      }
+      #stampToast[hidden] { display: none; }
+      .stamp-toast-circle {
+        --stamp-ink: #2e8b57;
+        position: relative; flex: none;
+        width: 58px; height: 58px; border-radius: 50%;
+        border: 3px solid var(--stamp-ink);
+        background: radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--stamp-ink) 11%, var(--card)), color-mix(in srgb, var(--stamp-ink) 4%, var(--card)) 74%);
+        display: flex; align-items: center; justify-content: center;
+        transform: rotate(-8deg);
+      }
+      .stamp-toast-circle::before { content: ""; position: absolute; inset: 4px; border-radius: 50%; border: 1.4px solid var(--stamp-ink); opacity: 0.75; }
+      .stamp-toast-circle.tier-mile { --stamp-ink: #c2610f; }
+      .stamp-toast-circle.tier-achv { --stamp-ink: #0e7c86; }
+      :root.night .stamp-toast-circle { --stamp-ink: #7fd6a4; }
+      :root.night .stamp-toast-circle.tier-mile { --stamp-ink: #f2a65e; }
+      :root.night .stamp-toast-circle.tier-achv { --stamp-ink: #7fd4dc; }
+      .stamp-toast-circle.press { animation: stampPress 0.45s ease-out; }
+      @keyframes stampPress {
+        0% { transform: scale(1.9) rotate(-20deg); opacity: 0; }
+        55% { transform: scale(0.9) rotate(-6deg); opacity: 1; }
+        100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+      }
+      #stampToastEm { font-size: 30px; line-height: 1; }
+      .stamp-toast-title { font-size: 13px; font-weight: 800; color: var(--sub); letter-spacing: 0.08em; }
+      #stampToastName { font-size: 18px; font-weight: 800; line-height: 1.25; }
+      .ck-stamp .ck-stamp-em { font-size: 36px; flex: none; line-height: 1.1; text-shadow: 0 0 1.5px currentColor; }
+      .ck-stamp .ck-stamp-name { font-size: 15.5px; line-height: 1.3; overflow-wrap: anywhere; text-shadow: 0 0 1px currentColor; }
+      .ck-stamp .ck-stamp-cat { font-size: 16px; }
+      .ck-stamp .ck-stamp-sub { font-size: 10.5px; letter-spacing: 0.12em; opacity: 0.85; margin-top: 3px; text-shadow: 0 0 1px currentColor; }
       .ck-garden-specials { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 10px; font-size: 30px; line-height: 1.25; }
       .ck-more { text-align: center; color: var(--sub); font-weight: 700; font-size: 14px; margin: 10px auto 0; line-height: 1.6; }
       /* ===== アクセシビリティ（音と動き・タップ領域・フォーカス・色だけに頼らない表示） =====
@@ -1569,19 +1701,32 @@
           <button id="furiganaOff" class="on" type="button">ふりがな オフ</button>
           <button id="furiganaOn" type="button">ふりがな オン</button>
         </div>
-        <p class="adult-note" style="margin-top:12px;">カードに分野名を表示： 盤面のカードの左上に、その言葉の分野（「うごき」「ようす」など）を小さく表示します。分野が色だけでなく文字でも分かるようにするための表示です。はじめはオフで、オンにしたときだけ表示されます。オフのときも、読み上げソフト向けの案内（カードの説明文）には分野名が残ります。変更はすぐに盤面に反映されます。</p>
+        <p class="adult-note" style="margin-top:12px;">カードに分野名を表示： 盤面のカードの左上に、その言葉の分野（「うごき」「ようす」など）を小さく表示します。分野が色だけでなく文字でも分かるようにするための表示です。初めはオフで、オンにしたときだけ表示されます。オフのときも、読み上げソフト向けの案内（カードの説明文）には分野名が残ります。変更はすぐに盤面に反映されます。</p>
         <div class="seg" role="group" aria-label="カードに分野名を表示するかの切り替え">
           <button id="catLabelOff" class="on" type="button" aria-pressed="true">分野名 オフ</button>
           <button id="catLabelOn" type="button" aria-pressed="false">分野名 オン</button>
         </div>
       </div>
       <div class="adult-card">
+        <h2>なぞりがきの判定</h2>
+        <p class="adult-note">「なぞりがき」で、なぞった線をどこまで細かく見るかを選べます。オンにした項目だけを判定します。合わなかった線は失敗にはせず、項目に合った案内を出して、その線だけ書き直せるようにします（ほかの線や、完成したときのほめ方は変わりません）。オフにした項目は一切判定しません。設定は保存され、バックアップにも含まれます。</p>
+        <div class="vocab-opts" role="group" aria-label="なぞりがきの判定レベル">
+          <button type="button" class="preset-opt nz-level" data-nlv="1">レベル1</button>
+          <button type="button" class="preset-opt nz-level" data-nlv="2">レベル2</button>
+          <button type="button" class="preset-opt nz-level" data-nlv="3">レベル3</button>
+          <button type="button" class="preset-opt nz-level" data-nlv="4">レベル4</button>
+          <button type="button" class="preset-opt nz-level" data-nlv="5">レベル5</button>
+        </div>
+        <p class="adult-note">レベル1＝画数だけ／レベル2＝画数＋書き順／レベル3＝画数＋書き順＋向き／レベル4＝画数＋書き順＋向き＋形／レベル5＝全部（正確な形も）。初めはレベル4になっています。レベルを選んだあとも、下の項目は1つずつ変えられます（その場合はレベル表示は消えます）。</p>
+        <div id="nazoriJudgeList"></div>
+      </div>
+      <div class="adult-card">
         <h2>読み上げの速さ</h2>
         <p class="adult-note">声の読み上げの速さを選べます。カードの言葉、文、まねっこのお手本、おやすみ前の振り返り再生のすべてに反映されます。</p>
         <div class="seg" role="group" aria-label="読み上げの速さ">
           <button id="rateSlow" class="on" type="button">ゆっくり</button>
-          <button id="rateNormal" type="button">ふつう</button>
-          <button id="rateFast" type="button">はやい</button>
+          <button id="rateNormal" type="button">普通</button>
+          <button id="rateFast" type="button">速い</button>
         </div>
       </div>
       <div class="adult-card">
@@ -1591,7 +1736,7 @@
       </div>
       <div class="adult-card">
         <h2>音と動き</h2>
-        <p class="adult-note">効果音は、カードをタップしたときや、お祝いのとき、正解したときに出る短い音です。読み上げの声とは別に、効果音だけを消せます。「動きを減らす」をオンにすると、紙吹雪やカードが飛び出すアニメーションなどの動きが止まります。お祝いの表示そのものは、絵と文字の静止した形でそのまま出ます。はじめて開いたときの「動きを減らす」は、端末の「視差効果を減らす／動きを減らす」設定に合わせてあります。どちらの設定も保存され、バックアップにも含まれます。</p>
+        <p class="adult-note">効果音は、カードをタップしたときや、お祝いのとき、正解したときに出る短い音です。読み上げの声とは別に、効果音だけを消せます。「動きを減らす」をオンにすると、紙吹雪やカードが飛び出すアニメーションなどの動きが止まります。お祝いの表示そのものは、絵と文字の静止した形でそのまま出ます。初めて開いたときの「動きを減らす」は、端末の「視差効果を減らす／動きを減らす」設定に合わせてあります。どちらの設定も保存され、バックアップにも含まれます。</p>
         <p class="report-h">効果音</p>
         <div class="seg" role="group" aria-label="効果音の切り替え">
           <button id="sfxOff" type="button" aria-pressed="false">効果音 オフ</button>
@@ -1599,17 +1744,17 @@
         </div>
         <p class="report-h">動きを減らす</p>
         <div class="seg" role="group" aria-label="動きを減らすの切り替え">
-          <button id="motionOff" class="on" type="button" aria-pressed="true">動き ふつう</button>
+          <button id="motionOff" class="on" type="button" aria-pressed="true">動き 普通</button>
           <button id="motionOn" type="button" aria-pressed="false">動きを減らす オン</button>
         </div>
       </div>
       <div class="adult-card">
         <h2>画面の明るさ（ナイトモード）</h2>
-        <p class="adult-note">背景やカードなどの色の明るさを選べます。色は端末やブラウザのダークモード設定ではなく、この設定だけで決まるので、パソコンでもスマートフォンでも同じ見え方になります。「じかんで じどう」は、夕方18:00から翌朝6:00までが「よる（暗い表示）」、それ以外の時間帯は「ひる（明るい表示）」になり、ページを開いたまま境界の時刻を過ぎても自動で切り替わります。設定は保存され、バックアップにも含まれます。</p>
+        <p class="adult-note">背景やカードなどの色の明るさを選べます。色は端末やブラウザのダークモード設定ではなく、この設定だけで決まるので、パソコンでもスマートフォンでも同じ見え方になります。「時間で自動」は、夕方18:00から翌朝6:00までが「夜（暗い表示）」、それ以外の時間帯は「昼（明るい表示）」になり、ページを開いたまま境界の時刻を過ぎても自動で切り替わります。設定は保存され、バックアップにも含まれます。</p>
         <div class="seg" role="group" aria-label="ナイトモード">
-          <button id="nightDay" type="button" aria-pressed="false">☀️ ひる</button>
-          <button id="nightNight" type="button" aria-pressed="false">🌙 よる</button>
-          <button id="nightAuto" class="on" type="button" aria-pressed="true">🕐 じかんで じどう</button>
+          <button id="nightDay" type="button" aria-pressed="false">☀️ 昼</button>
+          <button id="nightNight" type="button" aria-pressed="false">🌙 夜</button>
+          <button id="nightAuto" class="on" type="button" aria-pressed="true">🕐 時間で自動</button>
         </div>
         <p id="nightNow" class="adult-now" style="margin:12px 0 0;"></p>
       </div>
@@ -1643,19 +1788,25 @@
       </div>
       <div class="adult-card">
         <h2>うちの子の言葉</h2>
-        <p class="adult-note">家族やペットの名前、好きなおもちゃなど、お子さんだけの言葉の登録と削除は、専用ページで行います。登録した言葉は、いちばんよく使う言葉（★8つ）として扱われ、言葉の数を絞っても常に出てきます。</p>
+        <p class="adult-note">家族やペットの名前、好きなおもちゃなど、お子さんだけの言葉の登録と削除は、専用ページで行います。登録した言葉は、一番よく使う言葉（★8つ）として扱われ、言葉の数を絞っても常に出てきます。</p>
         <button id="openCustomPage" class="adult-nav-btn" type="button"><span>うちの子の言葉を設定する</span><span class="chev" aria-hidden="true">›</span></button>
         <p id="customSummary" class="adult-note adult-nav-summary"></p>
       </div>
       <div class="adult-card">
+        <h2>言葉の絵を変える</h2>
+        <p class="adult-note">ゲームに収録されている言葉の絵（絵文字）を、お子さんの写真などに差し替えられます。言葉を検索して選び、写真をアップすると、自動で小さく軽くしてこのブラウザ内に保存します。差し替えた写真は、盤面・図鑑・各遊びなど、その言葉の絵が出る場所すべてに表示されます。バックアップにも含まれます。言葉ごとに元の絵文字へ戻すことも、全部まとめて戻すこともできます。「うちの子の言葉」の写真とは別の仕組みです。</p>
+        <button id="openPhotoPage" class="adult-nav-btn" type="button"><span>言葉の絵を変える</span><span class="chev" aria-hidden="true">›</span></button>
+        <p id="photoSummary" class="adult-note adult-nav-summary"></p>
+      </div>
+      <div class="adult-card">
         <h2>保護者レポート</h2>
         <p class="adult-note">このブラウザに保存されている記録から集計しています。</p>
-        <div class="backup-row"><button id="reportPrintBtn" class="adult-btn" type="button">🖨️ レポートを印刷</button><button id="albumBtn" class="adult-btn" type="button">きろくをひらく</button></div>
+        <div class="backup-row"><button id="reportPrintBtn" class="adult-btn" type="button">🖨️ レポートを印刷</button><button id="albumBtn" class="adult-btn" type="button">きろくを開く</button></div>
         <div id="reportBody"></div>
       </div>
       <div class="adult-card">
         <h2>記録のバックアップ</h2>
-        <p class="adult-note">保存データ一式（全員のプロフィールの記録、共通設定、うちの子の言葉、写真を含む）をファイルに書き出せます。機種変更やブラウザのデータ消去に備えて保存しておくと、ファイルを選んで読み込むことで元に戻せます。読み込むと、いまの保存データはファイルの内容に置き換わります。</p>
+        <p class="adult-note">保存データ一式（全員のプロフィールの記録、共通設定、うちの子の言葉とその写真、言葉の絵に差し替えた写真を含む）をファイルに書き出せます。機種変更やブラウザのデータ消去に備えて保存しておくと、ファイルを選んで読み込むことで元に戻せます。読み込むと、今の保存データはファイルの内容に置き換わります。</p>
         <div class="backup-row">
           <button id="backupExportBtn" class="adult-btn primary" type="button">⬇ ファイルに書き出す</button>
           <label class="adult-btn" for="backupFile" style="display:inline-flex;align-items:center;cursor:pointer;">⬆ ファイルを選んで読み込む</label>
@@ -1663,7 +1814,7 @@
         </div>
         <p id="backupMsg" class="custom-msg" aria-live="polite"></p>
         <div id="backupConfirm" class="reset-confirm" hidden>
-          <p id="backupConfirmText">このファイルの内容で、いまの保存データを置き換えますか？</p>
+          <p id="backupConfirmText">このファイルの内容で、今の保存データを置き換えますか？</p>
           <div class="row">
             <button id="backupDoBtn" class="reset-btn reset-do" type="button">読み込んで置き換える</button>
             <button id="backupCancelBtn" class="reset-btn" type="button">やめる</button>
@@ -1672,10 +1823,10 @@
       </div>
       <div class="adult-card">
         <h2>記録と設定のリセット</h2>
-        <p class="adult-note">いま遊んでいる子の記録（集めた言葉、お気に入りやシール、スタンプなど）と、言葉の数・文字の表示などの共通設定を、最初の状態に戻します。他の子の記録と、登録した「うちの子の言葉」は残ります。戻した記録は元に戻せません（心配なときは先にバックアップを書き出してください）。</p>
+        <p class="adult-note">今遊んでいる子の記録（集めた言葉、お気に入りやシール、スタンプなど）と、言葉の数・文字の表示などの共通設定を、最初の状態に戻します。他の子の記録と、登録した「うちの子の言葉」は残ります。戻した記録は元に戻せません（心配なときは先にバックアップを書き出してください）。</p>
         <button id="resetBtn" class="reset-btn" type="button">記録と設定をリセット</button>
         <div id="resetConfirm" class="reset-confirm" hidden>
-          <p>本当にリセットしますか？ いま遊んでいる子の記録と共通設定が消え、最初の状態に戻ります。他の子の記録と「うちの子の言葉」は残ります。</p>
+          <p>本当にリセットしますか？ 今遊んでいる子の記録と共通設定が消え、最初の状態に戻ります。他の子の記録と「うちの子の言葉」は残ります。</p>
           <div class="row">
             <button id="resetDoBtn" class="reset-btn reset-do" type="button">リセットする</button>
             <button id="resetCancelBtn" class="reset-btn" type="button">やめる</button>
@@ -1686,9 +1837,9 @@
         <h2>このゲームについて</h2>
         <p class="adult-note">「ごいごいゲーム」は、小さなお子さんが言葉に触れて、楽しみながら語彙を増やすためのゲームです。</p>
         <p class="adult-note">言葉のカードをタップすると、その言葉が声で読み上げられ、関係のある言葉が周りに並びます。気になる言葉を次々とたどっていくうちに、知っている言葉が少しずつ増えていきます。</p>
-        <p class="adult-note">クイズで別の答えを選んでも失敗にはせず、正解を一緒に確認してほめる作りです。競争もありません。言葉を見つけて図鑑に集める楽しさの中で、自分のペースで遊べます。出てくる言葉は、日常生活でよく使うものを中心に出るよう調整しています。上の設定で、言葉の数や文字の表示をお子さんに合わせて変えられます。</p>
+        <p class="adult-note">クイズで別の答えを選んでも失敗にはせず、正解を一緒に確認して褒める作りです。競争もありません。言葉を見つけて図鑑に集める楽しさの中で、自分のペースで遊べます。出てくる言葉は、日常生活でよく使うものを中心に出るよう調整しています。上の設定で、言葉の数や文字の表示をお子さんに合わせて変えられます。</p>
         <p class="credit-line">作者： @kagoya</p>
-        <p class="credit-line">バージョン 2.0</p>
+        <p class="credit-line">バージョン 2.2</p>
         <p class="credit-line">書き順データ：KanjiVG © Ulrich Apel（CC BY-SA 3.0）</p>
         <p class="credit-line">効果音（おととことば）：CC0の録音素材（Freesound等）</p>
         <p class="adult-note">このゲームは、クリエイティブ・コモンズ表示 4.0 国際ライセンス（CC BY 4.0）で公開しています。作者名を表示すれば、複製や再配布、改変もできます。ライセンスの内容は<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener">クリエイティブ・コモンズのページ</a>で確認できます。</p>
@@ -1716,7 +1867,7 @@
         </div>
       <div class="adult-card">
         <h2>うちの子の言葉を追加</h2>
-        <p class="adult-note">家族やペットの名前、好きなおもちゃ、近所の場所など、お子さんだけの言葉を登録できます。登録した言葉は図鑑の「うちの子の ことば」に入り、カードにも出てきて、タップすれば中心になって遊べます。選んだ分野の言葉が、関係のある言葉として周りに並びます。登録した言葉は、いちばんよく使う言葉（★8つ）として扱われ、言葉の数を絞っても常に出てきます。登録内容はこのブラウザ内に保存されます。</p>
+        <p class="adult-note">家族やペットの名前、好きなおもちゃ、近所の場所など、お子さんだけの言葉を登録できます。登録した言葉は図鑑の「うちの子の ことば」に入り、カードにも出てきて、タップすれば中心になって遊べます。選んだ分野の言葉が、関係のある言葉として周りに並びます。登録した言葉は、一番よく使う言葉（★8つ）として扱われ、言葉の数を絞っても常に出てきます。登録内容はこのブラウザ内に保存されます。</p>
         <div class="custom-form">
           <label for="customH">読み（ひらがな）</label>
           <input id="customH" type="text" placeholder="例：ももちゃん" autocomplete="off" />
@@ -1743,6 +1894,60 @@
         <div id="customList"></div>
       </div>
       </div>
+      <div id="adultPhotoView" hidden>
+        <div class="adult-subhead">
+          <button id="backFromPhoto" class="adult-back-btn" type="button">← 大人用設定に戻る</button>
+          <h2>言葉の絵を変える</h2>
+        </div>
+        <div class="adult-card">
+          <p class="adult-note">ゲーム収録の言葉が対象です（「うちの子の言葉」は含みません）。言葉を検索して選び、写真をアップしてください。写真は自動で小さく圧縮して（1枚あたり数十KB以下が目安）このブラウザ内に保存し、その言葉の絵が出る場所すべて（盤面カード・図鑑・各遊び・子供用きろくなど）で絵文字の代わりに表示します。言葉の文字・読み上げ・図鑑への集まり方は変わりません。差し替えは保存され、バックアップの書き出し／読み込みにも含まれます。</p>
+          <p class="report-h">言葉を検索して選ぶ</p>
+          <input id="photoSearch" class="excl-search" type="search" placeholder="言葉を検索（ひらがな・漢字）" aria-label="絵を変える言葉を検索" />
+          <div id="photoResults"></div>
+          <div id="photoEditor" class="photo-editor-box" hidden>
+            <div class="photo-editor-head">
+              <div id="photoCurPic"></div>
+              <div>
+                <div id="photoEditName" class="photo-editor-name"></div>
+                <div id="photoEditMeta" class="photo-editor-meta"></div>
+                <div id="photoEditState" class="photo-editor-meta"></div>
+              </div>
+            </div>
+            <div class="custom-form">
+              <label for="photoFile">写真をアップする（端末の写真・ファイルから選べます）</label>
+              <input id="photoFile" type="file" accept="image/*" />
+              <p id="photoPendingInfo" class="adult-note" style="margin-top:6px;" hidden></p>
+            </div>
+            <div class="backup-row" style="margin-top:10px;">
+              <button id="photoApplyBtn" class="adult-btn primary" type="button" hidden>この写真で差し替える</button>
+              <button id="photoPendingClear" class="adult-btn" type="button" hidden>写真をやめる</button>
+              <button id="photoResetBtn" class="adult-btn" type="button" hidden>デフォルトに戻す（元の絵文字）</button>
+            </div>
+            <div id="photoResetConfirm" class="reset-confirm" hidden>
+              <p>この言葉の絵を、元の絵文字に戻しますか？</p>
+              <div class="row">
+                <button id="photoResetDoBtn" class="reset-btn reset-do" type="button">戻す</button>
+                <button id="photoResetCancelBtn" class="reset-btn" type="button">やめる</button>
+              </div>
+            </div>
+            <p id="photoMsg" class="custom-msg" aria-live="polite"></p>
+          </div>
+          <p class="report-h">写真に差し替えた言葉</p>
+          <div id="photoList"></div>
+          <div id="photoResetAllBox" hidden>
+            <div class="backup-row" style="margin-top:10px;">
+              <button id="photoResetAllBtn" class="adult-btn" type="button">すべてデフォルトに戻す</button>
+            </div>
+            <div id="photoResetAllConfirm" class="reset-confirm" hidden>
+              <p>写真に差し替えた言葉を、すべて元の絵文字に戻しますか？</p>
+              <div class="row">
+                <button id="photoResetAllDoBtn" class="reset-btn reset-do" type="button">すべて戻す</button>
+                <button id="photoResetAllCancelBtn" class="reset-btn" type="button">やめる</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div id="adultExcludeView" hidden>
         <div class="adult-subhead">
           <button id="backFromExclude" class="adult-back-btn" type="button">← 大人用設定に戻る</button>
@@ -1751,9 +1956,9 @@
         <div class="adult-card">
           <p class="adult-note">分野ごとにまとめて出さなくするか、言葉を検索して1つずつ出さなくするかを選べます。除外した言葉・分野は、盤面・おだい・クイズ・今日の言葉・ピックアップに出なくなり、図鑑やマップの「あと○こ」やコンプリート判定の母数からも外れます。すでに集めた記録は消えません（除外中は数えず、戻すと数え直します）。設定は保存され、バックアップにも含まれます。</p>
           <p class="report-h">言葉を検索して選ぶ</p>
-          <input id="exclSearch" class="excl-search" type="search" placeholder="ことばを さがす（ひらがな・漢字）" aria-label="出さない言葉をさがす" />
+          <input id="exclSearch" class="excl-search" type="search" placeholder="言葉を検索（ひらがな・漢字）" aria-label="出さない言葉を検索" />
           <div id="exclResults"></div>
-          <p class="report-h">いま出していない言葉</p>
+          <p class="report-h">今出していない言葉</p>
           <div id="exclWordList"></div>
           <p class="report-h">分野で選ぶ</p>
           <div id="exclCatList" class="excl-scroll"></div>
@@ -1833,6 +2038,7 @@
       <div class="play-tabs" role="group" aria-label="かずあそびの しゅるい">
         <button id="kazuTabCount" class="on" type="button">🔢 かぞえる</button>
         <button id="kazuTabSeq" type="button">🔀 じゅんばん</button>
+        <button id="kazuTab100" type="button">💯 100まで</button>
       </div>
       <div class="play-stage">
         <p id="kazuQ" class="play-q">いくつ あるかな？</p>
@@ -2165,6 +2371,14 @@
       </div>
     </div>
 
+    <div id="stampToast" hidden role="status">
+      <div class="stamp-toast-circle" id="stampToastCircle"><span id="stampToastEm">🌱</span></div>
+      <div>
+        <div class="stamp-toast-title">スタンプ ゲット！</div>
+        <div id="stampToastName"></div>
+      </div>
+    </div>
+
     <div id="zukan" hidden role="dialog" aria-label="ずかん">
       <div id="zukanHead">
         <h1>📖 ずかん</h1>
@@ -2176,6 +2390,11 @@
       <div class="ztabs" role="group" aria-label="ずかんの きりかえ">
         <button id="tabCollected" class="on" type="button">あつめた ことば</button>
         <button id="tabAll" type="button">ぜんぶの ことば</button>
+      </div>
+      <div class="zview" role="group" aria-label="みせかたを きりかえる">
+        <span class="zview-label">みせかた</span>
+        <button id="zViewList" class="on" type="button" aria-pressed="true"><span class="zv-em">📋</span> リスト</button>
+        <button id="zViewCard" type="button" aria-pressed="false"><span class="zv-em">🃏</span> カード</button>
       </div>
       <div id="zukanProgress"></div>
       <div id="bigFilter" role="group" aria-label="なかまを えらぶ"></div>
@@ -3002,6 +3221,31 @@
           WORDS[i].e = safeEmoji(WORDS[i].e, WORDS[i].c);
         }
       })();
+      /* ===== 収録語の絵の写真差し替え =====
+         大人用設定「言葉の絵を変える」で選んだ写真を、その言葉の表示用の絵として
+         WORDS[i].img に載せる。盤面・図鑑・各遊びは「w.img があれば写真、なければ
+         絵文字 w.e」という既存の表示経路（うちの子の言葉の写真と同じ）で描くため、
+         ここで img を差し替えるだけで全ての表示場所に反映される。言葉の文字・
+         読み上げ・図鑑登録などの扱いは変えない。対象は収録語だけ（先頭
+         BUILTIN_TOTAL 語）で、カスタム語の img には触れない。保存キーは
+         読み（ひらがな）で、データ更新で番号がずれても読みで引き直す
+         （除外設定の exclWordHs と同じ考え方）。実データ（wordPhotos 本体）は
+         保存まわりの変数の並びで宣言する */
+      function applyWordPhotos() {
+        if (typeof wordPhotos === "undefined" || !wordPhotos) return;
+        var lim = (typeof BUILTIN_TOTAL === "number" && BUILTIN_TOTAL >= 0) ? Math.min(BUILTIN_TOTAL, WORDS.length) : WORDS.length;
+        for (var i = 0; i < lim; i++) {
+          var p = wordPhotos[WORDS[i].h];
+          WORDS[i].img = (typeof p === "string" && p) ? p : null;
+        }
+      }
+      function copyWordPhotos() {
+        var o = {};
+        if (typeof wordPhotos !== "undefined" && wordPhotos) {
+          for (var wk in wordPhotos) { if (Object.prototype.hasOwnProperty.call(wordPhotos, wk)) o[wk] = wordPhotos[wk]; }
+        }
+        return o;
+      }
       /* ===== 出さない言葉・分野（除外設定） =====
          大人用設定で選んだ分野・言葉を対象範囲から外す。記録自体は消さず、
          除外中は盤面等に出ず、母数（scopeCount）にも数えない。戻せば数え直す。
@@ -3374,6 +3618,8 @@
       var stampDays = {};             /* 「今日の言葉」を全部見つけた日の記録（カレンダーのスタンプ用）: "年-月-日" → 1 */
       var collectedDates = {};        /* 言葉を集めた日: 番号 → "年-月-日"（復習と保護者レポートに使う） */
       var customWords = [];           /* 大人が登録した「うちの子の言葉」: {h, d, e, cat, img?} の配列 */
+      var wordPhotos = {};            /* 収録語の絵の写真差し替え: 読み（ひらがな）→ 圧縮済み写真データ(dataURL)。「うちの子の言葉」の写真（customWords[].img）とは別の仕組み。共通設定として保存され、バックアップにも含まれる（buildSaveData の settings.wordPhotos） */
+      var BUILTIN_TOTAL = TOTAL;      /* 収録語（カスタム語を足す前）の総数。差し替えの対象は先頭 BUILTIN_TOTAL 語だけ */
       /* ===== 第2弾の追加状態 =====
          speechRate: 読み上げ速度（0.78=ゆっくり・従来相当 / 0.95=ふつう / 1.12=はやい）
          timerMin: おしまいの合図タイマー（0=なし）
@@ -3390,10 +3636,38 @@
       var voiceURI = "";        /* 選んだ日本語の声の voiceURI（空＝自動で最初の日本語の声） */
       var sfxOn = true;         /* 効果音（読み上げとは別の短い音）のオン・オフ（初期値オン） */
       var nightMode = "auto";   /* ナイトモード: "day"=ひる（いつも明るい）/ "night"=よる（いつも暗い）/ "auto"=じかんで じどう（18:00〜翌6:00 が よる）。初期値は auto。色は端末のダークモード設定には連動させず、この設定だけで決める */
+      var zukanView = "list";   /* 図鑑の見せ方: "list"=今までの横長リスト / "card"=絵が大きいカード表示。子供が図鑑画面のボタンで切り替え、共通設定として保存する（buildSaveData の settings.zukanView）。初期値は "list" */
+      /* なぞりがきの判定項目（大人用設定で項目ごとにオン・オフする。共通設定として
+         保存され、バックアップにも含まれる: buildSaveData の settings.nazoriJudge）。
+         count=かくすう / order=かきじゅん / dir=むき / shape=かたち（ゆるい形） /
+         exact=せいかくな かたち（オンのときは shape の代わりに厳しく照合する）。
+         初期値とリセット時の戻し先はレベル4相当（exact だけオフ）。 */
+      var NAZORI_CHK_DEFAULT = { count: 1, order: 1, dir: 1, shape: 1, exact: 0 };
+      var nazoriChk = { count: 1, order: 1, dir: 1, shape: 1, exact: 0 };
+      /* 判定項目の定義とレベルの組み合わせは、renderAdult が読み込みの早い段階で
+         renderNazoriJudgeUI を呼ぶため、ここ（設定変数の並び）で先に初期化する */
+      var NAZORI_CHK_DEFS = [
+        { k: "count", label: "画数", note: "お手本と同じ本数の線で書けているかを見ます。1本の線を途中で分けたり、2本分を続けて1本で書いたりしたときに案内します。" },
+        { k: "order", label: "書き順", note: "お手本の順番どおりに線を書いているかを見ます。違う線を先に書いたときに案内します。" },
+        { k: "dir", label: "向き", note: "線の書き始めから書き終わりへの向きが、お手本と合っているかを見ます。反対向きに書いたときに案内します。" },
+        { k: "shape", label: "形", note: "線の形がお手本に近いかを見ます。お手本の線から大きく外れたり、途中で終わったりしたときに案内します。" },
+        { k: "exact", label: "正確な形", note: "オンにすると、「形」の緩い判定の代わりに、線の形をお手本と細かく照合します（書き始め・書き終わりの位置も見ます）。" }
+      ];
+      var NAZORI_LEVELS = [
+        null,
+        { count: 1, order: 0, dir: 0, shape: 0, exact: 0 },
+        { count: 1, order: 1, dir: 0, shape: 0, exact: 0 },
+        { count: 1, order: 1, dir: 1, shape: 0, exact: 0 },
+        { count: 1, order: 1, dir: 1, shape: 1, exact: 0 },
+        { count: 1, order: 1, dir: 1, shape: 1, exact: 1 }
+      ];
       var reduceMotion = false; /* 動きを減らす（初期値は端末の prefers-reduced-motion に連動） */
       try { if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) reduceMotion = true; } catch (eRM0) { /* 判定できない環境では通常の動きで始める */ }
       var favPicks = {};        /* 「どっちが すき？」で選んだ回数: 番号 → 回数（プロフィールごと） */
       var saidFirst = {};
+      var stampLog = {};        /* もらったスタンプ: スタンプのキー → もらった日 "年-月-日"（プロフィールごと）。コンプリートのスタンプ（🏅👑🏆）とは別に、「はじめて」系と集めた数の節目を記録する。定義と付与の処理は「お祝い」の節（STAMP_DEFS・awardStamp・syncDerivedStamps） */
+      var playDays = {};        /* 遊んだ日: "年-月-日" → 1（プロフィールごと）。連続日数スタンプ（3日・7日）の判定に使う。一度記録した日は消さず、もらったスタンプも間が空いても消えない */
+      var achv = { nz: [], hp: [] };   /* 達成系スタンプの進み具合（プロフィールごと）: nz=なぞり終えたひらがな（文字の配列）、hp=クイズでペアにできたはんたい言葉（"読み|読み" の配列） */
       var profilesData = [];
       var profileNames = [""];
       var activeProfile = 0;
@@ -3531,8 +3805,24 @@
         if (typeof st2.sfx === "number" || typeof st2.sfx === "boolean") sfxOn = !!st2.sfx;
         if (typeof st2.motion === "number" || typeof st2.motion === "boolean") reduceMotion = !!st2.motion;
         if (st2.night === "day" || st2.night === "night" || st2.night === "auto") nightMode = st2.night;
+        if (st2.zukanView === "card" || st2.zukanView === "list") zukanView = st2.zukanView;
+        /* なぞりがきの判定: 保存に項目がある分だけ復元する（保存が無い・項目が無い
+           保存データでは初期値＝レベル4相当のまま。利用者が明示して保存した値だけが効く） */
+        if (st2.nazoriJudge && typeof st2.nazoriJudge === "object" && !Array.isArray(st2.nazoriJudge)) {
+          ["count", "order", "dir", "shape", "exact"].forEach(function (chkKey) {
+            var chkVal = st2.nazoriJudge[chkKey];
+            if (typeof chkVal === "number" || typeof chkVal === "boolean") nazoriChk[chkKey] = chkVal ? 1 : 0;
+          });
+        }
         if (Array.isArray(st2.exclCats)) exclCatNames = st2.exclCats.filter(function (n) { return typeof n === "string"; });
         if (Array.isArray(st2.exclWords)) exclWordHs = st2.exclWords.filter(function (n) { return typeof n === "string"; });
+        /* 言葉の絵の写真差し替え: 形の正しいもの（dataURL・上限サイズ内）だけ復元する */
+        if (st2.wordPhotos && typeof st2.wordPhotos === "object" && !Array.isArray(st2.wordPhotos)) {
+          Object.keys(st2.wordPhotos).forEach(function (ph) {
+            var pv = st2.wordPhotos[ph];
+            if (ph && typeof pv === "string" && pv.indexOf("data:image/") === 0 && pv.length <= 120000) wordPhotos[ph] = pv;
+          });
+        }
         rebuildExclusions();
         var prof2 = profilesData[activeProfile];
         var flat2 = {};
@@ -3583,6 +3873,9 @@
           missionSeen: (typeof missionSeen !== "undefined" && missionSeen) ? missionSeen : {},
           missionSeq: (typeof missionSeq !== "undefined" ? missionSeq : 0),
           saidFirst: (typeof saidFirst !== "undefined" && saidFirst) ? saidFirst : {},
+          stamps: (typeof stampLog !== "undefined" && stampLog) ? stampLog : {},
+          playDays: (typeof playDays !== "undefined" && playDays) ? playDays : {},
+          achv: (typeof achv !== "undefined" && achv) ? achv : { nz: [], hp: [] },
           picks: (typeof favPicks !== "undefined" && favPicks) ? favPicks : {}
         };
       }
@@ -3612,8 +3905,11 @@
             sfx: sfxOn ? 1 : 0,
             motion: reduceMotion ? 1 : 0,
             night: nightMode,
+            zukanView: zukanView,
+            nazoriJudge: { count: nazoriChk.count, order: nazoriChk.order, dir: nazoriChk.dir, shape: nazoriChk.shape, exact: nazoriChk.exact },
             exclCats: exclCatNames.slice(),
-            exclWords: exclWordHs.slice()
+            exclWords: exclWordHs.slice(),
+            wordPhotos: copyWordPhotos()
           },
           customWords: (typeof customWords !== "undefined" && customWords) ? customWords : [],
           activeProfile: activeProfile,
@@ -4044,6 +4340,7 @@
         if (typeof renderVoiceUI === "function") renderVoiceUI();
         if (typeof renderFuriganaUI === "function") renderFuriganaUI();
         if (typeof renderA11yUI === "function") renderA11yUI();
+        if (typeof renderNazoriJudgeUI === "function") renderNazoriJudgeUI();
       }
       function setVocab(n) {
         vocabLimit = n === 0 ? TOTAL : n;
@@ -4062,6 +4359,7 @@
         }
         visitSeed++;
         refreshKnownComplete();   /* 語数設定の変更では達成状態を静かに覚え直す（お祝いは出さない） */
+        syncDerivedStamps(true);   /* 範囲が広がって届くようになった節目スタンプも静かに補う */
         if (typeof buildAntoIds === "function") buildAntoIds();   /* はんたい言葉のペアも語数範囲に合わせ直す */
         if (typeof refreshShiritori === "function") refreshShiritori();   /* しりとりを開いたままなら語数範囲に合わせ直す */
         if (typeof refreshTanken === "function") refreshTanken();   /* ことばたんけんを開いたままなら語数範囲に合わせ直す */
@@ -4089,6 +4387,7 @@
       var adultFeatureView = document.getElementById("adultFeatureView");
       var adultCustomView = document.getElementById("adultCustomView");
       var adultExcludeView = document.getElementById("adultExcludeView");
+      var adultPhotoView = document.getElementById("adultPhotoView");
       function updateAdultSummaries() {
         var fs = document.getElementById("featureSummary");
         if (fs) {
@@ -4098,6 +4397,8 @@
         }
         var cs = document.getElementById("customSummary");
         if (cs) cs.textContent = customWords.length ? "現在：" + customWords.length + "語を登録中です。" : "まだ登録した言葉はありません。";
+        var ps = document.getElementById("photoSummary");
+        if (ps) { var pn = Object.keys(wordPhotos).length; ps.textContent = pn ? "現在：" + pn + "語の絵を写真に差し替え中です。" : "まだ写真に差し替えた言葉はありません。"; }
         if (typeof updateExcludeSummary === "function") updateExcludeSummary();
       }
       function showAdultView(name) {
@@ -4105,9 +4406,11 @@
         if (adultFeatureView) adultFeatureView.hidden = name !== "feature";
         if (adultCustomView) adultCustomView.hidden = name !== "custom";
         if (adultExcludeView) adultExcludeView.hidden = name !== "exclude";
+        if (adultPhotoView) adultPhotoView.hidden = name !== "photo";
         if (name === "feature" && typeof renderFeatureToggles === "function") renderFeatureToggles();
         if (name === "custom" && typeof renderCustomUI === "function") renderCustomUI();
         if (name === "exclude" && typeof renderExcludeUI === "function") renderExcludeUI();
+        if (name === "photo" && typeof renderPhotoUI === "function") renderPhotoUI();
         if (name === "main") updateAdultSummaries();
         adultPanel.scrollTop = 0;
       }
@@ -4123,6 +4426,10 @@
       if (openExcludePageBtn) openExcludePageBtn.addEventListener("click", function () { showAdultView("exclude"); });
       var backFromExcludeBtn = document.getElementById("backFromExclude");
       if (backFromExcludeBtn) backFromExcludeBtn.addEventListener("click", function () { showAdultView("main"); });
+      var openPhotoPageBtn = document.getElementById("openPhotoPage");
+      if (openPhotoPageBtn) openPhotoPageBtn.addEventListener("click", function () { showAdultView("photo"); });
+      var backFromPhotoBtn = document.getElementById("backFromPhoto");
+      if (backFromPhotoBtn) backFromPhotoBtn.addEventListener("click", function () { showAdultView("main"); });
       document.getElementById("adultBtn").addEventListener("click", function () { showAdultView("main"); });
       document.getElementById("adultClose").addEventListener("click", function () { showAdultView("main"); });
       updateAdultSummaries();
@@ -4301,6 +4608,177 @@
           celebrateTier(1, msgSmall, "🏅", "ぶんや コンプリート");
           speakLater(msgSmall);
         }
+        /* 言葉が増えたタイミングで、集めた数の節目などのスタンプも確かめる */
+        syncDerivedStamps(false);
+      }
+
+      /* ===== スタンプ（「はじめて」系と集めた数の節目） =====
+         コンプリートのスタンプ（🏅👑🏆・子供用きろくで達成状態から都度算出）とは別に、
+         初めてできたことと集めた数の節目を、「もらった日」と一緒に stampLog へ
+         記録する（プロフィールごと・保存とバックアップの対象）。
+         集めた数・はじめて集めた・はじめて言えたは既存の記録（collectedDates /
+         saidFirst）から算出できるので、読み込み時・プロフィール切替時・言葉を
+         集めたときに syncDerivedStamps で補う（昔の記録にもその場で反映される）。
+         遊びごとの「はじめて」は履歴が残っていないため、遊んだ瞬間に各遊びから
+         awardStamp を呼んで記録する。どれも「できた」だけを祝うもので、
+         失敗・競争の要素は入れない。 */
+      var STAMP_MILES = [100, 500, 1000, 5000, 10000];
+      var STAMP_DEFS = [
+        { key: "first", emoji: "🌱", name: "はじめて あつめた", sub: "はじめて できたよ！", phrase: "はじめて ことばを あつめたよ！ スタンプ ゲット！", tier: "tier-first", album: "初めて言葉を集めた" },
+        { key: "said", emoji: "🗣️", name: "はじめて いえた", sub: "はじめて できたよ！", phrase: "はじめて いえたよ！ スタンプ ゲット！", tier: "tier-first", album: "初めて言えた" },
+        { key: "nazori", emoji: "✏️", name: "はじめて なぞりがき", sub: "はじめて できたよ！", phrase: "はじめて なぞりがきで かけたよ！ スタンプ ゲット！", tier: "tier-first", album: "初めてなぞりがきで文字を書き終えた" },
+        { key: "shiri", emoji: "🔗", name: "はじめて しりとり", sub: "はじめて できたよ！", phrase: "はじめて しりとりが つながったよ！ スタンプ ゲット！", tier: "tier-first", album: "初めてしりとりがつながった" },
+        { key: "quiz", emoji: "👂", name: "はじめて クイズ", sub: "はじめて できたよ！", phrase: "はじめて クイズで せいかいしたよ！ スタンプ ゲット！", tier: "tier-first", album: "初めてクイズで正解した" },
+        { key: "oto", emoji: "🎵", name: "はじめて おととことば", sub: "はじめて できたよ！", phrase: "はじめて おととことばで そろえたよ！ スタンプ ゲット！", tier: "tier-first", album: "初めておととことばでそろえた" },
+        { key: "story", emoji: "📖", name: "はじめて おはなし", sub: "はじめて できたよ！", phrase: "はじめて おはなしを きいたよ！ スタンプ ゲット！", tier: "tier-first", album: "初めてお話を聞いた" },
+        { key: "english", emoji: "🔤", name: "はじめて えいご", sub: "はじめて できたよ！", phrase: "はじめて えいごで あそんだよ！ スタンプ ゲット！", tier: "tier-first", album: "初めて英語で遊んだ" },
+        { key: "m100", emoji: "💯", mile: 100, sub: "すごい！", phrase: "100ご あつめたよ！ スタンプ ゲット！", tier: "tier-mile", album: "100語集めた" },
+        { key: "m500", emoji: "🌟", mile: 500, sub: "すごい！", phrase: "500ご あつめたよ！ スタンプ ゲット！", tier: "tier-mile", album: "500語集めた" },
+        { key: "m1000", emoji: "⭐", mile: 1000, sub: "すごい！", phrase: "1000ご あつめたよ！ スタンプ ゲット！", tier: "tier-mile", album: "1,000語集めた" },
+        { key: "m5000", emoji: "🌠", mile: 5000, sub: "すごい！", phrase: "5000ご あつめたよ！ スタンプ ゲット！", tier: "tier-mile", album: "5,000語集めた" },
+        { key: "m10000", emoji: "🏵️", mile: 10000, sub: "すごい！", phrase: "10000ご あつめたよ！ スタンプ ゲット！", tier: "tier-mile", album: "10,000語集めた" },
+        /* ===== 達成系（第2弾）: 遊びのやりこみ・おだい/今日の言葉・続けて遊ぶ・おはなばたけ。
+           進み具合は playDays / achv / stampDays / 集めた数から判定し、一度もらったら消えない ===== */
+        { key: "shiri10", emoji: "🔟", name: "しりとり 10こ", sub: "やったね！", phrase: "しりとりで 10こ つながったよ！ スタンプ ゲット！", tier: "tier-achv", album: "しりとりで10個つながった" },
+        { key: "nazoriAll", emoji: "💮", name: "ひらがな ぜんぶ", sub: "やったね！", phrase: "ひらがな ぜんぶ かけるように なったよ！ スタンプ ゲット！", tier: "tier-achv", album: "なぞりがきでひらがな全部（71字）を書き終えた" },
+        { key: "hantaiAll", emoji: "↔️", name: "はんたい ぜんぶ", sub: "やったね！", phrase: "はんたい ことばを ぜんぶ ペアに できたよ！ スタンプ ゲット！", tier: "tier-achv", album: "はんたい言葉を全部ペアにできた" },
+        { key: "kazu100", emoji: "🔢", name: "100まで かぞえた", sub: "やったね！", phrase: "100まで かぞえたよ！ スタンプ ゲット！", tier: "tier-achv", album: "かずあそびで100まで数えた" },
+        { key: "mission1", emoji: "🎯", name: "はじめて おだい", sub: "やったね！", phrase: "はじめて おだいを たっせいしたよ！ スタンプ ゲット！", tier: "tier-achv", album: "おだい（ミッション）を初めて達成した" },
+        { key: "today10", emoji: "☀️", name: "きょうの ことば 10かい", sub: "やったね！", phrase: "きょうの ことばを 10かい おぼえたよ！ スタンプ ゲット！", tier: "tier-achv", album: "今日の言葉を10回覚えた" },
+        { key: "days3", emoji: "🌿", name: "3にち つづけて", sub: "やったね！", phrase: "3にち つづけて あそんだよ！ スタンプ ゲット！", tier: "tier-achv", album: "3日続けて遊んだ" },
+        { key: "days7", emoji: "🌳", name: "7にち つづけて", sub: "やったね！", phrase: "7にち つづけて あそんだよ！ すごい！ スタンプ ゲット！", tier: "tier-achv", album: "7日続けて遊んだ" },
+        { key: "gardenFull", emoji: "🌷", name: "おはなばたけ まんかい", sub: "やったね！", phrase: "おはなばたけが まんかいに なったよ！ スタンプ ゲット！", tier: "tier-achv", album: "おはなばたけが満開になった" }
+      ];
+      var STAMP_DEF_MAP = {};
+      STAMP_DEFS.forEach(function (sd) { STAMP_DEF_MAP[sd.key] = sd; });
+      function stampNameOf(def) { return def.mile ? (fmt(def.mile) + "ご あつめた") : def.name; }
+      /* 日付 "年-月-日"（0埋めなし）を大小比較できる数値にする */
+      function stampDateNum(ds) { var p = String(ds || "").split("-"); return (Number(p[0]) || 0) * 10000 + (Number(p[1]) || 0) * 100 + (Number(p[2]) || 0); }
+      var stampToastTimer = null;
+      /* もらった瞬間の小さなお祝い: 丸いスタンプが押される見た目＋短い言葉 */
+      function showStampToast(def) {
+        var el = document.getElementById("stampToast");
+        if (!el) return;
+        var cir = document.getElementById("stampToastCircle");
+        var em = document.getElementById("stampToastEm");
+        var nm = document.getElementById("stampToastName");
+        if (em) em.textContent = def.emoji;
+        if (nm) nm.textContent = stampNameOf(def);
+        if (cir) {
+          cir.className = "stamp-toast-circle" + (def.tier === "tier-mile" ? " tier-mile" : def.tier === "tier-achv" ? " tier-achv" : "");
+          if (!reduceMotion) { cir.classList.remove("press"); void cir.offsetWidth; cir.classList.add("press"); }
+        }
+        el.hidden = false;
+        if (stampToastTimer) clearTimeout(stampToastTimer);
+        stampToastTimer = setTimeout(function () { el.hidden = true; }, 2800);
+      }
+      function celebrateStamp(def) {
+        showStampToast(def);
+        sfx(def.mile ? "fanfare" : "good");
+        speakLater(def.phrase);
+      }
+      /* 遊びで初めてできた瞬間に呼ぶ: 今日の日付で記録して保存し、その場で小さく祝う */
+      function awardStamp(key) {
+        var def = STAMP_DEF_MAP[key];
+        if (!def || stampLog[key]) return;
+        stampLog[key] = todayKey;
+        saveState();
+        celebrateStamp(def);
+      }
+      /* ===== 達成系（第2弾）の判定に使う補助 ===== */
+      /* 日付 "年-月-日" どうしの差（日数）。連続日数の判定に使う */
+      function stampDayDiff(a, b) {
+        var pa = String(a || "").split("-"), pb = String(b || "").split("-");
+        var da = Date.UTC(Number(pa[0]) || 0, (Number(pa[1]) || 1) - 1, Number(pa[2]) || 1);
+        var db = Date.UTC(Number(pb[0]) || 0, (Number(pb[1]) || 1) - 1, Number(pb[2]) || 1);
+        return Math.round((db - da) / 86400000);
+      }
+      /* はんたい言葉の対象ペア（両語が設定した語彙数の範囲内で、除外されていないペア）のキー一覧。
+         ANTO_PAIRS の定義前（読み込みの早い段階）では null を返して判定を省く */
+      function hantaiTargetKeys() {
+        if (typeof ANTO_PAIRS === "undefined" || !ANTO_PAIRS) return null;
+        var keys = [];
+        ANTO_PAIRS.forEach(function (p) {
+          var a = IDX[p[0]], b = IDX[p[1]];
+          if (a == null || b == null || isExcluded(a) || isExcluded(b)) return;
+          if (inScope(a) && inScope(b)) keys.push(p[0] + "|" + p[1]);
+        });
+        return keys;
+      }
+      function hantaiAllDone() {
+        var t = hantaiTargetKeys();
+        if (!t || !t.length) return false;
+        for (var i = 0; i < t.length; i++) { if (achv.hp.indexOf(t[i]) < 0) return false; }
+        return true;
+      }
+      /* なぞりがきのひらがな全71字（TRACE_DATA の全キー）を書き終えたか */
+      function nazoriAllHiraDone() {
+        var all = Object.keys(window.TRACE_DATA || {});
+        if (!all.length) return false;
+        for (var i = 0; i < all.length; i++) { if (achv.nz.indexOf(all[i]) < 0) return false; }
+        return true;
+      }
+      /* おはなばたけの「満開」: いまの語彙範囲内で届く一番大きい節目（特別な飾りが
+         その範囲では全部そろう数）。範囲が一番小さい節目未満のときは 0（対象外） */
+      function gardenFullMile() {
+        if (typeof GARDEN_MILES === "undefined" || !GARDEN_MILES) return 0;
+        var cap = scopeCount(), t = 0;
+        GARDEN_MILES.forEach(function (m) { if (m <= cap) t = m; });
+        return t;
+      }
+      /* 既存の記録から算出できるスタンプ（はじめて集めた・はじめて言えた・節目）を
+         stampLog へ補う。silent=false（遊びの最中）は、新しく届いた分だけその場で
+         祝う。読み込み・切替・設定変更のときは silent=true で静かに補う */
+      function syncDerivedStamps(silent) {
+        var newDefs = [];
+        function give(key, date) {
+          if (!STAMP_DEF_MAP[key] || stampLog[key] || !date) return;
+          stampLog[key] = date;
+          newDefs.push(STAMP_DEF_MAP[key]);
+        }
+        var dateList = Object.keys(collectedDates).filter(function (k) { return collectedDates[k]; })
+          .map(function (k) { return collectedDates[k]; })
+          .sort(function (a, b) { return stampDateNum(a) - stampDateNum(b); });
+        if (dateList.length) give("first", dateList[0]);
+        var saidDates = Object.keys(saidFirst).filter(function (k) { return saidFirst[k]; })
+          .map(function (k) { return saidFirst[k]; })
+          .sort(function (a, b) { return stampDateNum(a) - stampDateNum(b); });
+        if (saidDates.length) give("said", saidDates[0]);
+        var n = collectedScopeCount(), cap = scopeCount();
+        STAMP_MILES.forEach(function (m) {
+          if (m > cap || n < m) return;   /* 設定した語彙数の範囲を超える節目は対象外 */
+          /* 日付は「その語数に届いた日」: 集めた日が分かる言葉を日付順に数えたときの
+             その語数目を集めた日。日付の分かる分が足りないときは、最後に集めた日で代用する */
+          give("m" + m, dateList.length >= m ? dateList[m - 1] : (dateList.length ? dateList[dateList.length - 1] : todayKey));
+        });
+        /* ===== 達成系（第2弾）のうち、既存の記録から算出できる分 ===== */
+        /* 遊んだ日: 今日を開いた（＝遊んだ）日として記録する。一度記録した日と
+           もらったスタンプは、間が空いても消えない */
+        var playDayAdded = false;
+        if (typeof todayKey === "string" && todayKey && !playDays[todayKey]) { playDays[todayKey] = 1; playDayAdded = true; }
+        var pdList = Object.keys(playDays).filter(function (k) { return playDays[k]; })
+          .sort(function (a, b) { return stampDateNum(a) - stampDateNum(b); });
+        var runLen = 0, prevDay = null, date3 = "", date7 = "";
+        pdList.forEach(function (ds) {
+          runLen = (prevDay && stampDayDiff(prevDay, ds) === 1) ? runLen + 1 : 1;
+          if (runLen === 3 && !date3) date3 = ds;
+          if (runLen === 7 && !date7) date7 = ds;
+          prevDay = ds;
+        });
+        if (date3) give("days3", date3);
+        if (date7) give("days7", date7);
+        /* 今日の言葉を全部見つけた日の累計が10日に届いたら（日付は10日目の日） */
+        var tdList = Object.keys(stampDays).filter(function (k) { return stampDays[k]; })
+          .sort(function (a, b) { return stampDateNum(a) - stampDateNum(b); });
+        if (tdList.length >= 10) give("today10", tdList[9]);
+        /* おはなばたけ満開: 範囲内で届く一番大きい節目まで集めたら */
+        var gMile = gardenFullMile();
+        if (gMile && n >= gMile) give("gardenFull", dateList.length >= gMile ? dateList[gMile - 1] : todayKey);
+        /* なぞりがき全ひらがな・はんたい全ペア（進み具合 achv から判定） */
+        if (nazoriAllHiraDone()) give("nazoriAll", todayKey);
+        if (hantaiAllDone()) give("hantaiAll", todayKey);
+        if (newDefs.length || playDayAdded) saveState();
+        if (!silent && newDefs.length) celebrateStamp(newDefs[newDefs.length - 1]);
       }
 
       /* ===== ぶん（言葉が文になる） ===== */
@@ -4437,6 +4915,7 @@
       function missionComplete() {
         celebrate("おだい クリア！", "🎉");
         speak("やったね！ おだい クリア！");
+        awardStamp("mission1");   /* 初めておだいを達成したらスタンプ */
         setTimeout(newMission, 1500);
       }
       function checkMission(id) {
@@ -4575,7 +5054,7 @@
         if (!features.today) return;   /* 今日の言葉がオフのときは判定もしない（その日の記録は残る） */
         if (todayIds.indexOf(id) < 0 || todayFound[id]) return;
         todayFound[id] = 1;
-        if (todayAllFound()) stampDays[todayKey] = 1;   /* カレンダーのスタンプとして残す */
+        if (todayAllFound()) { stampDays[todayKey] = 1; syncDerivedStamps(false); }   /* カレンダーのスタンプとして残す＋累計10回スタンプの判定 */
         renderToday();
         render();
         if (todayAllFound()) {
@@ -4684,6 +5163,7 @@
           celebrate("せいかい！", "🎉");
           sfx("good");
           shiriCollect(id);   /* 正解した言葉は図鑑に集める（しりとりと同じ記録の付け方） */
+          awardStamp("quiz");   /* 初めて正解したらスタンプ */
           speak("せいかい！ " + WORDS[id].h + "だね！");
           setTimeout(function () { if (quizMode) dealQuiz(); }, 1900);
         } else {
@@ -4820,6 +5300,8 @@
       var searchInput = document.getElementById("zukanSearch");
       var tabCollected = document.getElementById("tabCollected");
       var tabAll = document.getElementById("tabAll");
+      var zViewListBtn = document.getElementById("zViewList");
+      var zViewCardBtn = document.getElementById("zViewCard");
       var zukanProgress = document.getElementById("zukanProgress");
       var bigFilterEl = document.getElementById("bigFilter");
       var zTab = "collected";
@@ -4834,11 +5316,13 @@
       function makeChip(id, num) {
         var w = WORDS[id];
         var chip = document.createElement("div");
-        chip.className = "zchip";
+        chip.className = "zchip" + (zukanView === "card" ? " card" : "");
         chip.style.setProperty("--c", CAT_COL[w.c] || "#ffe1b8");
         var main = document.createElement("button");
         main.type = "button";
-        main.style.cssText = "display:flex;align-items:center;gap:7px;background:none;border:none;padding:4px 2px;font:inherit;color:inherit;min-height:38px;cursor:pointer;text-align:left;";
+        main.style.cssText = zukanView === "card"
+          ? "display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;padding:12px 6px 4px;font:inherit;color:inherit;min-height:44px;cursor:pointer;text-align:center;width:100%;"
+          : "display:flex;align-items:center;gap:7px;background:none;border:none;padding:4px 2px;font:inherit;color:inherit;min-height:38px;cursor:pointer;text-align:left;";
         main.setAttribute("aria-label", disp(w) + " の こえを きく");
         if (num != null) {
           var ns = document.createElement("span");
@@ -4894,6 +5378,12 @@
           setCenter(id, true);
         });
         chip.appendChild(main);
+        /* カード表示では、シール・お気に入り・▶のボタンをカード下部の1行にまとめる */
+        var actBox = chip;
+        if (zukanView === "card") {
+          actBox = document.createElement("div");
+          actBox.className = "zacts";
+        }
         if (features.favSticker && collectedSet[id] && typeof favSet !== "undefined") {
           var stickerBtn = document.createElement("button");
           stickerBtn.type = "button";
@@ -4909,7 +5399,7 @@
             saveState();
             renderZukan();
           });
-          chip.appendChild(stickerBtn);
+          actBox.appendChild(stickerBtn);
           var favBtn = document.createElement("button");
           favBtn.type = "button";
           favBtn.className = "favbtn" + (favSet[id] ? " on" : "");
@@ -4921,15 +5411,16 @@
             saveState();
             renderZukan();
           });
-          chip.appendChild(favBtn);
+          actBox.appendChild(favBtn);
         }
-        chip.appendChild(play);
+        actBox.appendChild(play);
+        if (actBox !== chip) chip.appendChild(actBox);
         return chip;
       }
       function makeSilChip(id) {
         var w = WORDS[id];
         var chip = document.createElement("div");
-        chip.className = "zchip sil";
+        chip.className = "zchip sil" + (zukanView === "card" ? " card" : "");
         var em = document.createElement("span");
         em.className = "em"; em.textContent = w.e;
         var tx = document.createElement("span");
@@ -5194,6 +5685,12 @@
         zukanCount.textContent = "あつめた ことば：" + fmt(collectedScopeCount()) + " こ ／ ぜんぶ " + fmt(scopeCount()) + " こ" + (scopeDone2 ? " 🏆 ぜんぶ あつめたよ！" : "");
         tabCollected.classList.toggle("on", zTab === "collected");
         tabAll.classList.toggle("on", zTab === "all");
+        /* 見せ方（リスト／カード）の状態をボタンと画面に反映する */
+        zukanEl.classList.toggle("cardview", zukanView === "card");
+        zViewListBtn.classList.toggle("on", zukanView === "list");
+        zViewCardBtn.classList.toggle("on", zukanView === "card");
+        zViewListBtn.setAttribute("aria-pressed", zukanView === "list" ? "true" : "false");
+        zViewCardBtn.setAttribute("aria-pressed", zukanView === "card" ? "true" : "false");
         searchWrap.hidden = zTab !== "all";
         renderZukanProgress();
         renderBigFilter();
@@ -5203,6 +5700,9 @@
       }
       tabCollected.addEventListener("click", function () { zTab = "collected"; renderZukan(); });
       tabAll.addEventListener("click", function () { zTab = "all"; renderZukan(); });
+      /* 見せ方の切り替え（子供用ボタン）: 選んだ見せ方は共通設定として保存し、次に図鑑を開いたときも同じ見せ方にする */
+      zViewListBtn.addEventListener("click", function () { if (zukanView !== "list") { zukanView = "list"; saveState(); renderZukan(); } });
+      zViewCardBtn.addEventListener("click", function () { if (zukanView !== "card") { zukanView = "card"; saveState(); renderZukan(); } });
       var searchTimer = null;
       searchInput.addEventListener("input", function () {
         if (searchTimer) clearTimeout(searchTimer);
@@ -5489,6 +5989,7 @@
                 saidFirst[centerId] = todayKey;
                 saveState();
               }
+              syncDerivedStamps(false);   /* 初めて言えたらスタンプもその場で祝う */
               celebrate("じょうず！", "🎤");
               mimicShow("🎉 じょうず！「" + w.h + "」、よく いえたね！");
               speak("じょうず！ よく いえたね！");
@@ -5585,7 +6086,7 @@
         var closeBtn = document.createElement("button");
         closeBtn.type = "button";
         closeBtn.className = "print-close";
-        closeBtn.textContent = "✕ プレビューを とじる";
+        closeBtn.textContent = "✕ プレビューを閉じる";
         closeBtn.addEventListener("click", function () { area.classList.remove("preview"); });
         area.appendChild(closeBtn);
         var title = document.createElement("p");
@@ -5626,6 +6127,16 @@
       });
 
       /* ===== 保護者レポート: 直近7日と累計の集計 ===== */
+      /* レポートの言葉チップ: 写真に差し替えた言葉は、絵文字の代わりに写真の小さい画像を入れる */
+      function fillReportChip(chip, w, text) {
+        if (w.img) {
+          var rim = document.createElement("img"); rim.className = "cimg"; rim.src = w.img; rim.alt = "";
+          chip.appendChild(rim);
+          chip.appendChild(document.createTextNode(text));
+        } else {
+          chip.textContent = w.e + " " + text;
+        }
+      }
       function renderReport() {
         var el = document.getElementById("reportBody");
         if (!el) return;
@@ -5685,7 +6196,7 @@
             var w = WORDS[r.id];
             var chip = document.createElement("span");
             chip.className = "report-chip";
-            chip.textContent = w.e + " " + (mode === "hira" ? w.h : w.d);
+            fillReportChip(chip, w, (mode === "hira" ? w.h : w.d));
             list.appendChild(chip);
           });
           el.appendChild(list);
@@ -5693,7 +6204,7 @@
         /* はじめて言えた言葉（まねっこで大まかに一致した言葉・日付つき・直近10語） */
         var h3 = document.createElement("p");
         h3.className = "report-h";
-        h3.textContent = "はじめて言えた言葉（まねっこ）";
+        h3.textContent = "初めて言えた言葉（まねっこ）";
         el.appendChild(h3);
         var saidList = Object.keys(saidFirst).map(function (k) { return { id: Number(k), d: saidFirst[k] }; })
           .filter(function (r) { return isValidId(r.id); })
@@ -5711,7 +6222,7 @@
             var parts = r.d.split("-");
             var chip = document.createElement("span");
             chip.className = "report-chip";
-            chip.textContent = w.e + " " + (mode === "hira" ? w.h : w.d) + "（" + (parts[1] || "") + "/" + (parts[2] || "") + "）";
+            fillReportChip(chip, w, (mode === "hira" ? w.h : w.d) + "（" + (parts[1] || "") + "/" + (parts[2] || "") + "）");
             slist.appendChild(chip);
           });
           el.appendChild(slist);
@@ -5736,7 +6247,7 @@
             var w = WORDS[r.id];
             var chip = document.createElement("span");
             chip.className = "report-chip";
-            chip.textContent = w.e + " " + (mode === "hira" ? w.h : w.d) + "（" + r.n + "回）";
+            fillReportChip(chip, w, (mode === "hira" ? w.h : w.d) + "（" + r.n + "回）");
             plist.appendChild(chip);
           });
           el.appendChild(plist);
@@ -6103,6 +6614,7 @@
         if (!en) return;
         if (!sound) { sound = true; syncSoundBtn(); }
         speakCenterEn(en);
+        awardStamp("english");   /* 初めて英語で遊んだらスタンプ */
       });
 
       /* ===== 第3弾: ふりがな設定 ===== */
@@ -6193,7 +6705,7 @@
         if (nEl) { nEl.classList.toggle("on", nightMode === "night"); nEl.setAttribute("aria-pressed", nightMode === "night" ? "true" : "false"); }
         if (aEl) { aEl.classList.toggle("on", nightMode === "auto"); aEl.setAttribute("aria-pressed", nightMode === "auto" ? "true" : "false"); }
         var nowEl = document.getElementById("nightNow");
-        if (nowEl) nowEl.textContent = "いまの表示：" + (nightIsDark() ? "🌙 よる（暗い表示）" : "☀️ ひる（明るい表示）") + (nightMode === "auto" ? "（じかんで じどう）" : "");
+        if (nowEl) nowEl.textContent = "今の表示：" + (nightIsDark() ? "🌙 夜（暗い表示）" : "☀️ 昼（明るい表示）") + (nightMode === "auto" ? "（時間で自動）" : "");
       }
       function setNightMode(m) {
         nightMode = m;
@@ -6211,6 +6723,74 @@
       renderNightUI();
       /* じどうのときは、開いたまま境界の時刻（18:00／6:00）をまたいでも切り替わるよう、1分ごとに確認する */
       setInterval(function () { if (nightMode === "auto") { applyNight(); renderNightUI(); } }, 60000);
+
+      /* ===== なぞりがきの判定（大人用設定）: 判定する項目を5つ、それぞれ
+         オン・オフできる。レベルボタン（1〜5）は下の組み合わせへの一括設定で、
+         押すと項目トグルが連動する。選んだあとも項目ごとに変更でき、その場合は
+         どのレベルとも一致しなくなるのでレベルボタンの選択表示は消える。
+         状態は共通設定として保存され、バックアップにも含まれる
+         （buildSaveData の settings.nazoriJudge）。判定そのものは
+         なぞりがき側の nazoriJudgeDetail が nazoriChk を見て行う。
+         項目定義（NAZORI_CHK_DEFS）とレベルの組み合わせ（NAZORI_LEVELS）は
+         設定変数の並び（nazoriChk の直後）で初期化してある。 ===== */
+      function nazoriChkLevel() {
+        for (var lv = 1; lv <= 5; lv++) {
+          var p = NAZORI_LEVELS[lv], ok = true;
+          for (var k in p) { if (!!nazoriChk[k] !== !!p[k]) { ok = false; break; } }
+          if (ok) return lv;
+        }
+        return 0;
+      }
+      function renderNazoriJudgeUI() {
+        var list = document.getElementById("nazoriJudgeList");
+        if (list) {
+          list.innerHTML = "";
+          NAZORI_CHK_DEFS.forEach(function (d) {
+            var row = document.createElement("div");
+            row.className = "feat-row";
+            var nm = document.createElement("span");
+            nm.className = "feat-name";
+            nm.textContent = d.label;
+            if (d.note) {
+              var nt = document.createElement("span");
+              nt.className = "feat-note";
+              nt.textContent = d.note;
+              nm.appendChild(nt);
+            }
+            var btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "feat-toggle" + (nazoriChk[d.k] ? " on" : "");
+            btn.textContent = nazoriChk[d.k] ? "オン" : "オフ";
+            btn.setAttribute("aria-pressed", nazoriChk[d.k] ? "true" : "false");
+            btn.setAttribute("aria-label", d.label + "の判定を" + (nazoriChk[d.k] ? "オフにする" : "オンにする"));
+            btn.addEventListener("click", function () { setNazoriChk(d.k, !nazoriChk[d.k]); });
+            row.appendChild(nm); row.appendChild(btn);
+            list.appendChild(row);
+          });
+        }
+        var lv = nazoriChkLevel();
+        document.querySelectorAll(".nz-level").forEach(function (b) {
+          var on = Number(b.getAttribute("data-nlv")) === lv;
+          b.classList.toggle("on", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+      function setNazoriChk(k, on) {
+        nazoriChk[k] = on ? 1 : 0;
+        renderNazoriJudgeUI();
+        saveState();
+      }
+      function setNazoriLevel(lv) {
+        var p = NAZORI_LEVELS[lv];
+        if (!p) return;
+        for (var k in p) nazoriChk[k] = p[k];
+        renderNazoriJudgeUI();
+        saveState();
+      }
+      document.querySelectorAll(".nz-level").forEach(function (b) {
+        b.addEventListener("click", function () { setNazoriLevel(Number(b.getAttribute("data-nlv"))); });
+      });
+      renderNazoriJudgeUI();
 
       /* ===== 第3弾: 読み上げの声の選択 ===== */
       function jaVoices() {
@@ -6318,6 +6898,18 @@
         btn.addEventListener("click", onClick);
         return btn;
       }
+      /* 除外画面の言葉名: 写真に差し替えた収録語は、絵文字の代わりに写真の小さい画像を添える */
+      function setExclName(nm, id, suffix) {
+        var w = WORDS[id];
+        var cur = (id != null && id < BUILTIN_TOTAL) ? wordPhotos[w.h] : null;
+        if (cur) {
+          var pim = document.createElement("img"); pim.className = "photo-thumb"; pim.src = cur; pim.alt = "";
+          nm.appendChild(pim);
+          nm.appendChild(document.createTextNode(disp(w) + (suffix || "")));
+        } else {
+          nm.textContent = w.e + " " + disp(w) + (suffix || "");
+        }
+      }
       function renderExcludeUI() {
         var catBox = document.getElementById("exclCatList");
         if (!catBox) return;
@@ -6344,7 +6936,7 @@
               if (id == null) return;
               var row = document.createElement("div"); row.className = "feat-row";
               var nm = document.createElement("span"); nm.className = "feat-name";
-              nm.textContent = WORDS[id].e + " " + disp(WORDS[id]);
+              setExclName(nm, id, "");
               row.appendChild(nm);
               row.appendChild(exclToggleBtn("戻す", true, function () { toggleExcludeWord(id); }));
               wordBox.appendChild(row);
@@ -6361,14 +6953,14 @@
         if (!exclSearchList) return;
         if (!exclSearchList.length) {
           var p = document.createElement("p"); p.className = "adult-note";
-          p.textContent = "みつかりませんでした。";
+          p.textContent = "見つかりませんでした。";
           box.appendChild(p);
           return;
         }
         exclSearchList.forEach(function (id) {
           var row = document.createElement("div"); row.className = "feat-row";
           var nm = document.createElement("span"); nm.className = "feat-name";
-          nm.textContent = WORDS[id].e + " " + disp(WORDS[id]) + "（" + (CATS[WORDS[id].c] || "") + "）";
+          setExclName(nm, id, "（" + (CATS[WORDS[id].c] || "") + "）");
           var off = !!exclWordSet[id] || !!exclCatSet[WORDS[id].c];
           var byCat = !!exclCatSet[WORDS[id].c] && !exclWordSet[id];
           row.appendChild(nm);
@@ -6389,6 +6981,284 @@
           }
           renderExclResults();
         }, 200);
+      });
+
+      /* ===== 言葉の絵を変える（収録語の絵文字を写真に差し替える） =====
+         「うちの子の言葉」の写真登録とは別の仕組み。対象は収録語だけ。
+         差し替えデータは wordPhotos（読み→圧縮済み dataURL）で持ち、
+         applyWordPhotos() で WORDS[i].img に載せることで、既存の写真優先の
+         表示経路（盤面・図鑑・各遊び・子供用きろく等）すべてに反映する。
+         保存できなかったとき（容量不足など）は変更前に戻し、既存の保存警告と
+         この画面のメッセージで正直に知らせる */
+      var photoSearchInput = document.getElementById("photoSearch");
+      var photoResultsEl = document.getElementById("photoResults");
+      var photoEditorEl = document.getElementById("photoEditor");
+      var photoCurPicEl = document.getElementById("photoCurPic");
+      var photoEditNameEl = document.getElementById("photoEditName");
+      var photoEditMetaEl = document.getElementById("photoEditMeta");
+      var photoEditStateEl = document.getElementById("photoEditState");
+      var photoFileInput = document.getElementById("photoFile");
+      var photoPendingInfoEl = document.getElementById("photoPendingInfo");
+      var photoApplyBtn = document.getElementById("photoApplyBtn");
+      var photoPendingClearBtn = document.getElementById("photoPendingClear");
+      var photoResetBtn = document.getElementById("photoResetBtn");
+      var photoResetConfirmEl = document.getElementById("photoResetConfirm");
+      var photoMsgEl = document.getElementById("photoMsg");
+      var photoListEl = document.getElementById("photoList");
+      var photoResetAllBox = document.getElementById("photoResetAllBox");
+      var photoResetAllConfirmEl = document.getElementById("photoResetAllConfirm");
+      var photoEditId = null;      /* 編集中の言葉の番号（収録語のみ） */
+      var photoPending = null;     /* 圧縮済みで、まだ保存していない写真の dataURL */
+      var photoSearchList = null;  /* 検索結果の言葉番号（未検索は null） */
+
+      function isPhotoWord(id) { return id != null && typeof id === "number" && id >= 0 && id < BUILTIN_TOTAL && !!WORDS[id]; }
+      function photoOf(id) { return isPhotoWord(id) ? (wordPhotos[WORDS[id].h] || null) : null; }
+
+      function photoRow(id, btnLabel, onBtn) {
+        var w = WORDS[id];
+        var row = document.createElement("div"); row.className = "custom-item";
+        var cur = photoOf(id);
+        var em;
+        if (cur) { em = document.createElement("img"); em.className = "photo-thumb"; em.src = cur; em.alt = ""; }
+        else { em = document.createElement("span"); em.className = "em"; em.textContent = w.e; }
+        var tx = document.createElement("span"); tx.textContent = disp(w);
+        var meta = document.createElement("span"); meta.className = "meta";
+        meta.textContent = "（" + w.h + "・" + (CATS[w.c] || "") + "）";
+        row.appendChild(em); row.appendChild(tx); row.appendChild(meta);
+        if (cur) { var bd = document.createElement("span"); bd.className = "photo-badge"; bd.textContent = "写真に変更中"; row.appendChild(bd); }
+        var btn = document.createElement("button");
+        btn.type = "button"; btn.className = "adult-btn"; btn.style.marginLeft = "auto"; btn.style.flex = "none";
+        btn.textContent = btnLabel;
+        btn.setAttribute("aria-label", disp(w) + " の絵を " + btnLabel);
+        btn.addEventListener("click", function () { onBtn(id); });
+        row.appendChild(btn);
+        return row;
+      }
+      function renderPhotoResults() {
+        if (!photoResultsEl) return;
+        photoResultsEl.innerHTML = "";
+        if (!photoSearchList) return;
+        if (!photoSearchList.length) {
+          var p = document.createElement("p"); p.className = "adult-note";
+          p.textContent = "見つかりませんでした。";
+          photoResultsEl.appendChild(p);
+          return;
+        }
+        photoSearchList.forEach(function (id) {
+          photoResultsEl.appendChild(photoRow(id, photoEditId === id ? "編集中" : "変える", function (selId) { openPhotoEditor(selId); }));
+        });
+      }
+      var photoSearchTimer = null;
+      if (photoSearchInput) photoSearchInput.addEventListener("input", function () {
+        var input = this;
+        if (photoSearchTimer) clearTimeout(photoSearchTimer);
+        photoSearchTimer = setTimeout(function () {
+          var q = input.value.trim();
+          if (!q) { photoSearchList = null; renderPhotoResults(); return; }
+          photoSearchList = [];
+          for (var i = 0; i < BUILTIN_TOTAL && photoSearchList.length < 30; i++) {
+            if (WORDS[i].h.indexOf(q) >= 0 || WORDS[i].d.indexOf(q) >= 0) photoSearchList.push(i);
+          }
+          renderPhotoResults();
+        }, 200);
+      });
+      function clearPhotoPending() {
+        photoPending = null;
+        if (photoFileInput) photoFileInput.value = "";
+        if (photoPendingInfoEl) { photoPendingInfoEl.hidden = true; photoPendingInfoEl.textContent = ""; }
+      }
+      function renderPhotoEditor() {
+        if (!photoEditorEl) return;
+        if (!isPhotoWord(photoEditId)) { photoEditorEl.hidden = true; return; }
+        var w = WORDS[photoEditId];
+        var cur = photoOf(photoEditId);
+        photoEditorEl.hidden = false;
+        photoCurPicEl.innerHTML = "";
+        if (photoPending) {
+          var pim = document.createElement("img"); pim.className = "photo-thumb-lg"; pim.src = photoPending; pim.alt = "";
+          photoCurPicEl.appendChild(pim);
+        } else if (cur) {
+          var cim = document.createElement("img"); cim.className = "photo-thumb-lg"; cim.src = cur; cim.alt = "";
+          photoCurPicEl.appendChild(cim);
+        } else {
+          var em = document.createElement("span"); em.className = "photo-cur-emoji"; em.textContent = w.e;
+          photoCurPicEl.appendChild(em);
+        }
+        photoEditNameEl.textContent = disp(w);
+        photoEditMetaEl.textContent = "読み：" + w.h + "／分野：" + (CATS[w.c] || "") + "／元の絵：" + w.e;
+        photoEditStateEl.textContent = photoPending
+          ? "新しい写真を選んでいます。「この写真で差し替える」を押すと保存されます。"
+          : (cur ? "今は写真に差し替え中です。別の写真を選ぶと差し替え直せます。" : "今は元の絵文字です。写真を選ぶと差し替えられます。");
+        photoApplyBtn.hidden = !photoPending;
+        photoPendingClearBtn.hidden = !photoPending;
+        photoResetBtn.hidden = !cur || !!photoPending;
+        if (!cur) photoResetConfirmEl.hidden = true;
+      }
+      function openPhotoEditor(id) {
+        if (!isPhotoWord(id)) return;
+        photoEditId = id;
+        clearPhotoPending();
+        if (photoMsgEl) photoMsgEl.textContent = "";
+        if (photoResetConfirmEl) photoResetConfirmEl.hidden = true;
+        renderPhotoEditor();
+        renderPhotoResults();
+        if (photoEditorEl && photoEditorEl.scrollIntoView) {
+          try { photoEditorEl.scrollIntoView({ block: "nearest" }); } catch (eSiv) { /* スクロールできない環境ではそのまま */ }
+        }
+      }
+      function renderPhotoList() {
+        if (!photoListEl) return;
+        photoListEl.innerHTML = "";
+        var keys = Object.keys(wordPhotos).filter(function (h) { return typeof wordPhotos[h] === "string" && wordPhotos[h]; });
+        if (photoResetAllBox) photoResetAllBox.hidden = !keys.length;
+        if (photoResetAllConfirmEl) photoResetAllConfirmEl.hidden = true;
+        if (!keys.length) {
+          var none = document.createElement("p"); none.className = "adult-note";
+          none.textContent = "まだ写真に差し替えた言葉はありません。";
+          photoListEl.appendChild(none);
+          return;
+        }
+        keys.sort();
+        keys.forEach(function (h) {
+          var id = IDX[h];
+          if (!isPhotoWord(id) || WORDS[id].h !== h) return;
+          photoListEl.appendChild(photoRow(id, "編集・戻す", function (selId) { openPhotoEditor(selId); }));
+        });
+      }
+      function renderPhotoUI() {
+        renderPhotoResults();
+        renderPhotoEditor();
+        renderPhotoList();
+      }
+      /* 写真を軽量化する: 長辺を小さくリサイズし、JPEGで圧縮する。
+         1枚あたり数十KB以下を目安に、大きすぎる場合は段階的にさらに小さくする */
+      function compressWordPhoto(file, done) {
+        var url = null;
+        try { url = URL.createObjectURL(file); } catch (eUrl) { url = null; }
+        if (!url) { done(null, "写真を読み込めませんでした。"); return; }
+        var img = new Image();
+        img.onload = function () {
+          try {
+            var steps = [{ max: 192, q: 0.82 }, { max: 160, q: 0.72 }, { max: 128, q: 0.62 }, { max: 96, q: 0.55 }];
+            var out = null;
+            for (var si = 0; si < steps.length; si++) {
+              var st = steps[si];
+              var scale = Math.min(1, st.max / Math.max(img.naturalWidth || st.max, img.naturalHeight || st.max));
+              var cv = document.createElement("canvas");
+              cv.width = Math.max(1, Math.round((img.naturalWidth || st.max) * scale));
+              cv.height = Math.max(1, Math.round((img.naturalHeight || st.max) * scale));
+              var cx = cv.getContext("2d");
+              cx.fillStyle = "#ffffff";
+              cx.fillRect(0, 0, cv.width, cv.height);
+              cx.drawImage(img, 0, 0, cv.width, cv.height);
+              out = cv.toDataURL("image/jpeg", st.q);
+              if (out.length <= 60000) break;
+            }
+            URL.revokeObjectURL(url);
+            if (!out || out.length > 120000) { done(null, "写真のデータが大きすぎて保存できませんでした。別の写真でお試しください。"); return; }
+            done(out, null);
+          } catch (eCv) { done(null, "写真を小さくできませんでした。"); }
+        };
+        img.onerror = function () { try { URL.revokeObjectURL(url); } catch (eRv) {} done(null, "写真を読み込めませんでした。"); };
+        img.src = url;
+      }
+      if (photoFileInput) photoFileInput.addEventListener("change", function () {
+        var file = photoFileInput.files && photoFileInput.files[0];
+        if (!file) return;
+        if (!/^image\//.test(file.type || "")) { photoMsgEl.textContent = "画像ファイルを選んでください。"; return; }
+        photoMsgEl.textContent = "写真を小さくしています…";
+        compressWordPhoto(file, function (dataUrl, err) {
+          if (!dataUrl) { photoMsgEl.textContent = err || "写真を使えませんでした。"; return; }
+          photoPending = dataUrl;
+          photoMsgEl.textContent = "";
+          if (photoPendingInfoEl) {
+            photoPendingInfoEl.hidden = false;
+            photoPendingInfoEl.textContent = "軽量化しました（約" + Math.max(1, Math.round(dataUrl.length / 1024)) + "KB）。「この写真で差し替える」を押すと保存されます。";
+          }
+          renderPhotoEditor();
+        });
+      });
+      if (photoPendingClearBtn) photoPendingClearBtn.addEventListener("click", function () {
+        clearPhotoPending();
+        photoMsgEl.textContent = "";
+        renderPhotoEditor();
+      });
+      /* 保存まで含めて反映する。保存できなかったとき（容量不足など）は
+         変更前の状態に戻し、false を返す（警告自体は saveState が出す） */
+      function commitWordPhotos(prevPhotos) {
+        applyWordPhotos();
+        saveState();
+        if (!storageUsable) return true;   /* 保存できない環境では、開いている間だけの反映になる（その旨は大人用設定に出ている） */
+        var ok = false;
+        try {
+          var raw = window.localStorage.getItem(SAVE_KEY);
+          var obj = raw ? JSON.parse(raw) : null;
+          var stored = (obj && obj.settings) ? obj.settings.wordPhotos : null;
+          ok = !!stored && JSON.stringify(stored) === JSON.stringify(wordPhotos);
+        } catch (eVerify) { ok = false; }
+        if (!ok) {
+          wordPhotos = prevPhotos;
+          applyWordPhotos();
+          saveState();
+        }
+        return ok;
+      }
+      function refreshPhotoEverywhere() {
+        renderPhotoEditor();
+        renderPhotoList();
+        renderPhotoResults();
+        updateAdultSummaries();
+        render();
+        if (typeof renderZukan === "function" && typeof zukanEl !== "undefined" && zukanEl && !zukanEl.hidden) renderZukan();
+      }
+      if (photoApplyBtn) photoApplyBtn.addEventListener("click", function () {
+        if (!isPhotoWord(photoEditId) || !photoPending) return;
+        var w = WORDS[photoEditId];
+        var prev = copyWordPhotos();
+        wordPhotos[w.h] = photoPending;
+        var okSave = commitWordPhotos(prev);
+        if (!okSave) {
+          photoMsgEl.textContent = "保存できませんでした。ブラウザの空き容量が足りない可能性があります。写真に差し替えた言葉を減らしてからお試しください。";
+          renderPhotoEditor(); renderPhotoList();
+          return;
+        }
+        clearPhotoPending();
+        photoMsgEl.textContent = "「" + disp(w) + "」の絵を写真に差し替えました。" + (storageUsable ? "" : "この環境ではブラウザへの保存ができないため、開いている間だけの差し替えになります。");
+        refreshPhotoEverywhere();
+      });
+      if (photoResetBtn) photoResetBtn.addEventListener("click", function () { photoResetConfirmEl.hidden = false; });
+      document.getElementById("photoResetCancelBtn").addEventListener("click", function () { photoResetConfirmEl.hidden = true; });
+      document.getElementById("photoResetDoBtn").addEventListener("click", function () {
+        if (!isPhotoWord(photoEditId)) return;
+        var w = WORDS[photoEditId];
+        var prev = copyWordPhotos();
+        delete wordPhotos[w.h];
+        var okSave = commitWordPhotos(prev);
+        photoResetConfirmEl.hidden = true;
+        if (!okSave) {
+          photoMsgEl.textContent = "保存できませんでした。ブラウザの空き容量を確認してください。";
+          renderPhotoEditor(); renderPhotoList();
+          return;
+        }
+        clearPhotoPending();
+        photoMsgEl.textContent = "「" + disp(w) + "」の絵を元の絵文字（" + w.e + "）に戻しました。";
+        refreshPhotoEverywhere();
+      });
+      document.getElementById("photoResetAllBtn").addEventListener("click", function () { photoResetAllConfirmEl.hidden = false; });
+      document.getElementById("photoResetAllCancelBtn").addEventListener("click", function () { photoResetAllConfirmEl.hidden = true; });
+      document.getElementById("photoResetAllDoBtn").addEventListener("click", function () {
+        var prev = copyWordPhotos();
+        wordPhotos = {};
+        var okSave = commitWordPhotos(prev);
+        photoResetAllConfirmEl.hidden = true;
+        if (!okSave) {
+          photoMsgEl.textContent = "保存できませんでした。ブラウザの空き容量を確認してください。";
+          renderPhotoList();
+          return;
+        }
+        clearPhotoPending();
+        if (photoMsgEl) photoMsgEl.textContent = "写真に差し替えた言葉を、すべて元の絵文字に戻しました。";
+        refreshPhotoEverywhere();
       });
 
       /* ===== 第3弾: ことばのおはなばたけ ===== */
@@ -6604,6 +7474,8 @@
         if ("speechSynthesis" in window) { try { window.speechSynthesis.cancel(); } catch (eC2) {} }
         storyPlaying = true;
         document.getElementById("storyPlayBtn").textContent = "▶ よんでいるよ…";
+        /* 言葉が少なくてお話になっていないときは数えない（言葉入りのお話を聞いたときだけ） */
+        if (storySegs.some(function (s) { return s && typeof s === "object"; })) awardStamp("story");
         speak(storyPlainText());
         var spans = storyTextEl.querySelectorAll(".story-w");
         var idx = 0;
@@ -6716,7 +7588,7 @@
         var closeBtn = document.createElement("button");
         closeBtn.type = "button";
         closeBtn.className = "print-close";
-        closeBtn.textContent = "✕ プレビューを とじる";
+        closeBtn.textContent = "✕ プレビューを閉じる";
         closeBtn.addEventListener("click", function () { area.classList.remove("preview"); });
         area.appendChild(closeBtn);
         var title = document.createElement("p");
@@ -6741,7 +7613,7 @@
         { k: "quiz", label: "聞き取りクイズ" },
         { k: "sentence", label: "文の読み上げボタン" },
         { k: "map", label: "冒険マップ" },
-        { k: "today", label: "今日の言葉（季節の言葉を含む）", note: "ホームだけに出ます。どの遊びで集めても「みつけた」になります。オフにすると表示も判定も止まりますが、その日の記録は残ります。" },
+        { k: "today", label: "今日の言葉（季節の言葉を含む）", note: "ホームだけに出ます。どの遊びで集めても「見つけた」になります。オフにすると表示も判定も止まりますが、その日の記録は残ります。" },
         { k: "mimic", label: "まねっこ発音" },
         { k: "bedtime", label: "おやすみ振り返り再生" },
         { k: "desc", label: "ひとこと説明ボタン" },
@@ -6885,6 +7757,32 @@
             if (isValidId(id) && typeof v === "string" && /^\d{4}-\d{1,2}-\d{1,2}$/.test(v)) saidFirst[id] = v;
           });
         }
+        /* もらったスタンプ（「はじめて」系・節目）: 定義にあるキーと日付の形だけ復元し、
+           既存の記録から算出できる分は静かに補う（昔の記録にもその場で反映される） */
+        stampLog = {};
+        if (rec.stamps && typeof rec.stamps === "object" && !Array.isArray(rec.stamps)) {
+          Object.keys(rec.stamps).forEach(function (k) {
+            var v = rec.stamps[k];
+            if (STAMP_DEF_MAP[k] && typeof v === "string" && /^\d{4}-\d{1,2}-\d{1,2}$/.test(v)) stampLog[k] = v;
+          });
+        }
+        /* 遊んだ日と達成系の進み具合（形の正しいものだけ復元する） */
+        playDays = {};
+        if (rec.playDays && typeof rec.playDays === "object" && !Array.isArray(rec.playDays)) {
+          Object.keys(rec.playDays).forEach(function (k) {
+            if (rec.playDays[k] && /^\d{4}-\d{1,2}-\d{1,2}$/.test(k)) playDays[k] = 1;
+          });
+        }
+        achv = { nz: [], hp: [] };
+        if (rec.achv && typeof rec.achv === "object" && !Array.isArray(rec.achv)) {
+          if (Array.isArray(rec.achv.nz)) rec.achv.nz.forEach(function (c) {
+            if (typeof c === "string" && c.length === 1 && achv.nz.indexOf(c) < 0) achv.nz.push(c);
+          });
+          if (Array.isArray(rec.achv.hp)) rec.achv.hp.forEach(function (k2) {
+            if (typeof k2 === "string" && k2.indexOf("|") > 0 && achv.hp.indexOf(k2) < 0) achv.hp.push(k2);
+          });
+        }
+        syncDerivedStamps(true);
         favPicks = {};
         if (rec.picks && typeof rec.picks === "object" && !Array.isArray(rec.picks)) {
           Object.keys(rec.picks).forEach(function (k) {
@@ -6950,7 +7848,7 @@
             var inp = document.createElement("input");
             inp.type = "text";
             inp.value = profileNames[idx] || "";
-            inp.placeholder = "こども" + (idx + 1) + "（名前は任意）";
+            inp.placeholder = "子ども" + (idx + 1) + "（名前は任意）";
             inp.setAttribute("aria-label", "子どもの名前");
             inp.addEventListener("change", function () {
               profileNames[idx] = inp.value.trim();
@@ -6965,7 +7863,7 @@
             if (idx === activeProfile) {
               var now = document.createElement("span");
               now.className = "prof-now";
-              now.textContent = "● いま あそんでいる";
+              now.textContent = "● 今遊んでいる";
               row.appendChild(now);
             } else {
               var sw = document.createElement("button");
@@ -7046,7 +7944,7 @@
           }
           pendingImport = text;
           var nProf = obj.v === 2 ? obj.profiles.length : 1;
-          document.getElementById("backupConfirmText").textContent = "バックアップファイル（プロフィール " + nProf + " 人分）を読み込みます。いまの保存データは置き換わります。よろしいですか？";
+          document.getElementById("backupConfirmText").textContent = "バックアップファイル（プロフィール " + nProf + " 人分）を読み込みます。今の保存データは置き換わります。よろしいですか？";
           backupConfirmEl.hidden = false;
           backupMsg.textContent = "";
         };
@@ -7103,6 +8001,7 @@
           });
         }
         rebuildExclusions();
+        applyWordPhotos();   /* 収録語の絵の写真差し替えを WORDS[i].img に反映する（カスタム語の img には触れない） */
         if (customWords.length) {
           /* カスタム言葉が対象範囲に入ったので、今日の言葉を作り直す */
           todayIds = computeTodayIds();
@@ -7123,6 +8022,31 @@
             var id = Number(k);
             var v = loadedSave.saidFirst[k];
             if (isValidId(id) && typeof v === "string" && /^\d{4}-\d{1,2}-\d{1,2}$/.test(v)) saidFirst[id] = v;
+          });
+        }
+        /* もらったスタンプ（「はじめて」系・節目）: 定義にあるキーと日付の形だけ復元する。
+           既存の記録から算出できる分の補完は、この後の syncDerivedStamps(true) で行う */
+        stampLog = {};
+        if (loadedSave.stamps && typeof loadedSave.stamps === "object" && !Array.isArray(loadedSave.stamps)) {
+          Object.keys(loadedSave.stamps).forEach(function (k) {
+            var v = loadedSave.stamps[k];
+            if (STAMP_DEF_MAP[k] && typeof v === "string" && /^\d{4}-\d{1,2}-\d{1,2}$/.test(v)) stampLog[k] = v;
+          });
+        }
+        /* 遊んだ日と達成系の進み具合（形の正しいものだけ復元する。補完は末尾の syncDerivedStamps で行う） */
+        playDays = {};
+        if (loadedSave.playDays && typeof loadedSave.playDays === "object" && !Array.isArray(loadedSave.playDays)) {
+          Object.keys(loadedSave.playDays).forEach(function (k) {
+            if (loadedSave.playDays[k] && /^\d{4}-\d{1,2}-\d{1,2}$/.test(k)) playDays[k] = 1;
+          });
+        }
+        achv = { nz: [], hp: [] };
+        if (loadedSave.achv && typeof loadedSave.achv === "object" && !Array.isArray(loadedSave.achv)) {
+          if (Array.isArray(loadedSave.achv.nz)) loadedSave.achv.nz.forEach(function (c) {
+            if (typeof c === "string" && c.length === 1 && achv.nz.indexOf(c) < 0) achv.nz.push(c);
+          });
+          if (Array.isArray(loadedSave.achv.hp)) loadedSave.achv.hp.forEach(function (k2) {
+            if (typeof k2 === "string" && k2.indexOf("|") > 0 && achv.hp.indexOf(k2) < 0) achv.hp.push(k2);
           });
         }
         /* 「どっちが すき？」の選択記録 */
@@ -7181,6 +8105,9 @@
         renderToday();
       }
 
+      applyWordPhotos();   /* 保存が無い場合も含め、写真差し替えの反映をここで確定させる */
+      syncDerivedStamps(true);   /* 既存の記録から算出できるスタンプ（はじめて集めた・はじめて言えた・節目）を静かに補う */
+
       /* ===== リセット（大人用設定）: 二段階で確認し、保存を消してその場で初期状態に戻す ===== */
       var resetConfirmEl = document.getElementById("resetConfirm");
       document.getElementById("resetBtn").addEventListener("click", function () {
@@ -7221,9 +8148,16 @@
         nightMode = "auto";
         if (typeof applyNight === "function") applyNight();
         if (typeof renderNightUI === "function") renderNightUI();
+        zukanView = "list";   /* 図鑑の見せ方も初期状態（リスト）に戻す */
+        /* なぞりがきの判定も初期状態（レベル4相当）に戻す */
+        for (var nzk in NAZORI_CHK_DEFAULT) nazoriChk[nzk] = NAZORI_CHK_DEFAULT[nzk];
+        if (typeof renderNazoriJudgeUI === "function") renderNazoriJudgeUI();
         exclCatNames = [];
         exclWordHs = [];
         rebuildExclusions();
+        /* 言葉の絵の写真差し替えも共通設定として初期状態（差し替えなし）に戻す */
+        wordPhotos = {};
+        applyWordPhotos();
         favBoardMode = false;
         if (typeof updateFavBoardUI === "function") updateFavBoardUI();
         timerMin = 0;
@@ -7420,9 +8354,15 @@
         kazuAnswer = 1 + Math.floor(Math.random() * max);
         kazuQEl.textContent = kazuItemNow.h + "は いくつ あるかな？";
         kazuItemsEl.innerHTML = "";
+        /* かずあそびの題材が写真に差し替えた言葉なら、数える物も写真で出す */
+        var kazuPhoto = null;
+        var kazuWid = IDX[kazuItemNow.h];
+        if (kazuWid != null && WORDS[kazuWid] && WORDS[kazuWid].img) kazuPhoto = WORDS[kazuWid].img;
         for (var i = 0; i < kazuAnswer; i++) {
           var s = document.createElement("span");
-          s.className = "kazu-item"; s.textContent = kazuItemNow.e;
+          s.className = "kazu-item";
+          if (kazuPhoto) { var kim = document.createElement("img"); kim.src = kazuPhoto; kim.alt = ""; s.appendChild(kim); }
+          else s.textContent = kazuItemNow.e;
           kazuItemsEl.appendChild(s);
         }
         kazuChoicesEl.innerHTML = "";
@@ -7511,11 +8451,59 @@
         }
         step();
       }
-      function newKazu() { if (kazuMode === "count") newKazuCount(); else newKazuSeq(); }
+      /* ===== かずあそび: 100まで かぞえる（ボタンを押すたびに1つずつ増えて声が出る。
+         100まで届いたら達成スタンプ。途中でやめても失敗にはならない） ===== */
+      var kazuNow100 = 0;
+      function renderKazu100() {
+        kazuQEl.textContent = "ボタンを おして、100まで かぞえよう！";
+        kazuItemsEl.innerHTML = "";
+        var big = document.createElement("span");
+        big.className = "kazu-item";
+        big.style.fontSize = "76px";
+        big.textContent = String(kazuNow100);
+        kazuItemsEl.appendChild(big);
+        var rd = document.createElement("div");
+        rd.style.cssText = "width:100%;text-align:center;font-size:22px;font-weight:800;";
+        rd.textContent = kazuNow100 ? numDisp(kazuNow100) : "ゼロ";
+        kazuItemsEl.appendChild(rd);
+        kazuChoicesEl.innerHTML = "";
+        if (kazuNow100 < 100) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "choice-card";
+          var bt = document.createElement("span");
+          bt.className = "big"; bt.textContent = "▶ つぎの かず";
+          b.appendChild(bt);
+          b.addEventListener("click", stepKazu100);
+          kazuChoicesEl.appendChild(b);
+        }
+      }
+      function newKazu100() {
+        kazuStopTimer();
+        kazuLock = false;
+        kazuNextBtn.hidden = true;
+        kazuMsgEl.textContent = "";
+        kazuSeqEl.innerHTML = "";
+        kazuNow100 = 0;
+        renderKazu100();
+        speak("100まで、かぞえよう！ボタンを おしてね。");
+      }
+      function stepKazu100() {
+        if (kazuNow100 >= 100) return;
+        kazuNow100++;
+        renderKazu100();
+        speak(numH(kazuNow100));
+        if (kazuNow100 >= 100) {
+          kazuMsgEl.textContent = "100まで かぞえたよ！すごい！";
+          awardStamp("kazu100");   /* 100まで数えたらスタンプ（お祝いの声も出る） */
+        }
+      }
+      function newKazu() { if (kazuMode === "count") newKazuCount(); else if (kazuMode === "seq") newKazuSeq(); else newKazu100(); }
       function setKazuMode(m) {
         kazuMode = m;
         document.getElementById("kazuTabCount").classList.toggle("on", m === "count");
         document.getElementById("kazuTabSeq").classList.toggle("on", m === "seq");
+        document.getElementById("kazuTab100").classList.toggle("on", m === "c100");
         newKazu();
       }
       document.getElementById("kazuBtn").addEventListener("click", function () {
@@ -7527,9 +8515,11 @@
       document.getElementById("kazuClose").addEventListener("click", function () { kazuStopTimer(); kazuEl.hidden = true; });
       document.getElementById("kazuTabCount").addEventListener("click", function () { setKazuMode("count"); });
       document.getElementById("kazuTabSeq").addEventListener("click", function () { setKazuMode("seq"); });
+      document.getElementById("kazuTab100").addEventListener("click", function () { setKazuMode("c100"); });
       kazuNextBtn.addEventListener("click", newKazu);
       document.getElementById("kazuHearBtn").addEventListener("click", function () {
         if (kazuMode === "count" && kazuItemNow) speak(kazuItemNow.h + "、は、いくつ あるかな？");
+        else if (kazuMode === "c100") speak(kazuNow100 ? numH(kazuNow100) : "100まで、かぞえよう！ボタンを おしてね。");
         else speak("あいてる ところは、なんばん かな？");
       });
 
@@ -7635,6 +8625,13 @@
         if (id === toId) {
           btn.classList.add("good");
           document.getElementById("hantaiMsg").textContent = "すごい！そのとおりだね！";
+          /* ペアにできた記録を残す（範囲内のペアを全部そろえたらスタンプ） */
+          var pairKey = WORDS[hantaiPair[0]].h + "|" + WORDS[hantaiPair[1]].h;
+          if (achv.hp.indexOf(pairKey) < 0) {
+            achv.hp.push(pairKey);
+            saveState();
+            if (hantaiAllDone()) awardStamp("hantaiAll");
+          }
           setTimeout(function () { speak(WORDS[fromId].h + "、の はんたいは、" + WORDS[toId].h + "だね！"); }, 900);
         } else {
           document.getElementById("hantaiMsg").textContent = "それは " + WORDS[id].h + " だね。はんたいは こっちだよ！";
@@ -7928,6 +8925,8 @@
           shiriChain.push(id);
           shiriUsed[id] = 1;
           shiriCollect(id);
+          awardStamp("shiri");   /* 初めてつながったらスタンプ */
+          if (shiriChain.length >= 10) awardStamp("shiri10");   /* 10個つながったらスタンプ */
           speak(WORDS[id].h);
           setTimeout(function () {
             if (shiritoriEl.hidden) return;
@@ -7991,10 +8990,12 @@
          カタカナは、大人用設定が「漢字・カタカナあり」のときだけ選べる
          （書き順は KanjiVG 由来の TRACE_KATA、ひらがなと同じ71文字分）。
          評価は合否判定にしない: お手本にだいたい沿えた画はそのまま進み、
-         最後までなぞれたらほめる。あまりにも違う画（線から大きく外れる・
-         方向が逆・関係ない場所など）だけは、失敗表示を出さず
-         「おてほんの せんを なぞってみよう」と案内してお手本を目立たせ、
-         その画をもう一度なぞれるようにする。基準は十分にゆるく取る。
+         最後までなぞれたらほめる。判定する項目は大人用設定「なぞりがきの判定」で
+         項目ごとにオン・オフでき（かくすう／かきじゅん／むき／かたち／
+         せいかくな かたち、初期値はレベル4相当＝正確な形だけオフ）、
+         オンにした項目が合わなかった画だけ、失敗表示を出さず項目に合った
+         案内を出してお手本を目立たせ、その画をもう一度なぞれるようにする。
+         オフの項目は一切判定しない（全部オフなら全ての画がそのまま進む）。
          なぞり終えたら、その文字の例として出した言葉を、
          他の遊びと同じ扱いで図鑑に集める（文字そのものは登録しない）。 */
       var nazoriEl = document.getElementById("nazoriEl");
@@ -8338,6 +9339,12 @@
       }
       function nazoriFinishChar() {
         nazoriFinished = true;
+        /* ひらがなを書き終えたら進み具合に記録する（全71字そろったらスタンプ） */
+        if (nazoriMode === "hira" && achv.nz.indexOf(nazoriChar) < 0) {
+          achv.nz.push(nazoriChar);
+          saveState();
+          if (nazoriAllHiraDone()) awardStamp("nazoriAll");
+        }
         nazoriUpdateGuides();
         document.getElementById("nazoriStep").textContent = "はなまる！";
         var msg;
@@ -8353,6 +9360,7 @@
         }
         document.getElementById("nazoriStatus").textContent = msg;
         sfx("fanfare");
+        awardStamp("nazori");   /* 初めて書き終えたらスタンプ */
         celebrate("じょうずに かけたね！", "🌸");
         speak(msg);
       }
@@ -8381,21 +9389,11 @@
         }
         document.getElementById("nazoriLive").setAttribute("d", nazoriPts.map(function (q, i) { return (i ? "L" : "M") + q.x + "," + q.y; }).join(" "));
       });
-      /* なぞりの評価（合否判定にはしない・基準は十分にゆるく）:
-         お手本の線にだいたい沿っていれば true。あまりにも違う場合だけ false。
-         - 方向: お手本と逆向きに大きく動いた
-         - 長さ: お手本の半分未満しか なぞっていない
-         - 近さ: お手本の点のうち、なぞり線の近くにある割合が 4割未満
-         判定に必要な情報が取れないときは true（通す）側に倒す。 */
-      function nazoriJudge(pts, userLen) {
-        var s = nazoriSamples[nazoriStroke];
-        if (!s || !s.pts || !s.pts.length || pts.length < 2) return true;
-        var ux = pts[pts.length - 1].x - pts[0].x, uy = pts[pts.length - 1].y - pts[0].y;
-        var gx = s.ex - s.x, gy = s.ey - s.y;
-        var gl = Math.hypot(gx, gy), ul = Math.hypot(ux, uy);
-        if (gl > 15 && ul > 10 && (ux * gx + uy * gy) < -0.35 * gl * ul) return false;
-        if (s.len >= 14 && userLen < s.len * 0.58) return false;
-        var TH = 17, hit = 0;
+      /* お手本の画サンプル s の点のうち、ユーザーの線 pts から th 以内にある割合（0〜1）。
+         判定に必要な情報が取れないときは 1（近い）側に倒す。 */
+      function nazoriCoverage(s, pts, th) {
+        if (!s || !s.pts || !s.pts.length || pts.length < 2) return 1;
+        var hit = 0, th2 = th * th;
         for (var i = 0; i < s.pts.length; i++) {
           var gp = s.pts[i], best = Infinity;
           for (var j = 0; j < pts.length; j++) {
@@ -8403,9 +9401,126 @@
             if (d2 < best) best = d2;
             if (best <= 25) break;
           }
-          if (best <= TH * TH) hit++;
+          if (best <= th2) hit++;
         }
-        return (hit / s.pts.length) >= 0.38;
+        return hit / s.pts.length;
+      }
+      /* ユーザーの線 pts の点のうち、お手本の画サンプル s から th 以内にある割合（0〜1）。
+         お手本から離れた場所に余分な線を引いていないかを見るために使う。 */
+      function nazoriUserCoverage(s, pts, th) {
+        if (!s || !s.pts || !s.pts.length || pts.length < 2) return 1;
+        var hit = 0, n = 0, th2 = th * th;
+        var step = Math.max(1, Math.floor(pts.length / 60));
+        for (var i = 0; i < pts.length; i += step) {
+          n++;
+          var up = pts[i], best = Infinity;
+          for (var j = 0; j < s.pts.length; j++) {
+            var dx = s.pts[j].x - up.x, dy = s.pts[j].y - up.y, d2 = dx * dx + dy * dy;
+            if (d2 < best) best = d2;
+            if (best <= 9) break;
+          }
+          if (best <= th2) hit++;
+        }
+        return n ? hit / n : 1;
+      }
+      /* なぞりの評価（合否判定にはしない）: 大人用設定「なぞりがきの判定」で
+         オンにした項目だけを判定し、合わなかった項目があれば { kind, msg } を、
+         問題なければ null を返す。返す場合は失敗扱いにせず、msg の案内を出して
+         その画だけ書き直せるようにする（nazoriEndStroke 側）。
+         判定に必要な情報が取れないときは通す（null）側に倒す。
+         - かくすう: 1本の線を途中で分けた（短すぎる）／2本分を1本で書いた（次の画まで届いた）
+         - かきじゅん: ほかの画（特によく似た別の画）を先に書いた
+         - むき: 書き始めの向き、または全体の向きがお手本と大きく違う
+         - かたち: お手本の点への近さと長さ（ゆるい基準）
+         - せいかくな かたち: かたちの代わりに、近さ・はみ出し・長さ・始点終点を厳しく見る */
+      function nazoriJudgeDetail(pts, userLen) {
+        var s = nazoriSamples[nazoriStroke];
+        if (!s || !s.pts || !s.pts.length || pts.length < 2) return null;
+        var chk = (typeof nazoriChk !== "undefined" && nazoriChk) ? nazoriChk : NAZORI_CHK_DEFAULT;
+        if (!chk.count && !chk.order && !chk.dir && !chk.shape && !chk.exact) return null;
+        var cov = nazoriCoverage(s, pts, 17);   /* いまの画への近さ（ゆるい物差し） */
+        /* かきじゅん: いまの画より、ほかの画にはっきり似ている線を書いた */
+        if (chk.order) {
+          var bestJ = -1, bestCov = 0;
+          for (var j = 0; j < nazoriSamples.length; j++) {
+            if (j === nazoriStroke) continue;
+            var sj = nazoriSamples[j];
+            if (!sj || !sj.pts || !sj.pts.length) continue;
+            var cj = nazoriCoverage(sj, pts, 17);
+            if (cj > bestCov) { bestCov = cj; bestJ = j; }
+          }
+          if (bestJ >= 0 && bestCov >= 0.5 && bestCov > cov + 0.2) {
+            return { kind: "order", msg: "いまは " + (nazoriStroke + 1) + "ばんめの せんを かこう。ばんごうの ところから はじめてね。" };
+          }
+        }
+        /* かくすう: 本数がお手本と違う書き方をした */
+        if (chk.count) {
+          /* 少ない: これから書く画まで、1本で続けて書いた */
+          var merged = false;
+          for (var j2 = nazoriStroke + 1; j2 < nazoriSamples.length; j2++) {
+            var sj2 = nazoriSamples[j2];
+            if (!sj2 || !sj2.pts || !sj2.pts.length) continue;
+            if (nazoriCoverage(sj2, pts, 17) >= 0.55) { merged = true; break; }
+          }
+          if (merged && cov >= 0.45) {
+            return { kind: "count", msg: "せんが たりないよ。せんは 1ぽんずつ かこう。" };
+          }
+          /* 多い: 1本の線を途中で分けて書いた（お手本の半分にも届いていない） */
+          if (s.len >= 20 && userLen < s.len * 0.5 && cov < 0.6) {
+            return { kind: "count", msg: "せんが おおいよ。その せんは 1ぽんで かいてみよう。" };
+          }
+        }
+        /* むき: 書き始めの向きと、まっすぐな画では全体の向きを見る */
+        if (chk.dir) {
+          var dirFail = false;
+          var gix = s.ax - s.x, giy = s.ay - s.y;         /* お手本: 始点から約11px先への向き */
+          var gil = Math.hypot(gix, giy);
+          var upt = pts[pts.length - 1], acc = 0;          /* ユーザー: 始点から約11px進んだ点 */
+          for (var ui = 1; ui < pts.length; ui++) {
+            acc += Math.hypot(pts[ui].x - pts[ui - 1].x, pts[ui].y - pts[ui - 1].y);
+            upt = pts[ui];
+            if (acc >= 11) break;
+          }
+          var uix = upt.x - pts[0].x, uiy = upt.y - pts[0].y;
+          var uil = Math.hypot(uix, uiy);
+          if (gil >= 7 && uil >= 6 && (gix * uix + giy * uiy) < 0.15 * gil * uil) dirFail = true;
+          if (!dirFail) {
+            var gx = s.ex - s.x, gy = s.ey - s.y;
+            var gl = Math.hypot(gx, gy);
+            var ux = pts[pts.length - 1].x - pts[0].x, uy = pts[pts.length - 1].y - pts[0].y;
+            var ul = Math.hypot(ux, uy);
+            /* 全体の向きは、曲がりの少ない画（始終点の距離が長さの4割以上）だけに使う */
+            if (gl >= 14 && gl >= s.len * 0.4 && ul >= 9 && (gx * ux + gy * uy) < 0.35 * gl * ul) dirFail = true;
+          }
+          if (dirFail) {
+            return { kind: "dir", msg: "こっちから かいてみよう。やじるしの むきに なぞってね。" };
+          }
+        }
+        /* かたち／せいかくな かたち: せいかくな かたちがオンなら厳しい方で判定する */
+        if (chk.exact) {
+          var shapeFail;
+          if (s.len < 12) {
+            shapeFail = nazoriCoverage(s, pts, 9) < 0.5;
+          } else {
+            var startOk = Math.hypot(pts[0].x - s.x, pts[0].y - s.y) <= 14;
+            var endOk = Math.hypot(pts[pts.length - 1].x - s.ex, pts[pts.length - 1].y - s.ey) <= 14;
+            shapeFail = nazoriCoverage(s, pts, 9) < 0.55 ||
+                        nazoriUserCoverage(s, pts, 9) < 0.55 ||
+                        userLen < s.len * 0.65 || userLen > s.len * 1.9 ||
+                        !startOk || !endOk;
+          }
+          if (shapeFail) {
+            return { kind: "shape", msg: "おてほんを よく みて、ゆっくり なぞってみよう。" };
+          }
+        } else if (chk.shape) {
+          if (s.len >= 14 && userLen < s.len * 0.58) {
+            return { kind: "shape", msg: "おてほんの せんを、さいごまで なぞってみよう。" };
+          }
+          if (cov < 0.38) {
+            return { kind: "shape", msg: "おてほんの かたちに あわせて なぞってみよう。" };
+          }
+        }
+        return null;
       }
       function nazoriEndStroke(cancelled) {
         if (nazoriPointer === null) return;
@@ -8417,15 +9532,16 @@
           nazoriPts = []; nazoriLen = 0;
           return;
         }
-        if (!nazoriJudge(nazoriPts, nazoriLen)) {
-          /* あまりにも違うなぞり方: 失敗表示はせず、お手本を目立たせて
-             その画をもう一度なぞれるようにする（画は進めない・線も残さない） */
+        var nazoriFail = nazoriJudgeDetail(nazoriPts, nazoriLen);
+        if (nazoriFail) {
+          /* オンにした判定項目が合わなかった: 失敗表示はせず、項目に合った案内を
+             出してお手本を目立たせ、その画をもう一度なぞれるようにする
+             （画は進めない・線も残さない） */
           nazoriPts = []; nazoriLen = 0;
-          var retryMsg = "おてほんの せんを なぞってみよう。ばんごうの ところから はじめてね。";
-          document.getElementById("nazoriStatus").textContent = retryMsg;
+          document.getElementById("nazoriStatus").textContent = nazoriFail.msg;
           var cur = nazoriPaths[nazoriStroke];
           if (cur) cur.setAttribute("class", "guide now retry");
-          speak(retryMsg);
+          speak(nazoriFail.msg);
           return;
         }
         var SVGNS = "http://www.w3.org/2000/svg";
@@ -8810,6 +9926,7 @@
             otoOpen = []; otoLock = false;
             otoRenderMatch();
             otoCollect(it);
+            awardStamp("oto");   /* 初めてそろえたらスタンプ */
             sfx("good");
             if (otoDoneCount >= 8) {
               document.getElementById("otoMsg").textContent = "ぜんぶ そろったね！ すごい！";
@@ -10058,8 +11175,9 @@
             var chip = document.createElement("button");
             chip.type = "button";
             chip.className = "today-chip";
-            var em = document.createElement("span");
-            em.className = "em"; em.textContent = WORDS[id].e;
+            var em;
+            if (WORDS[id].img) { em = document.createElement("img"); em.className = "cimg"; em.src = WORDS[id].img; em.alt = ""; }
+            else { em = document.createElement("span"); em.className = "em"; em.textContent = WORDS[id].e; }
             var tx = document.createElement("span");
             setWordHTML(tx, WORDS[id]);
             chip.appendChild(em); chip.appendChild(tx);
@@ -10143,7 +11261,7 @@
           dated.forEach(function (r, i) {
             var n = i + 1;
             if (ALBUM_MILES.indexOf(n) >= 0) events.push({ d: r.d, text: n.toLocaleString() + "語目を集めた日" });
-            if (GARDEN_ONLY_MILES.indexOf(n) >= 0) events.push({ d: r.d, text: "おはなばたけが " + n.toLocaleString() + "こになった日" });
+            if (GARDEN_ONLY_MILES.indexOf(n) >= 0) events.push({ d: r.d, text: "おはなばたけが " + n.toLocaleString() + "個になった日" });
           });
         }
         /* 分野コンプリート日: その分野の最後の1語を集めた日（全語に日付がある場合のみ算出） */
@@ -10172,11 +11290,15 @@
         Object.keys(saidFirst).forEach(function (k) {
           var id = Number(k);
           if (isValidId(id) && saidFirst[k]) {
-            events.push({ d: saidFirst[k], text: "はじめて言えた言葉：「" + (mode === "hira" ? WORDS[id].h : WORDS[id].d) + "」" });
+            events.push({ d: saidFirst[k], text: "初めて言えた言葉：「" + (mode === "hira" ? WORDS[id].h : WORDS[id].d) + "」" });
           }
         });
         Object.keys(stampDays).forEach(function (dk) {
           if (stampDays[dk]) events.push({ d: dk, text: "「今日の言葉」を全部見つけた日" });
+        });
+        /* もらったスタンプ（「はじめて」系・集めた数の節目）も記録として載せる */
+        STAMP_DEFS.forEach(function (sd) {
+          if (stampLog[sd.key]) events.push({ d: stampLog[sd.key], text: "スタンプ獲得：" + sd.album });
         });
         events.sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
         if (!events.length) {
@@ -10311,28 +11433,35 @@
         }
         body.appendChild(saidSec);
 
-        /* 3. もらったスタンプ（🏅小分類・👑大分類・🏆全体） */
+        /* 3. もらったスタンプ（🏅小分類・👑大分類・🏆全体のコンプリートに加えて、
+           「はじめて」系と集めた数の節目。後者は stampLog に記録された分だけ並べる。
+           見た目は全て同じ丸いスタンプで、インク色で種類を分ける） */
         var stampSec = ckSection("🎖️ もらった スタンプ", "");
         var stamps = document.createElement("div");
         stamps.className = "ck-stamps";
         var stampCount = 0;
-        function addStamp(emoji, catEmoji, name, phrase, isScope) {
+        function addStamp(emoji, catEmoji, name, phrase, isScope, opt) {
           stampCount++;
+          var tier = (opt && opt.tier) ? opt.tier : (emoji === "🏆" ? "tier-trophy" : emoji === "👑" ? "tier-crown" : "tier-medal");
           var row = document.createElement("button");
           row.type = "button";
-          row.className = "ck-stamp" + (isScope ? " scope" : "");
+          row.className = "ck-stamp " + tier + (isScope ? " scope" : "");
           row.setAttribute("aria-label", name + "、" + phrase);
           var se = document.createElement("span");
           se.className = "ck-stamp-em"; se.setAttribute("aria-hidden", "true"); se.textContent = emoji;
           row.appendChild(se);
+          var nm = document.createElement("span");
+          nm.className = "ck-stamp-name";
           if (catEmoji) {
             var ce = document.createElement("span");
-            ce.className = "ck-stamp-cat"; ce.setAttribute("aria-hidden", "true"); ce.textContent = catEmoji;
-            row.appendChild(ce);
+            ce.className = "ck-stamp-cat"; ce.setAttribute("aria-hidden", "true"); ce.textContent = catEmoji + " ";
+            nm.appendChild(ce);
           }
-          var nm = document.createElement("span");
-          nm.textContent = name;
+          nm.appendChild(document.createTextNode(name));
           row.appendChild(nm);
+          var sb = document.createElement("span");
+          sb.className = "ck-stamp-sub"; sb.setAttribute("aria-hidden", "true"); sb.textContent = (opt && opt.sub) ? opt.sub : "ぜんぶ あつめたよ！";
+          row.appendChild(sb);
           row.addEventListener("click", function () { speak(phrase); });
           stamps.appendChild(row);
         }
@@ -10347,8 +11476,12 @@
             addStamp("🏅", CAT_E[ci] || "", cn, cn + "、ぜんぶ あつめたよ！", false);
           }
         });
+        /* 「はじめて」系（緑インク）と集めた数の節目（橙インク） */
+        STAMP_DEFS.forEach(function (sd) {
+          if (stampLog[sd.key]) addStamp(sd.emoji, "", stampNameOf(sd), sd.phrase, false, { tier: sd.tier, sub: sd.sub });
+        });
         if (!stampCount) {
-          stampSec.appendChild(ckGuide("スタンプは まだ ないよ。\nなかまの ことばを ぜんぶ あつめると、ここに たまるよ。"));
+          stampSec.appendChild(ckGuide("スタンプは まだ ないよ。\nあそんで いると、はじめて できた ときや、たくさん あつめた とき、がんばった ときに、ここに たまるよ。"));
         } else {
           stampSec.appendChild(stamps);
         }
