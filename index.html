@@ -6871,7 +6871,7 @@
          本人の意思でない「オフ」が残っていることがある。そのため、大人が
          バッジを明示的に切り替えた記録（firstBadgeChoice）が無い保存データでは、
          保存値にかかわらずオンとして扱い直す（下の v2 復元部を参照）。 */
-      var FEATURE_SIMPLE = { rensou: 1, mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 1, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 1, nazori: 1, oto: 1, tanken: 0, moji: 1 };
+      var FEATURE_SIMPLE = { rensou: 1, mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 1, nazori: 1, oto: 1, tanken: 0, moji: 1 };
       var FEATURE_FULL = { rensou: 1, mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1, nazori: 1, oto: 1, tanken: 1, moji: 1 };
       /* デフォルト（初期状態・「デフォルトに戻す」の戻し先）: FEATURE_SIMPLE が
          そのままそれにあたる。ホームに並ぶ遊びで初期オンなのは、れんそう・
@@ -6880,7 +6880,7 @@
          おだい（mission）と今日の言葉（today）はデフォルトでオフ: この2つは
          盤面専用ではなく、ホーム表示＋全ての遊びの図鑑登録で達成が進む機能だが、
          初期状態では出さず、大人用設定でオンにしたときだけ使う。
-         ずかんの★表示（star）はデフォルトでオン（初期状態と「デフォルトに戻す」
+         ずかんの★表示（star）はデフォルトでオフ（初期状態と「デフォルトに戻す」
          の戻し先）。保存データに個別の値がある場合は、その保存値を尊重する。
          れんそう（rensou）は後から追加した項目で、古い保存データには値が無い。
          その場合は初期値（オン）のままになる＝今まで常に出ていた盤面が
