@@ -4,7 +4,7 @@
 
 Permainan kata untuk anak usia dini yang dapat dimainkan di peramban, untuk menambah kosakata sambil bermain. **Sepenuhnya gratis, tanpa biaya.**
 
-Versi saat ini: **3.1**
+Versi saat ini: **3.2**
 
 **▶ Main: https://kagoya.github.io/goigoi/**
 
@@ -20,13 +20,14 @@ Versi saat ini: **3.1**
 ## Fitur
 
 - Berisi **sekitar 39.000 kata** (ずかん memiliki dua tingkat: 11 kategori besar dan 200 kategori kecil)
-- 18 permainan di layar beranda (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Pada pengaturan awal, 6 permainan aktif (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), dan masing-masing dapat diaktifkan atau dinonaktifkan di Pengaturan
-- 「もじあそび」 terdiri dari dua permainan: 「ことば あなうめ」 dan 「ことば みっけ」. 「五十音ならべ」 adalah permainan tersendiri: pilih satu baris dari tabel gojuuon dan susun huruf-hurufnya. Setelah satu baris lengkap, ketuk satu huruf untuk melihat kartu kata yang mengandung huruf tersebut
+- 18 permainan di layar beranda (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Pada pengaturan awal, 6 permainan aktif (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), dan masing-masing dapat diaktifkan atau dinonaktifkan di Pengaturan
+- 「もじあそび」 terdiri dari dua permainan: 「ことば あなうめ」 dan 「ことば みっけ」. 「ごじゅうおん ならべ」 adalah permainan tersendiri: pilih satu baris dari tabel gojuuon dan susun huruf-hurufnya. Setelah satu baris lengkap, ketuk satu huruf untuk melihat kartu kata yang mengandung huruf tersebut
 - Meskipun salah menjawab kuis, itu tidak pernah dianggap sebagai kegagalan: jawaban yang benar diperiksa bersama dan anak dipuji. Tidak ada persaingan
 - Ukuran kosakata dapat dipilih dari 1.000 / 5.000 / 25.000 / semua (disaring dengan peringkat 8 tingkat berdasarkan seberapa sering kata digunakan; berlaku untuk semua fitur)
 - Mode malam dapat dipilih di Pengaturan: "siang / malam / otomatis menurut waktu (18.00–06.00)". Tidak mengikuti mode gelap perangkat
 - Sakelar nyala/mati suara adalah sakelar bersama di bagian atas layar (tidak dapat dimatikan di おととことば dan ききとりクイズ)
-- Total 25 jenis stempel (3 stempel penyelesaian, 8 stempel "pertama kali", 5 stempel pencapaian jumlah kata yang dikumpulkan, 9 stempel prestasi). Dapat dilihat dalam bentuk stempel bulat di 「きろく」 untuk anak, yang dibuka dari ずかん
+- Total 33 jenis stempel (3 stempel penyelesaian, 9 stempel "pertama kali", 5 stempel pencapaian jumlah kata yang dikumpulkan, 11 stempel prestasi, 5 stempel total hari bermain). Dapat dilihat dalam bentuk stempel bulat di 「きろく」 untuk anak, yang dibuka dari ずかん
+- Di ずかん, setiap kata menampilkan berapa kali kata itu dimainkan, dengan lencana "×N". Dalam tampilan kartu, kata yang dimainkan 5 kali atau lebih mendapat bingkai perak, dan 10 kali atau lebih mendapat bingkai emas dan 👑. 「きろく」 untuk anak menampilkan kata yang paling sering dimainkan sebagai 「たくさん あそんだ ことば」, dan jumlahnya juga tercantum di 保護者レポート dan kartu kata yang dicetak
 - ずかん dapat dialihkan oleh anak sendiri antara tampilan daftar dan tampilan kartu dengan gambar besar
 - Gambar suatu kata dapat diganti dengan foto dari Pengaturan, di 「言葉の絵を変える」 (foto otomatis diperkecil ukurannya dan disimpan; termasuk dalam cadangan dan dapat dikembalikan ke bawaan)
 - Penilaian なぞりがき dapat diatur satu per satu di Pengaturan: jumlah goresan, urutan goresan, arah, bentuk, dan bentuk persis (dapat juga dipilih dengan level 1–5; pengaturan awal setara dengan level 4)

@@ -4,7 +4,7 @@
 
 A word game for toddlers to enjoy growing their vocabulary, playable in a web browser. **Completely free — no charges.**
 
-Current version: **3.1**
+Current version: **3.2**
 
 **▶ Play: https://kagoya.github.io/goigoi/**
 
@@ -20,13 +20,14 @@ Current version: **3.1**
 ## Features
 
 - About **39,000 words** included (the ずかん has two levels: 11 large categories and 200 small categories)
-- 18 activities on the home screen (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Six are on in the initial settings (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), and each can be turned on or off in Settings
-- 「もじあそび」 consists of two games: 「ことば あなうめ」 and 「ことば みっけ」. 「五十音ならべ」 is a separate activity: pick a row from the gojuuon chart and arrange its characters. After completing a row, choose a character to see a word card containing that character
+- 18 activities on the home screen (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Six are on in the initial settings (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), and each can be turned on or off in Settings
+- 「もじあそび」 consists of two games: 「ことば あなうめ」 and 「ことば みっけ」. 「ごじゅうおん ならべ」 is a separate activity: pick a row from the gojuuon chart and arrange its characters. After completing a row, choose a character to see a word card containing that character
 - Even if you get a quiz question wrong, it is never treated as a failure — you check the right answer together and get praised. There is no competition
 - Vocabulary size can be chosen from 1,000 / 5,000 / 25,000 / all (filtered by an 8-level rating of how commonly each word is used; applies to all features)
 - Night mode can be chosen in Settings: "day / night / automatic by time (18:00–6:00)". It does not follow your device's dark mode
 - The sound on/off switch is a shared switch at the top of the screen (it cannot be turned off in おととことば or ききとりクイズ)
-- 25 kinds of stamps in total (3 completion stamps, 8 "first time" stamps, 5 word-count milestone stamps, 9 achievement stamps). You can view them as round stamps in the children's 「きろく」, opened from the ずかん
+- 33 kinds of stamps in total (3 completion stamps, 9 "first time" stamps, 5 word-count milestone stamps, 11 achievement stamps, 5 total-days-played stamps). You can view them as round stamps in the children's 「きろく」, opened from the ずかん
+- In the ずかん, each word shows how many times it has been played with, as a "×N" badge. In the card view, a word played with 5 or more times gets a silver border, and 10 or more times a gold border and a 👑. The children's 「きろく」 lines up the most-played words as 「たくさん あそんだ ことば」, and the count is also included in the 保護者レポート and in printed word cards
 - The ずかん can be switched between a list view and a card view with big pictures, by the child
 - The picture for a word can be replaced with a photo from Settings, in 「言葉の絵を変える」 (the photo is automatically reduced in size and saved; it is included in backups and can be reset to the default)
 - The なぞりがき tracing checks can be set individually in Settings: stroke count, stroke order, direction, shape, and exact shape (levels 1–5 can also be chosen; the default is equivalent to level 4)

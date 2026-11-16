@@ -4,7 +4,7 @@
 
 Um jogo de palavras para crianças pequenas ampliarem o vocabulário brincando, jogável no navegador. **Totalmente grátis, sem cobranças.**
 
-Versão atual: **3.1**
+Versão atual: **3.2**
 
 **▶ Jogar: https://kagoya.github.io/goigoi/**
 
@@ -20,13 +20,14 @@ Versão atual: **3.1**
 ## Características
 
 - **Cerca de 39.000 palavras** incluídas (o ずかん tem dois níveis: 11 categorias grandes e 200 categorias pequenas)
-- 18 brincadeiras na tela inicial (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Na configuração inicial, seis ficam ligadas (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), e cada uma pode ser ligada ou desligada nas Configurações
-- 「もじあそび」 é formado por dois jogos: 「ことば あなうめ」 e 「ことば みっけ」. 「五十音ならべ」 é uma brincadeira independente: você escolhe uma linha da tabela gojuuon e organiza suas letras. Depois de completar uma linha, toque em uma letra para ver um cartão de uma palavra que contém essa letra
+- 18 brincadeiras na tela inicial (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Na configuração inicial, seis ficam ligadas (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), e cada uma pode ser ligada ou desligada nas Configurações
+- 「もじあそび」 é formado por dois jogos: 「ことば あなうめ」 e 「ことば みっけ」. 「ごじゅうおん ならべ」 é uma brincadeira independente: você escolhe uma linha da tabela gojuuon e organiza suas letras. Depois de completar uma linha, toque em uma letra para ver um cartão de uma palavra que contém essa letra
 - Mesmo errando no quiz, isso não é tratado como fracasso: a resposta certa é conferida junto e a criança é elogiada. Não há competição
 - O tamanho do vocabulário pode ser escolhido entre 1.000 / 5.000 / 25.000 / tudo (filtrado por uma classificação de 8 níveis conforme a frequência de uso; vale para todas as funções)
 - O modo noturno pode ser escolhido nas Configurações: "dia / noite / automático pelo horário (18h–6h)". Não segue o modo escuro do aparelho
 - O interruptor de som ligado/desligado é comum, no topo da tela (não pode ser desligado em おととことば e ききとりクイズ)
-- 25 tipos de carimbos no total (3 de conclusão, 8 de "primeira vez", 5 de marcos de quantidade de palavras coletadas, 9 de conquistas). Podem ser vistos em formato de carimbo redondo no 「きろく」 infantil, aberto a partir do ずかん
+- 33 tipos de carimbos no total (3 de conclusão, 9 de "primeira vez", 5 de marcos de quantidade de palavras coletadas, 11 de conquistas, 5 de dias totais de brincadeira). Podem ser vistos em formato de carimbo redondo no 「きろく」 infantil, aberto a partir do ずかん
+- No ずかん, cada palavra mostra quantas vezes foi usada para brincar, em um selo "×N". Na visualização em cartões, uma palavra usada 5 vezes ou mais ganha uma borda prateada, e 10 vezes ou mais, uma borda dourada e um 👑. O 「きろく」 infantil enfileira as palavras mais brincadas como 「たくさん あそんだ ことば」, e a contagem também entra no 保護者レポート e nos cartões de palavras impressos
 - O ずかん pode ser alternado pela própria criança entre a exibição em lista e a exibição em cartões com imagens grandes
 - A imagem de uma palavra pode ser trocada por uma foto em Configurações, em 「言葉の絵を変える」 (a foto é reduzida automaticamente e salva; está incluída no backup e pode voltar ao padrão)
 - A avaliação do なぞりがき pode ser ajustada nas Configurações, item por item: número de traços, ordem dos traços, direção, forma e forma exata (também é possível escolher pelos níveis 1–5; o padrão equivale ao nível 4)

@@ -479,6 +479,14 @@
         background: var(--card); color: var(--ink); font-weight: 800; font-size: 14px;
       }
       #quizBar button:active { transform: scale(0.95); }
+      /* ===== れんそうの遊び方ガイド（盤面の上に常時表示） ===== */
+      #boardGuide {
+        width: min(96vw, 620px); margin-top: 10px; text-align: center;
+        background: color-mix(in srgb, var(--accent) 16%, var(--card));
+        border: 2px solid var(--accent); border-radius: 20px;
+        padding: 10px 14px; box-shadow: var(--shadow);
+        font-size: 17px; font-weight: 800; line-height: 1.5; color: var(--ink);
+      }
       #quizBtn.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
       /* クイズ中は「いまの ことば」バーの中央読み上げボタンを押せなくする（見た目も分かるように薄くする） */
       #speakBtn:disabled, #sentenceBtn:disabled, #descBtn:disabled, #enSpeakBtn:disabled { opacity: 0.45; cursor: default; }
@@ -507,6 +515,13 @@
       }
       .b-center .first-badge { width: 5.4cqw; height: 5.4cqw; font-size: 3.1cqw; }
       .zchip .zrate { font-size: 11px; color: #8a5f00; letter-spacing: 1px; flex: none; font-weight: 800; }
+      /* 累積回数バッジ（×N）: ★レーティング（.zrate）や集めた順番（.znum）とは別物だと分かるよう、濃い茶色の丸バッジにする */
+      .zchip .zcount { font-size: 11px; font-weight: 800; background: #6b5b3e; color: #fff; border-radius: 999px; padding: 1px 7px; flex: none; }
+      :root.night .zchip .zcount { background: #8a764f; }
+      /* カード表示の段階の飾り: 5回以上＝銀色のふち、10回以上＝金色のふち＋👑（右上） */
+      .zchip.card.tier-silver { border-color: #aeb9c4; box-shadow: 0 0 0 3px #d9e1e9, var(--shadow); }
+      .zchip.card.tier-gold { border-color: #e0a400; box-shadow: 0 0 0 3px #ffd94d, var(--shadow); }
+      .zchip.card .zcrown { position: absolute; top: 6px; right: 10px; font-size: 22px; line-height: 1; }
       .bubble.shake { animation: shakeX 0.5s ease; }
       @keyframes shakeX {
         0%, 100% { transform: translateX(0); }
@@ -1042,6 +1057,10 @@
       .print-card .pem { font-size: 54px; line-height: 1.2; }
       .print-card .pwd { font-size: 24px; font-weight: 800; margin-top: 4px; color: #000; }
       .print-card .pyd { font-size: 13px; color: #555; margin-top: 2px; }
+      .print-card.tier-silver { border-color: #8a97a5; box-shadow: inset 0 0 0 3px #d7dee6; }
+      .print-card.tier-gold { border-color: #b8860b; box-shadow: inset 0 0 0 3px #ffd94d; }
+      .print-card .pcount { font-size: 13px; font-weight: 800; color: #333; margin-top: 3px; }
+      .print-card .pcrown { font-size: 20px; line-height: 1.2; }
       .print-title { font-size: 18px; font-weight: 800; margin: 0 auto 6px; color: #000; max-width: 760px; }
       .print-note { font-size: 13px; color: #555; margin: 0 auto 12px; max-width: 760px; font-weight: 700; line-height: 1.6; }
       .print-close {
@@ -1469,6 +1488,11 @@
       .ck-card:active { filter: brightness(0.95); }
       .ck-card .em { display: block; font-size: 46px; }
       .ck-card .em-img { width: 58px; height: 58px; object-fit: cover; border-radius: 14px; display: block; }
+      .ck-card { position: relative; }
+      .ck-card.tier-silver { border-color: #aeb9c4; box-shadow: 0 0 0 3px #d9e1e9, var(--shadow); }
+      .ck-card.tier-gold { border-color: #e0a400; box-shadow: 0 0 0 3px #ffd94d, var(--shadow); }
+      .ck-card .ck-count { position: absolute; top: 6px; right: 6px; font-size: 12px; font-weight: 800; background: #6b5b3e; color: #fff; border-radius: 999px; padding: 1px 8px; line-height: 1.4; }
+      .ck-card .ck-crown { position: absolute; top: 4px; left: 8px; font-size: 20px; line-height: 1; }
       .ck-card .wd {
         display: block; font-weight: 800; color: var(--ink); text-align: center;
         background: color-mix(in srgb, var(--card) 82%, transparent);
@@ -1521,7 +1545,10 @@
       :root.night .ck-stamp.tier-achv { --stamp-ink: #7fd4dc; }
       /* 通算で遊んだ日数（連続ではない）は紫インクで、連続日数（達成系）と区別する */
       .ck-stamp.tier-days { --stamp-ink: #7a4fa3; }
+      /* 累積回数（くりかえし遊んだ）系はピンクのインクで、他の系統と区別する */
+      .ck-stamp.tier-repeat { --stamp-ink: #b03060; }
       :root.night .ck-stamp.tier-days { --stamp-ink: #c9a6ec; }
+      :root.night .ck-stamp.tier-repeat { --stamp-ink: #f2a0c0; }
       /* 新しいスタンプをもらった瞬間の小さなお祝い: 画面の下に、丸いスタンプが
          「ポン」と押される見た目で短く出る。操作の邪魔をしないよう pointer-events は切る。
          「動きを減らす」（body.rm）のときはアニメーションが止まり、静止したまま出る */
@@ -1547,10 +1574,12 @@
       .stamp-toast-circle.tier-mile { --stamp-ink: #c2610f; }
       .stamp-toast-circle.tier-achv { --stamp-ink: #0e7c86; }
       .stamp-toast-circle.tier-days { --stamp-ink: #7a4fa3; }
+      .stamp-toast-circle.tier-repeat { --stamp-ink: #b03060; }
       :root.night .stamp-toast-circle { --stamp-ink: #7fd6a4; }
       :root.night .stamp-toast-circle.tier-mile { --stamp-ink: #f2a65e; }
       :root.night .stamp-toast-circle.tier-achv { --stamp-ink: #7fd4dc; }
       :root.night .stamp-toast-circle.tier-days { --stamp-ink: #c9a6ec; }
+      :root.night .stamp-toast-circle.tier-repeat { --stamp-ink: #f2a0c0; }
       .stamp-toast-circle.press { animation: stampPress 0.45s ease-out; }
       @keyframes stampPress {
         0% { transform: scale(1.9) rotate(-20deg); opacity: 0; }
@@ -1721,6 +1750,8 @@
       <button id="quizReplayBtn" type="button">🔊 もういちど きく</button>
       <button id="quizExitBtn" type="button">クイズを おわる</button>
     </div>
+
+    <div id="boardGuide">まんなかの ことばと なかよしの ことばを えらんでね</div>
 
     <div id="boardWrap">
       <div id="board" aria-label="ことばの カード">
@@ -1964,7 +1995,7 @@
         <p class="adult-note" data-i18n="about2">言葉のカードをタップすると、その言葉が声で読み上げられ、関係のある言葉が周りに並びます。気になる言葉を次々とたどっていくうちに、知っている言葉が少しずつ増えていきます。</p>
         <p class="adult-note" data-i18n="about3">クイズで別の答えを選んでも失敗にはせず、正解を一緒に確認して褒める作りです。競争もありません。言葉を見つけてずかんに集める楽しさの中で、自分のペースで遊べます。出てくる言葉は、日常生活でよく使うものを中心に出るよう調整しています。上の設定で、言葉の数や文字の表示を、使う人に合わせて変えられます。</p>
         <p class="credit-line" data-i18n="creditAuthor">作者： @kagoya</p>
-        <p class="credit-line">バージョン 3.1</p>
+        <p class="credit-line">バージョン 3.2</p>
         <p class="credit-line" data-i18n="creditKanji">書き順データ：KanjiVG © Ulrich Apel（CC BY-SA 3.0）</p>
         <p class="credit-line" data-i18n="creditSfx">効果音（おととことば）：CC0の録音素材（Freesound等）</p>
         <p class="adult-note"><span data-i18n="licensePre">このゲームは、クリエイティブ・コモンズ表示 4.0 国際ライセンス（CC BY 4.0）で公開しています。作者名を表示すれば、複製や再配布、改変もできます。ライセンスの内容は</span><a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener" data-i18n="licenseLink">クリエイティブ・コモンズのページ</a><span data-i18n="licensePost">で確認できます。</span></p>
@@ -2633,6 +2664,8 @@
         d_repRecent: "新しく集めた言葉（直近）", d_repDatedNote: "日付の記録は、これから遊ぶ分から残ります。",
         d_repSaid: "初めて言えた言葉（まねっこ）", d_repSaidNone: "まだ記録がありません。まねっこで上手に言えると、ここに残ります。",
         d_repPicks: "よく選ぶ言葉（どっちが すき？）", d_repPicksNone: "まだ記録がありません。「どっちが すき？」で選ぶと、ここに残ります。",
+        d_repPlayed: "たくさん遊んだ言葉（累積回数）", d_repPlayedNone: "まだ記録がありません。同じ言葉で繰り返し遊ぶと、ここに残ります。",
+        d_stageGold: "👑金色", d_stageSilver: "銀色",
         d_timesCount: "（{n}回）",
         d_printClose: "✕ プレビューを閉じる",
         d_printNote: "印刷するときは、ブラウザの印刷機能（メニュー、または Ctrl+P / ⌘+P）を使ってください。印刷では、このカード一覧だけが整って印刷されます。",
@@ -2852,6 +2885,8 @@
         d_repRecent: "Newly collected words (recent)", d_repDatedNote: "Date records will be kept from words collected from now on.",
         d_repSaid: "Words said for the first time (まねっこ)", d_repSaidNone: "No records yet. When a word is said well in まねっこ, it will appear here.",
         d_repPicks: "Words chosen often (どっちが すき？)", d_repPicksNone: "No records yet. Choices in どっちが すき？ will appear here.",
+        d_repPlayed: "Words played many times (total plays)", d_repPlayedNone: "No records yet. Playing the same word again and again will appear here.",
+        d_stageGold: "👑Gold", d_stageSilver: "Silver",
         d_timesCount: " ({n} times)",
         d_printClose: "✕ Close preview",
         d_printNote: "To print, use your browser's print function (menu, or Ctrl+P / ⌘+P). Only this card list is printed, neatly formatted.",
@@ -6923,6 +6958,35 @@
       } catch (eProbe) { storageUsable = false; }
       var stampDays = {};             /* 「今日の言葉」を全部見つけた日の記録（カレンダーのスタンプ用）: "年-月-日" → 1 */
       var collectedDates = {};        /* 言葉を集めた日: 番号 → "年-月-日"（復習と保護者レポートに使う） */
+      var playCounts = {};            /* 言葉で遊んだ累積回数: 番号 → 回数（プロフィールごと）。ずかん登録と同じタイミングで数え、初回（登録）＝1回、登録済みの言葉で再び遊ぶと+1する。保存・バックアップの対象 */
+      /* 累積回数の読み取り: 記録が無い言葉は、登録済みなら1回（移行前の古い記録への配慮）、未登録なら0回として扱う */
+      function playCountOf(id) {
+        var n = playCounts[id];
+        if (typeof n === "number" && isFinite(n) && n > 0) return Math.floor(n);
+        return collectedSet[id] ? 1 : 0;
+      }
+      /* 言葉で遊んだ回数を数える（ずかん登録と同じ場所から呼ぶ）。初回＝登録＝1回、登録済みの言葉は+1する。
+         累積回数のスタンプ判定もここで行う */
+      function bumpPlayCount(id, wasNew) {
+        if (wasNew) playCounts[id] = 1;
+        else playCounts[id] = playCountOf(id) + 1;
+        if (typeof syncPlayCountStamps === "function") syncPlayCountStamps(false);
+      }
+      /* 登録済みの言葉に回数の記録が無ければ1回から始める（既存の保存データの移行） */
+      function ensurePlayCounts() {
+        collected.forEach(function (id) { if (!(typeof playCounts[id] === "number" && playCounts[id] > 0)) playCounts[id] = 1; });
+      }
+      /* 保存・プロフィール読み込み用: 形の正しい回数だけ復元し、残りは1回から始める */
+      function restorePlayCounts(src) {
+        playCounts = {};
+        if (src && typeof src === "object" && !Array.isArray(src)) {
+          Object.keys(src).forEach(function (k) {
+            var id = Number(k), v = src[k];
+            if (isValidId(id) && collectedSet[id] && typeof v === "number" && isFinite(v) && v > 0) playCounts[id] = Math.floor(v);
+          });
+        }
+        ensurePlayCounts();
+      }
       var customWords = [];           /* 大人が登録した「うちの子の言葉」: {h, d, e, cat, img?} の配列 */
       var wordPhotos = {};            /* 収録語の絵の写真差し替え: 読み（ひらがな）→ 圧縮済み写真データ(dataURL)。「うちの子の言葉」の写真（customWords[].img）とは別の仕組み。共通設定として保存され、バックアップにも含まれる（buildSaveData の settings.wordPhotos） */
       var BUILTIN_TOTAL = TOTAL;      /* 収録語（カスタム語を足す前）の総数。差し替えの対象は先頭 BUILTIN_TOTAL 語だけ */
@@ -7067,6 +7131,7 @@
         loadedSave.centerId = migratedCenter == null ? (IDX["いぬ"] != null ? IDX["いぬ"] : 0) : migratedCenter;
         loadedSave.stickers = migrateIdMap(loadedSave.stickers);
         loadedSave.collectedDates = migrateIdMap(loadedSave.collectedDates);
+        loadedSave.playCounts = migrateIdMap(loadedSave.playCounts);
         loadedSave.todayFound = migrateIdMap(loadedSave.todayFound);
         loadedSave.missionSeen = migrateIdMap(loadedSave.missionSeen);
         if (Array.isArray(loadedSave.customWords)) {
@@ -7168,6 +7233,7 @@
          （容量不足の警告は出さない） */
       if (!storageUsable) showSaveBlocked();
       function packCurrentProfile() {
+        if (typeof ensurePlayCounts === "function") ensurePlayCounts();   /* 登録済みの言葉は最低1回として保存する */
         return {
           name: profileNames[activeProfile] || "",
           centerId: centerId,
@@ -7188,7 +7254,8 @@
           stamps: (typeof stampLog !== "undefined" && stampLog) ? stampLog : {},
           playDays: (typeof playDays !== "undefined" && playDays) ? playDays : {},
           achv: (typeof achv !== "undefined" && achv) ? achv : { nz: [], hp: [] },
-          picks: (typeof favPicks !== "undefined" && favPicks) ? favPicks : {}
+          picks: (typeof favPicks !== "undefined" && favPicks) ? favPicks : {},
+          playCounts: (typeof playCounts !== "undefined" && playCounts) ? playCounts : {}
         };
       }
       function buildSaveData() {
@@ -7344,6 +7411,9 @@
       function quizActive() { return typeof quizMode !== "undefined" && !!quizMode; }
       function speakCenter(text) { if (quizActive()) return; speak(text); }
       function speakCenterEn(text) { if (quizActive()) return; speakEn(text); }
+      /* れんそう画面を開いたときの遊び方ガイドの読み上げ用に公開する
+         （画面遷移側のスクリプトから呼ぶ。クイズ中は speakCenter と同じく止める） */
+      window.goigoiSpeakGuide = function (text) { speakCenter(text); };
       /* ===== 読み上げ専用: 言葉の直後の間 =====
          文の中ではめ込んだ言葉（◯）に助詞（は・を・が・に・へ・の・で・も・と等）が
          続くと、「◯は」「◯を」が一息につながって聞こえる。そのため読み上げテキスト
@@ -7586,11 +7656,13 @@
         if (pushBack) backStack.push(centerId);
         centerId = id;
         visitSeed++;
-        if (!collectedSet[id]) {
+        var wasNewPlay = !collectedSet[id];
+        if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
           var cd = new Date();
           collectedDates[id] = cd.getFullYear() + "-" + (cd.getMonth() + 1) + "-" + cd.getDate();
         }
+        bumpPlayCount(id, wasNewPlay);   /* 累積回数: 初回（登録）＝1回、登録済みの言葉で再び遊んだら+1 */
         render();
         speakCenter(WORDS[id].h);
         sfx("pop");
@@ -7969,7 +8041,12 @@
         { key: "total30", emoji: "🗓️", totalDays: 30, sub: "たくさん あそんだ！", phrase: "30にち あそんだよ！ スタンプ ゲット！", tier: "tier-days", album: "通算30日遊んだ" },
         { key: "total90", emoji: "🌈", totalDays: 90, sub: "たくさん あそんだ！", phrase: "90にち あそんだよ！ スタンプ ゲット！", tier: "tier-days", album: "通算90日遊んだ" },
         { key: "total180", emoji: "🎈", totalDays: 180, sub: "たくさん あそんだ！", phrase: "180にち あそんだよ！ スタンプ ゲット！", tier: "tier-days", album: "通算180日遊んだ" },
-        { key: "total360", emoji: "🎉", totalDays: 360, sub: "たくさん あそんだ！", phrase: "360にち あそんだよ！ すごい！ スタンプ ゲット！", tier: "tier-days", album: "通算360日遊んだ" }
+        { key: "total360", emoji: "🎉", totalDays: 360, sub: "たくさん あそんだ！", phrase: "360にち あそんだよ！ すごい！ スタンプ ゲット！", tier: "tier-days", album: "通算360日遊んだ" },
+        /* ===== 累積回数系: 同じ言葉で繰り返し遊んだ記録（playCounts）から判定する。
+           付与の処理は syncPlayCountStamps（既存の記録からも算出できる分は静かに補う） ===== */
+        { key: "repeat2", emoji: "🔁", name: "はじめて くりかえし", sub: "くりかえし あそんだ！", phrase: "おなじ ことばと 2かい あそんだよ！ スタンプ ゲット！", tier: "tier-repeat", album: "同じ言葉と2回遊んだ" },
+        { key: "gold1", emoji: "👑", name: "きんいろの ことば", sub: "10かい あそんだ！", phrase: "1つの ことばと 10かい あそんだよ！ きんいろの ことばが できたよ！ スタンプ ゲット！", tier: "tier-repeat", album: "1つの言葉と10回遊んだ（金色の言葉ができた）" },
+        { key: "gold5", emoji: "🌟", name: "きんいろ 5つ", sub: "すごい！", phrase: "きんいろの ことばが 5つ あつまったよ！ スタンプ ゲット！", tier: "tier-repeat", album: "金色の言葉（10回以上）が5つ集まった" }
       ];
       var STAMP_DEF_MAP = {};
       STAMP_DEFS.forEach(function (sd) { STAMP_DEF_MAP[sd.key] = sd; });
@@ -7991,7 +8068,7 @@
         if (em) em.textContent = def.emoji;
         if (nm) nm.textContent = stampNameOf(def);
         if (cir) {
-          cir.className = "stamp-toast-circle" + (def.tier === "tier-mile" ? " tier-mile" : def.tier === "tier-achv" ? " tier-achv" : def.tier === "tier-days" ? " tier-days" : "");
+          cir.className = "stamp-toast-circle" + (def.tier === "tier-mile" ? " tier-mile" : def.tier === "tier-achv" ? " tier-achv" : def.tier === "tier-days" ? " tier-days" : def.tier === "tier-repeat" ? " tier-repeat" : "");
           if (!reduceMotion) { cir.classList.remove("press"); void cir.offsetWidth; cir.classList.add("press"); }
         }
         el.hidden = false;
@@ -8110,6 +8187,35 @@
         if (hantaiAllDone()) give("hantaiAll", todayKey);
         if (newDefs.length || playDayAdded) saveState();
         if (!silent && newDefs.length) celebrateStamp(newDefs[newDefs.length - 1]);
+        syncPlayCountStamps(silent);   /* 累積回数のスタンプも、算出できる分はここで補う */
+      }
+
+      /* ===== 累積回数のスタンプ（playCounts から算出） =====
+         同じ言葉と2回遊んだ／1つの言葉と10回遊んだ（金色の言葉）／金色の言葉が
+         5つ集まった、の3種。bumpPlayCount（遊んだ瞬間）からは silent=false で
+         呼んでその場で小さく祝い、読み込み・切替・設定変更のときは
+         syncDerivedStamps 経由で silent=true で静かに補う。一度もらったら消えない */
+      function syncPlayCountStamps(silent) {
+        if (typeof todayKey !== "string" || !todayKey) return;
+        var newDefs = [];
+        function give(key) {
+          if (!STAMP_DEF_MAP[key] || stampLog[key]) return;
+          stampLog[key] = todayKey;
+          newDefs.push(STAMP_DEF_MAP[key]);
+        }
+        var maxN = 0, goldN = 0;
+        collected.forEach(function (id) {
+          var n = playCountOf(id);
+          if (n > maxN) maxN = n;
+          if (n >= 10) goldN++;
+        });
+        if (maxN >= 2) give("repeat2");
+        if (maxN >= 10) give("gold1");
+        if (goldN >= 5) give("gold5");
+        if (newDefs.length) {
+          saveState();
+          if (!silent) celebrateStamp(newDefs[newDefs.length - 1]);
+        }
       }
 
       /* ===== ぶん（言葉が文になる） ===== */
@@ -8646,15 +8752,16 @@
       function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
       function makeChip(id, num) {
         var w = WORDS[id];
+        var pcN = collectedSet[id] ? playCountOf(id) : 0;   /* 累積回数（未登録の言葉は0） */
         var chip = document.createElement("div");
-        chip.className = "zchip" + (zukanView === "card" ? " card" : "");
+        chip.className = "zchip" + (zukanView === "card" ? " card" : "") + (zukanView === "card" && pcN >= 10 ? " tier-gold" : zukanView === "card" && pcN >= 5 ? " tier-silver" : "");
         chip.style.setProperty("--c", CAT_COL[w.c] || "#ffe1b8");
         var main = document.createElement("button");
         main.type = "button";
         main.style.cssText = zukanView === "card"
           ? "display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;padding:12px 6px 4px;font:inherit;color:inherit;min-height:44px;cursor:pointer;text-align:center;width:100%;"
           : "display:flex;align-items:center;gap:7px;background:none;border:none;padding:4px 2px;font:inherit;color:inherit;min-height:38px;cursor:pointer;text-align:left;";
-        main.setAttribute("aria-label", disp(w) + " の こえを きく");
+        main.setAttribute("aria-label", disp(w) + " の こえを きく" + (pcN > 0 ? "、" + pcN + "かい あそんだ" : ""));
         if (num != null) {
           var ns = document.createElement("span");
           ns.className = "znum"; ns.textContent = num;
@@ -8695,6 +8802,19 @@
           var got = document.createElement("span");
           got.className = "zgot"; got.textContent = "✓ あつめた";
           main.appendChild(got);
+        }
+        /* 累積回数バッジ「×N」（リスト・カード共通）。★レーティングとは別の濃い茶色バッジにする */
+        if (pcN > 0) {
+          var cntBadge = document.createElement("span");
+          cntBadge.className = "zcount"; cntBadge.textContent = "×" + pcN;
+          cntBadge.title = "あそんだ かいすう：" + pcN + "かい";
+          main.appendChild(cntBadge);
+        }
+        /* カード表示で10回以上の言葉には、金色のふち（tier-gold）に加えて👑を付ける */
+        if (zukanView === "card" && pcN >= 10) {
+          var crownEl = document.createElement("span");
+          crownEl.className = "zcrown"; crownEl.setAttribute("aria-hidden", "true"); crownEl.textContent = "👑";
+          chip.appendChild(crownEl);
         }
         main.addEventListener("click", function () { speak(w.h); });
         var play = document.createElement("button");
@@ -8841,6 +8961,7 @@
         var noteC = "あつめた ことばが ここに たまるよ。タップすると こえが でるよ。▶で あそべるよ。オレンジの すうじは あつめた じゅんばんだよ。";
         if (features.favSticker) noteC += "☆を おすと おきにいりに なるよ。🏷️で シールを はれるよ。";
         if (features.star) noteC += "★は よく つかう ことばの しるしだよ。";
+        noteC += "「×すうじ」は あそんだ かいすうだよ。たくさん あそぶと カードが ぎんいろ・きんいろに なるよ。";
         noteC += "うえの ボタンで なかまを えらべるよ。ぜんぶ あつめると ごほうび！";
         zukanNote.textContent = noteC;
         if (!collectedScopeCount()) {
@@ -9196,7 +9317,7 @@
         collected.forEach(function (id) { collectedSet[id] = 1; });
         backStack = backStack.filter(function (id) { return allCustomIds.indexOf(id) < 0; });
         allCustomIds.forEach(function (id) {
-          delete seenOnBoard[id]; delete favSet[id]; delete stickerMap[id]; delete collectedDates[id]; delete todayFound[id]; delete saidFirst[id];
+          delete seenOnBoard[id]; delete favSet[id]; delete stickerMap[id]; delete collectedDates[id]; delete todayFound[id]; delete saidFirst[id]; delete playCounts[id];
         });
         if (allCustomIds.indexOf(centerId) >= 0) {
           centerId = IDX["いぬ"] != null ? IDX["いぬ"] : 0;
@@ -9432,8 +9553,9 @@
         grid.className = "print-grid";
         ids.forEach(function (id) {
           var w = WORDS[id];
+          var pcP = playCountOf(id);
           var card = document.createElement("div");
-          card.className = "print-card";
+          card.className = "print-card" + (pcP >= 10 ? " tier-gold" : pcP >= 5 ? " tier-silver" : "");
           var em = document.createElement("div"); em.className = "pem";
           if (w.img) {
             var pim = document.createElement("img");
@@ -9443,6 +9565,12 @@
           } else { em.textContent = w.e; }
           var wd = document.createElement("div"); wd.className = "pwd"; setWordHTML(wd, w);
           card.appendChild(em); card.appendChild(wd);
+          if (pcP >= 10) {
+            var pcr = document.createElement("div"); pcr.className = "pcrown"; pcr.textContent = "👑";
+            card.appendChild(pcr);
+          }
+          var pcnt = document.createElement("div"); pcnt.className = "pcount"; pcnt.textContent = "あそんだ かいすう ×" + pcP;
+          card.appendChild(pcnt);
           if (mode !== "hira" && w.d !== w.h) {
             var yd = document.createElement("div"); yd.className = "pyd"; yd.textContent = w.h;
             card.appendChild(yd);
@@ -9582,6 +9710,33 @@
             plist.appendChild(chip);
           });
           el.appendChild(plist);
+        }
+        /* たくさん遊んだ言葉（累積回数の多い順・10語まで。5回以上は銀色、10回以上は金色の段階も併記する） */
+        var h5 = document.createElement("p");
+        h5.className = "report-h";
+        h5.textContent = ST("d_repPlayed");
+        el.appendChild(h5);
+        var playedList = collected.filter(function (id) { return inScope(id); })
+          .map(function (id) { return { id: id, n: playCountOf(id) }; })
+          .filter(function (r) { return r.n >= 2; })
+          .sort(function (a, b) { return b.n - a.n || a.id - b.id; });
+        if (!playedList.length) {
+          var ynote = document.createElement("p");
+          ynote.className = "report-line";
+          ynote.textContent = ST("d_repPlayedNone");
+          el.appendChild(ynote);
+        } else {
+          var ylist = document.createElement("div");
+          ylist.className = "report-list";
+          playedList.slice(0, 10).forEach(function (r) {
+            var w = WORDS[r.id];
+            var chip = document.createElement("span");
+            chip.className = "report-chip";
+            var stage = r.n >= 10 ? " " + ST("d_stageGold") : r.n >= 5 ? " " + ST("d_stageSilver") : "";
+            fillReportChip(chip, w, (mode === "hira" ? w.h : w.d) + ST("d_timesCount", { n: r.n }) + stage);
+            ylist.appendChild(chip);
+          });
+          el.appendChild(ylist);
         }
       }
       document.getElementById("adultBtn").addEventListener("click", function () {
@@ -11083,6 +11238,7 @@
             if (isValidId(id) && collectedSet[id] && typeof v === "string" && /^\d{4}-\d{1,2}-\d{1,2}$/.test(v)) collectedDates[id] = v;
           });
         }
+        restorePlayCounts(rec.playCounts);   /* 累積回数（記録が無い言葉は1回から始める） */
         saidFirst = {};
         if (rec.saidFirst && typeof rec.saidFirst === "object" && !Array.isArray(rec.saidFirst)) {
           Object.keys(rec.saidFirst).forEach(function (k) {
@@ -11348,6 +11504,8 @@
             if (isValidId(id) && collectedSet[id] && typeof v === "string" && /^\d{4}-\d{1,2}-\d{1,2}$/.test(v)) collectedDates[id] = v;
           });
         }
+        /* 遊んだ累積回数（記録が無い言葉は1回から始める） */
+        restorePlayCounts(loadedSave.playCounts);
         /* 「はじめて言えた」記録 */
         saidFirst = {};
         if (loadedSave.saidFirst && typeof loadedSave.saidFirst === "object" && !Array.isArray(loadedSave.saidFirst)) {
@@ -12126,11 +12284,13 @@
       }
       /* 遊んだ言葉は他の遊びと同じく図鑑に集める（中心になったときと同じ記録の付け方） */
       function shiriCollect(id) {
-        if (!collectedSet[id]) {
+        var wasNewPlay = !collectedSet[id];
+        if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
           var cd = new Date();
           collectedDates[id] = cd.getFullYear() + "-" + (cd.getMonth() + 1) + "-" + cd.getDate();
         }
+        bumpPlayCount(id, wasNewPlay);   /* 累積回数: 初回（登録）＝1回、登録済みの言葉で再び遊んだら+1 */
         zukanBadge.textContent = "（" + collectedScopeCount() + "）";
         if (typeof checkToday === "function") checkToday(id);
         if (typeof checkMission === "function") checkMission(id);
@@ -12412,11 +12572,13 @@
       /* 遊んだ言葉を図鑑に集める（しりとり等と同じ記録の付け方） */
       function nazoriCollect(id) {
         if (id == null || !isValidId(id)) return;
-        if (!collectedSet[id]) {
+        var wasNewPlay = !collectedSet[id];
+        if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
           var cd = new Date();
           collectedDates[id] = cd.getFullYear() + "-" + (cd.getMonth() + 1) + "-" + cd.getDate();
         }
+        bumpPlayCount(id, wasNewPlay);   /* 累積回数: 初回（登録）＝1回、登録済みの言葉で再び遊んだら+1 */
         zukanBadge.textContent = "（" + collectedScopeCount() + "）";
         if (typeof checkToday === "function") checkToday(id);
         if (typeof checkMission === "function") checkMission(id);
@@ -13155,11 +13317,13 @@
       function otoCollect(it) {
         var id = IDX[it.h];
         if (id == null || !isValidId(id)) return;
-        if (!collectedSet[id]) {
+        var wasNewPlay = !collectedSet[id];
+        if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
           var cd = new Date();
           collectedDates[id] = cd.getFullYear() + "-" + (cd.getMonth() + 1) + "-" + cd.getDate();
         }
+        bumpPlayCount(id, wasNewPlay);   /* 累積回数: 初回（登録）＝1回、登録済みの言葉で再び遊んだら+1 */
         zukanBadge.textContent = "（" + collectedScopeCount() + "）";
         if (typeof checkToday === "function") checkToday(id);
         if (typeof checkMission === "function") checkMission(id);
@@ -13438,11 +13602,13 @@
       /* 遊んだ言葉を図鑑に集める（しりとり・おととことば等と同じ記録の付け方） */
       function tankenCollect(id) {
         if (id == null || !isValidId(id)) return;
-        if (!collectedSet[id]) {
+        var wasNewPlay = !collectedSet[id];
+        if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
           var cd = new Date();
           collectedDates[id] = cd.getFullYear() + "-" + (cd.getMonth() + 1) + "-" + cd.getDate();
         }
+        bumpPlayCount(id, wasNewPlay);   /* 累積回数: 初回（登録）＝1回、登録済みの言葉で再び遊んだら+1 */
         zukanBadge.textContent = "（" + collectedScopeCount() + "）";
         if (typeof checkToday === "function") checkToday(id);
         if (typeof checkMission === "function") checkMission(id);
@@ -13667,11 +13833,13 @@
       /* 遊んだ言葉を図鑑に集める（たんけん・おととことば等と同じ記録の付け方） */
       function mojiCollect(id) {
         if (id == null || !isValidId(id)) return;
-        if (!collectedSet[id]) {
+        var wasNewPlay = !collectedSet[id];
+        if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
           var cd = new Date();
           collectedDates[id] = cd.getFullYear() + "-" + (cd.getMonth() + 1) + "-" + cd.getDate();
         }
+        bumpPlayCount(id, wasNewPlay);   /* 累積回数: 初回（登録）＝1回、登録済みの言葉で再び遊んだら+1 */
         zukanBadge.textContent = "（" + collectedScopeCount() + "）";
         if (typeof checkToday === "function") checkToday(id);
         if (typeof checkMission === "function") checkMission(id);
@@ -15315,6 +15483,62 @@
         }
         body.appendChild(stampSec);
 
+        /* 3b. たくさん あそんだ ことば（累積回数が多い順・2回以上の言葉だけ。
+           カード表示の図鑑と同じく、5回以上は銀色のふち、10回以上は金色のふち＋👑。
+           タップで読み上げは、他の欄のカードと同じ操作感にする） */
+        var playedIds = collected.filter(function (id) { return inScope(id) && playCountOf(id) >= 2; });
+        playedIds.sort(function (a, b) {
+          var dd = playCountOf(b) - playCountOf(a);
+          return dd !== 0 ? dd : collected.indexOf(a) - collected.indexOf(b);
+        });
+        var playSec = ckSection("🔁 たくさん あそんだ ことば", playedIds.length ? "タップすると こえが でるよ" : "");
+        if (!playedIds.length) {
+          playSec.appendChild(ckGuide("おなじ ことばと くりかえし あそぶと、ここに たまるよ。\nこれから たのしみだね！"));
+        } else {
+          var pgrid = document.createElement("div");
+          pgrid.className = "ck-grid";
+          var CK_PLAY_MAX = 12;
+          playedIds.slice(0, CK_PLAY_MAX).forEach(function (id) {
+            var w = WORDS[id];
+            var pn = playCountOf(id);
+            var card = document.createElement("button");
+            card.type = "button";
+            card.className = "ck-card" + (pn >= 10 ? " tier-gold" : pn >= 5 ? " tier-silver" : "");
+            card.style.setProperty("--c", CAT_COL[w.c] || "#ffe1b8");
+            card.setAttribute("aria-label", disp(w) + "、" + pn + "かい あそんだ");
+            if (pn >= 10) {
+              var cr = document.createElement("span");
+              cr.className = "ck-crown"; cr.setAttribute("aria-hidden", "true"); cr.textContent = "👑";
+              card.appendChild(cr);
+            }
+            var cb = document.createElement("span");
+            cb.className = "ck-count"; cb.setAttribute("aria-hidden", "true"); cb.textContent = "×" + pn;
+            card.appendChild(cb);
+            if (w.img) {
+              var pim2 = document.createElement("img");
+              pim2.className = "em-img"; pim2.src = w.img; pim2.alt = "";
+              card.appendChild(pim2);
+            } else {
+              var pem = document.createElement("span");
+              pem.className = "em"; pem.textContent = w.e;
+              card.appendChild(pem);
+            }
+            var pwd = document.createElement("span");
+            pwd.className = "wd"; setWordHTML(pwd, w);
+            card.appendChild(pwd);
+            card.addEventListener("click", function () { speak(w.h); });
+            pgrid.appendChild(card);
+          });
+          playSec.appendChild(pgrid);
+          if (playedIds.length > CK_PLAY_MAX) {
+            var moreP = document.createElement("p");
+            moreP.className = "ck-more";
+            moreP.textContent = "ほかにも " + fmt(playedIds.length - CK_PLAY_MAX) + "こ あるよ";
+            playSec.appendChild(moreP);
+          }
+        }
+        body.appendChild(playSec);
+
         /* 4. おはなばたけの育ち具合（今の状態を絵で表示。おはなばたけ本体と
            同じ花・節目の飾りを使い、集めた数に連動させる） */
         var gardenSec = ckSection("🌷 おはなばたけ", n > 0 ? "あつめた ことばの かずだけ、おはなが さいているよ" : "");
@@ -15474,6 +15698,13 @@
           /* 盤面（れんそう）ページには ずかんボタンを出さない */
           if (zukanBtn) zukanBtn.hidden = true;
           window.scrollTo(0, 0);
+          /* 開いたときに遊び方のガイドを読み上げる（少し遅らせて、開く操作に
+             伴う他の読み上げと重ならないようにする） */
+          setTimeout(function () {
+            if (!boardScreen.hidden && typeof window.goigoiSpeakGuide === "function") {
+              window.goigoiSpeakGuide("まんなかの ことばと なかよしの ことばを えらんでね");
+            }
+          }, 450);
         };
         homeBtn.addEventListener("click", window.showHomeScreen);
         /* 各遊び画面の「🏠 ホームへ もどる」でホームに戻る。

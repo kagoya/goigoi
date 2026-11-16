@@ -4,7 +4,7 @@
 
 Ein Wortspiel für Kleinkinder, das im Browser gespielt wird und spielerisch den Wortschatz erweitert. **Komplett kostenlos – keine Gebühren.**
 
-Aktuelle Version: **3.1**
+Aktuelle Version: **3.2**
 
 **▶ Spielen: https://kagoya.github.io/goigoi/**
 
@@ -20,13 +20,14 @@ Aktuelle Version: **3.1**
 ## Merkmale
 
 - **Etwa 39.000 Wörter** enthalten (das ずかん hat zwei Ebenen: 11 große Kategorien und 200 kleine Kategorien)
-- 18 Spiele auf dem Startbildschirm (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). In den Anfangseinstellungen sind 6 eingeschaltet (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), und jedes kann in den Einstellungen ein- oder ausgeschaltet werden
-- 「もじあそび」 besteht aus zwei Spielen: 「ことば あなうめ」 und 「ことば みっけ」. 「五十音ならべ」 ist ein eigenes Spiel: Man wählt eine Reihe aus der Gojuuon-Tabelle und ordnet die Zeichen. Ist eine Reihe vollständig, tippt man auf ein Zeichen und sieht eine Wortkarte mit diesem Zeichen
+- 18 Spiele auf dem Startbildschirm (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). In den Anfangseinstellungen sind 6 eingeschaltet (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), und jedes kann in den Einstellungen ein- oder ausgeschaltet werden
+- 「もじあそび」 besteht aus zwei Spielen: 「ことば あなうめ」 und 「ことば みっけ」. 「ごじゅうおん ならべ」 ist ein eigenes Spiel: Man wählt eine Reihe aus der Gojuuon-Tabelle und ordnet die Zeichen. Ist eine Reihe vollständig, tippt man auf ein Zeichen und sieht eine Wortkarte mit diesem Zeichen
 - Auch wenn man im Quiz etwas falsch macht, gilt das nie als Misserfolg: Die richtige Antwort wird gemeinsam überprüft und das Kind wird gelobt. Es gibt keinen Wettbewerb
 - Die Größe des Wortschatzes kann aus 1.000 / 5.000 / 25.000 / alle gewählt werden (gefiltert nach einer 8-stufigen Bewertung, wie häufig ein Wort verwendet wird; gilt für alle Funktionen)
 - Der Nachtmodus kann in den Einstellungen gewählt werden: „Tag / Nacht / automatisch nach Uhrzeit (18–6 Uhr)“. Er richtet sich nicht nach dem Dunkelmodus des Geräts
 - Der Schalter für Ton an/aus ist ein gemeinsamer Schalter oben auf dem Bildschirm (bei おととことば und ききとりクイズ kann er nicht ausgeschaltet werden)
-- Insgesamt 25 Arten von Stempeln (3 für Vervollständigung, 8 „zum ersten Mal“, 5 Meilensteine für die Anzahl gesammelter Wörter, 9 Erfolge). Man kann sie als runde Stempel im 「きろく」 für Kinder ansehen, das vom ずかん aus geöffnet wird
+- Insgesamt 33 Arten von Stempeln (3 für Vervollständigung, 9 „zum ersten Mal“, 5 Meilensteine für die Anzahl gesammelter Wörter, 11 Erfolge, 5 für die Gesamtzahl der Spieltage). Man kann sie als runde Stempel im 「きろく」 für Kinder ansehen, das vom ずかん aus geöffnet wird
+- Im ずかん zeigt jedes Wort mit einem „×N“-Abzeichen, wie oft mit ihm gespielt wurde. In der Kartenansicht erhält ein Wort ab 5 Mal einen silbernen Rand und ab 10 Mal einen goldenen Rand und eine 👑. Im 「きろく」 für Kinder stehen die am häufigsten gespielten Wörter als 「たくさん あそんだ ことば」, und die Anzahl steht auch im 保護者レポート und auf gedruckten Wortkarten
 - Das ずかん kann vom Kind selbst zwischen Listenansicht und Kartenansicht mit großen Bildern umgeschaltet werden
 - Das Bild eines Wortes kann in den Einstellungen unter 「言葉の絵を変える」 durch ein Foto ersetzt werden (das Foto wird automatisch verkleinert und gespeichert; es ist in Sicherungen enthalten und kann auf den Standard zurückgesetzt werden)
 - Die Bewertung von なぞりがき kann in den Einstellungen einzeln eingestellt werden: Strichzahl, Strichfolge, Richtung, Form und exakte Form (auch über die Stufen 1–5 wählbar; die Anfangseinstellung entspricht Stufe 4)

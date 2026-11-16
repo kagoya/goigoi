@@ -4,7 +4,7 @@
 
 Một trò chơi từ vựng để trẻ nhỏ vừa chơi vừa mở rộng vốn từ, chơi được trên trình duyệt. **Hoàn toàn miễn phí, không thu phí.**
 
-Phiên bản hiện tại: **3.1**
+Phiên bản hiện tại: **3.2**
 
 **▶ Chơi: https://kagoya.github.io/goigoi/**
 
@@ -20,13 +20,14 @@ Phiên bản hiện tại: **3.1**
 ## Đặc điểm
 
 - Thu thập **khoảng 39.000 từ** (ずかん có hai cấp: 11 phân loại lớn và 200 phân loại nhỏ)
-- 18 trò chơi trên màn hình chính (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Trong cài đặt ban đầu có 6 trò chơi được bật (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), và có thể bật hoặc tắt từng trò chơi trong Cài đặt
-- 「もじあそび」 gồm hai trò chơi: 「ことば あなうめ」 và 「ことば みっけ」. 「五十音ならべ」 là một trò chơi riêng: chọn một hàng trong bảng gojuuon và sắp xếp các chữ của hàng đó. Sau khi xếp xong một hàng, chạm vào một chữ để xem thẻ một từ có chứa chữ đó
+- 18 trò chơi trên màn hình chính (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Trong cài đặt ban đầu có 6 trò chơi được bật (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), và có thể bật hoặc tắt từng trò chơi trong Cài đặt
+- 「もじあそび」 gồm hai trò chơi: 「ことば あなうめ」 và 「ことば みっけ」. 「ごじゅうおん ならべ」 là một trò chơi riêng: chọn một hàng trong bảng gojuuon và sắp xếp các chữ của hàng đó. Sau khi xếp xong một hàng, chạm vào một chữ để xem thẻ một từ có chứa chữ đó
 - Dù trả lời sai câu đố cũng không bị coi là thất bại: đáp án đúng sẽ được cùng nhau kiểm tra và trẻ sẽ được khen. Không có thi đua
 - Số lượng từ vựng có thể chọn từ 1.000 / 5.000 / 25.000 / tất cả (lọc theo thang đánh giá 8 mức về độ thường dùng; áp dụng cho mọi tính năng)
 - Chế độ ban đêm có thể chọn trong Cài đặt: "ban ngày / ban đêm / tự động theo giờ (18 giờ–6 giờ)". Không liên động với chế độ tối của thiết bị
 - Công tắc bật/tắt âm thanh là công tắc chung ở phía trên màn hình (không thể tắt trong おととことば và ききとりクイズ)
-- Tổng cộng 25 loại con dấu (3 loại hoàn thành, 8 loại "lần đầu tiên", 5 loại mốc số từ đã sưu tầm, 9 loại thành tích). Có thể xem dưới dạng con dấu tròn trong 「きろく」 dành cho trẻ em, mở từ ずかん
+- Tổng cộng 33 loại con dấu (3 loại hoàn thành, 9 loại "lần đầu tiên", 5 loại mốc số từ đã sưu tầm, 11 loại thành tích, 5 loại tổng số ngày đã chơi). Có thể xem dưới dạng con dấu tròn trong 「きろく」 dành cho trẻ em, mở từ ずかん
+- Trong ずかん, mỗi từ hiển thị số lần đã chơi với từ đó bằng huy hiệu "×N". Ở chế độ thẻ, từ được chơi 5 lần trở lên có viền bạc, 10 lần trở lên có viền vàng và 👑. 「きろく」 dành cho trẻ em xếp các từ được chơi nhiều nhất thành 「たくさん あそんだ ことば」, và số lần cũng có trong 保護者レポート và thẻ từ in ra
 - ずかん có thể chuyển đổi giữa hiển thị dạng danh sách và hiển thị dạng thẻ với hình ảnh lớn, do chính trẻ thao tác
 - Hình ảnh của một từ có thể đổi thành ảnh chụp trong Cài đặt, tại 「言葉の絵を変える」 (ảnh được tự động thu nhỏ dung lượng và lưu lại; được bao gồm trong bản sao lưu và có thể khôi phục về mặc định)
 - Việc chấm なぞりがき có thể cài đặt từng mục trong Cài đặt: số nét, thứ tự nét, hướng, hình dạng và hình dạng chính xác (cũng có thể chọn theo cấp độ 1–5; mặc định tương đương cấp độ 4)
