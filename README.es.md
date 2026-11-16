@@ -8,7 +8,7 @@ Versión actual: **3.0**
 
 **▶ Jugar: https://kagoya.github.io/goigoi/**
 
-![Póster](poster.webp)
+![Póster](poster.es.webp)
 
 ## Cómo jugar
 

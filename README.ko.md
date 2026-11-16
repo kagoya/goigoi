@@ -8,7 +8,7 @@
 
 **▶ 플레이: https://kagoya.github.io/goigoi/**
 
-![포스터](poster.webp)
+![포스터](poster.ko.webp)
 
 ## 노는 방법
 

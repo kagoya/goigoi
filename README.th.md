@@ -8,7 +8,7 @@
 
 **▶ เล่น: https://kagoya.github.io/goigoi/**
 
-![โปสเตอร์](poster.webp)
+![โปสเตอร์](poster.th.webp)
 
 ## วิธีเล่น
 

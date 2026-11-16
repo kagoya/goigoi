@@ -8,7 +8,7 @@ Phiên bản hiện tại: **3.0**
 
 **▶ Chơi: https://kagoya.github.io/goigoi/**
 
-![Áp phích](poster.webp)
+![Áp phích](poster.vi.webp)
 
 ## Cách chơi
 

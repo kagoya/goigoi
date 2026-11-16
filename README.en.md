@@ -8,7 +8,7 @@ Current version: **3.0**
 
 **▶ Play: https://kagoya.github.io/goigoi/**
 
-![Poster](poster.webp)
+![Poster](poster.en.webp)
 
 ## How to play
 

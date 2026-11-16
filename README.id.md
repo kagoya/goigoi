@@ -8,7 +8,7 @@ Versi saat ini: **3.0**
 
 **▶ Main: https://kagoya.github.io/goigoi/**
 
-![Poster](poster.webp)
+![Poster](poster.id.webp)
 
 ## Cara bermain
 

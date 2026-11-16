@@ -8,7 +8,7 @@
 
 **▶ 遊ぶ： https://kagoya.github.io/goigoi/**
 
-![ポスター](poster.webp)
+![ポスター](poster.ja-easy.webp)
 
 ## <ruby>遊<rt>あそ</rt></ruby>び<ruby>方<rt>かた</rt></ruby>
 

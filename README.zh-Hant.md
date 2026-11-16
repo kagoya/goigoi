@@ -8,7 +8,7 @@
 
 **▶ 開始玩：https://kagoya.github.io/goigoi/**
 
-![海報](poster.webp)
+![海報](poster.zh-Hant.webp)
 
 ## 玩法
 
