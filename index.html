@@ -13864,6 +13864,11 @@
       var MOJI_OK_EX = MOJI_OK + "ゃゅょっ";
       /* ===== 完成後の単語カード: そろった行の文字から言葉を探す =====
          探し方: その文字で始まる言葉を優先し、無ければ途中に含む言葉。
+         ただし例外として、その文字で始まる言葉が全体で3つ以下しかない
+         文字（「ん」のように始まる言葉がほぼ無い文字）は、始まる言葉と
+         含む言葉を同じ候補プールに入れて探す（毎回同じ言葉しか出ない
+         のを避け、「みかん」「らいおん」のような含む言葉も出るように）。
+         始まる言葉が0の場合は、従来どおり含む言葉だけが候補になる。
          どちらの場合も、まず今の語彙数の範囲内から、レーティング
          （8段階レベル）の高い順に探し（8→7→6…）、同じレベルの候補が
          複数あればランダムに1つ選ぶ。範囲内に無ければ範囲外（ただし
@@ -13892,12 +13897,24 @@
         return out;
       }
       function narabePickWordId(unit) {
-        var pools = [
-          narabeWordCandidates(unit, true, true),
-          narabeWordCandidates(unit, true, false),
-          narabeWordCandidates(unit, false, true),
-          narabeWordCandidates(unit, false, false)
-        ];
+        /* その文字で始まる言葉の総数（「出さない言葉」を除き、候補に
+           なりうる かなだけの言葉で数える）。3つ以下なら「始まる」を
+           優先せず、含む言葉も同じプールに入れて選ぶ */
+        var startAll = narabeWordCandidates(unit, true, false);
+        var pools;
+        if (startAll.length <= 3) {
+          pools = [
+            narabeWordCandidates(unit, false, true),
+            narabeWordCandidates(unit, false, false)
+          ];
+        } else {
+          pools = [
+            narabeWordCandidates(unit, true, true),
+            startAll,
+            narabeWordCandidates(unit, false, true),
+            narabeWordCandidates(unit, false, false)
+          ];
+        }
         for (var k = 0; k < pools.length; k++) {
           var pool = pools[k];
           if (!pool.length) continue;
