@@ -667,6 +667,8 @@
       }
       .preset-opt.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
       .preset-opt:active { transform: scale(0.97); }
+      .age-opt { line-height: 1.3; }
+      .age-opt .age-sub { display: block; font-size: 12.5px; font-weight: 700; opacity: 0.88; margin-top: 3px; line-height: 1.35; }
       /* ===== きのうの ことば（復習） ===== */
       #reviewBar {
         width: min(96vw, 620px); margin-top: 10px;
@@ -1109,8 +1111,19 @@
       <p id="saveWarn" hidden>⚠️ 記録を保存できませんでした。ブラウザの空き容量が足りない可能性があります。写真を登録した言葉を減らすか、不要な記録をリセットしてからお試しください。</p>
       <p id="saveBlocked" hidden>⚠️ この表示環境では、ブラウザへの記録の保存が使えません（アプリ内ブラウザの制限など）。そのまま遊べますが、ページを閉じると記録は残りません。通常のブラウザで開くと保存できる場合があります。</p>
       <div class="adult-card">
-        <h2>遊びに出てくる言葉の数</h2>
-        <p class="adult-note">遊びに出てくる言葉の数を選べます。少ない数を選ぶと、身の回りでよく使う言葉が中心になります。数を増やすと、珍しい言葉も出てくるようになります。言葉が消えるわけではないので、「全部」に戻せばいつでも元に戻せます。変更はすぐに画面に反映されます。</p>
+        <h2>まとめて選ぶ（年齢の目安）</h2>
+        <p class="adult-note">プリセットは、語彙数と文字（ひらがな／漢字・カタカナ）を一度に選ぶ近道です。押したあとは、下の語彙数と文字の設定で個別に変えられます。</p>
+        <div class="vocab-opts" role="group" aria-label="年齢の目安">
+          <button type="button" class="vocab-opt age-opt" data-age="2-3">2〜3歳ごろ<span class="age-sub">1,000語・ひらがなだけ</span></button>
+          <button type="button" class="vocab-opt age-opt" data-age="3-5">3〜5歳ごろ<span class="age-sub">5,000語・ひらがなだけ</span></button>
+          <button type="button" class="vocab-opt age-opt" data-age="5-plus">5歳ごろ〜小学生<span class="age-sub">25,000語・漢字・カタカナあり</span></button>
+        </div>
+        <p class="adult-note">中身の目安：2〜3歳ごろ＝身の回りの、よく使う言葉だけ／3〜5歳ごろ＝日常の言葉ひととおり／5歳ごろ〜小学生＝幅広い言葉、読み書きに慣れてきた子向け。</p>
+        <p class="adult-note">発達には個人差が大きいので、年齢はあくまで目安です。お子さんの様子に合わせて選んでください。</p>
+      </div>
+      <div class="adult-card">
+        <h2>遊びに出てくる言葉の数（語彙数）</h2>
+        <p class="adult-note">これは、遊びに出てくる「言葉のプールの大きさ」です。お子さんが知っている語数のことではありません。上のプリセットで選ばれるのも、この語彙数です。少ない数を選ぶと、身の回りでよく使う言葉が中心になります。数を増やすと、珍しい言葉も出てくるようになります。言葉が消えるわけではないので、「全部」に戻せばいつでも元に戻せます。変更はすぐに画面に反映されます。</p>
         <div class="vocab-opts" role="group" aria-label="言葉の数">
           <button type="button" class="vocab-opt" data-n="1000">1,000語</button>
           <button type="button" class="vocab-opt" data-n="5000">5,000語</button>
@@ -1119,16 +1132,6 @@
         </div>
         <p id="adultScopeNow" class="adult-now"></p>
         <p class="adult-note">この設定は、カードに出る言葉だけでなく、図鑑、ぼうけんマップ、おだい、聞き取りクイズ、「今日の言葉」にも共通して適用されます。</p>
-      </div>
-      <div class="adult-card">
-        <h2>年齢の目安プリセット</h2>
-        <p class="adult-note">年齢の目安を選ぶと、言葉の数と文字の表示が目安に合わせて一度にセットされます。あとから、それぞれの設定を個別に変えることもできます。</p>
-        <div class="vocab-opts" role="group" aria-label="年齢の目安">
-          <button type="button" class="vocab-opt age-opt" data-age="1-2">1〜2歳</button>
-          <button type="button" class="vocab-opt age-opt" data-age="3-4">3〜4歳</button>
-          <button type="button" class="vocab-opt age-opt" data-age="5-6">5〜6歳</button>
-        </div>
-        <p class="adult-note">目安：1〜2歳＝1,000語・ひらがなだけ／3〜4歳＝5,000語・ひらがなだけ／5〜6歳＝25,000語・漢字・カタカナあり。お子さんの様子に合わせて調整してください。</p>
       </div>
       <div class="adult-card">
         <h2>文字の表示</h2>
@@ -3157,9 +3160,9 @@
         /* 年齢プリセット・タイマーの選択状態も現在の設定に合わせて表示する */
         document.querySelectorAll(".age-opt").forEach(function (ab) {
           var a = ab.getAttribute("data-age");
-          var on = (a === "1-2" && vocabLimit === 1000 && mode === "hira") ||
-                   (a === "3-4" && vocabLimit === 5000 && mode === "hira") ||
-                   (a === "5-6" && vocabLimit === 25000 && mode === "mix");
+          var on = (a === "2-3" && vocabLimit === 1000 && mode === "hira") ||
+                   (a === "3-5" && vocabLimit === 5000 && mode === "hira") ||
+                   (a === "5-plus" && vocabLimit === 25000 && mode === "mix");
           ab.classList.toggle("on", on);
         });
         document.querySelectorAll(".timer-opt").forEach(function (tb) {
@@ -4987,8 +4990,8 @@
       document.querySelectorAll(".age-opt").forEach(function (b) {
         b.addEventListener("click", function () {
           var a = b.getAttribute("data-age");
-          if (a === "1-2") { setMode("hira"); setVocab(1000); }
-          else if (a === "3-4") { setMode("hira"); setVocab(5000); }
+          if (a === "2-3") { setMode("hira"); setVocab(1000); }
+          else if (a === "3-5") { setMode("hira"); setVocab(5000); }
           else { setMode("mix"); setVocab(25000); }
           renderAdult();
         });
