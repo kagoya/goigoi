@@ -1114,11 +1114,11 @@
         <h2>まとめて選ぶ（年齢の目安）</h2>
         <p class="adult-note">プリセットは、語彙数と文字（ひらがな／漢字・カタカナ）を一度に選ぶ近道です。押したあとは、下の語彙数と文字の設定で個別に変えられます。</p>
         <div class="vocab-opts" role="group" aria-label="年齢の目安">
-          <button type="button" class="vocab-opt age-opt" data-age="2-3">2〜3歳ごろ<span class="age-sub">1,000語・ひらがなだけ</span></button>
-          <button type="button" class="vocab-opt age-opt" data-age="3-5">3〜5歳ごろ<span class="age-sub">5,000語・ひらがなだけ</span></button>
-          <button type="button" class="vocab-opt age-opt" data-age="5-plus">5歳ごろ〜小学生<span class="age-sub">25,000語・漢字・カタカナあり</span></button>
+          <button type="button" class="vocab-opt age-opt" data-age="3-4">3〜4歳ごろ<span class="age-sub">1,000語・ひらがなだけ</span></button>
+          <button type="button" class="vocab-opt age-opt" data-age="4-6">4〜6歳ごろ<span class="age-sub">5,000語・ひらがなだけ</span></button>
+          <button type="button" class="vocab-opt age-opt" data-age="6-plus">6歳ごろ〜小学生<span class="age-sub">25,000語・漢字・カタカナあり</span></button>
         </div>
-        <p class="adult-note">中身の目安：2〜3歳ごろ＝身の回りの、よく使う言葉だけ／3〜5歳ごろ＝日常の言葉ひととおり／5歳ごろ〜小学生＝幅広い言葉、読み書きに慣れてきた子向け。</p>
+        <p class="adult-note">中身の目安：3〜4歳ごろ＝身の回りの、よく使う言葉だけ／4〜6歳ごろ＝日常の言葉ひととおり／6歳ごろ〜小学生＝幅広い言葉、読み書きに慣れてきた子向け。</p>
         <p class="adult-note">発達には個人差が大きいので、年齢はあくまで目安です。お子さんの様子に合わせて選んでください。</p>
       </div>
       <div class="adult-card">
@@ -3160,9 +3160,9 @@
         /* 年齢プリセット・タイマーの選択状態も現在の設定に合わせて表示する */
         document.querySelectorAll(".age-opt").forEach(function (ab) {
           var a = ab.getAttribute("data-age");
-          var on = (a === "2-3" && vocabLimit === 1000 && mode === "hira") ||
-                   (a === "3-5" && vocabLimit === 5000 && mode === "hira") ||
-                   (a === "5-plus" && vocabLimit === 25000 && mode === "mix");
+          var on = (a === "3-4" && vocabLimit === 1000 && mode === "hira") ||
+                   (a === "4-6" && vocabLimit === 5000 && mode === "hira") ||
+                   (a === "6-plus" && vocabLimit === 25000 && mode === "mix");
           ab.classList.toggle("on", on);
         });
         document.querySelectorAll(".timer-opt").forEach(function (tb) {
@@ -4990,8 +4990,8 @@
       document.querySelectorAll(".age-opt").forEach(function (b) {
         b.addEventListener("click", function () {
           var a = b.getAttribute("data-age");
-          if (a === "2-3") { setMode("hira"); setVocab(1000); }
-          else if (a === "3-5") { setMode("hira"); setVocab(5000); }
+          if (a === "3-4") { setMode("hira"); setVocab(1000); }
+          else if (a === "4-6") { setMode("hira"); setVocab(5000); }
           else { setMode("mix"); setVocab(25000); }
           renderAdult();
         });
