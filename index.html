@@ -1094,6 +1094,28 @@
       .moji-target .tem { font-size: 72px; line-height: 1.15; }
       .moji-target .timg { width: 88px; height: 88px; object-fit: cover; border-radius: 20px; }
       .moji-target .twd { font-size: 28px; font-weight: 800; }
+      /* 五十音ならべ: カードも わくも 横ではなく 上から下へ縦一列に並べる。
+         左に「もじの カード」の列、右に「ならべる わく」の列を置き、
+         カードを選んで右の列へ置く流れにする（五十音表の列と同じ縦方向）。
+         あなうめ・みっけのカード並びには影響しないよう、このステージ内だけに効かせる */
+      .moji-narabe-board {
+        display: flex; justify-content: center; align-items: flex-start; gap: 14px;
+        max-width: 340px; margin: 12px auto 2px; padding: 14px 12px 16px;
+        background: var(--bg); border: 2px dashed var(--line); border-radius: 22px;
+      }
+      .moji-narabe-col { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 70px; }
+      .moji-narabe-col-label { font-size: 13px; font-weight: 800; color: var(--sub); line-height: 1.35; text-align: center; }
+      .moji-narabe-arrow { align-self: center; font-size: 22px; font-weight: 800; color: var(--accent-text); line-height: 1; }
+      #mojiNarabeStage .moji-slots {
+        flex-direction: column; flex-wrap: nowrap; align-items: center; margin: 0;
+      }
+      #mojiNarabeStage .moji-tiles {
+        flex-direction: column; flex-wrap: nowrap; align-items: center; margin: 0;
+        max-width: none; min-width: 62px; min-height: 62px;
+      }
+      @media (max-width: 360px) {
+        .moji-narabe-board { gap: 10px; padding: 12px 8px 14px; }
+      }
       /* 五十音ならべ: ひらがな／カタカナ・だくてんの切り替え（なぞりがきと同じ並び） */
       .moji-narabe-toggles { margin-bottom: 10px; }
       .moji-narabe-toggles .nazori-tabs { margin-bottom: 8px; }
@@ -2299,8 +2321,17 @@
         </div>
         <div id="mojiRows" class="oto-cats" role="group" aria-label="ぎょうを えらぶ" style="margin-top:2px;"></div>
         <p id="mojiNarabeQ" class="play-q">もじを じゅんばんに ならべよう</p>
-        <div id="mojiSlots" class="moji-slots" aria-label="ならべる わく"></div>
-        <div id="mojiTiles" class="moji-tiles" aria-label="もじの カード"></div>
+        <div class="moji-narabe-board">
+          <div class="moji-narabe-col">
+            <div class="moji-narabe-col-label" aria-hidden="true">もじの カード</div>
+            <div id="mojiTiles" class="moji-tiles" aria-label="もじの カード"></div>
+          </div>
+          <div class="moji-narabe-arrow" aria-hidden="true">→</div>
+          <div class="moji-narabe-col">
+            <div class="moji-narabe-col-label" aria-hidden="true">ならべる わく</div>
+            <div id="mojiSlots" class="moji-slots" aria-label="ならべる わく"></div>
+          </div>
+        </div>
         <p id="mojiNarabeMsg" class="play-msg" aria-live="polite"></p>
         <div class="play-btns">
           <button id="mojiNarabeHearBtn" type="button">🔊 もういちど きく</button>
