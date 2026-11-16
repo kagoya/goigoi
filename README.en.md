@@ -4,7 +4,7 @@
 
 A word game for toddlers to enjoy growing their vocabulary, playable in a web browser. **Completely free — no charges.**
 
-Current version: **3.0**
+Current version: **3.1**
 
 **▶ Play: https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,8 @@ Current version: **3.0**
 ## Features
 
 - About **39,000 words** included (the ずかん has two levels: 11 large categories and 200 small categories)
-- 17 activities on the home screen (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Five are on in the initial settings (れんそう, しりとり, もじあそび, おととことば, なぞりがき), and each can be turned on or off in Settings
+- 18 activities on the home screen (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Six are on in the initial settings (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), and each can be turned on or off in Settings
+- 「もじあそび」 consists of two games: 「ことば あなうめ」 and 「ことば みっけ」. 「五十音ならべ」 is a separate activity: pick a row from the gojuuon chart and arrange its characters. After completing a row, choose a character to see a word card containing that character
 - Even if you get a quiz question wrong, it is never treated as a failure — you check the right answer together and get praised. There is no competition
 - Vocabulary size can be chosen from 1,000 / 5,000 / 25,000 / all (filtered by an 8-level rating of how commonly each word is used; applies to all features)
 - Night mode can be chosen in Settings: "day / night / automatic by time (18:00–6:00)". It does not follow your device's dark mode

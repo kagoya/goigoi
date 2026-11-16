@@ -1061,7 +1061,7 @@
       body.fx-oto-off #otoBtn { display: none !important; }
       body.fx-tanken-off #tankenBtn { display: none !important; }
       body.fx-moji-off #mojiBtn { display: none !important; }
-      /* ===== もじあそび（五十音並べ・あなうめ・ことば みっけ） ===== */
+      /* ===== もじあそび（あなうめ・ことば みっけ）・五十音ならべ ===== */
       .moji-slots { display: flex; gap: 8px; justify-content: center; margin: 14px auto 4px; flex-wrap: wrap; }
       .moji-slot {
         width: 62px; height: 62px; border-radius: 16px; border: 3px dashed var(--line); background: var(--bg);
@@ -1094,47 +1094,72 @@
       .moji-target .tem { font-size: 72px; line-height: 1.15; }
       .moji-target .timg { width: 88px; height: 88px; object-fit: cover; border-radius: 20px; }
       .moji-target .twd { font-size: 28px; font-weight: 800; }
-      /* 五十音ならべ: カードも わくも 横ではなく 上から下へ縦一列に並べる。
-         左に「ならべる わく」の列、右に その行の候補カードの列を置き、
-         枠と候補が離れないよう すぐ横同士にする（候補を画面の下には出さない）。
-         枠を選んで候補と入れ替えることも、候補を選んで枠へ置くこともできる
-         （五十音表の列と同じ縦方向）。
-         あなうめ・みっけのカード並びには影響しないよう、このステージ内だけに効かせる */
-      .moji-narabe-board {
-        display: flex; justify-content: center; align-items: flex-start; gap: 14px;
-        max-width: 340px; margin: 12px auto 2px; padding: 14px 12px 16px;
-        background: var(--bg); border: 2px dashed var(--line); border-radius: 22px;
+      /* 五十音ならべ: 行が決まったら、その行の列そのものが「ならべる わく」に
+         なる。候補のために表の中に新しい列は作らない: 候補は大きな文字で
+         五十音表の直下に横一列に並べて出し（.narabe-overlay）、それをドラッグして
+         行の枠へ持っていくと枠に入る。枠の外で離すと候補は元の位置に
+         戻るだけで、失敗にはしない。タップで選んで枠をタップする入れ方も
+         残す（キーボード・読み上げソフト向け）。枠は、五十音表の列と
+         同じく上から下へ縦に並ぶ。
+         あなうめ・みっけのカード並びには影響しないよう、行えらび表の中だけに
+         効かせる */
+      /* 選ばれている行の列: 背景をうっすら色づけて「いま遊んでいる行」と分かるようにする */
+      #mojiRows .nazori-col.narabe-active {
+        background: color-mix(in srgb, #ffd94d 22%, transparent); border-radius: 12px;
       }
-      .moji-narabe-col { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 70px; }
-      .moji-narabe-col-label { font-size: 13px; font-weight: 800; color: var(--sub); line-height: 1.35; text-align: center; }
-      .moji-narabe-arrow { align-self: center; font-size: 22px; font-weight: 800; color: var(--accent-text); line-height: 1; }
-      #mojiNarabeStage .moji-slots {
-        flex-direction: column; flex-wrap: nowrap; align-items: center; margin: 0;
+      /* 表の中の枠は、マスの大きさに合わせて出す（62px固定にしない）。
+         段の位置が隣の列とそろうよう、高さは ○ のマスとそろえる */
+      #mojiRows .moji-slot {
+        width: 100%; height: auto; min-height: 46px; border-radius: 10px;
+        font-size: clamp(16px, 5vw, 26px);
       }
-      #mojiNarabeStage .moji-tiles {
-        flex-direction: column; flex-wrap: nowrap; align-items: center; margin: 0;
-        max-width: none; min-width: 62px; min-height: 62px;
+      /* 五十音ならべ: まだ文字が入っていない枠の「？」は、他の強調色と
+         同じオレンジ（--accent）にする。文字が入った枠（.filled／.good）は
+         従来どおりの色のまま */
+      #mojiRows .moji-slot:not(.filled) { color: var(--accent); }
+      /* 五十音ならべ: 拗音（きゃ・しゃ など2文字）の枠は、枠に
+         収まるよう文字を少し小さくする */
+      #mojiRows .moji-slot.long { font-size: clamp(12px, 3.6vw, 19px); }
+      /* 候補の表示: 五十音表には重ねず、その直下に横一列で並ぶ大きな文字。
+         並び自体はクリックを通し、文字の上だけがドラッグ・タップを受け付ける。
+         ドラッグ中は指に付いて動き、離した場所が枠でなければ元の位置へ戻る。
+         横一列を保つため、狭い画面では文字とマスを少し小さくして収める */
+      #mojiRows .narabe-overlay {
+        display: flex; flex-wrap: nowrap; align-items: center; justify-content: center;
+        gap: 8px; padding: 4px 2px 2px; margin-top: 10px; pointer-events: none;
       }
-      @media (max-width: 360px) {
-        .moji-narabe-board { gap: 10px; padding: 12px 8px 14px; }
+      #mojiRows .narabe-overlay .moji-tile {
+        pointer-events: auto; touch-action: none; cursor: grab;
+        flex: 0 1 auto;
+        width: clamp(56px, 17vw, 78px); height: clamp(56px, 17vw, 78px); min-height: 56px; border-radius: 18px;
+        font-size: clamp(32px, 9vw, 46px); border-width: 3px; position: relative;
+        transition: transform 0.18s ease;
+      }
+      #mojiRows .narabe-overlay .moji-tile.long { width: clamp(74px, 23vw, 98px); font-size: clamp(22px, 6.5vw, 32px); }
+      #mojiRows .narabe-overlay .moji-tile.dragging {
+        cursor: grabbing; z-index: 30; transition: none;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
+      }
+      /* ドラッグ中に指の下に来た枠を目立たせる */
+      #mojiRows .moji-slot.drop-hint {
+        outline: 4px solid var(--accent); outline-offset: 2px;
+        background: color-mix(in srgb, #ffd94d 45%, var(--card));
       }
       /* 五十音ならべ: ひらがな／カタカナ・だくてんの切り替え（なぞりがきと同じ並び） */
       .moji-narabe-toggles { margin-bottom: 10px; }
       .moji-narabe-toggles .nazori-tabs { margin-bottom: 8px; }
-      .moji-narabe-toggles .nazori-daku-row { margin-top: 0; }
+      .moji-narabe-toggles .nazori-daku-row { margin-top: 0; gap: 8px; flex-wrap: wrap; }
       .moji-narabe-toggles .nazori-daku-row button.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
-      /* 五十音ならべの行えらび表: 文字が見えるのは各行の最初の字だけで、
-         それ以外のマスは ○ で示す（押せるのは最初の字だけ）。
-         マスの大きさ・並びは文字のマス（.nazori-col button）とそろえる */
+      /* 五十音ならべの行えらび表: 文字は最初から見せず、先頭の字も含めて
+         全てのマスを ○ で示す。行の中のどのマスを押しても、その行が選ばれる
+         （位置で選ぶ）。マスの大きさ・並びは文字のマス（.nazori-col button）とそろえる。
+         ただし決まった行の列だけは ○ ではなく枠（.moji-slot）になり、
+         その列の背景も色づく（.narabe-active）ので、○ の色づけは要らない */
       #mojiRows .narabe-cell-circle {
         min-height: 46px; display: flex; align-items: center; justify-content: center;
         border-radius: 10px; border: 2px solid var(--line); background: var(--card);
         box-shadow: var(--shadow); line-height: 1.1;
         font-size: clamp(14px, 4.2vw, 21px); font-weight: 800; color: var(--sub);
-      }
-      /* 選ばれている行の ○ も色を付けて、その行が選ばれていることが分かるようにする */
-      #mojiRows .narabe-cell-circle.on {
-        background: color-mix(in srgb, #ffd94d 45%, var(--card)); border-color: #f5b301; color: #8a6d1f;
       }
       /* 五十音ならべの行えらび表: あ行〜な行の塊と は行〜わ行の塊の切り替えは、
          塊名のタブではなく、表の左端・右端に置いた矢印ボタンで行う。
@@ -1150,6 +1175,17 @@
         font-size: 26px; font-weight: 800; color: var(--accent-text); box-shadow: var(--shadow); line-height: 1;
       }
       #mojiRows .narabe-arrow:disabled { opacity: 0.3; box-shadow: none; }
+      /* 五十音ならべ: 行がそろった後に行の中の文字を選ぶと、五十音表の下に
+         出る単語カード。カード自体は れんそう と同じ見た目（.big-word-card）で、
+         言葉の中で選んだ文字にあたる部分だけをハイライトする。
+         display:flex が hidden 属性より優先されるため、隠すときは明示的に消す */
+      .narabe-word { display: flex; justify-content: center; margin: 2px auto 4px; }
+      .narabe-word[hidden] { display: none; }
+      .narabe-word .bwd .narabe-hl {
+        color: var(--accent-text); font-weight: 800;
+        background: color-mix(in srgb, #ffd94d 55%, transparent);
+        border-radius: 6px; padding: 0 2px;
+      }
       /* ===== ことばたんけん ===== */
       .tanken-tray {
         display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center;
@@ -1658,6 +1694,7 @@
       <button id="otoBtn" type="button">🔊 おととことば</button>
       <button id="tankenBtn" type="button">🧭 ことばたんけん</button>
       <button id="mojiBtn" type="button">🔡 もじあそび</button>
+      <button id="narabeBtn" type="button">🔤 五十音ならべ</button>
       <button id="courseBtn" type="button">⭐ おまかせコース</button>
       <button id="favBoardBtn" type="button" aria-pressed="false">💗 おきにいりだけ</button>
     </div>
@@ -1918,7 +1955,7 @@
         <p class="adult-note" data-i18n="about2">言葉のカードをタップすると、その言葉が声で読み上げられ、関係のある言葉が周りに並びます。気になる言葉を次々とたどっていくうちに、知っている言葉が少しずつ増えていきます。</p>
         <p class="adult-note" data-i18n="about3">クイズで別の答えを選んでも失敗にはせず、正解を一緒に確認して褒める作りです。競争もありません。言葉を見つけてずかんに集める楽しさの中で、自分のペースで遊べます。出てくる言葉は、日常生活でよく使うものを中心に出るよう調整しています。上の設定で、言葉の数や文字の表示を、使う人に合わせて変えられます。</p>
         <p class="credit-line" data-i18n="creditAuthor">作者： @kagoya</p>
-        <p class="credit-line">バージョン 3.0</p>
+        <p class="credit-line">バージョン 3.1</p>
         <p class="credit-line" data-i18n="creditKanji">書き順データ：KanjiVG © Ulrich Apel（CC BY-SA 3.0）</p>
         <p class="credit-line" data-i18n="creditSfx">効果音（おととことば）：CC0の録音素材（Freesound等）</p>
         <p class="adult-note"><span data-i18n="licensePre">このゲームは、クリエイティブ・コモンズ表示 4.0 国際ライセンス（CC BY 4.0）で公開しています。作者名を表示すれば、複製や再配布、改変もできます。ライセンスの内容は</span><a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener" data-i18n="licenseLink">クリエイティブ・コモンズのページ</a><span data-i18n="licensePost">で確認できます。</span></p>
@@ -1931,7 +1968,7 @@
           <h2 data-i18n="featTitle">機能のオン・オフ</h2>
         </div>
         <div class="adult-card">
-          <p class="adult-note" data-i18n="featViewNote">遊び・機能ごとに使う・使わないを選べます。選んだ遊びだけがホーム画面に並びます（「れんそう」も遊びの1つとして選べます）。「デフォルトに戻す」で最初の組み合わせ（遊びは れんそう・しりとり・もじあそび・おととことば・なぞりがき の5つ＋基本の機能）に、「全部選ぶ」で全ての遊び・機能をオンにできます。まとめて切り替えたあと、1つずつ調整することもできます。個別に変えた状態は、そのまま保存されます。オフにしても、その機能の記録や進み具合は消えません。オンに戻せば続きから使えます。変更はすぐに画面に反映されます。</p>
+          <p class="adult-note" data-i18n="featViewNote">遊び・機能ごとに使う・使わないを選べます。選んだ遊びだけがホーム画面に並びます（「れんそう」も遊びの1つとして選べます）。「デフォルトに戻す」で最初の組み合わせ（遊びは れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき の6つ＋基本の機能）に、「全部選ぶ」で全ての遊び・機能をオンにできます。まとめて切り替えたあと、1つずつ調整することもできます。個別に変えた状態は、そのまま保存されます。オフにしても、その機能の記録や進み具合は消えません。オンに戻せば続きから使えます。変更はすぐに画面に反映されます。</p>
           <div class="vocab-opts" role="group" aria-label="まとめて切り替える">
             <button id="presetDefaultBtn" type="button" class="preset-opt" data-i18n="presetDefault">↩️ デフォルトに戻す</button>
             <button id="presetAllBtn" type="button" class="preset-opt" data-i18n="presetAll">✅ 全部選ぶ</button>
@@ -2334,41 +2371,10 @@
         <button id="mojiClose" class="play-close" type="button">🏠 ホームへ もどる</button>
       </div>
       <div class="play-tabs" role="group" aria-label="もじあそびの しゅるい">
-        <button id="mojiTabNarabe" class="on" type="button" aria-pressed="true">🔤 五十音ならべ</button>
-        <button id="mojiTabAna" type="button" aria-pressed="false">⭕ あなうめ</button>
+        <button id="mojiTabAna" class="on" type="button" aria-pressed="true">⭕ あなうめ</button>
         <button id="mojiTabMikke" type="button" aria-pressed="false">🔎 ことば みっけ</button>
       </div>
-      <div id="mojiNarabeStage" class="play-stage">
-        <div class="moji-narabe-toggles">
-          <div id="mojiNarabeScriptRow" class="nazori-tabs" role="group" aria-label="ひらがなと カタカナの きりかえ" hidden>
-            <button id="mojiNarabeHiraBtn" type="button" class="on" aria-pressed="true">あ ひらがな</button>
-            <button id="mojiNarabeKataBtn" type="button" aria-pressed="false">ア カタカナ</button>
-          </div>
-          <div class="nazori-daku-row">
-            <button id="mojiNarabeDakuBtn" type="button" aria-pressed="false">゛ だくてん</button>
-          </div>
-        </div>
-        <div id="mojiRows" role="group" aria-label="五十音表から ぎょうを えらぶ" style="margin:2px auto 12px;"></div>
-        <p id="mojiNarabeQ" class="play-q">もじを じゅんばんに ならべよう</p>
-        <div class="moji-narabe-board">
-          <div class="moji-narabe-col">
-            <div class="moji-narabe-col-label" aria-hidden="true">ならべる わく</div>
-            <div id="mojiSlots" class="moji-slots" aria-label="ならべる わく"></div>
-          </div>
-          <div class="moji-narabe-arrow" aria-hidden="true">←</div>
-          <div class="moji-narabe-col">
-            <div class="moji-narabe-col-label" aria-hidden="true">もじの カード</div>
-            <div id="mojiTiles" class="moji-tiles" aria-label="もじの カード"></div>
-          </div>
-        </div>
-        <p id="mojiNarabeMsg" class="play-msg" aria-live="polite"></p>
-        <div class="play-btns">
-          <button id="mojiNarabeHearBtn" type="button">🔊 もういちど きく</button>
-          <button id="mojiNarabeResetBtn" type="button">🔀 まぜなおす</button>
-          <button id="mojiNarabeNextBtn" class="primary" type="button" hidden>つぎの ぎょう ›</button>
-        </div>
-      </div>
-      <div id="mojiAnaStage" class="play-stage" hidden>
+      <div id="mojiAnaStage" class="play-stage">
         <div class="moji-narabe-toggles">
           <div id="mojiAnaScriptRow" class="nazori-tabs" role="group" aria-label="ひらがなと カタカナの きりかえ" hidden>
             <button id="mojiAnaHiraBtn" type="button" class="on" aria-pressed="true">あ ひらがな</button>
@@ -2403,6 +2409,35 @@
         </div>
       </div>
       <p class="bed-note">もじの カードを タップして あそぼう。べつの もじを えらんでも だいじょうぶ。いっしょに たしかめて、ほめるよ。あなうめと みっけで あそんだ ことばは、ずかんに あつまるよ。</p>
+    </div>
+
+    <div id="narabeEl" class="play-el" hidden role="dialog" aria-label="五十音ならべ">
+      <div class="play-head">
+        <h1 id="narabeTitle">🔤 五十音ならべ</h1>
+        <button id="narabeClose" class="play-close" type="button">🏠 ホームへ もどる</button>
+      </div>
+      <div id="mojiNarabeStage" class="play-stage">
+        <div class="moji-narabe-toggles">
+          <div id="mojiNarabeScriptRow" class="nazori-tabs" role="group" aria-label="ひらがなと カタカナの きりかえ" hidden>
+            <button id="mojiNarabeHiraBtn" type="button" class="on" aria-pressed="true">あ ひらがな</button>
+            <button id="mojiNarabeKataBtn" type="button" aria-pressed="false">ア カタカナ</button>
+          </div>
+          <div class="nazori-daku-row">
+            <button id="mojiNarabeDakuBtn" type="button" aria-pressed="false">゛ だくてん</button>
+            <button id="mojiNarabeYouonBtn" type="button" aria-pressed="false">ゃ ようおん</button>
+          </div>
+        </div>
+        <div id="mojiRows" role="group" aria-label="五十音表から ぎょうを えらぶ" style="margin:2px auto 12px;"></div>
+        <div id="mojiNarabeWord" class="narabe-word" hidden></div>
+        <p id="mojiNarabeQ" class="play-q">もじを じゅんばんに ならべよう</p>
+        <p id="mojiNarabeMsg" class="play-msg" aria-live="polite"></p>
+        <div class="play-btns">
+          <button id="mojiNarabeHearBtn" type="button">🔊 もういちど きく</button>
+          <button id="mojiNarabeResetBtn" type="button">🔀 まぜなおす</button>
+          <button id="mojiNarabeNextBtn" class="primary" type="button" hidden>つぎの ぎょう ›</button>
+        </div>
+      </div>
+      <p class="bed-note">ぎょうを えらんで、もじを ドラッグして わくに いれよう。わくに いれた もじは、タップすると したの こうほに もどるよ。ぎょうが そろったら、もじを タップすると、その もじの ことばの カードが でて、ずかんに あつまるよ。</p>
     </div>
 
     <div id="quizEl" class="play-el" hidden role="dialog" aria-label="ききとりクイズ">
@@ -2538,7 +2573,8 @@
         d_featNoteNazori: "ひらがな・カタカナ・数字のお手本を指でなぞって、書き方を練習する遊びです。なぞった文字の例の言葉が、ずかんに集まります。",
         d_featNoteOto: "本物の録音の音を聞いて言葉と合わせる神経衰弱（えあわせ）と、音を聞いて合うカードを選ぶ聞き取りで遊べます。そろった言葉は、ずかんに集まります。",
         d_featNoteTanken: "場面に合う言葉を集める探検の遊びです。集めた言葉は、ずかんに集まります。",
-        d_featNoteMoji: "五十音を順番に並べる・抜けた文字を当てる・言葉を探す、の3種類で遊べる文字の遊びです。",
+        d_featNoteMoji: "抜けた文字を当てる・言葉を探す、の2種類で遊べる文字の遊びです。",
+        d_featNoteNarabe: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。",
         d_nzNoteCount: "お手本と同じ本数の線で書けているかを見ます。1本の線を途中で分けたり、2本分を続けて1本で書いたりしたときに案内します。",
         d_nzNoteOrder: "お手本の順番どおりに線を書いているかを見ます。違う線を先に書いたときに案内します。",
         d_nzNoteDir: "線の書き始めから書き終わりへの向きが、お手本と合っているかを見ます。反対向きに書いたときに案内します。",
@@ -2691,7 +2727,7 @@
         licensePost: " for the license details.",
         warranty: "This game is provided without warranty. The creator does not guarantee its operation or the saving of records, and is not responsible for any problems or damages arising from its use. Please use it at your own responsibility.",
         backSettings: "← Back to Settings",
-        featViewNote: "Choose which games and features to use. Only the selected games appear on the home screen (れんそう is also one of the choices). “Reset to default” restores the starting combination (the five games れんそう・しりとり・もじあそび・おととことば・なぞりがき, plus the basic features), and “Select all” turns every game and feature on. After using these, you can still adjust each one individually. Your individual choices are saved as they are. Turning a feature off does not delete its records or progress; turn it back on to continue. Changes apply immediately.",
+        featViewNote: "Choose which games and features to use. Only the selected games appear on the home screen (れんそう is also one of the choices). “Reset to default” restores the starting combination (the six games れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, plus the basic features), and “Select all” turns every game and feature on. After using these, you can still adjust each one individually. Your individual choices are saved as they are. Turning a feature off does not delete its records or progress; turn it back on to continue. Changes apply immediately.",
         presetDefault: "↩️ Reset to default", presetAll: "✅ Select all",
         customAddTitle: "Add your own words",
         customViewNote: "You can register words of your own — names of family members and pets, favorite toys, nearby places, and so on. Registered words go into the picture dictionary's 「うちの子の ことば」, appear on cards, and can be tapped to play with them in the center. Words from the chosen category appear around them as related words. Registered words are treated as the most common words (8 stars), so they always appear even when the vocabulary size is reduced. Registrations are saved in this browser.",
@@ -2756,7 +2792,8 @@
         d_featNoteNazori: "Trace model ひらがな, カタカナ and numbers with your finger to practice writing. The example word for each traced character is collected in the ずかん.",
         d_featNoteOto: "Play a matching game with real recorded sounds (えあわせ), or listen to a sound and pick the matching card. Matched words are collected in the ずかん.",
         d_featNoteTanken: "An exploration game: collect the words that fit each scene. Collected words go into the ずかん.",
-        d_featNoteMoji: "Three letter games: putting the 五十音 in order, guessing the missing letter, and finding words.",
+        d_featNoteMoji: "Two letter games: guessing the missing letter and finding words.",
+        d_featNoteNarabe: "A game of putting the letters of a 五十音 row in order. When a row is complete, a card with a word containing one of its letters appears, and that word goes into the ずかん.",
         d_nzNoteCount: "Checks whether the character is written with the same number of strokes as the model. Guidance is shown when one stroke is split into two, or two strokes are written as one.",
         d_nzNoteOrder: "Checks whether the strokes are written in the same order as the model. Guidance is shown when a different stroke is written first.",
         d_nzNoteDir: "Checks whether each stroke's direction, from its start to its end, matches the model. Guidance is shown when a stroke is written in the opposite direction.",
@@ -2910,7 +2947,7 @@
         licensePost: "查看。",
         warranty: "本游戏按无担保方式提供。不保证其运行或记录的保存，因使用而产生的问题或损害，作者不承担责任。请自行负责使用。",
         backSettings: "← 返回设置",
-        featViewNote: "可以逐个选择游戏·功能使用与否。只有选中的游戏会排列在主页上（「れんそう」也作为游戏之一可选）。“恢复默认”会回到最初的组合（游戏为 れんそう・しりとり・もじあそび・おととことば・なぞりがき 5个＋基本功能），“全选”会打开全部游戏·功能。一并切换后，仍可逐个调整。逐个更改的状态会原样保存。关闭后，该功能的记录和进度不会消失；重新打开即可继续。更改会立即反映到画面上。",
+        featViewNote: "可以逐个选择游戏·功能使用与否。只有选中的游戏会排列在主页上（「れんそう」也作为游戏之一可选）。“恢复默认”会回到最初的组合（游戏为 れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき 6个＋基本功能），“全选”会打开全部游戏·功能。一并切换后，仍可逐个调整。逐个更改的状态会原样保存。关闭后，该功能的记录和进度不会消失；重新打开即可继续。更改会立即反映到画面上。",
         presetDefault: "↩️ 恢复默认", presetAll: "✅ 全选",
         customAddTitle: "添加自己的词语",
         customViewNote: "可以登记家人、宠物的名字、喜欢的玩具、附近的场所等自己的词语。登记的词语会进入图鉴的「うちの子の ことば」，也会出现在卡片上，点按即可成为中心来游玩。所选分野的词语会作为相关词语排列在周围。登记的词语会按最常用词语（★8）处理，即使缩小词汇量也始终会出现。登记内容保存在此浏览器中。",
@@ -2975,7 +3012,8 @@
         d_featNoteNazori: "用手指描摹ひらがな、カタカナ和数字的范字，练习书写。描过的文字的例句词语会收集到ずかん里。",
         d_featNoteOto: "用真实录音的声音玩配对游戏（えあわせ），也可以听声音选相配的卡片。配对成功的词语会收集到ずかん里。",
         d_featNoteTanken: "收集与场景相符的词语的探险游戏。收集的词语会进入ずかん。",
-        d_featNoteMoji: "3种文字游戏：按顺序排列五十音、猜缺失的文字、找词语。",
+        d_featNoteMoji: "2种文字游戏：猜缺失的文字、找词语。",
+        d_featNoteNarabe: "把五十音一行的文字按顺序排列的游戏。排好一行后，会出现包含该行文字的词语卡片，那个词语会收集到ずかん中。",
         d_nzNoteCount: "检查是否用与范本相同数量的线条书写。在把1条线中途分开、或把2条线连成1条时给出提示。",
         d_nzNoteOrder: "检查是否按范本的顺序书写线条。在先写了其他线条时给出提示。",
         d_nzNoteDir: "检查线条从起笔到收笔的方向是否与范本一致。在反方向书写时给出提示。",
@@ -3128,7 +3166,7 @@
         licensePost: "查看。",
         warranty: "本遊戲按無擔保方式提供。不保證其運行或紀錄的保存，因使用而產生的問題或損害，作者不承擔責任。請自行負責使用。",
         backSettings: "← 返回設定",
-        featViewNote: "可以逐個選擇遊戲·功能使用與否。只有選中的遊戲會排列在主頁上（「れんそう」也作為遊戲之一可選）。「恢復預設」會回到最初的組合（遊戲為 れんそう・しりとり・もじあそび・おととことば・なぞりがき 5個＋基本功能），「全選」會打開全部遊戲·功能。一併切換後，仍可逐個調整。逐個更改的狀態會原樣保存。關閉後，該功能的紀錄和進度不會消失；重新打開即可繼續。更改會立即反映到畫面上。",
+        featViewNote: "可以逐個選擇遊戲·功能使用與否。只有選中的遊戲會排列在主頁上（「れんそう」也作為遊戲之一可選）。「恢復預設」會回到最初的組合（遊戲為 れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき 6個＋基本功能），「全選」會打開全部遊戲·功能。一併切換後，仍可逐個調整。逐個更改的狀態會原樣保存。關閉後，該功能的紀錄和進度不會消失；重新打開即可繼續。更改會立即反映到畫面上。",
         presetDefault: "↩️ 恢復預設", presetAll: "✅ 全選",
         customAddTitle: "添加自己的詞語",
         customViewNote: "可以登記家人、寵物的名字、喜歡的玩具、附近的場所等自己的詞語。登記的詞語會進入圖鑑的「うちの子の ことば」，也會出現在卡片上，點按即可成為中心來遊玩。所選分野的詞語會作為相關詞語排列在周圍。登記的詞語會按最常用詞語（★8）處理，即使縮小詞彙量也始終會出現。登記內容保存在此瀏覽器中。",
@@ -3193,7 +3231,8 @@
         d_featNoteNazori: "用手指描摹ひらがな、カタカナ和數字的範字，練習書寫。描過的文字的例句詞語會收集到ずかん裡。",
         d_featNoteOto: "用真實錄音的聲音玩配對遊戲（えあわせ），也可以聽聲音選相配的卡片。配對成功的詞語會收集到ずかん裡。",
         d_featNoteTanken: "收集與場景相符的詞語的探險遊戲。收集的詞語會進入ずかん。",
-        d_featNoteMoji: "3種文字遊戲：按順序排列五十音、猜缺失的文字、找詞語。",
+        d_featNoteMoji: "2種文字遊戲：猜缺失的文字、找詞語。",
+        d_featNoteNarabe: "把五十音一行的文字按順序排列的遊戲。排好一行後，會出現包含該行文字的詞語卡片，那個詞語會收集到ずかん中。",
         d_nzNoteCount: "檢查是否用與範本相同數量的線條書寫。在把1條線中途分開、或把2條線連成1條時給出提示。",
         d_nzNoteOrder: "檢查是否按範本的順序書寫線條。在先寫了其他線條時給出提示。",
         d_nzNoteDir: "檢查線條從起筆到收筆的方向是否與範本一致。在反方向書寫時給出提示。",
@@ -3347,7 +3386,7 @@
         licensePost: " para os detalhes da licença.",
         warranty: "Este jogo é fornecido sem garantia. O criador não garante seu funcionamento nem o salvamento de registros, e não se responsabiliza por problemas ou danos decorrentes do uso. Use por sua própria conta e risco.",
         backSettings: "← Voltar às configurações",
-        featViewNote: "Escolha quais jogos e funções usar. Somente os jogos escolhidos aparecem na tela inicial (れんそう também é uma das escolhas). “Restaurar o padrão” volta à combinação inicial (os cinco jogos れんそう・しりとり・もじあそび・おととことば・なぞりがき, mais as funções básicas), e “Selecionar tudo” liga todos os jogos e funções. Depois disso, você ainda pode ajustar cada um individualmente. Suas escolhas individuais são salvas como estão. Desligar uma função não apaga seus registros nem progresso; ligue-a de novo para continuar. As mudanças são aplicadas imediatamente.",
+        featViewNote: "Escolha quais jogos e funções usar. Somente os jogos escolhidos aparecem na tela inicial (れんそう também é uma das escolhas). “Restaurar o padrão” volta à combinação inicial (os seis jogos れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, mais as funções básicas), e “Selecionar tudo” liga todos os jogos e funções. Depois disso, você ainda pode ajustar cada um individualmente. Suas escolhas individuais são salvas como estão. Desligar uma função não apaga seus registros nem progresso; ligue-a de novo para continuar. As mudanças são aplicadas imediatamente.",
         presetDefault: "↩️ Restaurar o padrão", presetAll: "✅ Selecionar tudo",
         customAddTitle: "Adicionar suas próprias palavras",
         customViewNote: "Você pode registrar palavras suas — nomes de familiares e animais de estimação, brinquedos favoritos, lugares próximos e assim por diante. As palavras registradas vão para o 「うちの子の ことば」 do dicionário ilustrado, aparecem nos cartões e podem ser tocadas para jogar com elas no centro. Palavras da categoria escolhida aparecem ao redor como palavras relacionadas. As palavras registradas são tratadas como as mais comuns (8 estrelas), então sempre aparecem, mesmo com o vocabulário reduzido. Os registros são salvos neste navegador.",
@@ -3412,7 +3451,8 @@
         d_featNoteNazori: "Trace os modelos de ひらがな, カタカナ e números com o dedo para praticar a escrita. A palavra de exemplo de cada letra traçada é coletada no ずかん.",
         d_featNoteOto: "Jogue um jogo de memória com sons reais gravados (えあわせ), ou ouça um som e escolha o cartão que combina. As palavras combinadas são coletadas no ずかん.",
         d_featNoteTanken: "Um jogo de exploração: colete as palavras que combinam com cada cena. As palavras coletadas vão para o ずかん.",
-        d_featNoteMoji: "Três jogos com letras: colocar o 五十音 em ordem, adivinhar a letra que falta e encontrar palavras.",
+        d_featNoteMoji: "Dois jogos com letras: adivinhar a letra que falta e encontrar palavras.",
+        d_featNoteNarabe: "Um jogo de colocar as letras de uma linha do 五十音 em ordem. Quando a linha fica completa, aparece um cartão com uma palavra que contém uma de suas letras, e essa palavra vai para o ずかん.",
         d_nzNoteCount: "Verifica se o caractere foi escrito com o mesmo número de traços do modelo. Uma orientação aparece quando um traço é dividido em dois, ou dois traços são escritos como um só.",
         d_nzNoteOrder: "Verifica se os traços foram escritos na mesma ordem do modelo. Uma orientação aparece quando um traço diferente é escrito primeiro.",
         d_nzNoteDir: "Verifica se a direção de cada traço, do início ao fim, corresponde ao modelo. Uma orientação aparece quando um traço é escrito na direção oposta.",
@@ -3565,7 +3605,7 @@
         licensePost: " para ver los detalles de la licencia.",
         warranty: "Este juego se ofrece sin garantía. El creador no garantiza su funcionamiento ni el guardado de registros, y no se responsabiliza de los problemas o daños derivados de su uso. Úsalo bajo tu propia responsabilidad.",
         backSettings: "← Volver a los ajustes",
-        featViewNote: "Elige qué juegos y funciones usar. Solo los juegos elegidos aparecen en la pantalla de inicio (れんそう también es una de las opciones). «Restaurar el valor predeterminado» vuelve a la combinación inicial (los cinco juegos れんそう・しりとり・もじあそび・おととことば・なぞりがき, más las funciones básicas), y «Seleccionar todo» activa todos los juegos y funciones. Después, aún puedes ajustar cada uno individualmente. Tus elecciones individuales se guardan tal cual. Desactivar una función no borra sus registros ni su progreso; vuelve a activarla para continuar. Los cambios se aplican de inmediato.",
+        featViewNote: "Elige qué juegos y funciones usar. Solo los juegos elegidos aparecen en la pantalla de inicio (れんそう también es una de las opciones). «Restaurar el valor predeterminado» vuelve a la combinación inicial (los seis juegos れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, más las funciones básicas), y «Seleccionar todo» activa todos los juegos y funciones. Después, aún puedes ajustar cada uno individualmente. Tus elecciones individuales se guardan tal cual. Desactivar una función no borra sus registros ni su progreso; vuelve a activarla para continuar. Los cambios se aplican de inmediato.",
         presetDefault: "↩️ Restaurar el valor predeterminado", presetAll: "✅ Seleccionar todo",
         customAddTitle: "Añadir tus propias palabras",
         customViewNote: "Puedes registrar palabras tuyas: nombres de familiares y mascotas, juguetes favoritos, lugares cercanos, etc. Las palabras registradas van al 「うちの子の ことば」 del diccionario ilustrado, aparecen en las tarjetas y se pueden tocar para jugar con ellas en el centro. Las palabras de la categoría elegida aparecen alrededor como palabras relacionadas. Las palabras registradas se tratan como las más comunes (8 estrellas), así que siempre aparecen, incluso con el vocabulario reducido. Los registros se guardan en este navegador.",
@@ -3630,7 +3670,8 @@
         d_featNoteNazori: "Traza los modelos de ひらがな, カタカナ y números con el dedo para practicar la escritura. La palabra de ejemplo de cada letra trazada se colecciona en el ずかん.",
         d_featNoteOto: "Juega a emparejar con sonidos reales grabados (えあわせ), o escucha un sonido y elige la tarjeta que coincide. Las palabras emparejadas se coleccionan en el ずかん.",
         d_featNoteTanken: "Un juego de exploración: colecciona las palabras que encajan con cada escena. Las palabras coleccionadas van al ずかん.",
-        d_featNoteMoji: "Tres juegos con letras: poner el 五十音 en orden, adivinar la letra que falta y encontrar palabras.",
+        d_featNoteMoji: "Dos juegos con letras: adivinar la letra que falta y encontrar palabras.",
+        d_featNoteNarabe: "Un juego para poner las letras de una fila del 五十音 en orden. Cuando la fila está completa, aparece una tarjeta con una palabra que contiene una de sus letras, y esa palabra va al ずかん.",
         d_nzNoteCount: "Comprueba si el carácter se escribió con el mismo número de trazos que el modelo. Aparece una guía cuando un trazo se divide en dos, o dos trazos se escriben como uno solo.",
         d_nzNoteOrder: "Comprueba si los trazos se escribieron en el mismo orden que el modelo. Aparece una guía cuando se escribe primero un trazo distinto.",
         d_nzNoteDir: "Comprueba si la dirección de cada trazo, desde su inicio hasta su fin, coincide con el modelo. Aparece una guía cuando un trazo se escribe en dirección contraria.",
@@ -3784,7 +3825,7 @@
         licensePost: ".",
         warranty: "Trò chơi này được cung cấp không kèm bảo đảm. Tác giả không bảo đảm hoạt động hay việc lưu bản ghi, và không chịu trách nhiệm về sự cố, thiệt hại phát sinh do việc sử dụng. Xin vui lòng tự chịu trách nhiệm khi sử dụng.",
         backSettings: "← Quay lại Cài đặt",
-        featViewNote: "Có thể chọn dùng hay không dùng từng trò chơi/chức năng. Chỉ những trò chơi đã chọn mới xếp trên màn hình chính (「れんそう」 cũng là một trong các trò chơi có thể chọn). “Khôi phục mặc định” đưa về tổ hợp ban đầu (5 trò chơi れんそう・しりとり・もじあそび・おととことば・なぞりがき + các chức năng cơ bản), “Chọn tất cả” bật mọi trò chơi/chức năng. Sau khi chuyển đổi hàng loạt, vẫn có thể chỉnh từng cái một. Trạng thái chỉnh riêng được lưu nguyên như vậy. Tắt đi thì bản ghi và tiến độ của chức năng đó cũng không mất; bật lại là dùng tiếp được. Thay đổi được áp dụng ngay lên màn hình.",
+        featViewNote: "Có thể chọn dùng hay không dùng từng trò chơi/chức năng. Chỉ những trò chơi đã chọn mới xếp trên màn hình chính (「れんそう」 cũng là một trong các trò chơi có thể chọn). “Khôi phục mặc định” đưa về tổ hợp ban đầu (6 trò chơi れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき + các chức năng cơ bản), “Chọn tất cả” bật mọi trò chơi/chức năng. Sau khi chuyển đổi hàng loạt, vẫn có thể chỉnh từng cái một. Trạng thái chỉnh riêng được lưu nguyên như vậy. Tắt đi thì bản ghi và tiến độ của chức năng đó cũng không mất; bật lại là dùng tiếp được. Thay đổi được áp dụng ngay lên màn hình.",
         presetDefault: "↩️ Khôi phục mặc định", presetAll: "✅ Chọn tất cả",
         customAddTitle: "Thêm từ riêng của bạn",
         customViewNote: "Có thể đăng ký các từ riêng như tên người thân và thú cưng, đồ chơi yêu thích, địa điểm gần nhà. Từ đã đăng ký sẽ vào 「うちの子の ことば」 trong từ điển tranh, xuất hiện trên thẻ, chạm vào là có thể chơi với từ đó ở giữa. Các từ thuộc lĩnh vực đã chọn sẽ xếp xung quanh như từ liên quan. Từ đã đăng ký được coi là từ dùng thường xuyên nhất (★8), nên luôn xuất hiện ngay cả khi giảm số lượng từ. Nội dung đăng ký được lưu trong trình duyệt này.",
@@ -3849,7 +3890,8 @@
         d_featNoteNazori: "Dùng ngón tay đồ theo mẫu ひらがな, カタカナ và chữ số để luyện viết. Từ ví dụ của mỗi chữ đã đồ sẽ được thu thập vào ずかん.",
         d_featNoteOto: "Chơi ghép đôi bằng âm thanh thu âm thật (えあわせ), hoặc nghe âm thanh và chọn thẻ phù hợp. Từ ghép đúng sẽ được thu thập vào ずかん.",
         d_featNoteTanken: "Trò chơi thám hiểm: thu thập các từ phù hợp với mỗi cảnh. Từ thu thập được sẽ vào ずかん.",
-        d_featNoteMoji: "Ba trò chơi chữ: xếp 五十音 theo thứ tự, đoán chữ còn thiếu và tìm từ.",
+        d_featNoteMoji: "Hai trò chơi chữ: đoán chữ còn thiếu và tìm từ.",
+        d_featNoteNarabe: "Trò chơi xếp các chữ trong một hàng 五十音 theo thứ tự. Khi xếp xong một hàng, sẽ xuất hiện thẻ từ chứa một chữ trong hàng đó, và từ đó được thu vào ずかん.",
         d_nzNoteCount: "Kiểm tra xem có viết đúng số nét như mẫu không. Sẽ hướng dẫn khi một nét bị chia làm đôi giữa chừng, hoặc hai nét bị viết liền thành một.",
         d_nzNoteOrder: "Kiểm tra xem có viết các nét đúng thứ tự của mẫu không. Sẽ hướng dẫn khi viết một nét khác trước.",
         d_nzNoteDir: "Kiểm tra xem hướng từ đầu nét đến cuối nét có khớp với mẫu không. Sẽ hướng dẫn khi viết ngược hướng.",
@@ -4002,7 +4044,7 @@
         licensePost: "",
         warranty: "เกมนี้ให้บริการโดยไม่มีการรับประกัน ไม่รับประกันการทำงานหรือการบันทึกข้อมูล และผู้สร้างไม่รับผิดชอบต่อปัญหาหรือความเสียหายที่เกิดจากการใช้งาน โปรดใช้งานด้วยความรับผิดชอบของตนเอง",
         backSettings: "← กลับไปการตั้งค่า",
-        featViewNote: "เลือกใช้หรือไม่ใช้ทีละเกม/ฟังก์ชันได้ เฉพาะเกมที่เลือกเท่านั้นที่จะเรียงบนหน้าจอหลัก (「れんそう」 ก็เลือกเป็นเกมหนึ่งได้) “คืนค่าเริ่มต้น” จะกลับไปเป็นชุดเริ่มต้น (เกม 5 อย่าง れんそう・しりとり・もじあそび・おととことば・なぞりがき + ฟังก์ชันพื้นฐาน) “เลือกทั้งหมด” จะเปิดทุกเกม/ฟังก์ชัน หลังจากสลับพร้อมกันแล้ว ยังปรับทีละรายการได้อีก สถานะที่เปลี่ยนทีละรายการจะถูกบันทึกไว้ตามนั้น แม้ปิดไป บันทึกและความคืบหน้าของฟังก์ชันนั้นก็ไม่หาย เปิดกลับก็ใช้ต่อได้ การเปลี่ยนแปลงจะมีผลบนหน้าจอทันที",
+        featViewNote: "เลือกใช้หรือไม่ใช้ทีละเกม/ฟังก์ชันได้ เฉพาะเกมที่เลือกเท่านั้นที่จะเรียงบนหน้าจอหลัก (「れんそう」 ก็เลือกเป็นเกมหนึ่งได้) “คืนค่าเริ่มต้น” จะกลับไปเป็นชุดเริ่มต้น (เกม 6 อย่าง れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき + ฟังก์ชันพื้นฐาน) “เลือกทั้งหมด” จะเปิดทุกเกม/ฟังก์ชัน หลังจากสลับพร้อมกันแล้ว ยังปรับทีละรายการได้อีก สถานะที่เปลี่ยนทีละรายการจะถูกบันทึกไว้ตามนั้น แม้ปิดไป บันทึกและความคืบหน้าของฟังก์ชันนั้นก็ไม่หาย เปิดกลับก็ใช้ต่อได้ การเปลี่ยนแปลงจะมีผลบนหน้าจอทันที",
         presetDefault: "↩️ คืนค่าเริ่มต้น", presetAll: "✅ เลือกทั้งหมด",
         customAddTitle: "เพิ่มคำเฉพาะของคุณ",
         customViewNote: "ลงทะเบียนคำเฉพาะของคุณได้ เช่น ชื่อคนในครอบครัวและสัตว์เลี้ยง ของเล่นที่ชอบ สถานที่ใกล้บ้าน คำที่ลงทะเบียนจะเข้าไปอยู่ใน 「うちの子の ことば」 ของพจนานุกรมภาพ ปรากฏบนการ์ด และแตะเพื่อให้มาอยู่ตรงกลางเพื่อเล่นได้ คำของหมวดที่เลือกจะเรียงอยู่รอบ ๆ เป็นคำที่เกี่ยวข้อง คำที่ลงทะเบียนจะถือเป็นคำที่ใช้บ่อยที่สุด (★8) จึงปรากฏเสมอแม้ลดจำนวนคำลง เนื้อหาที่ลงทะเบียนจะถูกบันทึกในเบราว์เซอร์นี้",
@@ -4067,7 +4109,8 @@
         d_featNoteNazori: "ใช้นิ้วลากตามแบบ ひらがな คาตากานะ และตัวเลขเพื่อฝึกเขียน คำตัวอย่างของแต่ละตัวอักษรที่ลากจะถูกเก็บใน ずかん",
         d_featNoteOto: "เล่นเกมจับคู่ด้วยเสียงบันทึกจริง (えあわせ) หรือฟังเสียงแล้วเลือกการ์ดที่ตรงกัน คำที่จับคู่ได้จะถูกเก็บใน ずかん",
         d_featNoteTanken: "เกมสำรวจ: เก็บคำที่เข้ากับแต่ละฉาก คำที่เก็บได้จะเข้า ずかん",
-        d_featNoteMoji: "เกมตัวอักษร 3 แบบ: เรียง 五十音 ตามลำดับ ทายตัวอักษรที่หายไป และค้นหาคำ",
+        d_featNoteMoji: "เกมตัวอักษร 2 แบบ: ทายตัวอักษรที่หายไป และค้นหาคำ",
+        d_featNoteNarabe: "เกมเรียงตัวอักษรในแถวของ 五十音 ตามลำดับ เมื่อเรียงครบหนึ่งแถว จะมีบัตรคำที่มีตัวอักษรในแถวนั้นปรากฏขึ้น และคำนั้นจะเก็บเข้า ずかん",
         d_nzNoteCount: "ตรวจว่าเขียนด้วยจำนวนเส้นเท่ากับต้นแบบหรือไม่ จะแนะนำเมื่อแยก 1 เส้นออกกลางคัน หรือเขียน 2 เส้นต่อกันเป็น 1 เส้น",
         d_nzNoteOrder: "ตรวจว่าเขียนเส้นตามลำดับเดียวกับต้นแบบหรือไม่ จะแนะนำเมื่อเขียนเส้นอื่นก่อน",
         d_nzNoteDir: "ตรวจว่าทิศทางจากจุดเริ่มถึงจุดจบของเส้นตรงกับต้นแบบหรือไม่ จะแนะนำเมื่อเขียนทิศตรงข้าม",
@@ -4221,7 +4264,7 @@
         licensePost: "에서 확인할 수 있습니다.",
         warranty: "이 게임은 무보증으로 제공됩니다. 동작이나 기록 저장을 보증하는 것이 아니며, 이용으로 생긴 문제·손해에 대해 제작자는 책임을 지지 않습니다. 이용은 자기 책임으로 부탁드립니다.",
         backSettings: "← 설정으로 돌아가기",
-        featViewNote: "게임·기능별로 사용할지 사용하지 않을지 선택할 수 있습니다. 선택한 게임만 홈 화면에 늘어섭니다('れんそう'도 게임 중 하나로 선택할 수 있습니다). '기본값으로 되돌리기'로는 처음 조합(게임은 れんそう・しりとり・もじあそび・おととことば・なぞりがき 5개 + 기본 기능)으로, '전부 선택'으로는 모든 게임·기능을 켤 수 있습니다. 한꺼번에 전환한 뒤에도 하나씩 조정할 수 있습니다. 개별적으로 바꾼 상태는 그대로 저장됩니다. 꺼도 그 기능의 기록이나 진행 상황은 사라지지 않습니다. 다시 켜면 이어서 사용할 수 있습니다. 변경은 즉시 화면에 반영됩니다.",
+        featViewNote: "게임·기능별로 사용할지 사용하지 않을지 선택할 수 있습니다. 선택한 게임만 홈 화면에 늘어섭니다('れんそう'도 게임 중 하나로 선택할 수 있습니다). '기본값으로 되돌리기'로는 처음 조합(게임은 れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき 6개 + 기본 기능)으로, '전부 선택'으로는 모든 게임·기능을 켤 수 있습니다. 한꺼번에 전환한 뒤에도 하나씩 조정할 수 있습니다. 개별적으로 바꾼 상태는 그대로 저장됩니다. 꺼도 그 기능의 기록이나 진행 상황은 사라지지 않습니다. 다시 켜면 이어서 사용할 수 있습니다. 변경은 즉시 화면에 반영됩니다.",
         presetDefault: "↩️ 기본값으로 되돌리기", presetAll: "✅ 전부 선택",
         customAddTitle: "나만의 단어 추가",
         customViewNote: "가족이나 반려동물의 이름, 좋아하는 장난감, 근처 장소 등 나만의 단어를 등록할 수 있습니다. 등록한 단어는 도감의 'うちの子の ことば'에 들어가고, 카드에도 나오며, 누르면 중심이 되어 플레이할 수 있습니다. 선택한 분야의 단어가 관계있는 단어로 주변에 늘어섭니다. 등록한 단어는 가장 자주 쓰는 단어(★8개)로 취급되어, 단어 수를 줄여도 항상 나옵니다. 등록 내용은 이 브라우저 안에 저장됩니다.",
@@ -4286,7 +4329,8 @@
         d_featNoteNazori: "ひらがな・カタカナ・숫자 본보기를 손가락으로 따라 쓰며 쓰기를 연습하는 놀이입니다. 따라 쓴 문자의 예시 단어가 ずかん에 모여요.",
         d_featNoteOto: "실제 녹음 소리로 짝을 맞히는 えあわせ와, 소리를 듣고 맞는 카드를 고르는 듣기로 놀 수 있어요. 맞힌 단어는 ずかん에 모여요.",
         d_featNoteTanken: "장면에 맞는 단어를 모으는 탐험 놀이입니다. 모은 단어는 ずかん에 모여요.",
-        d_featNoteMoji: "五十音 순서대로 나열하기, 빠진 문자 맞히기, 단어 찾기, 3가지로 노는 문자 놀이입니다.",
+        d_featNoteMoji: "빠진 문자 맞히기, 단어 찾기, 2가지로 노는 문자 놀이입니다.",
+        d_featNoteNarabe: "五十音 한 줄의 문자를 순서대로 나열하는 놀이입니다. 한 줄이 완성되면 그 줄의 문자가 들어간 단어 카드가 나오고, 그 단어가 ずかん에 모입니다.",
         d_nzNoteCount: "모범과 같은 개수의 선으로 쓰고 있는지 봅니다. 1개의 선을 중간에 나누거나, 2개 분량을 이어서 1개로 썼을 때 안내합니다.",
         d_nzNoteOrder: "모범의 순서대로 선을 쓰고 있는지 봅니다. 다른 선을 먼저 썼을 때 안내합니다.",
         d_nzNoteDir: "선의 쓰기 시작부터 쓰기 끝까지의 방향이 모범과 맞는지 봅니다. 반대 방향으로 썼을 때 안내합니다.",
@@ -4467,7 +4511,7 @@
         licensePost: "で かくにん できます。",
         warranty: "この ゲームは ほしょう なしで 出されます。動きや きろくの ほぞんは たしかでは ありません。使って もんだいが あっても 作者は せきにんを もちません。自分の せきにんで 使って ください。",
         backSettings: "← せっていに もどる",
-        featViewNote: "あそび・きのうごとに 使う・使わないを えらべます。えらんだ あそびだけが ホーム画面に ならびます（「れんそう」も あそびの 1つとして えらべます）。「デフォルトに もどす」で はじめの 組み合わせ（あそびは れんそう・しりとり・もじあそび・おととことば・なぞりがきの 5つ＋きほんの きのう）に、「全部 えらぶ」で すべての あそび・きのうを オンに できます。まとめて かえた あと、1つずつ かえることも できます。1つずつ かえた ことは、そのまま ほぞん されます。オフにしても、その きのうの きろくや 進み方は 消えません。オンに もどせば つづきから 使えます。かえた ことは すぐに 画面に 出ます。",
+        featViewNote: "あそび・きのうごとに 使う・使わないを えらべます。えらんだ あそびだけが ホーム画面に ならびます（「れんそう」も あそびの 1つとして えらべます）。「デフォルトに もどす」で はじめの 組み合わせ（あそびは れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがきの 6つ＋きほんの きのう）に、「全部 えらぶ」で すべての あそび・きのうを オンに できます。まとめて かえた あと、1つずつ かえることも できます。1つずつ かえた ことは、そのまま ほぞん されます。オフにしても、その きのうの きろくや 進み方は 消えません。オンに もどせば つづきから 使えます。かえた ことは すぐに 画面に 出ます。",
         presetDefault: "↩️ デフォルトに もどす",
         presetAll: "✅ 全部 えらぶ",
         customAddTitle: "うちの子の ことばを ついか",
@@ -4542,7 +4586,8 @@
         d_featNoteNazori: "ひらがな・カタカナ・すうじの おてほんを ゆびで なぞって、書きかたを れんしゅうする あそびです。なぞった もじの れいの ことばが、ずかんに あつまります。",
         d_featNoteOto: "ほんものの ろくおんの おとを きいて ことばと あわせる えあわせと、おとを きいて あう カードを えらぶ ききとりで あそべます。そろった ことばは、ずかんに あつまります。",
         d_featNoteTanken: "ばめんに あう ことばを あつめる たんけんの あそびです。あつめた ことばは、ずかんに あつまります。",
-        d_featNoteMoji: "五十音を じゅんばんに ならべる・ぬけた もじを あてる・ことばを さがす、の 3つの あそびが できる もじの あそびです。",
+        d_featNoteMoji: "ぬけた もじを あてる・ことばを さがす、の 2つの あそびが できる もじの あそびです。",
+        d_featNoteNarabe: "五十音の もじを ぎょうごとに じゅんばんに ならべる あそびです。ぎょうが そろうと、その もじが 入った ことばの カードが 出て、その ことばが ずかんに あつまります。",
         d_nzNoteCount: "お手本と 同じ 本数の 線で 書けているかを 見ます。1本の 線を とちゅうで 分けたり、2本分を つづけて 1本で 書いたりした ときに あんない します。",
         d_nzNoteOrder: "お手本の じゅんばんどおりに 線を 書いているかを 見ます。ちがう 線を 先に 書いた ときに あんない します。",
         d_nzNoteDir: "線の 書き始めから 書き終わりへの 向きが、お手本と 合っているかを 見ます。反対の 向きに 書いた ときに あんない します。",
@@ -4715,7 +4760,7 @@
         licensePost: " pour les détails de la licence.",
         warranty: "Ce jeu est fourni sans garantie. Le créateur ne garantit pas son fonctionnement ni l'enregistrement des données, et n'est pas responsable des problèmes ou dommages résultant de son utilisation. Veuillez l'utiliser sous votre propre responsabilité.",
         backSettings: "← Retour aux réglages",
-        featViewNote: "Choisissez quels jeux et quelles fonctions utiliser. Seuls les jeux choisis apparaissent sur l'écran d'accueil (れんそう fait aussi partie des choix). « Rétablir par défaut » restaure la combinaison de départ (les cinq jeux れんそう・しりとり・もじあそび・おととことば・なぞりがき, plus les fonctions de base), et « Tout sélectionner » active tous les jeux et toutes les fonctions. Après les avoir utilisés, vous pouvez toujours ajuster chacun individuellement. Vos choix individuels sont enregistrés tels quels. Désactiver une fonction ne supprime ni ses données ni sa progression ; réactivez-la pour continuer. Les changements s'appliquent immédiatement.",
+        featViewNote: "Choisissez quels jeux et quelles fonctions utiliser. Seuls les jeux choisis apparaissent sur l'écran d'accueil (れんそう fait aussi partie des choix). « Rétablir par défaut » restaure la combinaison de départ (les six jeux れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, plus les fonctions de base), et « Tout sélectionner » active tous les jeux et toutes les fonctions. Après les avoir utilisés, vous pouvez toujours ajuster chacun individuellement. Vos choix individuels sont enregistrés tels quels. Désactiver une fonction ne supprime ni ses données ni sa progression ; réactivez-la pour continuer. Les changements s'appliquent immédiatement.",
         presetDefault: "↩️ Rétablir par défaut", presetAll: "✅ Tout sélectionner",
         customAddTitle: "Ajouter vos propres mots",
         customViewNote: "Vous pouvez enregistrer vos propres mots — noms des membres de la famille et des animaux, jouets préférés, lieux proches, etc. Les mots enregistrés vont dans le 「うちの子の ことば」 du dictionnaire en images, apparaissent sur les cartes, et peuvent être touchés pour jouer avec eux au centre. Les mots de la catégorie choisie apparaissent autour comme mots liés. Les mots enregistrés sont traités comme les mots les plus fréquents (8 étoiles), donc ils apparaissent toujours même quand la taille du vocabulaire est réduite. Les enregistrements sont conservés dans ce navigateur.",
@@ -4780,7 +4825,8 @@
         d_featNoteNazori: "Tracez les modèles de ひらがな, カタカナ et de chiffres avec le doigt pour vous entraîner à écrire. Le mot d'exemple de chaque lettre tracée est collectionné dans le ずかん.",
         d_featNoteOto: "Jouez à un jeu d'association avec de vrais sons enregistrés (えあわせ), ou écoutez un son et choisissez la carte correspondante. Les mots associés sont collectionnés dans le ずかん.",
         d_featNoteTanken: "Un jeu d'exploration : collectionnez les mots qui conviennent à chaque scène. Les mots collectionnés vont dans le ずかん.",
-        d_featNoteMoji: "Trois jeux de lettres : mettre le 五十音 dans l'ordre, deviner la lettre manquante et trouver des mots.",
+        d_featNoteMoji: "Deux jeux de lettres : deviner la lettre manquante et trouver des mots.",
+        d_featNoteNarabe: "Un jeu où l'on met les lettres d'une rangée du 五十音 dans l'ordre. Quand une rangée est complète, une carte avec un mot contenant l'une de ses lettres apparaît, et ce mot va dans le ずかん.",
         d_nzNoteCount: "Vérifie si le caractère est écrit avec le même nombre de traits que le modèle. Un conseil s'affiche quand un trait est coupé en deux, ou quand deux traits sont écrits en un seul.",
         d_nzNoteOrder: "Vérifie si les traits sont écrits dans le même ordre que le modèle. Un conseil s'affiche quand un autre trait est écrit en premier.",
         d_nzNoteDir: "Vérifie si la direction de chaque trait, de son début à sa fin, correspond au modèle. Un conseil s'affiche quand un trait est écrit dans le sens opposé.",
@@ -4933,7 +4979,7 @@
         licensePost: " für die Einzelheiten der Lizenz.",
         warranty: "Dieses Spiel wird ohne Gewährleistung bereitgestellt. Der Ersteller garantiert weder seinen Betrieb noch das Speichern von Daten und ist nicht verantwortlich für Probleme oder Schäden, die aus seiner Nutzung entstehen. Bitte nutzen Sie es in eigener Verantwortung.",
         backSettings: "← Zurück zu den Einstellungen",
-        featViewNote: "Wählen Sie, welche Spiele und Funktionen verwendet werden. Nur die gewählten Spiele erscheinen auf dem Startbildschirm (れんそう ist auch eine der Auswahlmöglichkeiten). „Auf Standard zurücksetzen“ stellt die Anfangskombination wieder her (die fünf Spiele れんそう・しりとり・もじあそび・おととことば・なぞりがき plus die Grundfunktionen), und „Alle auswählen“ schaltet jedes Spiel und jede Funktion ein. Danach können Sie jedes Element weiterhin einzeln anpassen. Ihre einzelnen Auswahlentscheidungen werden so gespeichert, wie sie sind. Das Ausschalten einer Funktion löscht weder ihre Daten noch ihren Fortschritt; schalten Sie sie wieder ein, um fortzufahren. Änderungen wirken sich sofort aus.",
+        featViewNote: "Wählen Sie, welche Spiele und Funktionen verwendet werden. Nur die gewählten Spiele erscheinen auf dem Startbildschirm (れんそう ist auch eine der Auswahlmöglichkeiten). „Auf Standard zurücksetzen“ stellt die Anfangskombination wieder her (die sechs Spiele れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき plus die Grundfunktionen), und „Alle auswählen“ schaltet jedes Spiel und jede Funktion ein. Danach können Sie jedes Element weiterhin einzeln anpassen. Ihre einzelnen Auswahlentscheidungen werden so gespeichert, wie sie sind. Das Ausschalten einer Funktion löscht weder ihre Daten noch ihren Fortschritt; schalten Sie sie wieder ein, um fortzufahren. Änderungen wirken sich sofort aus.",
         presetDefault: "↩️ Auf Standard zurücksetzen", presetAll: "✅ Alle auswählen",
         customAddTitle: "Eigene Wörter hinzufügen",
         customViewNote: "Sie können eigene Wörter registrieren — Namen von Familienmitgliedern und Haustieren, Lieblingsspielzeuge, Orte in der Nähe und so weiter. Registrierte Wörter kommen in das 「うちの子の ことば」 des Bildwörterbuchs, erscheinen auf Karten und können angetippt werden, um mit ihnen in der Mitte zu spielen. Wörter aus der gewählten Kategorie erscheinen als verwandte Wörter um sie herum. Registrierte Wörter werden wie die häufigsten Wörter behandelt (8 Sterne), sodass sie immer erscheinen, auch wenn die Wortschatzgröße verringert wird. Registrierungen werden in diesem Browser gespeichert.",
@@ -4998,7 +5044,8 @@
         d_featNoteNazori: "Zeichnen Sie die Vorlagen für ひらがな, カタカナ und Zahlen mit dem Finger nach, um das Schreiben zu üben. Das Beispielwort jedes nachgezeichneten Zeichens wird im ずかん gesammelt.",
         d_featNoteOto: "Spielen Sie ein Zuordnungsspiel mit echten Tonaufnahmen (えあわせ), oder hören Sie einen Ton und wählen Sie die passende Karte. Zugeordnete Wörter werden im ずかん gesammelt.",
         d_featNoteTanken: "Ein Erkundungsspiel: Sammeln Sie die Wörter, die zu jeder Szene passen. Gesammelte Wörter kommen ins ずかん.",
-        d_featNoteMoji: "Drei Buchstabenspiele: das 五十音 in die richtige Reihenfolge bringen, den fehlenden Buchstaben erraten und Wörter finden.",
+        d_featNoteMoji: "Zwei Buchstabenspiele: den fehlenden Buchstaben erraten und Wörter finden.",
+        d_featNoteNarabe: "Ein Spiel, bei dem man die Buchstaben einer 五十音-Reihe in die richtige Reihenfolge bringt. Ist eine Reihe vollständig, erscheint eine Karte mit einem Wort, das einen ihrer Buchstaben enthält, und dieses Wort kommt ins ずかん.",
         d_nzNoteCount: "Prüft, ob das Zeichen mit derselben Strichanzahl wie das Vorbild geschrieben wird. Ein Hinweis wird angezeigt, wenn ein Strich in zwei geteilt oder zwei Striche als einer geschrieben werden.",
         d_nzNoteOrder: "Prüft, ob die Striche in derselben Reihenfolge wie das Vorbild geschrieben werden. Ein Hinweis wird angezeigt, wenn ein anderer Strich zuerst geschrieben wird.",
         d_nzNoteDir: "Prüft, ob die Richtung jedes Strichs, von seinem Anfang bis zu seinem Ende, mit dem Vorbild übereinstimmt. Ein Hinweis wird angezeigt, wenn ein Strich in entgegengesetzter Richtung geschrieben wird.",
@@ -5151,7 +5198,7 @@
         licensePost: " per i dettagli della licenza.",
         warranty: "Questo gioco è fornito senza garanzia. Il creatore non garantisce il suo funzionamento né il salvataggio dei dati, e non è responsabile di problemi o danni derivanti dal suo utilizzo. Usalo sotto la tua responsabilità.",
         backSettings: "← Torna alle impostazioni",
-        featViewNote: "Scegli quali giochi e funzioni usare. Solo i giochi scelti appaiono nella schermata iniziale (anche れんそう è tra le scelte). «Ripristina predefiniti» riporta la combinazione iniziale (i cinque giochi れんそう・しりとり・もじあそび・おととことば・なぞりがき, più le funzioni di base), e «Seleziona tutto» attiva ogni gioco e funzione. Dopo averli usati, puoi comunque regolare ciascuno singolarmente. Le tue scelte individuali vengono salvate così come sono. Disattivare una funzione non elimina i suoi dati né i suoi progressi; riattivala per continuare. Le modifiche si applicano subito.",
+        featViewNote: "Scegli quali giochi e funzioni usare. Solo i giochi scelti appaiono nella schermata iniziale (anche れんそう è tra le scelte). «Ripristina predefiniti» riporta la combinazione iniziale (i sei giochi れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, più le funzioni di base), e «Seleziona tutto» attiva ogni gioco e funzione. Dopo averli usati, puoi comunque regolare ciascuno singolarmente. Le tue scelte individuali vengono salvate così come sono. Disattivare una funzione non elimina i suoi dati né i suoi progressi; riattivala per continuare. Le modifiche si applicano subito.",
         presetDefault: "↩️ Ripristina predefiniti", presetAll: "✅ Seleziona tutto",
         customAddTitle: "Aggiungi le tue parole",
         customViewNote: "Puoi registrare parole tue — nomi dei familiari e degli animali, giocattoli preferiti, luoghi vicini e così via. Le parole registrate vanno in 「うちの子の ことば」 del dizionario illustrato, appaiono sulle carte e possono essere toccate per giocarci al centro. Le parole della categoria scelta appaiono intorno come parole collegate. Le parole registrate sono trattate come le parole più frequenti (8 stelle), quindi appaiono sempre anche quando la dimensione del vocabolario è ridotta. Le registrazioni vengono salvate in questo browser.",
@@ -5216,7 +5263,8 @@
         d_featNoteNazori: "Traccia i modelli di ひらがな, カタカナ e numeri con il dito per esercitarti a scrivere. La parola di esempio di ogni lettera tracciata viene raccolta nel ずかん.",
         d_featNoteOto: "Gioca a un gioco di abbinamento con suoni veri registrati (えあわせ), oppure ascolta un suono e scegli la carta corrispondente. Le parole abbinate vengono raccolte nel ずかん.",
         d_featNoteTanken: "Un gioco di esplorazione: raccogli le parole adatte a ogni scena. Le parole raccolte vanno nel ずかん.",
-        d_featNoteMoji: "Tre giochi con le lettere: mettere il 五十音 in ordine, indovinare la lettera mancante e trovare parole.",
+        d_featNoteMoji: "Due giochi con le lettere: indovinare la lettera mancante e trovare parole.",
+        d_featNoteNarabe: "Un gioco in cui si mettono in ordine le lettere di una riga del 五十音. Quando una riga è completa, appare una carta con una parola che contiene una delle sue lettere, e quella parola va nello ずかん.",
         d_nzNoteCount: "Controlla se il carattere è scritto con lo stesso numero di tratti del modello. Un suggerimento viene mostrato quando un tratto viene diviso in due, o due tratti vengono scritti come uno solo.",
         d_nzNoteOrder: "Controlla se i tratti sono scritti nello stesso ordine del modello. Un suggerimento viene mostrato quando un tratto diverso viene scritto per primo.",
         d_nzNoteDir: "Controlla se la direzione di ogni tratto, dal suo inizio alla sua fine, corrisponde al modello. Un suggerimento viene mostrato quando un tratto viene scritto nella direzione opposta.",
@@ -5369,7 +5417,7 @@
         licensePost: " untuk rincian lisensinya.",
         warranty: "Permainan ini disediakan tanpa jaminan. Pembuat tidak menjamin pengoperasiannya maupun penyimpanan catatan, dan tidak bertanggung jawab atas masalah atau kerusakan yang timbul dari penggunaannya. Silakan gunakan dengan tanggung jawab Anda sendiri.",
         backSettings: "← Kembali ke Pengaturan",
-        featViewNote: "Pilih permainan dan fitur mana yang akan digunakan. Hanya permainan yang dipilih yang muncul di layar utama (れんそう juga salah satu pilihannya). “Kembalikan ke default” memulihkan kombinasi awal (lima permainan れんそう・しりとり・もじあそび・おととことば・なぞりがき, ditambah fitur dasar), dan “Pilih semua” menghidupkan setiap permainan dan fitur. Setelah menggunakannya, Anda tetap dapat menyesuaikan masing-masing secara terpisah. Pilihan Anda disimpan apa adanya. Mematikan fitur tidak menghapus catatan atau kemajuannya; hidupkan kembali untuk melanjutkan. Perubahan langsung diterapkan.",
+        featViewNote: "Pilih permainan dan fitur mana yang akan digunakan. Hanya permainan yang dipilih yang muncul di layar utama (れんそう juga salah satu pilihannya). “Kembalikan ke default” memulihkan kombinasi awal (enam permainan れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, ditambah fitur dasar), dan “Pilih semua” menghidupkan setiap permainan dan fitur. Setelah menggunakannya, Anda tetap dapat menyesuaikan masing-masing secara terpisah. Pilihan Anda disimpan apa adanya. Mematikan fitur tidak menghapus catatan atau kemajuannya; hidupkan kembali untuk melanjutkan. Perubahan langsung diterapkan.",
         presetDefault: "↩️ Kembalikan ke default", presetAll: "✅ Pilih semua",
         customAddTitle: "Tambahkan kata Anda sendiri",
         customViewNote: "Anda dapat mendaftarkan kata Anda sendiri — nama anggota keluarga dan hewan peliharaan, mainan favorit, tempat di sekitar, dan sebagainya. Kata yang didaftarkan masuk ke 「うちの子の ことば」 pada kamus bergambar, muncul di kartu, dan dapat diketuk untuk dimainkan di tengah. Kata dari kategori yang dipilih muncul di sekitarnya sebagai kata terkait. Kata yang didaftarkan diperlakukan sebagai kata yang paling umum (8 bintang), jadi selalu muncul bahkan saat ukuran kosakata dikurangi. Pendaftaran disimpan di browser ini.",
@@ -5434,7 +5482,8 @@
         d_featNoteNazori: "Telusuri contoh ひらがな, カタカナ, dan angka dengan jari untuk berlatih menulis. Kata contoh dari tiap huruf yang ditelusuri dikumpulkan di ずかん.",
         d_featNoteOto: "Mainkan permainan mencocokkan dengan suara rekaman asli (えあわせ), atau dengarkan suara dan pilih kartu yang cocok. Kata yang cocok dikumpulkan di ずかん.",
         d_featNoteTanken: "Permainan penjelajahan: kumpulkan kata yang sesuai dengan tiap adegan. Kata yang dikumpulkan masuk ke ずかん.",
-        d_featNoteMoji: "Tiga permainan huruf: mengurutkan 五十音, menebak huruf yang hilang, dan mencari kata.",
+        d_featNoteMoji: "Dua permainan huruf: menebak huruf yang hilang, dan mencari kata.",
+        d_featNoteNarabe: "Permainan menyusun huruf-huruf dalam satu baris 五十音 sesuai urutan. Saat satu baris lengkap, muncul kartu kata yang mengandung salah satu huruf dari baris itu, dan kata itu terkumpul di ずかん.",
         d_nzNoteCount: "Memeriksa apakah karakter ditulis dengan jumlah goresan yang sama seperti contoh. Panduan ditampilkan saat satu goresan dibagi menjadi dua, atau dua goresan ditulis sebagai satu.",
         d_nzNoteOrder: "Memeriksa apakah goresan ditulis dalam urutan yang sama seperti contoh. Panduan ditampilkan saat goresan yang berbeda ditulis terlebih dahulu.",
         d_nzNoteDir: "Memeriksa apakah arah setiap goresan, dari awal hingga akhir, sesuai dengan contoh. Panduan ditampilkan saat goresan ditulis dalam arah berlawanan.",
@@ -6931,11 +6980,11 @@
          本人の意思でない「オフ」が残っていることがある。そのため、大人が
          バッジを明示的に切り替えた記録（firstBadgeChoice）が無い保存データでは、
          保存値にかかわらずオンとして扱い直す（下の v2 復元部を参照）。 */
-      var FEATURE_SIMPLE = { rensou: 1, mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 1, nazori: 1, oto: 1, tanken: 0, moji: 1 };
-      var FEATURE_FULL = { rensou: 1, mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1, nazori: 1, oto: 1, tanken: 1, moji: 1 };
+      var FEATURE_SIMPLE = { rensou: 1, mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 1, nazori: 1, oto: 1, tanken: 0, moji: 1, narabe: 1 };
+      var FEATURE_FULL = { rensou: 1, mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1, nazori: 1, oto: 1, tanken: 1, moji: 1, narabe: 1 };
       /* デフォルト（初期状態・「デフォルトに戻す」の戻し先）: FEATURE_SIMPLE が
          そのままそれにあたる。ホームに並ぶ遊びで初期オンなのは、れんそう・
-         しりとり・もじあそび・おととことば・なぞりがき の5つだけ。
+         しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき の6つだけ。
          それ以外の遊び（クイズ・ことばたんけん・かずあそび等）は初期オフ。
          おだい（mission）と今日の言葉（today）はデフォルトでオフ: この2つは
          盤面専用ではなく、ホーム表示＋全ての遊びの図鑑登録で達成が進む機能だが、
@@ -6944,7 +6993,10 @@
          の戻し先）。保存データに個別の値がある場合は、その保存値を尊重する。
          れんそう（rensou）は後から追加した項目で、古い保存データには値が無い。
          その場合は初期値（オン）のままになる＝今まで常に出ていた盤面が
-         そのまま出る。既存ユーザーの保存済みの個別設定は初期化しない。 */
+         そのまま出る。既存ユーザーの保存済みの個別設定は初期化しない。
+         五十音ならべ（narabe）も、v3.1 で もじあそびから独立させた追加項目で、
+         古い保存データには値が無い。その場合は初期値（オン）のままになる。
+         もじあそび側の保存値はそのまま尊重し、壊さない。 */
       var FEATURE_DEFAULT = FEATURE_SIMPLE;
       var firstBadgeChoiceSaved = false;   /* 大人が初めてバッジを明示的に切り替えたことがあるか（保存に残す） */
       var features = {};
@@ -10906,7 +10958,8 @@
         { k: "nazori", label: "なぞりがき", note: "ひらがな・カタカナ・数字のお手本を指でなぞって、書き方を練習する遊びです。なぞった文字の例の言葉が、ずかんに集まります。", noteKey: "d_featNoteNazori" },
         { k: "oto", label: "おととことば", note: "本物の録音の音を聞いて言葉と合わせる神経衰弱（えあわせ）と、音を聞いて合うカードを選ぶ聞き取りで遊べます。そろった言葉は、ずかんに集まります。", noteKey: "d_featNoteOto" },
         { k: "tanken", label: "ことばたんけん", note: "場面に合う言葉を集める探検の遊びです。集めた言葉は、ずかんに集まります。", noteKey: "d_featNoteTanken" },
-        { k: "moji", label: "もじあそび（五十音並べ・あなうめ・ことば みっけ）", note: "五十音を順番に並べる・抜けた文字を当てる・言葉を探す、の3種類で遊べる文字の遊びです。", noteKey: "d_featNoteMoji" }
+        { k: "moji", label: "もじあそび（あなうめ・ことば みっけ）", note: "抜けた文字を当てる・言葉を探す、の2種類で遊べる文字の遊びです。", noteKey: "d_featNoteMoji" },
+        { k: "narabe", label: "五十音ならべ", note: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。", noteKey: "d_featNoteNarabe" }
       ];
       function applyFeatures() {
         FEATURE_DEFS.forEach(function (d) {
@@ -10928,6 +10981,7 @@
         if (!features.oto && typeof otoEl !== "undefined" && otoEl) { if (typeof otoStop === "function") otoStop(); otoEl.hidden = true; }
         if (!features.tanken && typeof tankenEl !== "undefined" && tankenEl) tankenEl.hidden = true;
         if (!features.moji && typeof mojiEl !== "undefined" && mojiEl) mojiEl.hidden = true;
+        if (!features.narabe && typeof narabeEl !== "undefined" && narabeEl) narabeEl.hidden = true;
         if (!features.favboard && typeof favBoardMode !== "undefined" && favBoardMode && typeof setFavBoard === "function") setFavBoard(false);
         /* れんそうをオフにしたら盤面は使えないので、盤面を開いていたらホームへ戻す
            （ホーム画面側のスクリプトが読み込まれる前は showHomeScreen が無いので何もしない） */
@@ -10982,7 +11036,7 @@
         });
         if (typeof updateAdultSummaries === "function") updateAdultSummaries();
       }
-      /* 「デフォルトに戻す」: 初期の組み合わせ（遊び5つ＋基本の機能）へ一括で戻す。
+      /* 「デフォルトに戻す」: 初期の組み合わせ（遊び6つ＋基本の機能）へ一括で戻す。
          「全部選ぶ」: 全ての遊び・機能をオンにする。どちらも個別トグルと同じく
          そのまま保存され、すぐに画面へ反映される。 */
       var presetDefaultBtn = document.getElementById("presetDefaultBtn");
@@ -13567,13 +13621,17 @@
       document.getElementById("tankenRestartBtn").addEventListener("click", function () { tankenStart(tankenScene, true); });
       document.getElementById("tankenNextBtn").addEventListener("click", function () { tankenStart((tankenScene + 1) % TANKEN_SCENES.length, true); });
 
-      /* ===== もじあそび（文字操作の遊び: 五十音並べ・あなうめ・ことば みっけ） =====
-         3つの遊びを1つの入口「🔡 もじあそび」にまとめ、中でタブで切り替える。
+      /* ===== もじあそび（あなうめ・ことば みっけ）と 五十音ならべ =====
+         あなうめ・ことば みっけは1つの入口「🔡 もじあそび」にまとめ、中でタブで
+         切り替える。五十音ならべは v3.1 で もじあそびから独立させ、専用の入口
+         「🔤 五十音ならべ」から直接開く別の遊びにした（機能トグルも独立）。
          共通方針（他の遊びと同じ）: 得点なし・失敗なし。違う文字を選んでも
          失敗扱いにせず、言葉を読み上げて一緒に確認し、正しい置き方・文字を
          見つけたらほめる。あなうめ・みっけで扱った言葉は、他の遊びと
-         同じ条件で図鑑に集める（mojiCollect）。五十音並べは、そろった行の
-         例の言葉を読み上げ、その言葉を図鑑に集める（なぞりがきと同じ扱い）。
+         同じ条件で図鑑に集める（mojiCollect）。五十音並べは、行がそろった
+         時点では図鑑に集めず（行と例の言葉の読み上げだけ）、そろった後に
+         行の中の文字を選ぶと、その文字を含む言葉のカードを表の下に出して
+         読み上げ、その言葉を図鑑に集める。
          言葉の出し方: あなうめ・みっけの言葉は「いまの語彙数設定の範囲内
          （scopeList: 出さない言葉の除外も反映）」で、短く（あなうめ2〜4文字、
          みっけ2〜3文字）、ひらがなだけで書ける身近な言葉（レーティングの
@@ -13587,9 +13645,10 @@
          ひらがな基準のまま）。「ひらがなだけ」では切り替え自体を出さず、
          選択中だった場合もひらがなに戻す。 */
       var mojiEl = document.getElementById("mojiEl");
+      var narabeEl = document.getElementById("narabeEl");
       var MOJI_OK = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ";
       var MOJI_ALL = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
-      var mojiTab = "narabe";
+      var mojiTab = "anaume";
       function mojiCleanH(id) { return String(WORDS[id].h || "").replace(/_/g, "").replace(/・/g, ""); }
       function mojiAllKana(h) {
         if (!h) return false;
@@ -13663,19 +13722,28 @@
 
       /* ===== もじあそび1: 五十音並べ =====
          行（あ行・か行…）ごとに、バラバラになった文字カードを順番に並べる。
-         タップで選択 → 置きたい場所をタップで置ける。置いたカード同士、
+         候補は大きな文字で五十音表の直下に横一列に並べて出し、ドラッグして行の枠へ
+         持っていくと枠に入る（枠の外で離すと元の位置に戻るだけ）。
+         タップで選択 → 置きたい場所をタップでも置ける。置いたカード同士、
          カードと手持ちの入れ替えもできる。正しい位置に置けたら その文字を
-         ほめて読み上げ、全部そろったら行を読み上げ、例の言葉も読み上げて
-         その言葉を図鑑に集める。違う場所に置いても失敗にはしない。 */
+         ほめて読み上げ、全部そろったら行と例の言葉を読み上げる（この時点では
+         図鑑には集めない）。そろった後に行の中の文字をタップすると、その文字を
+         含む言葉のカード（れんそうと同じ見た目）が五十音表の下に出て、その
+         言葉を読み上げて図鑑に集める。別の文字をタップすれば、その文字の
+         言葉のカードに切り替わる。違う場所に置いても失敗にはしない。 */
       /* 行の見出しは、文字の表示設定に合わせる: label は漢字表記（「漢字・カタカナあり」用）、
          hiraLabel はひらがな表記（「ひらがなだけ」用・読み上げにも使う）。
          遊びのタイトル「五十音ならべ」も同じ扱いで、ひらがなだけのときは
          「ごじゅうおん ならべ」にする（narabeSyncControls）。
          濁点・半濁点は「゛だくてん」切り替えで MOJI_ROWS_DAKU に切り替える
-         （なぞりがきと同じ考え方）。カタカナ切り替えは、大人用設定が
+         （なぞりがきと同じ考え方）。拗音は「ゃ ようおん」切り替えで
+         MOJI_ROWS_YOUON（だくてんと組み合わせると MOJI_ROWS_YOUON_DAKU）に
+         切り替える。促音「っ」は行を作らず、基本の表に特別な1文字の
+         疑似行として置く。カタカナ切り替えは、大人用設定が
          「漢字・カタカナあり」のときだけ出し、内部の文字はひらがなのまま
          保持して、表示だけカタカナに変える。そのため並べ終わったときの
-         読み上げと例の言葉の図鑑登録は、どの表示でも従来どおり動く。 */
+         読み上げや、完成後の単語カードの言葉探し・図鑑登録は、
+         どの表示でも ひらがな基準で同じように動く。 */
       var MOJI_ROWS_BASIC = [
         { label: "あ行", hiraLabel: "あぎょう", chars: ["あ", "い", "う", "え", "お"] },
         { label: "か行", hiraLabel: "かぎょう", chars: ["か", "き", "く", "け", "こ"] },
@@ -13686,7 +13754,11 @@
         { label: "ま行", hiraLabel: "まぎょう", chars: ["ま", "み", "む", "め", "も"] },
         { label: "や行", hiraLabel: "やぎょう", chars: ["や", "ゆ", "よ"] },
         { label: "ら行", hiraLabel: "らぎょう", chars: ["ら", "り", "る", "れ", "ろ"] },
-        { label: "わ行", hiraLabel: "わぎょう", chars: ["わ", "を", "ん"] }
+        { label: "わ行", hiraLabel: "わぎょう", chars: ["わ", "を", "ん"] },
+        /* 促音「っ」は行を作らない特別な1文字。ん と同じく表の中に置き、
+           選ぶと枠1つ・候補は「っ」だけの並べ練習になる。sokuon フラグで
+           見出し・案内・読み上げを専用の言い方に切り替える */
+        { label: "っ", hiraLabel: "ちいさい つ", chars: ["っ"], sokuon: true }
       ];
       var MOJI_ROWS_DAKU = [
         { label: "が行", hiraLabel: "がぎょう", chars: ["が", "ぎ", "ぐ", "げ", "ご"] },
@@ -13695,18 +13767,53 @@
         { label: "ば行", hiraLabel: "ばぎょう", chars: ["ば", "び", "ぶ", "べ", "ぼ"] },
         { label: "ぱ行", hiraLabel: "ぱぎょう", chars: ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"] }
       ];
+      /* 拗音の行: 「ゃ ようおん」切り替えで出す。1つの音が2文字（きゃ等）で、
+         行は あ・う・お の3つだけ。だくてん切り替えと組み合わせると
+         濁音・半濁音の拗音になる（なぞりがきの切り替えと同じ考え方）。
+         内部の文字はひらがなのまま保持し、カタカナ表示は narabeDispChar が
+         1文字ずつ変換するので、キャ・シャ…もそのまま出る */
+      var MOJI_ROWS_YOUON = [
+        { label: "きゃ行", hiraLabel: "きゃぎょう", chars: ["きゃ", "きゅ", "きょ"] },
+        { label: "しゃ行", hiraLabel: "しゃぎょう", chars: ["しゃ", "しゅ", "しょ"] },
+        { label: "ちゃ行", hiraLabel: "ちゃぎょう", chars: ["ちゃ", "ちゅ", "ちょ"] },
+        { label: "にゃ行", hiraLabel: "にゃぎょう", chars: ["にゃ", "にゅ", "にょ"] },
+        { label: "ひゃ行", hiraLabel: "ひゃぎょう", chars: ["ひゃ", "ひゅ", "ひょ"] },
+        { label: "みゃ行", hiraLabel: "みゃぎょう", chars: ["みゃ", "みゅ", "みょ"] },
+        { label: "りゃ行", hiraLabel: "りゃぎょう", chars: ["りゃ", "りゅ", "りょ"] }
+      ];
+      var MOJI_ROWS_YOUON_DAKU = [
+        { label: "ぎゃ行", hiraLabel: "ぎゃぎょう", chars: ["ぎゃ", "ぎゅ", "ぎょ"] },
+        { label: "じゃ行", hiraLabel: "じゃぎょう", chars: ["じゃ", "じゅ", "じょ"] },
+        { label: "ぢゃ行", hiraLabel: "ぢゃぎょう", chars: ["ぢゃ", "ぢゅ", "ぢょ"] },
+        { label: "びゃ行", hiraLabel: "びゃぎょう", chars: ["びゃ", "びゅ", "びょ"] },
+        { label: "ぴゃ行", hiraLabel: "ぴゃぎょう", chars: ["ぴゃ", "ぴゅ", "ぴょ"] }
+      ];
       var narabeRow = 0;
       var narabeSlots = [];   /* 置かれた文字（無い場所は null。常にひらがなで保持） */
       var narabeTray = [];    /* まだ置いていない文字（常にひらがなで保持） */
       var narabeSel = null;   /* {from:"tray", ch} | {from:"slot", idx} */
       var narabeDone = false;
+      var narabeWordIdx = -1;   /* 完成後に単語カードを出した枠の番号（枠の選択表示に使う） */
+      var narabeWordUnit = null;   /* 単語カードを出した文字（拗音は2文字で1単位） */
+      var narabeWordId = null;   /* 単語カードに出ている言葉の番号 */
       var narabeDakuOn = false;   /* 濁点・半濁点の行に切り替えているか */
+      var narabeYouonOn = false;   /* 拗音の行に切り替えているか（だくてんと組み合わせ可） */
       var narabeKataOn = false;   /* カタカナ表示に切り替えているか（mix のときだけ有効） */
       var narabeBlock = 0;   /* 行えらび表の塊: 0=あ・か・さ・た・な行、1=は・ま・や・ら・わ（・ん）行 */
-      function narabeRows() { return narabeDakuOn ? MOJI_ROWS_DAKU : MOJI_ROWS_BASIC; }
+      function narabeRows() {
+        if (narabeYouonOn) return narabeDakuOn ? MOJI_ROWS_YOUON_DAKU : MOJI_ROWS_YOUON;
+        return narabeDakuOn ? MOJI_ROWS_DAKU : MOJI_ROWS_BASIC;
+      }
       function narabeCurrentRow() { return narabeRows()[narabeRow]; }
-      function narabeHiraToKata(c) { return c ? String.fromCharCode(c.charCodeAt(0) + 0x60) : c; }
+      /* ひらがな→カタカナ変換は1文字ずつ行う（拗音「きゃ」→「キャ」、
+         促音「っ」→「ッ」のように、2文字の音もまるごと変換できるように） */
+      function narabeHiraToKata(c) {
+        return c ? String(c).split("").map(function (x) { return String.fromCharCode(x.charCodeAt(0) + 0x60); }).join("") : c;
+      }
       function narabeDispChar(c) { return narabeKataOn ? narabeHiraToKata(c) : c; }
+      /* 読み上げ用の文字の名前: 「っ」は1文字だけだと読み上げで音にならない
+         ことがあるので、「ちいさい つ」という名前で読ませる */
+      function narabeSayChar(ch) { return ch === "っ" ? "ちいさい「つ」、っ" : ch; }
       function narabeKataAllowed() { return typeof mode !== "undefined" && mode === "mix"; }
       /* もじあそび共通の表示変換: カタカナ選択中は文字列全体を表示だけカタカナにする。
          内部の文字・判定・読み上げ・図鑑登録は常にひらがなのまま（narabeKataOn は
@@ -13726,6 +13833,8 @@
       }
       /* 行の見出し表示: ひらがなだけ→ひらがな表記、カタカナ表示中→先頭だけカタカナ＋行、それ以外→漢字表記 */
       function narabeRowLabel(row) {
+        /* 促音は「行」ではないので、文字そのもの（ひらがなだけでは名前）を見出しにする */
+        if (row.sokuon) return narabeKataOn ? "ッ" : (narabeKataAllowed() ? "っ" : "ちいさい つ");
         if (!narabeKataAllowed()) return row.hiraLabel;
         if (narabeKataOn) return narabeHiraToKata(row.chars[0]) + "行";
         return row.label;
@@ -13733,8 +13842,8 @@
       /* タイトルと切り替えボタンの表示を、いまの設定に合わせる。
          カタカナが使えない設定（ひらがなだけ）では切り替え自体を隠し、選択もひらがなに戻す */
       function narabeSyncControls() {
-        var tab = document.getElementById("mojiTabNarabe");
-        if (tab) tab.textContent = narabeKataAllowed() ? "🔤 五十音ならべ" : "🔤 ごじゅうおん ならべ";
+        var titleEl = document.getElementById("narabeTitle");
+        if (titleEl) titleEl.textContent = narabeKataAllowed() ? "🔤 五十音ならべ" : "🔤 ごじゅうおん ならべ";
         var allowed = narabeKataAllowed();
         if (!allowed) narabeKataOn = false;
         var srow = document.getElementById("mojiNarabeScriptRow");
@@ -13745,14 +13854,27 @@
         if (kb) { kb.classList.toggle("on", narabeKataOn); kb.setAttribute("aria-pressed", narabeKataOn ? "true" : "false"); }
         var db = document.getElementById("mojiNarabeDakuBtn");
         if (db) { db.classList.toggle("on", narabeDakuOn); db.setAttribute("aria-pressed", narabeDakuOn ? "true" : "false"); }
+        var yb = document.getElementById("mojiNarabeYouonBtn");
+        if (yb) { yb.classList.toggle("on", narabeYouonOn); yb.setAttribute("aria-pressed", narabeYouonOn ? "true" : "false"); }
         mojiSyncSubScriptRows(allowed);
+      }
+      /* 例の言葉さがし専用のかな判定: 小さい「ゃゅょ」と促音「っ」を含む言葉も
+         例にできるようにする（あなうめ・みっけの MOJI_OK は変えない） */
+      var MOJI_OK_EX = MOJI_OK + "ゃゅょっ";
+      function mojiAllKanaEx(h) {
+        if (!h) return false;
+        for (var i = 0; i < h.length; i++) { if (MOJI_OK_EX.indexOf(h.charAt(i)) < 0) return false; }
+        return true;
       }
       function narabeRowExampleId(row) {
         var first = row.chars[0];
+        /* 拗音（2文字）で始まる言葉や、促音を含む言葉は身近でも少し長く
+           なりがちなので、拗音・促音の行だけ例の言葉を5文字まで許す */
+        var maxLen = (first.length > 1 || row.sokuon) ? 5 : 4;
         var best = null, bestScore = -1, fb = null, fbScore = -1;
         for (var i = 0; i < WORDS.length; i++) {
           var h = mojiCleanH(i);
-          if (h.length < 2 || h.length > 4 || h.charAt(0) !== first || !mojiAllKana(h)) continue;
+          if (h.length < 2 || h.length > maxLen || h.indexOf(first) !== 0 || !mojiAllKanaEx(h)) continue;
           var sc = (LEVEL[i] || 0) * 10 - h.length;
           if (inScope(i)) { if (sc > bestScore) { bestScore = sc; best = i; } }
           else if (!isExcluded(i)) { if (sc > fbScore) { fbScore = sc; fb = i; } }
@@ -13763,31 +13885,154 @@
         var cBest = null, cScore = -1, cFb = null, cFbScore = -1;
         for (var j = 0; j < WORDS.length; j++) {
           var h2 = mojiCleanH(j);
-          if (h2.length < 2 || h2.length > 4 || h2.indexOf(first) < 0 || !mojiAllKana(h2)) continue;
+          if (h2.length < 2 || h2.length > maxLen || h2.indexOf(first) < 0 || !mojiAllKanaEx(h2)) continue;
           var sc2 = (LEVEL[j] || 0) * 10 - h2.length;
           if (inScope(j)) { if (sc2 > cScore) { cScore = sc2; cBest = j; } }
           else if (!isExcluded(j)) { if (sc2 > cFbScore) { cFbScore = sc2; cFb = j; } }
         }
         return cBest != null ? cBest : cFb;
       }
+      /* ===== 完成後の単語カード: そろった行の文字から言葉を探す =====
+         探し方: その文字で始まる言葉を優先し、無ければ途中に含む言葉。
+         どちらの場合も、まず今の語彙数の範囲内から、レーティング
+         （8段階レベル）の高い順に探し（8→7→6…）、同じレベルの候補が
+         複数あればランダムに1つ選ぶ。範囲内に無ければ範囲外（ただし
+         「出さない言葉」は除く）から同じ順で探す。拗音（きゃ等）は
+         2文字を1単位として、促音「っ」も1単位として探す。
+         読みはカタカナをひらがなに直して比べ、読みが かなだけで
+         書けている言葉だけを候補にする（数字などが混ざる言葉は除く） */
+      function narabeCleanReading(id) { return kataToHira(mojiCleanH(id)); }
+      var NARABE_KANA_OK = MOJI_OK_EX + "ーぁぃぅぇぉ";
+      function narabeKanaOnly(h) {
+        if (!h) return false;
+        for (var i = 0; i < h.length; i++) { if (NARABE_KANA_OK.indexOf(h.charAt(i)) < 0) return false; }
+        return true;
+      }
+      function narabeWordCandidates(unit, startsOnly, scopeOnly) {
+        var out = [];
+        for (var i = 0; i < WORDS.length; i++) {
+          if (isExcluded(i)) continue;
+          if (scopeOnly && !inScope(i)) continue;
+          var h = narabeCleanReading(i);
+          if (!narabeKanaOnly(h)) continue;
+          var p = h.indexOf(unit);
+          if (p < 0 || (startsOnly && p !== 0)) continue;
+          out.push(i);
+        }
+        return out;
+      }
+      function narabePickWordId(unit) {
+        var pools = [
+          narabeWordCandidates(unit, true, true),
+          narabeWordCandidates(unit, true, false),
+          narabeWordCandidates(unit, false, true),
+          narabeWordCandidates(unit, false, false)
+        ];
+        for (var k = 0; k < pools.length; k++) {
+          var pool = pools[k];
+          if (!pool.length) continue;
+          var best = -1;
+          pool.forEach(function (id) { var lv = LEVEL[id] || 0; if (lv > best) best = lv; });
+          var ties = pool.filter(function (id) { return (LEVEL[id] || 0) === best; });
+          /* 同じ文字を続けて選んだときは、いま出ている言葉と違う言葉を優先する */
+          if (narabeWordUnit === unit && ties.length > 1) {
+            var alt = ties.filter(function (id) { return id !== narabeWordId; });
+            if (alt.length) ties = alt;
+          }
+          return ties[Math.floor(Math.random() * ties.length)];
+        }
+        return null;
+      }
+      /* 単語カードの言葉の中で、選んだ文字にあたる部分をハイライトする。
+         表示文字列（disp）と読み（ひらがな）の共通の前後を手がかりに、
+         表示側の対応範囲を求める: 先頭・末尾に近い部分はそのまま対応し、
+         漢字などに置き換わった真ん中の部分に文字が含まれる場合は、
+         その真ん中全体をハイライトする。ふりがな（ルビ）は付けない */
+      function narabeHighlightWordEl(el, id, unit) {
+        var w = WORDS[id];
+        var h = narabeCleanReading(id);
+        var pos = h.indexOf(unit);
+        var d = disp(w);
+        if (pos < 0 || !d) { setWordHTML(el, w); return; }
+        var dn = kataToHira(d);
+        var hs = -1, he = -1;
+        if (dn === h) { hs = pos; he = pos + unit.length; }
+        else {
+          var pre = 0;
+          while (pre < dn.length && pre < h.length && dn.charAt(pre) === h.charAt(pre)) pre++;
+          var suf = 0;
+          while (suf < dn.length - pre && suf < h.length - pre && dn.charAt(dn.length - 1 - suf) === h.charAt(h.length - 1 - suf)) suf++;
+          if (pos + unit.length <= pre) { hs = pos; he = pos + unit.length; }
+          else if (pos >= h.length - suf) { hs = d.length - (h.length - pos); he = d.length - (h.length - pos - unit.length); }
+          else { hs = pre; he = d.length - suf; }
+        }
+        if (hs < 0 || he <= hs || he > d.length) { setWordHTML(el, w); return; }
+        el.innerHTML = "";
+        function addSeg(txt, hl) {
+          if (!txt) return;
+          var s = document.createElement("span");
+          if (hl) s.className = "narabe-hl";
+          s.textContent = txt;
+          el.appendChild(s);
+        }
+        addSeg(d.slice(0, hs), false);
+        addSeg(d.slice(hs, he), true);
+        addSeg(d.slice(he), false);
+      }
+      /* 単語カードを描く（れんそうと同じ makeWordCard を使い、言葉の
+         該当部分だけハイライトに差し替える） */
+      function narabeDrawWordCard(id, unit) {
+        var area = document.getElementById("mojiNarabeWord");
+        area.innerHTML = "";
+        var card = makeWordCard(id);
+        var wd = card.querySelector(".bwd");
+        if (wd) narabeHighlightWordEl(wd, id, unit);
+        area.appendChild(card);
+        area.hidden = false;
+      }
+      /* 完成後に行の中の文字が選ばれた: その文字を含む言葉のカードを
+         五十音表の下に出し、その言葉を読み上げて図鑑に集める。
+         言葉が1つも見つからない文字は、カードを出さず文字の読み上げだけ */
+      function narabeShowWordForChar(idx, ch) {
+        narabeWordIdx = idx;
+        var id = narabePickWordId(ch);
+        narabeRender(document.getElementById("mojiNarabeMsg").textContent);
+        var area = document.getElementById("mojiNarabeWord");
+        if (id == null) {
+          narabeWordUnit = null;
+          narabeWordId = null;
+          area.innerHTML = "";
+          area.hidden = true;
+          document.getElementById("mojiNarabeMsg").textContent = "「" + narabeDispChar(ch) + "」だね";
+          speak(narabeSayChar(ch));
+          return;
+        }
+        narabeWordUnit = ch;
+        narabeWordId = id;
+        narabeDrawWordCard(id, ch);
+        mojiCollect(id);
+        document.getElementById("mojiNarabeMsg").textContent = "「" + disp(WORDS[id]) + "」だね！";
+        speak(narabeCleanReading(id));
+      }
       /* 行えらびは五十音表から選ぶ（なぞりがきの文字えらびと同じ並び:
          列が縦並びで右端が あ行、各列は上から あいうえお。表の1列が そのまま
          練習する「行」に対応する）。表全体は一度に出さず、塊A（あ・か・さ・
          た・な行）と塊B（は・ま・や・ら・わ行と ん）の2つの塊に分けて、
          表の左端・右端の矢印で切り替えて表示する（濁点の表は行数が少ないので塊には
-         分けず従来どおり全部出す）。ただし文字を全部は見せず、各行で文字が
-         見えるのは最初の字だけ。それ以外のマスは「○」で示し（文字は出さない）、
-         押せるのは最初の字だけ: 最初の字をタップすると その行を選ぶ。
-         選ばれた行は、最初の字と その行の ○ が色付きで分かるようにする。
-         や行・わ行は空きマスで段をそろえ、ん は わ行の左に1列置く
-         （この遊びでは ん も わ行の文字なので、わ行の最初の字は わ で、
-         ん のマスも ○ になる）。
+         分けず従来どおり全部出す）。文字は最初から見せない: 先頭の字も含めて
+         全てのマスを「○」で示し、行の中のどのマスを押しても その行が選ばれる
+         （位置で選ぶ。例えば「う」の位置のマスを押すと あ行が選ばれる）。
+         行が決まると、その行の列は ○ の代わりに「ならべる わく」そのものに
+         なり（列の背景も色づく）、候補は表の中に列を作らず、大きな文字で
+         表の直下に横一列に並んで出る。候補をドラッグして枠へ持っていくと枠に入る。
+         や行・わ行は空きマスで段をそろえ（空きマスは押せない）、ん は
+         わ行の左に1列置く（この遊びでは ん も わ行の文字なので、ん の
+         マスを押しても わ行が選ばれる）。促音「っ」は その ん と同じ列の
+         2つ下のマスに置く（左に別の列は作らない）。
          濁点・半濁点は上の「゛だくてん」切り替えで表ごと切り替わり、
-         濁点の表でも各行の最初の字（が・ざ・だ・ば・ぱ）だけ文字で出す
-         （narabeRows が MOJI_ROWS_DAKU になるのと対になる）。
-         表示文字は narabeDispChar を通すので、カタカナ表示中は最初の字も
-         カタカナになり、ひらがなだけの設定では切り替え自体が出ない
-         （なぞりがきと同じ）。
+         拗音は「ゃ ようおん」切り替えで表を出す（だくてんと組み合わせると
+         濁音・半濁音の拗音の表になる）。どの表でも、まだ決まっていない行は
+         文字を見せず ○ で示すルールは同じ。
          ri は narabeRows() の行番号、cells は常にひらがなで段順に並べる */
       var NARABE_TABLE_BASIC = [
         { ri: 0, cells: ["あ", "い", "う", "え", "お"] },
@@ -13800,7 +14045,12 @@
         { ri: 7, cells: ["や", "", "ゆ", "", "よ"] },
         { ri: 8, cells: ["ら", "り", "る", "れ", "ろ"] },
         { ri: 9, cells: ["わ", "", "", "", "を"] },
-        { ri: 9, cells: ["ん", "", "", "", ""] }
+        /* 促音「っ」は、ん と同じ列の2つ下に特別な1文字として置く
+           （ん の左の列には置かない）。セルを {ch, ri} の形で書くと、
+           そのセルだけ列の ri とは別の行に属する。ri 10 は
+           MOJI_ROWS_BASIC の促音の疑似行で、この ○ を押すと
+           1文字だけの練習が始まる */
+        { ri: 9, cells: ["ん", "", { ch: "っ", ri: 10 }, "", ""] }
       ];
       var NARABE_TABLE_DAKU = [
         { ri: 0, cells: ["が", "ぎ", "ぐ", "げ", "ご"] },
@@ -13808,6 +14058,26 @@
         { ri: 2, cells: ["だ", "ぢ", "づ", "で", "ど"] },
         { ri: 3, cells: ["ば", "び", "ぶ", "べ", "ぼ"] },
         { ri: 4, cells: ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"] }
+      ];
+      /* 拗音の表: 各列は あ段・う段・お段の位置にだけ音があり、
+         い段・え段の位置は空きマスで段をそろえる（や行と同じ並べ方）。
+         他の表と同じく、文字は見せず全てのマスを ○ で出し、
+         どのマスを押しても その行が選ばれる */
+      var NARABE_TABLE_YOUON = [
+        { ri: 0, cells: ["きゃ", "", "きゅ", "", "きょ"] },
+        { ri: 1, cells: ["しゃ", "", "しゅ", "", "しょ"] },
+        { ri: 2, cells: ["ちゃ", "", "ちゅ", "", "ちょ"] },
+        { ri: 3, cells: ["にゃ", "", "にゅ", "", "にょ"] },
+        { ri: 4, cells: ["ひゃ", "", "ひゅ", "", "ひょ"] },
+        { ri: 5, cells: ["みゃ", "", "みゅ", "", "みょ"] },
+        { ri: 6, cells: ["りゃ", "", "りゅ", "", "りょ"] }
+      ];
+      var NARABE_TABLE_YOUON_DAKU = [
+        { ri: 0, cells: ["ぎゃ", "", "ぎゅ", "", "ぎょ"] },
+        { ri: 1, cells: ["じゃ", "", "じゅ", "", "じょ"] },
+        { ri: 2, cells: ["ぢゃ", "", "ぢゅ", "", "ぢょ"] },
+        { ri: 3, cells: ["びゃ", "", "びゅ", "", "びょ"] },
+        { ri: 4, cells: ["ぴゃ", "", "ぴゅ", "", "ぴょ"] }
       ];
       /* 行番号から塊を求める（基本の表だけ: 0〜4=塊A、5〜9=塊B。ん の列は ri 9 なので塊B） */
       function narabeBlockOf(ri) { return ri <= 4 ? 0 : 1; }
@@ -13820,15 +14090,18 @@
            左端の矢印（◀）が塊B（は・ま・や・ら・わ・ん）に対応する。
            塊は2つだけなので、いま見ている側の矢印は押せなくし、
            反対側の矢印を押すともう一方の塊に切り替わる。塊を切り替えても、
-           並べかけの行や状態はそのまま（行は表の中の最初の字で選ぶ） */
+           並べかけの行や状態はそのまま（行は表の中の最初の字で選ぶ）。
+           塊に分けるのは基本の表だけ: だくてん・ようおんの表は列が少ないので
+           全部を一度に出す */
+        var showBlocks = !narabeDakuOn && !narabeYouonOn;
         var wrap = null, arrowL = null, arrowR = null;
-        if (!narabeDakuOn) {
+        if (showBlocks) {
           wrap = document.createElement("div");
           wrap.className = "narabe-table-wrap";
           function narabeBlockLabel(blk) {
             var labelRis = blk === 0 ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9];
             var label = labelRis.map(function (ri) { return narabeDispChar(rows[ri].chars[0]); }).join("・");
-            if (blk === 1) label += "・" + narabeDispChar("ん");
+            if (blk === 1) label += "・" + narabeDispChar("ん") + "・" + narabeDispChar("っ");
             return label;
           }
           function narabeMakeArrow(blk, glyph) {
@@ -13851,13 +14124,24 @@
         var table = document.createElement("div");
         table.className = "nazori-table";
         table.setAttribute("role", "group");
-        table.setAttribute("aria-label", narabeDakuOn ? "だくてんの 五十音表" : "五十音表");
-        (narabeDakuOn ? NARABE_TABLE_DAKU : NARABE_TABLE_BASIC).forEach(function (colDef) {
-          if (!narabeDakuOn && narabeBlockOf(colDef.ri) !== narabeBlock) return;   /* いまの塊の列だけ出す */
+        table.setAttribute("aria-label", narabeYouonOn ? (narabeDakuOn ? "だくてんの ようおんの表" : "ようおんの表") : (narabeDakuOn ? "だくてんの 五十音表" : "五十音表"));
+        var tableDef = narabeYouonOn ? (narabeDakuOn ? NARABE_TABLE_YOUON_DAKU : NARABE_TABLE_YOUON) : (narabeDakuOn ? NARABE_TABLE_DAKU : NARABE_TABLE_BASIC);
+        var activeLastCol = null;   /* 決まった行の列のうち、DOMで最後のもの（候補の列を その横に出す） */
+        tableDef.forEach(function (colDef) {
+          if (showBlocks && narabeBlockOf(colDef.ri) !== narabeBlock) return;   /* いまの塊の列だけ出す */
           var ri = colDef.ri;
           var row = rows[ri];
+          /* 列の中に決まった行のセルが1つでもあれば、その列が遊びの列に
+             なる（「っ」のように、列の ri とは別の行に属するセルが
+             混ざる列があるため、列単位ではなくセル単位で判定する） */
+          var isActive = colDef.cells.some(function (cc) { return !!cc && (typeof cc === "object" ? cc.ri : ri) === narabeRow; });
           var colEl = document.createElement("div");
-          colEl.className = "nazori-col";
+          colEl.className = "nazori-col" + (isActive ? " narabe-active" : "");
+          if (isActive) {
+            colEl.setAttribute("role", "group");
+            colEl.setAttribute("aria-label", narabeRowLabel(rows[narabeRow]) + "の ならべる わく");
+            activeLastCol = colEl;
+          }
           colDef.cells.forEach(function (c) {
             if (!c) {
               var sp = document.createElement("div");
@@ -13865,23 +14149,41 @@
               colEl.appendChild(sp);
               return;
             }
-            if (c !== row.chars[0]) {
-              /* 最初の字以外のマスは文字を出さず ○ で示す（押せない。
-                 選ばれている行の ○ は色を付けて示す） */
-              var cir = document.createElement("div");
-              cir.className = "narabe-cell-circle" + (ri === narabeRow ? " on" : "");
-              cir.textContent = "○";
-              cir.setAttribute("aria-hidden", "true");
-              colEl.appendChild(cir);
-              return;
+            /* セルが {ch, ri} の形なら、そのセルだけ列とは別の行に属する
+               （「っ」は ん と同じ列の2つ下に置き、押すと促音の練習になる） */
+            var cellCh = c, cellRi = ri, cellRow = row;
+            if (typeof c === "object") { cellCh = c.ch; cellRi = c.ri; cellRow = rows[cellRi]; }
+            if (cellRi === narabeRow) {
+              /* 決まった行の列は、○ ではなく そのまま「ならべる わく」になる。
+                 わ行のように列が2つに分かれる行でも、文字から枠の番号を
+                 引くので、両方の列に枠が分かれて出る。枠の並び・判定・
+                 入れ替えは、表の外に枠があったときと全く同じ */
+              var sIdx = cellRow.chars.indexOf(cellCh);
+              if (sIdx >= 0) {
+                var placed = narabeSlots[sIdx];
+                var sb = document.createElement("button");
+                sb.type = "button";
+                var slotSel = (narabeSel && narabeSel.from === "slot" && narabeSel.idx === sIdx) || (narabeDone && narabeWordIdx === sIdx);
+                sb.className = "moji-slot" + (placed ? " filled" : "") + (placed && placed === cellRow.chars[sIdx] ? " good" : "") + (slotSel ? " sel" : "") + (placed && placed.length > 1 ? " long" : "");
+                sb.textContent = placed ? narabeDispChar(placed) : "？";
+                sb.setAttribute("data-narabe-slot", sIdx);
+                sb.setAttribute("aria-label", placed ? (sIdx + 1) + "ばんめの わく、" + narabeDispChar(placed) : (sIdx + 1) + "ばんめの わく、からっぽ");
+                sb.addEventListener("click", function () { narabeTapSlot(sIdx); });
+                colEl.appendChild(sb);
+                return;
+              }
             }
+            /* 文字は最初から見せない: 先頭の字も含めて全てのマスを ○ で出す。
+               その代わり、行の中のどのマスを押しても その行が選ばれる
+               （位置で選ぶ。例えば「う」の位置のマスを押すと あ行になる）。
+               読み上げソフト向けには、マスの位置の文字を行名と一緒に伝える */
             var b = document.createElement("button");
             b.type = "button";
-            b.textContent = narabeDispChar(c);
-            if (ri === narabeRow) b.className = "on";
-            b.setAttribute("aria-label", "「" + narabeDispChar(c) + "」の " + narabeRowLabel(row) + "を えらぶ");
-            b.setAttribute("aria-pressed", ri === narabeRow ? "true" : "false");
-            b.addEventListener("click", function () { if (ri !== narabeRow) narabeStart(ri, true); });
+            b.className = "narabe-cell-circle";
+            b.textContent = "○";
+            b.setAttribute("aria-label", cellRow.sokuon ? "ちいさい「" + narabeDispChar(cellCh) + "」を えらぶ" : "「" + narabeDispChar(cellCh) + "」の ばしょ。" + narabeRowLabel(cellRow) + "を えらぶ");
+            b.setAttribute("aria-pressed", "false");
+            b.addEventListener("click", function () { if (cellRi !== narabeRow) narabeStart(cellRi, true); });
             colEl.appendChild(b);
           });
           table.appendChild(colEl);
@@ -13894,43 +14196,128 @@
         } else {
           box.appendChild(table);
         }
+        /* 候補は、表の中に新しい列を作らず、大きな文字で五十音表の直下に
+           横一列に並べて出す（表には重ねない）。候補をドラッグして決まった行の枠へ持っていくと
+           枠に入り、枠の外で離すと元の位置に戻るだけ（失敗にはしない）。
+           タップで選んで枠をタップする入れ方も残してある。
+           候補が残っていないとき（全部 置き終わったとき）は出さない。
+           矢印で別の塊を見ている間は、選んだ行の枠が無いので候補も
+           出さない（塊を戻すか、行を押し直せば また出る） */
+        if (activeLastCol && narabeTray.length) {
+          var overlay = document.createElement("div");
+          overlay.className = "narabe-overlay";
+          overlay.setAttribute("role", "group");
+          overlay.setAttribute("aria-label", "もじの カード");
+          narabeTray.forEach(function (ch) {
+            var tb = document.createElement("button");
+            tb.type = "button";
+            tb.className = "moji-tile" + (narabeSel && narabeSel.from === "tray" && narabeSel.ch === ch ? " sel" : "") + (ch.length > 1 ? " long" : "");
+            tb.textContent = narabeDispChar(ch);
+            tb.setAttribute("aria-label", "もじの カード、" + narabeDispChar(ch));
+            tb.addEventListener("click", function () {
+              /* ドラッグで離した直後のクリックは、タップ扱いにしない */
+              if (Date.now() - narabeDragEndAt < 400) return;
+              narabeTapTray(ch);
+            });
+            narabeAttachDrag(tb, ch);
+            overlay.appendChild(tb);
+          });
+          box.appendChild(overlay);
+        }
+      }
+      /* 候補を枠へ入れる（ドラッグの落下と、タップ操作の共通処理）。
+         枠に文字が入っていたら、その文字は候補に戻る（入れ替え） */
+      function narabePlaceFromTray(ch, idx) {
+        if (narabeDone) return;
+        var ti = narabeTray.indexOf(ch);
+        if (ti < 0) return;
+        var old = narabeSlots[idx];
+        narabeSlots[idx] = ch;
+        if (old) narabeTray[ti] = old; else narabeTray.splice(ti, 1);
+        narabeSel = null;
+        narabeRender("");
+        narabeAfterMove(idx);
+      }
+      /* ドラッグで離した時刻。離した直後に来るクリックを、タップ扱いに
+         しないために使う */
+      var narabeDragEndAt = 0;
+      /* 画面座標の下にある「ならべる わく」を探す。無ければ null */
+      function narabeSlotAtPoint(x, y) {
+        var box = document.getElementById("mojiRows");
+        if (!box) return null;
+        var slots = box.querySelectorAll(".moji-slot[data-narabe-slot]");
+        for (var i = 0; i < slots.length; i++) {
+          var r = slots[i].getBoundingClientRect();
+          if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+            return { el: slots[i], idx: parseInt(slots[i].getAttribute("data-narabe-slot"), 10) };
+          }
+        }
+        return null;
+      }
+      /* 候補の大きな文字をドラッグできるようにする。指（タッチ）でも
+         マウスでも、Pointer Events で同じように動く。枠の上で離すと
+         その枠に入り、枠の外で離すと元の位置に戻るだけ（失敗にはしない）。
+         ほとんど動かさずに離したときは通常のタップとして扱い、
+         クリック（narabeTapTray）に任せる */
+      function narabeAttachDrag(el, ch) {
+        var sx = 0, sy = 0, active = false, moved = false, hintEl = null;
+        function clearHint() {
+          if (hintEl) { hintEl.classList.remove("drop-hint"); hintEl = null; }
+        }
+        el.addEventListener("pointerdown", function (e) {
+          if (narabeDone) return;
+          active = true; moved = false;
+          sx = e.clientX; sy = e.clientY;
+          try { el.setPointerCapture(e.pointerId); } catch (err) {}
+        });
+        el.addEventListener("pointermove", function (e) {
+          if (!active) return;
+          var dx = e.clientX - sx, dy = e.clientY - sy;
+          if (!moved && Math.abs(dx) + Math.abs(dy) > 8) {
+            moved = true;
+            el.classList.add("dragging");
+            speak(narabeSayChar(ch));
+          }
+          if (!moved) return;
+          e.preventDefault();
+          el.style.transform = "translate(" + dx + "px," + dy + "px) scale(1.08)";
+          var hit = narabeSlotAtPoint(e.clientX, e.clientY);
+          if (hit && hit.el !== hintEl) { clearHint(); hintEl = hit.el; hintEl.classList.add("drop-hint"); }
+          else if (!hit) clearHint();
+        });
+        function finish(e) {
+          if (!active) return;
+          active = false;
+          clearHint();
+          el.classList.remove("dragging");
+          if (!moved) return;
+          narabeDragEndAt = Date.now();
+          var hit = (e && typeof e.clientX === "number") ? narabeSlotAtPoint(e.clientX, e.clientY) : null;
+          if (hit) { narabePlaceFromTray(ch, hit.idx); return; }
+          /* 枠の外で離した: 候補は元の位置に戻るだけ */
+          el.style.transform = "";
+        }
+        el.addEventListener("pointerup", finish);
+        el.addEventListener("pointercancel", finish);
       }
       function narabeRender(msg) {
         var row = narabeCurrentRow();
         narabeSyncControls();
         narabeRenderRows();
-        document.getElementById("mojiNarabeQ").textContent = narabeRowLabel(row) + "の もじを、じゅんばんに ならべよう";
-        var slots = document.getElementById("mojiSlots");
-        slots.innerHTML = "";
-        narabeSlots.forEach(function (ch, idx) {
-          var b = document.createElement("button");
-          b.type = "button";
-          var isSel = narabeSel && narabeSel.from === "slot" && narabeSel.idx === idx;
-          b.className = "moji-slot" + (ch ? " filled" : "") + (ch && ch === row.chars[idx] ? " good" : "") + (isSel ? " sel" : "");
-          b.textContent = ch ? narabeDispChar(ch) : "？";
-          b.setAttribute("aria-label", ch ? (idx + 1) + "ばんめの わく、" + narabeDispChar(ch) : (idx + 1) + "ばんめの わく、からっぽ");
-          b.addEventListener("click", function () { narabeTapSlot(idx); });
-          slots.appendChild(b);
-        });
-        var tiles = document.getElementById("mojiTiles");
-        tiles.innerHTML = "";
-        narabeTray.forEach(function (ch) {
-          var b = document.createElement("button");
-          b.type = "button";
-          b.className = "moji-tile" + (narabeSel && narabeSel.from === "tray" && narabeSel.ch === ch ? " sel" : "");
-          b.textContent = narabeDispChar(ch);
-          b.setAttribute("aria-label", "もじの カード、" + narabeDispChar(ch));
-          b.addEventListener("click", function () { narabeTapTray(ch); });
-          tiles.appendChild(b);
-        });
+        document.getElementById("mojiNarabeQ").textContent = row.sokuon
+          ? "ちいさい「" + narabeDispChar("っ") + "」を わくに おいてみよう"
+          : narabeRowLabel(row) + "の もじを、じゅんばんに ならべよう";
+        /* 枠は行えらび表の中の決まった行の列に、候補は表の直下に横一列で
+           narabeRenderRows が描く */
         document.getElementById("mojiNarabeMsg").textContent = msg != null ? msg : document.getElementById("mojiNarabeMsg").textContent;
         document.getElementById("mojiNarabeNextBtn").hidden = !narabeDone;
       }
       function narabeStart(ri, sayIt) {
         var rows = narabeRows();
         narabeRow = Math.max(0, Math.min(ri, rows.length - 1));
-        /* 選んだ行が含まれる塊を表示する（「つぎの ぎょう」で塊をまたいでも表が追いつく） */
-        if (!narabeDakuOn) narabeBlock = narabeBlockOf(narabeRow);
+        /* 選んだ行が含まれる塊を表示する（「つぎの ぎょう」で塊をまたいでも表が追いつく。
+           塊があるのは基本の表だけ） */
+        if (!narabeDakuOn && !narabeYouonOn) narabeBlock = narabeBlockOf(narabeRow);
         var row = rows[narabeRow];
         narabeSlots = row.chars.map(function () { return null; });
         narabeTray = shuffleArr(row.chars.slice());
@@ -13938,8 +14325,13 @@
         if (narabeTray.join("") === row.chars.join("")) narabeTray = shuffleArr(row.chars.slice().reverse());
         narabeSel = null;
         narabeDone = false;
-        narabeRender("もじの カードを タップして、わくを タップすると おけるよ");
-        if (sayIt) speak(row.hiraLabel + "だよ。もじを じゅんばんに ならべよう");
+        narabeWordIdx = -1;
+        narabeWordUnit = null;
+        narabeWordId = null;
+        var wordArea = document.getElementById("mojiNarabeWord");
+        if (wordArea) { wordArea.innerHTML = ""; wordArea.hidden = true; }
+        narabeRender("おおきな もじを ゆびで うごかして、わくに いれてみよう");
+        if (sayIt) speak(row.sokuon ? "ちいさい「つ」、っだよ。わくに おいてみよう" : row.hiraLabel + "だよ。もじを じゅんばんに ならべよう");
       }
       function narabeAfterMove(placedIdx) {
         var row = narabeCurrentRow();
@@ -13953,25 +14345,29 @@
           var exId = narabeRowExampleId(row);
           var seq = row.chars.join("");
           var seqDisp = row.chars.map(narabeDispChar).join("");
-          narabeRender("やったね！" + seqDisp + "、ぜんぶ そろったね！");
+          narabeRender("やったね！" + seqDisp + "、ぜんぶ そろったね！すきな もじを タップすると ことばが でるよ");
           sfx("fanfare");
           celebrate(seqDisp + " できたね！", "🎉");
+          /* 促音だけの行は、並んだ文字列が「っ」1文字なので名前で読む。
+             行がそろった時点では図鑑には集めない: 例の言葉は読み上げるだけ。
+             図鑑に集まるのは、そろった後に文字を選んで単語カードが出た
+             言葉だけ（narabeShowWordForChar） */
+          var seqSay = narabeSayChar(seq);
           if (exId != null) {
-            mojiCollect(exId);
-            speak(seq + "！やったね！たとえば「" + WORDS[exId].h + "」だね");
+            speak(seqSay + "！やったね！たとえば「" + WORDS[exId].h + "」だね。もじを タップすると ことばが でるよ");
           } else {
-            speak(seq + "！やったね！");
+            speak(seqSay + "！やったね！もじを タップすると ことばが でるよ");
           }
           return;
         }
         if (wasCorrect) {
           sfx("good");
           narabeRender("いいね！「" + narabeDispChar(placedCh) + "」は " + (placedIdx + 1) + "ばんめだね");
-          speak(placedCh + "！いいね！");
+          speak(narabeSayChar(placedCh) + "！いいね！");
         } else if (placedCh != null) {
           sfx("pop");
           narabeRender("「" + narabeDispChar(placedCh) + "」をおいたよ。じゅんばんを たしかめてみよう");
-          speak(placedCh);
+          speak(narabeSayChar(placedCh));
         } else {
           narabeRender("");
         }
@@ -13991,20 +14387,21 @@
         }
         if (narabeSel && narabeSel.from === "tray" && narabeSel.ch === ch) { narabeSel = null; narabeRender(""); return; }
         narabeSel = { from: "tray", ch: ch };
-        speak(ch);
+        speak(narabeSayChar(ch));
         narabeRender("「" + narabeDispChar(ch) + "」を おきたい わくを タップしてね");
       }
       function narabeTapSlot(idx) {
-        if (narabeDone) return;
+        if (narabeDone) {
+          /* そろった後の枠のタップは、文字を候補に戻す操作ではなく、
+             その文字を含む言葉のカードを出す操作になる（別の文字を
+             タップすれば、その文字のカードに切り替わる）。
+             行をやり直したいときは「まぜなおす」を使う */
+          var doneCh = narabeSlots[idx];
+          if (doneCh) narabeShowWordForChar(idx, doneCh);
+          return;
+        }
         if (narabeSel && narabeSel.from === "tray") {
-          var ch = narabeSel.ch;
-          var ti = narabeTray.indexOf(ch);
-          var old = narabeSlots[idx];
-          narabeSlots[idx] = ch;
-          if (old) narabeTray[ti] = old; else narabeTray.splice(ti, 1);
-          narabeSel = null;
-          narabeRender("");
-          narabeAfterMove(idx);
+          narabePlaceFromTray(narabeSel.ch, idx);
           return;
         }
         if (narabeSel && narabeSel.from === "slot") {
@@ -14017,9 +14414,17 @@
           return;
         }
         if (narabeSlots[idx]) {
-          narabeSel = { from: "slot", idx: idx };
-          speak(narabeSlots[idx]);
-          narabeRender("「" + narabeDispChar(narabeSlots[idx]) + "」を うごかすよ。いれかえたい ばしょを タップしてね");
+          /* 枠に入れた文字を もう一度タップしたら、あっている文字でも
+             間違っている文字でも、下の候補欄に戻す（枠は空に戻る）。
+             これは完成前だけの操作で、完成後のタップは上の分岐で
+             単語カードの表示になる */
+          var backCh = narabeSlots[idx];
+          narabeSlots[idx] = null;
+          narabeTray.push(backCh);
+          narabeSel = null;
+          narabeDone = false;
+          narabeRender("「" + narabeDispChar(backCh) + "」を もどしたよ");
+          speak(narabeSayChar(backCh));
         }
       }
 
@@ -14208,21 +14613,18 @@
       function mojiSetTab(t, sayIt) {
         mojiTab = t;
         narabeSyncControls();
-        var tn = document.getElementById("mojiTabNarabe"), ta = document.getElementById("mojiTabAna"), tm = document.getElementById("mojiTabMikke");
-        tn.classList.toggle("on", t === "narabe"); tn.setAttribute("aria-pressed", t === "narabe" ? "true" : "false");
+        var ta = document.getElementById("mojiTabAna"), tm = document.getElementById("mojiTabMikke");
         ta.classList.toggle("on", t === "anaume"); ta.setAttribute("aria-pressed", t === "anaume" ? "true" : "false");
         tm.classList.toggle("on", t === "mikke"); tm.setAttribute("aria-pressed", t === "mikke" ? "true" : "false");
-        document.getElementById("mojiNarabeStage").hidden = t !== "narabe";
         document.getElementById("mojiAnaStage").hidden = t !== "anaume";
         document.getElementById("mojiMikkeStage").hidden = t !== "mikke";
-        if (t === "narabe") narabeStart(narabeRow, sayIt);
-        else if (t === "anaume") anaStart(sayIt);
+        if (t === "anaume") anaStart(sayIt);
         else mikkeStart(sayIt);
       }
       /* 語数・除外の設定が変わったとき、開いたままなら範囲に合わせて出し直す */
       function refreshMoji() {
+        if (!narabeEl.hidden) narabeRender("");
         if (mojiEl.hidden) return;
-        if (mojiTab === "narabe") { narabeRender(""); return; }
         if (mojiTab === "anaume") { anaStart(false); document.getElementById("mojiAnaMsg").textContent = "ことばの かずが かわったよ。あたらしい もんだいだよ！"; return; }
         mikkeStart(false);
         document.getElementById("mojiMikkeMsg").textContent = "ことばの かずが かわったよ。あたらしい もんだいだよ！";
@@ -14232,9 +14634,13 @@
          出し分けもその場で合わせる（ひらがなだけに戻したら選択もひらがなに戻る） */
       function mojiOnModeChange() {
         narabeSyncControls();
+        if (!narabeEl.hidden) {
+          narabeRender(document.getElementById("mojiNarabeMsg").textContent);
+          /* 単語カードが出ていれば、表示の切り替えに合わせてハイライトを描き直す */
+          if (narabeWordId != null && narabeWordUnit) narabeDrawWordCard(narabeWordId, narabeWordUnit);
+        }
         if (mojiEl.hidden) return;
-        if (mojiTab === "narabe") narabeRender(document.getElementById("mojiNarabeMsg").textContent);
-        else if (mojiTab === "anaume") anaRender(document.getElementById("mojiAnaMsg").textContent);
+        if (mojiTab === "anaume") anaRender(document.getElementById("mojiAnaMsg").textContent);
         else if (mojiTab === "mikke") mikkeRender(document.getElementById("mojiMikkeMsg").textContent);
       }
       document.getElementById("mojiBtn").addEventListener("click", function () {
@@ -14244,11 +14650,20 @@
         speak("もじあそび！もじの カードで あそぼう！");
       });
       document.getElementById("mojiClose").addEventListener("click", function () { mojiEl.hidden = true; });
-      document.getElementById("mojiTabNarabe").addEventListener("click", function () { mojiSetTab("narabe", true); });
+      /* 五十音ならべは独立した遊び: 専用の入口ボタンから直接開く */
+      document.getElementById("narabeBtn").addEventListener("click", function () {
+        narabeSyncControls();
+        narabeStart(narabeRow, false);
+        narabeEl.hidden = false;
+        narabeEl.scrollTop = 0;
+        speak((narabeKataAllowed() ? "五十音ならべ" : "ごじゅうおん ならべ") + "！もじを じゅんばんに ならべよう！");
+      });
+      document.getElementById("narabeClose").addEventListener("click", function () { narabeEl.hidden = true; });
       document.getElementById("mojiTabAna").addEventListener("click", function () { mojiSetTab("anaume", true); });
       document.getElementById("mojiTabMikke").addEventListener("click", function () { mojiSetTab("mikke", true); });
       document.getElementById("mojiNarabeHearBtn").addEventListener("click", function () {
         var row = narabeCurrentRow();
+        if (row.sokuon) { speak(narabeDone ? "ちいさい「つ」、っ！できたね" : "ちいさい「つ」、っを わくに おいてみよう"); return; }
         speak(narabeDone ? row.chars.join("、") : row.hiraLabel + "の もじを、じゅんばんに ならべよう");
       });
       document.getElementById("mojiNarabeResetBtn").addEventListener("click", function () { narabeStart(narabeRow, true); });
@@ -14256,6 +14671,12 @@
       /* だくてん切り替え: 切り替え後の行の先頭（あ行／が行）から始める（なぞりがきと同じ考え方） */
       document.getElementById("mojiNarabeDakuBtn").addEventListener("click", function () {
         narabeDakuOn = !narabeDakuOn;
+        narabeStart(0, true);
+      });
+      /* ようおん切り替え: 拗音の表に切り替え、先頭の行（きゃ行／ぎゃ行）から始める。
+         だくてん切り替えと組み合わせると、濁音・半濁音の拗音になる */
+      document.getElementById("mojiNarabeYouonBtn").addEventListener("click", function () {
+        narabeYouonOn = !narabeYouonOn;
         narabeStart(0, true);
       });
       /* ひらがな／カタカナ切り替え: 並べかけの状態はそのままに、表示だけ切り替える */
@@ -14524,6 +14945,7 @@
           { k: "clap", btn: "clapBtn", icon: "👏", title: "てびょうし" },
           { k: "clock", btn: "clockBtn", icon: "🕐", title: "とけい あそび" },
           { k: "shiritori", btn: "shiritoriBtn", icon: "🔤", title: "しりとり" },
+          { k: "narabe", btn: "narabeBtn", icon: "🔤", title: "五十音ならべ" },
           { k: "moji", btn: "mojiBtn", icon: "🔡", title: "もじあそび" },
           { k: "pick", btn: "pickBtn", icon: "💗", title: "どっちが すき？" }
         ];
@@ -14966,7 +15388,8 @@
           { k: "nazori", btn: "nazoriBtn", icon: "✏️", title: "なぞりがき", desc: "もじを なぞって かこう" },
           { k: "oto", btn: "otoBtn", icon: "🔊", title: "おととことば", desc: "おとと ことばを あわせよう" },
           { k: "tanken", btn: "tankenBtn", icon: "🧭", title: "ことばたんけん", desc: "ばめんに あう ことばを あつめよう" },
-          { k: "moji", btn: "mojiBtn", icon: "🔡", title: "もじあそび", desc: "五十音ならべ・あなうめ・ことば みっけ" },
+          { k: "moji", btn: "mojiBtn", icon: "🔡", title: "もじあそび", desc: "あなうめ・ことば みっけ" },
+          { k: "narabe", btn: "narabeBtn", icon: "🔤", title: "五十音ならべ", desc: "もじを じゅんばんに ならべよう" },
           { k: "shiritori", btn: "shiritoriBtn", icon: "🔤", title: "しりとり", desc: "ことばを つなげて あそぼう" },
           { k: "kazu", btn: "kazuBtn", icon: "🔢", title: "かずあそび", desc: "かぞえたり じゅんばんを あてよう" },
           { k: "antonym", btn: "hantaiBtn", icon: "↔️", title: "はんたい ことば", desc: "はんたいの ことばは どっち？" },

@@ -4,7 +4,7 @@
 
 Un jeu de mots pour les tout-petits, à jouer dans le navigateur, pour enrichir leur vocabulaire en s'amusant. **Entièrement gratuit, sans aucun frais.**
 
-Version actuelle : **3.0**
+Version actuelle : **3.1**
 
 **▶ Jouer : https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,8 @@ Version actuelle : **3.0**
 ## Caractéristiques
 
 - **Environ 39 000 mots** inclus (le ずかん a deux niveaux : 11 grandes catégories et 200 petites catégories)
-- 17 jeux sur l'écran d'accueil (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Dans les réglages initiaux, 5 sont activés (れんそう, しりとり, もじあそび, おととことば, なぞりがき), et chacun peut être activé ou désactivé dans les Réglages
+- 18 jeux sur l'écran d'accueil (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Dans les réglages initiaux, 6 sont activés (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), et chacun peut être activé ou désactivé dans les Réglages
+- 「もじあそび」 comprend deux jeux : 「ことば あなうめ」 et 「ことば みっけ」. 「五十音ならべ」 est un jeu indépendant : on choisit une ligne du tableau gojuuon et on y range les caractères. Une fois la ligne complétée, touchez un caractère pour voir une carte d'un mot contenant ce caractère
 - Même en cas d'erreur au quiz, ce n'est jamais un échec : on vérifie la bonne réponse ensemble et l'enfant est félicité. Il n'y a aucune compétition
 - La taille du vocabulaire peut être choisie parmi 1 000 / 5 000 / 25 000 / tout (filtrage selon une évaluation en 8 niveaux de la fréquence d'usage des mots ; s'applique à toutes les fonctions)
 - Le mode nuit peut être choisi dans les Réglages : « jour / nuit / automatique selon l'heure (18 h – 6 h) ». Il ne suit pas le mode sombre de l'appareil

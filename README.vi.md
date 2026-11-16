@@ -4,7 +4,7 @@
 
 Một trò chơi từ vựng để trẻ nhỏ vừa chơi vừa mở rộng vốn từ, chơi được trên trình duyệt. **Hoàn toàn miễn phí, không thu phí.**
 
-Phiên bản hiện tại: **3.0**
+Phiên bản hiện tại: **3.1**
 
 **▶ Chơi: https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,8 @@ Phiên bản hiện tại: **3.0**
 ## Đặc điểm
 
 - Thu thập **khoảng 39.000 từ** (ずかん có hai cấp: 11 phân loại lớn và 200 phân loại nhỏ)
-- 17 trò chơi trên màn hình chính (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Trong cài đặt ban đầu có 5 trò chơi được bật (れんそう, しりとり, もじあそび, おととことば, なぞりがき), và có thể bật hoặc tắt từng trò chơi trong Cài đặt
+- 18 trò chơi trên màn hình chính (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Trong cài đặt ban đầu có 6 trò chơi được bật (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), và có thể bật hoặc tắt từng trò chơi trong Cài đặt
+- 「もじあそび」 gồm hai trò chơi: 「ことば あなうめ」 và 「ことば みっけ」. 「五十音ならべ」 là một trò chơi riêng: chọn một hàng trong bảng gojuuon và sắp xếp các chữ của hàng đó. Sau khi xếp xong một hàng, chạm vào một chữ để xem thẻ một từ có chứa chữ đó
 - Dù trả lời sai câu đố cũng không bị coi là thất bại: đáp án đúng sẽ được cùng nhau kiểm tra và trẻ sẽ được khen. Không có thi đua
 - Số lượng từ vựng có thể chọn từ 1.000 / 5.000 / 25.000 / tất cả (lọc theo thang đánh giá 8 mức về độ thường dùng; áp dụng cho mọi tính năng)
 - Chế độ ban đêm có thể chọn trong Cài đặt: "ban ngày / ban đêm / tự động theo giờ (18 giờ–6 giờ)". Không liên động với chế độ tối của thiết bị

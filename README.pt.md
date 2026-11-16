@@ -4,7 +4,7 @@
 
 Um jogo de palavras para crianças pequenas ampliarem o vocabulário brincando, jogável no navegador. **Totalmente grátis, sem cobranças.**
 
-Versão atual: **3.0**
+Versão atual: **3.1**
 
 **▶ Jogar: https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,8 @@ Versão atual: **3.0**
 ## Características
 
 - **Cerca de 39.000 palavras** incluídas (o ずかん tem dois níveis: 11 categorias grandes e 200 categorias pequenas)
-- 17 brincadeiras na tela inicial (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Na configuração inicial, cinco ficam ligadas (れんそう, しりとり, もじあそび, おととことば, なぞりがき), e cada uma pode ser ligada ou desligada nas Configurações
+- 18 brincadeiras na tela inicial (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Na configuração inicial, seis ficam ligadas (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), e cada uma pode ser ligada ou desligada nas Configurações
+- 「もじあそび」 é formado por dois jogos: 「ことば あなうめ」 e 「ことば みっけ」. 「五十音ならべ」 é uma brincadeira independente: você escolhe uma linha da tabela gojuuon e organiza suas letras. Depois de completar uma linha, toque em uma letra para ver um cartão de uma palavra que contém essa letra
 - Mesmo errando no quiz, isso não é tratado como fracasso: a resposta certa é conferida junto e a criança é elogiada. Não há competição
 - O tamanho do vocabulário pode ser escolhido entre 1.000 / 5.000 / 25.000 / tudo (filtrado por uma classificação de 8 níveis conforme a frequência de uso; vale para todas as funções)
 - O modo noturno pode ser escolhido nas Configurações: "dia / noite / automático pelo horário (18h–6h)". Não segue o modo escuro do aparelho

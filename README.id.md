@@ -4,7 +4,7 @@
 
 Permainan kata untuk anak usia dini yang dapat dimainkan di peramban, untuk menambah kosakata sambil bermain. **Sepenuhnya gratis, tanpa biaya.**
 
-Versi saat ini: **3.0**
+Versi saat ini: **3.1**
 
 **▶ Main: https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,8 @@ Versi saat ini: **3.0**
 ## Fitur
 
 - Berisi **sekitar 39.000 kata** (ずかん memiliki dua tingkat: 11 kategori besar dan 200 kategori kecil)
-- 17 permainan di layar beranda (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Pada pengaturan awal, 5 permainan aktif (れんそう, しりとり, もじあそび, おととことば, なぞりがき), dan masing-masing dapat diaktifkan atau dinonaktifkan di Pengaturan
+- 18 permainan di layar beranda (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, 五十音ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Pada pengaturan awal, 6 permainan aktif (れんそう, しりとり, もじあそび, おととことば, なぞりがき, 五十音ならべ), dan masing-masing dapat diaktifkan atau dinonaktifkan di Pengaturan
+- 「もじあそび」 terdiri dari dua permainan: 「ことば あなうめ」 dan 「ことば みっけ」. 「五十音ならべ」 adalah permainan tersendiri: pilih satu baris dari tabel gojuuon dan susun huruf-hurufnya. Setelah satu baris lengkap, ketuk satu huruf untuk melihat kartu kata yang mengandung huruf tersebut
 - Meskipun salah menjawab kuis, itu tidak pernah dianggap sebagai kegagalan: jawaban yang benar diperiksa bersama dan anak dipuji. Tidak ada persaingan
 - Ukuran kosakata dapat dipilih dari 1.000 / 5.000 / 25.000 / semua (disaring dengan peringkat 8 tingkat berdasarkan seberapa sering kata digunakan; berlaku untuk semua fitur)
 - Mode malam dapat dipilih di Pengaturan: "siang / malam / otomatis menurut waktu (18.00–06.00)". Tidak mengikuti mode gelap perangkat
