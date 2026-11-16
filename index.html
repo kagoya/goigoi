@@ -140,9 +140,9 @@
         border-radius: 50%;
       }
       .bubble .em { display: block; }
-      .b-center .em { font-size: 13.5cqw; }
-      .b-in .em { font-size: 8.8cqw; }
-      .b-out .em { font-size: 4.8cqw; }
+      .b-center .em { font-size: 16.9cqw; }
+      .b-in .em { font-size: 11cqw; }
+      .b-out .em { font-size: 6cqw; }
       .bubble .wd {
         display: block;
         font-weight: 800;
@@ -153,9 +153,9 @@
         white-space: nowrap;
         max-width: 96%;
       }
-      .b-center .wd { font-size: 6.4cqw; margin-top: 0.4cqw; }
-      .b-in .wd { font-size: 4.4cqw; margin-top: 0.2cqw; }
-      .b-out .wd { font-size: 2.55cqw; }
+      .b-center .wd { font-size: 7.8cqw; margin-top: 0.5cqw; }
+      .b-in .wd { font-size: 5.4cqw; margin-top: 0.25cqw; }
+      .b-out .wd { font-size: 3.1cqw; }
       @keyframes pop {
         from { transform: scale(0.3); opacity: 0; }
         to { transform: scale(1); opacity: 1; }
@@ -773,8 +773,8 @@
       .report-line { font-size: 14.5px; font-weight: 700; line-height: 1.7; margin: 0; }
       /* ===== 写真の絵・なあに？・プロフィール・おしまい合図 ===== */
       .bubble .em-img { object-fit: cover; border-radius: 14px; display: block; }
-      .b-center .em-img { width: 15.5cqw; height: 15.5cqw; }
-      .b-in .em-img { width: 10.8cqw; height: 10.8cqw; }
+      .b-center .em-img { width: 19.4cqw; height: 19.4cqw; }
+      .b-in .em-img { width: 13.5cqw; height: 13.5cqw; }
       .zchip .zimg { width: 36px; height: 36px; object-fit: cover; border-radius: 10px; flex: none; }
       .today-chip .cimg, .review-chip .cimg { width: 30px; height: 30px; object-fit: cover; border-radius: 8px; flex: none; }
       #descLine {
@@ -2988,7 +2988,7 @@
         if (opts.mystery) wd.textContent = "？？？";
         else if (furiganaOn && mode === "mix") wd.innerHTML = furiganaHTML(txt, w.h);
         else wd.textContent = txt;
-        var base = cls === "b-center" ? 6.4 : cls === "b-in" ? 4.4 : 2.55;
+        var base = cls === "b-center" ? 7.8 : cls === "b-in" ? 5.4 : 3.1;
         wd.style.fontSize = wScale(wd.textContent.length, base) + "cqw";
         if (!opts.mystery && txt.length >= 11) { wd.style.whiteSpace = "normal"; wd.style.overflowWrap = "anywhere"; wd.style.lineHeight = "1.1"; wd.style.borderRadius = "10px"; }
         b.appendChild(em); b.appendChild(wd);
