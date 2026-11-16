@@ -1,0 +1,59 @@
+# ごいごいゲーム
+
+**Read in other languages:** [日本語](README.md) | [やさしい日本語](README.ja-easy.md) | **English** | [简体中文](README.zh-Hans.md) | [繁體中文](README.zh-Hant.md) | [Português](README.pt.md) | [Español](README.es.md) | [Tiếng Việt](README.vi.md) | [ภาษาไทย](README.th.md) | [한국어](README.ko.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Italiano](README.it.md) | [Bahasa Indonesia](README.id.md)
+
+A word game for toddlers to enjoy growing their vocabulary, playable in a web browser. **Completely free — no charges.**
+
+Current version: **3.0**
+
+**▶ Play: https://kagoya.github.io/goigoi/**
+
+![Poster](poster.webp)
+
+## How to play
+
+- When you start, a home screen opens with cards for each activity
+- Tap a word card and the word is read aloud
+- In 「れんそう」, words related to the one you picked appear around it, so following them leads you to new words
+- Words you meet are collected in the ずかん, no matter which activity you found them in
+
+## Features
+
+- About **39,000 words** included (the ずかん has two levels: 11 large categories and 200 small categories)
+- 17 activities on the home screen (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Five are on in the initial settings (れんそう, しりとり, もじあそび, おととことば, なぞりがき), and each can be turned on or off in Settings
+- Even if you get a quiz question wrong, it is never treated as a failure — you check the right answer together and get praised. There is no competition
+- Vocabulary size can be chosen from 1,000 / 5,000 / 25,000 / all (filtered by an 8-level rating of how commonly each word is used; applies to all features)
+- Night mode can be chosen in Settings: "day / night / automatic by time (18:00–6:00)". It does not follow your device's dark mode
+- The sound on/off switch is a shared switch at the top of the screen (it cannot be turned off in おととことば or ききとりクイズ)
+- 25 kinds of stamps in total (3 completion stamps, 8 "first time" stamps, 5 word-count milestone stamps, 9 achievement stamps). You can view them as round stamps in the children's 「きろく」, opened from the ずかん
+- The ずかん can be switched between a list view and a card view with big pictures, by the child
+- The picture for a word can be replaced with a photo from Settings, in 「言葉の絵を変える」 (the photo is automatically reduced in size and saved; it is included in backups and can be reset to the default)
+- The なぞりがき tracing checks can be set individually in Settings: stroke count, stroke order, direction, shape, and exact shape (levels 1–5 can also be chosen; the default is equivalent to level 4)
+- The explanations on the Settings page are available in 14 languages (Japanese, Easy Japanese with furigana, English, Simplified Chinese, Traditional Chinese, Portuguese, Spanish, Vietnamese, Thai, Korean, French, German, Italian, Indonesian). In-game terms and words remain in Japanese
+- Sibling profiles for up to 3 children. There is also a 保護者レポート, the 「きろく」, and backup of records
+
+## Materials for adults
+
+- [Catalog for adults (PDF, in Japanese)](docs/goigoi-game-catalog.pdf) — a 4-page document listing the features, the settings, and notes on use
+
+## How it works
+
+- It runs using only standard browser features, with no external services or paid AI
+- Play records are saved only in your browser and are never sent to a server
+- Speech (reading aloud) and speech recognition use your browser's features (まねっこ pronunciation works in Chrome / Edge. The voices available depend on your device)
+- Emoji that your device cannot display are automatically replaced with the category's emoji
+
+## About the materials used
+
+- Stroke order data: KanjiVG © Ulrich Apel (CC BY-SA 3.0)
+- Sounds for 「おととことば」: CC0 sound materials are used. See [assets/sounds/CREDITS.md](assets/sounds/CREDITS.md) for the sources
+
+## No warranty
+
+This game is provided without warranty. It does not guarantee operation or the saving of records, and the author is not responsible for any problems or damage arising from its use. Please use it at your own responsibility.
+
+## License
+
+Published under CC BY 4.0 (Creative Commons Attribution 4.0 International). With attribution, you may copy, modify, and redistribute it. See [LICENSE](LICENSE) for details. The stroke order data (KanjiVG) is CC BY-SA 3.0.
+
+Author: @kagoya
