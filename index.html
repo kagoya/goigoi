@@ -2319,7 +2319,7 @@
             <button id="mojiNarabeDakuBtn" type="button" aria-pressed="false">゛ だくてん</button>
           </div>
         </div>
-        <div id="mojiRows" class="oto-cats" role="group" aria-label="ぎょうを えらぶ" style="margin-top:2px;"></div>
+        <div id="mojiRows" role="group" aria-label="五十音表から ぎょうを えらぶ" style="margin:2px auto 12px;"></div>
         <p id="mojiNarabeQ" class="play-q">もじを じゅんばんに ならべよう</p>
         <div class="moji-narabe-board">
           <div class="moji-narabe-col">
@@ -13740,18 +13740,68 @@
         }
         return cBest != null ? cBest : cFb;
       }
+      /* 行えらびは五十音表から選ぶ（なぞりがきの文字えらびと同じ作り・見た目:
+         列が縦並びで右端が あ行、各列は上から あいうえお。表の1列が そのまま
+         練習する「行」に対応し、どのマスをタップしても その列の行を選ぶ。
+         や行・わ行は空きマスで段をそろえ、ん は わ行の左に1列置く
+         （この遊びでは ん も わ行の文字なので、タップすると わ行を選ぶ）。
+         濁点・半濁点は上の「゛だくてん」切り替えで表ごと切り替わる
+         （narabeRows が MOJI_ROWS_DAKU になるのと対になる）。
+         表示文字は narabeDispChar を通すので、カタカナ表示中は表もカタカナに
+         なり、ひらがなだけの設定では切り替え自体が出ない（なぞりがきと同じ）。
+         ri は narabeRows() の行番号、cells は常にひらがなで段順に並べる */
+      var NARABE_TABLE_BASIC = [
+        { ri: 0, cells: ["あ", "い", "う", "え", "お"] },
+        { ri: 1, cells: ["か", "き", "く", "け", "こ"] },
+        { ri: 2, cells: ["さ", "し", "す", "せ", "そ"] },
+        { ri: 3, cells: ["た", "ち", "つ", "て", "と"] },
+        { ri: 4, cells: ["な", "に", "ぬ", "ね", "の"] },
+        { ri: 5, cells: ["は", "ひ", "ふ", "へ", "ほ"] },
+        { ri: 6, cells: ["ま", "み", "む", "め", "も"] },
+        { ri: 7, cells: ["や", "", "ゆ", "", "よ"] },
+        { ri: 8, cells: ["ら", "り", "る", "れ", "ろ"] },
+        { ri: 9, cells: ["わ", "", "", "", "を"] },
+        { ri: 9, cells: ["ん", "", "", "", ""] }
+      ];
+      var NARABE_TABLE_DAKU = [
+        { ri: 0, cells: ["が", "ぎ", "ぐ", "げ", "ご"] },
+        { ri: 1, cells: ["ざ", "じ", "ず", "ぜ", "ぞ"] },
+        { ri: 2, cells: ["だ", "ぢ", "づ", "で", "ど"] },
+        { ri: 3, cells: ["ば", "び", "ぶ", "べ", "ぼ"] },
+        { ri: 4, cells: ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"] }
+      ];
       function narabeRenderRows() {
         var box = document.getElementById("mojiRows");
         box.innerHTML = "";
-        narabeRows().forEach(function (row, ri) {
-          var b = document.createElement("button");
-          b.type = "button";
-          b.textContent = narabeDispChar(row.chars[0]) + " " + narabeRowLabel(row);
-          if (ri === narabeRow) b.className = "on";
-          b.setAttribute("aria-pressed", ri === narabeRow ? "true" : "false");
-          b.addEventListener("click", function () { if (ri !== narabeRow) narabeStart(ri, true); });
-          box.appendChild(b);
+        var rows = narabeRows();
+        var table = document.createElement("div");
+        table.className = "nazori-table";
+        table.setAttribute("role", "group");
+        table.setAttribute("aria-label", narabeDakuOn ? "だくてんの 五十音表" : "五十音表");
+        (narabeDakuOn ? NARABE_TABLE_DAKU : NARABE_TABLE_BASIC).forEach(function (colDef) {
+          var ri = colDef.ri;
+          var row = rows[ri];
+          var colEl = document.createElement("div");
+          colEl.className = "nazori-col";
+          colDef.cells.forEach(function (c) {
+            if (!c) {
+              var sp = document.createElement("div");
+              sp.className = "nazori-cell-empty"; sp.setAttribute("aria-hidden", "true");
+              colEl.appendChild(sp);
+              return;
+            }
+            var b = document.createElement("button");
+            b.type = "button";
+            b.textContent = narabeDispChar(c);
+            if (ri === narabeRow) b.className = "on";
+            b.setAttribute("aria-label", "「" + narabeDispChar(c) + "」の " + narabeRowLabel(row) + "を えらぶ");
+            b.setAttribute("aria-pressed", ri === narabeRow ? "true" : "false");
+            b.addEventListener("click", function () { if (ri !== narabeRow) narabeStart(ri, true); });
+            colEl.appendChild(b);
+          });
+          table.appendChild(colEl);
         });
+        box.appendChild(table);
       }
       function narabeRender(msg) {
         var row = narabeCurrentRow();
