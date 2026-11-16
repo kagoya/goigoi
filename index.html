@@ -1136,7 +1136,9 @@
            静止したまま表示されるので、動きがなくても達成が分かる。
          ・キーボード操作では :focus-visible で輪郭をはっきり出す。
          ・小さいアイコンボタンは見た目を変えず、当たり判定だけ 44px 以上に広げる。
-         ・盤面カードには分野名の小さなラベル（.bcat）を付け、色だけに頼らない。 */
+         ・盤面カードには分野名の小さなラベル（.bcat）を付けられる（大人用設定
+           「カードに分野名を表示」、初期値オフ）。オフでもカードの aria-label には
+           分野名が入るので、色だけに頼らない配慮は読み上げ側で維持される。 */
       body.rm *, body.rm *::before, body.rm *::after { animation: none !important; transition: none !important; }
       body.rm #celRain { display: none !important; }
       button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, label:focus-visible, [tabindex]:focus-visible {
@@ -1314,6 +1316,11 @@
         <div class="seg" role="group" aria-label="ふりがなの切り替え">
           <button id="furiganaOff" class="on" type="button">ふりがな オフ</button>
           <button id="furiganaOn" type="button">ふりがな オン</button>
+        </div>
+        <p class="adult-note" style="margin-top:12px;">カードに分野名を表示： 盤面のカードの左上に、その言葉の分野（「うごき」「ようす」など）を小さく表示します。分野が色だけでなく文字でも分かるようにするための表示です。はじめはオフで、オンにしたときだけ表示されます。オフのときも、読み上げソフト向けの案内（カードの説明文）には分野名が残ります。変更はすぐに盤面に反映されます。</p>
+        <div class="seg" role="group" aria-label="カードに分野名を表示するかの切り替え">
+          <button id="catLabelOff" class="on" type="button" aria-pressed="true">分野名 オフ</button>
+          <button id="catLabelOn" type="button" aria-pressed="false">分野名 オン</button>
         </div>
       </div>
       <div class="adult-card">
@@ -2865,6 +2872,7 @@
       var speechRate = 0.78;
       var timerMin = 0;
       var furiganaOn = false;   /* ふりがな表示（漢字・カタカナありのときだけ効く） */
+      var catLabelOn = false;   /* カードへの分野名ラベル（.bcat）表示。表示設定で、機能のオン・オフ一覧には含めない。初期値はオフ（保存に無い場合もオフ） */
       var voiceURI = "";        /* 選んだ日本語の声の voiceURI（空＝自動で最初の日本語の声） */
       var sfxOn = true;         /* 効果音（読み上げとは別の短い音）のオン・オフ（初期値オン） */
       var reduceMotion = false; /* 動きを減らす（初期値は端末の prefers-reduced-motion に連動） */
@@ -2879,8 +2887,12 @@
          大人用設定で1つずつ切り替えでき、状態は保存・バックアップの対象になる。
          シンプル／フルは「まとめて切り替えるプリセット」として残し、選ぶと
          下の組み合わせに一括設定される。その後の個別変更はそのまま保持される。 */
-      var FEATURE_SIMPLE = { mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, album: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 0 };
-      var FEATURE_FULL = { mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, album: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1 };
+      /* 初めてバッジ（firstBadge）だけは例外: 初期値はオフで、シンプル／フルの
+         どちらのプリセットでも自動ではオンにならない。大人用設定の機能一覧で
+         明示的にオンにしたときだけ表示され、その設定は保存・バックアップに残る。
+         保存データに firstBadge の設定が無い場合もオフとして扱う。 */
+      var FEATURE_SIMPLE = { mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 0, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, album: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 0 };
+      var FEATURE_FULL = { mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 0, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, album: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1 };
       var features = {};
       for (var fsk in FEATURE_SIMPLE) features[fsk] = FEATURE_SIMPLE[fsk];
       var favBoardMode = false;   /* 第4弾: おきにいり盤面モード（共通設定として保存する） */
@@ -2976,6 +2988,7 @@
         }
         if (typeof st2.timerMin === "number" && isFinite(st2.timerMin) && st2.timerMin >= 0) timerMin = Math.floor(st2.timerMin);
         if (st2.furigana) furiganaOn = true;
+        if (st2.catLabel) catLabelOn = true;   /* 保存に無い場合は初期値オフのまま */
         if (st2.favBoard) favBoardMode = true;
         if (typeof st2.voiceURI === "string") voiceURI = st2.voiceURI;
         if (typeof st2.sfx === "number" || typeof st2.sfx === "boolean") sfxOn = !!st2.sfx;
@@ -3055,6 +3068,7 @@
             features: features,
             favBoard: favBoardMode ? 1 : 0,
             furigana: furiganaOn ? 1 : 0,
+            catLabel: catLabelOn ? 1 : 0,
             voiceURI: voiceURI,
             sfx: sfxOn ? 1 : 0,
             motion: reduceMotion ? 1 : 0,
@@ -3156,6 +3170,26 @@
           u.pitch = 1.15;
           window.speechSynthesis.speak(u);
         } catch (e) { /* 音声が使えない環境では何もしない */ }
+      }
+      /* ===== 読み上げ専用: 言葉の直後の間 =====
+         文の中ではめ込んだ言葉（◯）に助詞（は・を・が・に・へ・の・で・も・と等）が
+         続くと、「◯は」「◯を」が一息につながって聞こえる。そのため読み上げテキスト
+         でのみ、言葉の直後に読点「、」を入れて TTS にわずかな間を取らせる。
+         画面に表示する文には使わない（表示は今までどおり）。
+         助詞が続かない位置（文末・「。」や「！」の前・「」で囲んだ形など）には
+         入らない。言葉単独の読み上げは助詞が続かないので、今までどおり変わらない。 */
+      var WORD_PARTICLES = ["は", "を", "が", "に", "へ", "の", "で", "も", "と", "から", "まで", "や"];
+      function pauseAfterWord(text, word) {
+        var t = String(text);
+        var words = Array.isArray(word) ? word : [word];
+        words.forEach(function (w) {
+          w = String(w || "");
+          if (!w) return;
+          WORD_PARTICLES.forEach(function (p) {
+            t = t.split(w + p).join(w + "、" + p);
+          });
+        });
+        return t;
       }
       function speakEn(text) {
         if (!("speechSynthesis" in window)) return;
@@ -3263,8 +3297,10 @@
         wd.style.fontSize = wScale(wd.textContent.length, base) + "cqw";
         if (!opts.mystery && txt.length >= 11) { wd.style.whiteSpace = "normal"; wd.style.overflowWrap = "anywhere"; wd.style.lineHeight = "1.1"; wd.style.borderRadius = "10px"; }
         b.appendChild(em); b.appendChild(wd);
-        if (!opts.mystery) {
-          /* 分野は色だけでなく名前の文字でも分かるように、小さなラベルを付ける */
+        if (!opts.mystery && catLabelOn) {
+          /* 分野は色だけでなく名前の文字でも分かるように、小さなラベルを付ける。
+             表示は大人用設定「カードに分野名を表示」（初期値オフ）で切り替える。
+             オフでも上の aria-label には分野名が残るので、読み上げでは分野が分かる */
           var catEl = document.createElement("span");
           catEl.className = "bcat";
           catEl.setAttribute("aria-hidden", "true");
@@ -3692,7 +3728,8 @@
       function updateSentence() { sentenceLine.textContent = "💬 " + makeSentence(centerId); }
       document.getElementById("sentenceBtn").addEventListener("click", function () {
         if (!sound) { sound = true; syncSoundBtn(); }
-        speak(makeSentence(centerId));
+        /* 表示（updateSentence）は makeSentence のまま。読み上げだけ言葉の後に間を入れる */
+        speak(pauseAfterWord(makeSentence(centerId), [disp(WORDS[centerId]), WORDS[centerId].h]));
       });
 
       /* ===== おだい（ミッション）＋ 実物さがし ===== */
@@ -3936,7 +3973,7 @@
       var quizBar = document.getElementById("quizBar");
       function speakQuiz() {
         if (quizTarget == null) return;
-        speak(WORDS[quizTarget].h + "は どれ？");
+        speak(WORDS[quizTarget].h + "、は どれ？");
       }
       function pickQuiz() {
         if (!lastSet || !lastSet.inner.length) return;
@@ -5276,7 +5313,8 @@
         descLine.hidden = false;
         descLine.textContent = "❓ " + text;
         if (!sound) { sound = true; syncSoundBtn(); }
-        speak(text);
+        /* 表示は text のまま。読み上げだけ言葉の後に間を入れる（固有説明は読みの形で始まるので両形を対象にする） */
+        speak(pauseAfterWord(text, [disp(WORDS[centerId]), WORDS[centerId].h]));
       });
 
       /* ===== 年齢の目安プリセット ===== */
@@ -5383,6 +5421,25 @@
       document.getElementById("furiganaOn").addEventListener("click", function () { setFurigana(true); });
       document.getElementById("furiganaOff").addEventListener("click", function () { setFurigana(false); });
       renderFuriganaUI();
+
+      /* ===== カードに分野名を表示（表示設定。機能のオン・オフ一覧には含めない） =====
+         盤面カード左上の分野名ラベル（.bcat）の表示切り替え。初期値はオフ。
+         共通設定として保存され、バックアップにも含まれる（buildSaveData の settings.catLabel）。
+         オフにしてもカードの aria-label には分野名が残り、読み上げでは分野が分かる。 */
+      function renderCatLabelUI() {
+        var onEl = document.getElementById("catLabelOn"), offEl = document.getElementById("catLabelOff");
+        if (onEl) { onEl.classList.toggle("on", catLabelOn); onEl.setAttribute("aria-pressed", catLabelOn ? "true" : "false"); }
+        if (offEl) { offEl.classList.toggle("on", !catLabelOn); offEl.setAttribute("aria-pressed", !catLabelOn ? "true" : "false"); }
+      }
+      function setCatLabel(on) {
+        catLabelOn = !!on;
+        renderCatLabelUI();
+        render();   /* 盤面へ即時反映 */
+        saveState();
+      }
+      document.getElementById("catLabelOn").addEventListener("click", function () { setCatLabel(true); });
+      document.getElementById("catLabelOff").addEventListener("click", function () { setCatLabel(false); });
+      renderCatLabelUI();
 
       /* ===== 音と動き（アクセシビリティ設定）: 効果音／動きを減らす =====
          どちらも共通設定として保存され、バックアップにも含まれる（buildSaveData の settings）。 */
@@ -5780,8 +5837,16 @@
           }
         });
       }
+      /* 読み上げ専用の平文（画面表示は storySegs のまま変えない）。
+         言葉の直後に助詞が続くときだけ、言葉の後に読点「、」を入れてわずかな間を作る */
       function storyPlainText() {
-        return storySegs.map(function (s) { return typeof s === "string" ? s : WORDS[s.w].h; }).join("");
+        return storySegs.map(function (s, i) {
+          if (typeof s === "string") return s;
+          var h = WORDS[s.w].h;
+          var next = storySegs[i + 1];
+          if (typeof next === "string" && next && WORD_PARTICLES.indexOf(next.charAt(0)) >= 0) h += "、";
+          return h;
+        }).join("");
       }
       function storyStop() {
         storyPlaying = false;
@@ -5938,7 +6003,7 @@
         { k: "bedtime", label: "おやすみ振り返り再生" },
         { k: "desc", label: "ひとこと説明ボタン" },
         { k: "review", label: "きのうの言葉（復習チップ）" },
-        { k: "firstBadge", label: "初めてバッジ" },
+        { k: "firstBadge", label: "初めてバッジ（カードの✨）" },
         { k: "favSticker", label: "図鑑のお気に入り・シール" },
         { k: "star", label: "図鑑の★表示" },
         { k: "print", label: "カード印刷ボタン" },
@@ -5978,7 +6043,11 @@
         renderFeatureToggles();
       }
       function applyFeaturePreset(preset) {
+        /* 初めてバッジはプリセットの対象外: シンプル／フルを選んでも自動で
+           オン・オフせず、大人用設定で明示的に決めた状態をそのまま保つ */
+        var keepFirstBadge = features.firstBadge ? 1 : 0;
         for (var k in preset) features[k] = preset[k];
+        features.firstBadge = keepFirstBadge;
         applyFeatures();
       }
       function setFeature(k, on) {
@@ -6372,6 +6441,8 @@
         renderRateUI();
         furiganaOn = false;
         if (typeof renderFuriganaUI === "function") renderFuriganaUI();
+        catLabelOn = false;
+        if (typeof renderCatLabelUI === "function") renderCatLabelUI();
         voiceURI = "";
         if (typeof pickVoice === "function") pickVoice();
         sfxOn = true;
@@ -6584,7 +6655,7 @@
         }
         kazuChoicesEl.innerHTML = "";
         numChoices(kazuAnswer, 20).forEach(function (v) { kazuChoicesEl.appendChild(kazuChoiceBtn(v, chooseKazuCount)); });
-        speak(kazuItemNow.h + "は、いくつ あるかな？");
+        speak(kazuItemNow.h + "、は、いくつ あるかな？");
       }
       function chooseKazuCount(v, btn) {
         if (kazuLock) return;
@@ -6686,7 +6757,7 @@
       document.getElementById("kazuTabSeq").addEventListener("click", function () { setKazuMode("seq"); });
       kazuNextBtn.addEventListener("click", newKazu);
       document.getElementById("kazuHearBtn").addEventListener("click", function () {
-        if (kazuMode === "count" && kazuItemNow) speak(kazuItemNow.h + "は、いくつ あるかな？");
+        if (kazuMode === "count" && kazuItemNow) speak(kazuItemNow.h + "、は、いくつ あるかな？");
         else speak("あいてる ところは、なんばん かな？");
       });
 
@@ -6781,7 +6852,7 @@
         ch.innerHTML = "";
         var opts = distractor != null ? shuffleArr([toId, distractor]) : [toId];
         opts.forEach(function (id) { ch.appendChild(hantaiWordBtn(id, chooseHantai)); });
-        speak(WORDS[fromId].h + "の はんたいは どっち？");
+        speak(WORDS[fromId].h + "、の はんたいは どっち？");
       }
       function chooseHantai(id, btn) {
         if (hantaiLock || !hantaiPair) return;
@@ -6792,12 +6863,12 @@
         if (id === toId) {
           btn.classList.add("good");
           document.getElementById("hantaiMsg").textContent = "すごい！そのとおりだね！";
-          setTimeout(function () { speak(WORDS[fromId].h + "の はんたいは、" + WORDS[toId].h + "だね！"); }, 900);
+          setTimeout(function () { speak(WORDS[fromId].h + "、の はんたいは、" + WORDS[toId].h + "だね！"); }, 900);
         } else {
           document.getElementById("hantaiMsg").textContent = "それは " + WORDS[id].h + " だね。はんたいは こっちだよ！";
           var ch = document.getElementById("hantaiChoices");
           for (var i = 0; i < ch.children.length; i++) { /* 正解カードを光らせる */ }
-          setTimeout(function () { speak(WORDS[fromId].h + "の はんたいは、" + WORDS[toId].h + "だね！"); }, 900);
+          setTimeout(function () { speak(WORDS[fromId].h + "、の はんたいは、" + WORDS[toId].h + "だね！"); }, 900);
         }
         document.getElementById("hantaiNextBtn").hidden = false;
       }
@@ -6830,7 +6901,7 @@
             row.appendChild(wd);
           });
           row.addEventListener("click", function () {
-            speak(WORDS[p[0]].h + "の はんたいは、" + WORDS[p[1]].h);
+            speak(WORDS[p[0]].h + "、の はんたいは、" + WORDS[p[1]].h);
           });
           list.appendChild(row);
         });
@@ -6854,7 +6925,7 @@
       document.getElementById("hantaiTabList").addEventListener("click", function () { setHantaiTab(false); });
       document.getElementById("hantaiNextBtn").addEventListener("click", newHantai);
       document.getElementById("hantaiHearBtn").addEventListener("click", function () {
-        if (hantaiPair) speak(WORDS[hantaiPair[hantaiFrom]].h + "の はんたいは どっち？");
+        if (hantaiPair) speak(WORDS[hantaiPair[hantaiFrom]].h + "、の はんたいは どっち？");
       });
 
       /* ===== しりとり（読みの最後の音と最初の音で言葉をつなぐ） =====
@@ -7220,7 +7291,7 @@
           document.getElementById("clapNextBtn").hidden = false;
         } else {
           msg.textContent = "いっしょに たたいて みよう！";
-          speak(WORDS[clapId].h + "は、" + clapTarget + "つ だよ。いっしょに たたこう！");
+          speak(WORDS[clapId].h + "、は、" + clapTarget + "つ だよ。いっしょに たたこう！");
           var box = document.getElementById("clapDots");
           box.innerHTML = "";
           var dots = [];
