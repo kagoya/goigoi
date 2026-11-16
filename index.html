@@ -1079,6 +1079,15 @@
       .moji-tile:active { transform: scale(0.94); }
       .moji-tile.sel { background: #ffd94d; border-color: #f5b301; color: #5c4300; }
       .moji-tile.tried { opacity: 0.45; }
+      /* あなうめ: 下に並ぶ候補の文字は、選びやすいよう他の遊びより大きく出す。
+         あなうめの候補（#mojiAnaChoices）の中だけに効かせ、みっけ・五十音
+         ならべの候補サイズには影響させない。候補は3つだけなので、大きく
+         しても画面幅に収まり、必要なら折り返す */
+      #mojiAnaChoices { min-height: 88px; }
+      #mojiAnaChoices .moji-tile {
+        width: 88px; height: 88px; border-radius: 20px; border-width: 3px;
+        font-size: 44px;
+      }
       .moji-pattern { display: flex; gap: 8px; justify-content: center; margin: 12px auto 4px; flex-wrap: wrap; }
       .moji-pchar {
         width: 58px; height: 58px; border-radius: 16px; border: 3px solid var(--line); background: var(--card);
@@ -1694,7 +1703,7 @@
       <button id="otoBtn" type="button">🔊 おととことば</button>
       <button id="tankenBtn" type="button">🧭 ことばたんけん</button>
       <button id="mojiBtn" type="button">🔡 もじあそび</button>
-      <button id="narabeBtn" type="button">🔤 五十音ならべ</button>
+      <button id="narabeBtn" type="button">🔤 ごじゅうおん ならべ</button>
       <button id="courseBtn" type="button">⭐ おまかせコース</button>
       <button id="favBoardBtn" type="button" aria-pressed="false">💗 おきにいりだけ</button>
     </div>
@@ -1968,7 +1977,7 @@
           <h2 data-i18n="featTitle">機能のオン・オフ</h2>
         </div>
         <div class="adult-card">
-          <p class="adult-note" data-i18n="featViewNote">遊び・機能ごとに使う・使わないを選べます。選んだ遊びだけがホーム画面に並びます（「れんそう」も遊びの1つとして選べます）。「デフォルトに戻す」で最初の組み合わせ（遊びは れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき の6つ＋基本の機能）に、「全部選ぶ」で全ての遊び・機能をオンにできます。まとめて切り替えたあと、1つずつ調整することもできます。個別に変えた状態は、そのまま保存されます。オフにしても、その機能の記録や進み具合は消えません。オンに戻せば続きから使えます。変更はすぐに画面に反映されます。</p>
+          <p class="adult-note" data-i18n="featViewNote">遊び・機能ごとに使う・使わないを選べます。選んだ遊びだけがホーム画面に並びます（「れんそう」も遊びの1つとして選べます）。「デフォルトに戻す」で最初の組み合わせ（遊びは れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき の6つ＋基本の機能）に、「全部選ぶ」で全ての遊び・機能をオンにできます。まとめて切り替えたあと、1つずつ調整することもできます。個別に変えた状態は、そのまま保存されます。オフにしても、その機能の記録や進み具合は消えません。オンに戻せば続きから使えます。変更はすぐに画面に反映されます。</p>
           <div class="vocab-opts" role="group" aria-label="まとめて切り替える">
             <button id="presetDefaultBtn" type="button" class="preset-opt" data-i18n="presetDefault">↩️ デフォルトに戻す</button>
             <button id="presetAllBtn" type="button" class="preset-opt" data-i18n="presetAll">✅ 全部選ぶ</button>
@@ -2411,9 +2420,9 @@
       <p class="bed-note">もじの カードを タップして あそぼう。べつの もじを えらんでも だいじょうぶ。いっしょに たしかめて、ほめるよ。あなうめと みっけで あそんだ ことばは、ずかんに あつまるよ。</p>
     </div>
 
-    <div id="narabeEl" class="play-el" hidden role="dialog" aria-label="五十音ならべ">
+    <div id="narabeEl" class="play-el" hidden role="dialog" aria-label="ごじゅうおん ならべ">
       <div class="play-head">
-        <h1 id="narabeTitle">🔤 五十音ならべ</h1>
+        <h1 id="narabeTitle">🔤 ごじゅうおん ならべ</h1>
         <button id="narabeClose" class="play-close" type="button">🏠 ホームへ もどる</button>
       </div>
       <div id="mojiNarabeStage" class="play-stage">
@@ -2727,7 +2736,7 @@
         licensePost: " for the license details.",
         warranty: "This game is provided without warranty. The creator does not guarantee its operation or the saving of records, and is not responsible for any problems or damages arising from its use. Please use it at your own responsibility.",
         backSettings: "← Back to Settings",
-        featViewNote: "Choose which games and features to use. Only the selected games appear on the home screen (れんそう is also one of the choices). “Reset to default” restores the starting combination (the six games れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, plus the basic features), and “Select all” turns every game and feature on. After using these, you can still adjust each one individually. Your individual choices are saved as they are. Turning a feature off does not delete its records or progress; turn it back on to continue. Changes apply immediately.",
+        featViewNote: "Choose which games and features to use. Only the selected games appear on the home screen (れんそう is also one of the choices). “Reset to default” restores the starting combination (the six games れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき, plus the basic features), and “Select all” turns every game and feature on. After using these, you can still adjust each one individually. Your individual choices are saved as they are. Turning a feature off does not delete its records or progress; turn it back on to continue. Changes apply immediately.",
         presetDefault: "↩️ Reset to default", presetAll: "✅ Select all",
         customAddTitle: "Add your own words",
         customViewNote: "You can register words of your own — names of family members and pets, favorite toys, nearby places, and so on. Registered words go into the picture dictionary's 「うちの子の ことば」, appear on cards, and can be tapped to play with them in the center. Words from the chosen category appear around them as related words. Registered words are treated as the most common words (8 stars), so they always appear even when the vocabulary size is reduced. Registrations are saved in this browser.",
@@ -2947,7 +2956,7 @@
         licensePost: "查看。",
         warranty: "本游戏按无担保方式提供。不保证其运行或记录的保存，因使用而产生的问题或损害，作者不承担责任。请自行负责使用。",
         backSettings: "← 返回设置",
-        featViewNote: "可以逐个选择游戏·功能使用与否。只有选中的游戏会排列在主页上（「れんそう」也作为游戏之一可选）。“恢复默认”会回到最初的组合（游戏为 れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき 6个＋基本功能），“全选”会打开全部游戏·功能。一并切换后，仍可逐个调整。逐个更改的状态会原样保存。关闭后，该功能的记录和进度不会消失；重新打开即可继续。更改会立即反映到画面上。",
+        featViewNote: "可以逐个选择游戏·功能使用与否。只有选中的游戏会排列在主页上（「れんそう」也作为游戏之一可选）。“恢复默认”会回到最初的组合（游戏为 れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき 6个＋基本功能），“全选”会打开全部游戏·功能。一并切换后，仍可逐个调整。逐个更改的状态会原样保存。关闭后，该功能的记录和进度不会消失；重新打开即可继续。更改会立即反映到画面上。",
         presetDefault: "↩️ 恢复默认", presetAll: "✅ 全选",
         customAddTitle: "添加自己的词语",
         customViewNote: "可以登记家人、宠物的名字、喜欢的玩具、附近的场所等自己的词语。登记的词语会进入图鉴的「うちの子の ことば」，也会出现在卡片上，点按即可成为中心来游玩。所选分野的词语会作为相关词语排列在周围。登记的词语会按最常用词语（★8）处理，即使缩小词汇量也始终会出现。登记内容保存在此浏览器中。",
@@ -3166,7 +3175,7 @@
         licensePost: "查看。",
         warranty: "本遊戲按無擔保方式提供。不保證其運行或紀錄的保存，因使用而產生的問題或損害，作者不承擔責任。請自行負責使用。",
         backSettings: "← 返回設定",
-        featViewNote: "可以逐個選擇遊戲·功能使用與否。只有選中的遊戲會排列在主頁上（「れんそう」也作為遊戲之一可選）。「恢復預設」會回到最初的組合（遊戲為 れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき 6個＋基本功能），「全選」會打開全部遊戲·功能。一併切換後，仍可逐個調整。逐個更改的狀態會原樣保存。關閉後，該功能的紀錄和進度不會消失；重新打開即可繼續。更改會立即反映到畫面上。",
+        featViewNote: "可以逐個選擇遊戲·功能使用與否。只有選中的遊戲會排列在主頁上（「れんそう」也作為遊戲之一可選）。「恢復預設」會回到最初的組合（遊戲為 れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき 6個＋基本功能），「全選」會打開全部遊戲·功能。一併切換後，仍可逐個調整。逐個更改的狀態會原樣保存。關閉後，該功能的紀錄和進度不會消失；重新打開即可繼續。更改會立即反映到畫面上。",
         presetDefault: "↩️ 恢復預設", presetAll: "✅ 全選",
         customAddTitle: "添加自己的詞語",
         customViewNote: "可以登記家人、寵物的名字、喜歡的玩具、附近的場所等自己的詞語。登記的詞語會進入圖鑑的「うちの子の ことば」，也會出現在卡片上，點按即可成為中心來遊玩。所選分野的詞語會作為相關詞語排列在周圍。登記的詞語會按最常用詞語（★8）處理，即使縮小詞彙量也始終會出現。登記內容保存在此瀏覽器中。",
@@ -3386,7 +3395,7 @@
         licensePost: " para os detalhes da licença.",
         warranty: "Este jogo é fornecido sem garantia. O criador não garante seu funcionamento nem o salvamento de registros, e não se responsabiliza por problemas ou danos decorrentes do uso. Use por sua própria conta e risco.",
         backSettings: "← Voltar às configurações",
-        featViewNote: "Escolha quais jogos e funções usar. Somente os jogos escolhidos aparecem na tela inicial (れんそう também é uma das escolhas). “Restaurar o padrão” volta à combinação inicial (os seis jogos れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, mais as funções básicas), e “Selecionar tudo” liga todos os jogos e funções. Depois disso, você ainda pode ajustar cada um individualmente. Suas escolhas individuais são salvas como estão. Desligar uma função não apaga seus registros nem progresso; ligue-a de novo para continuar. As mudanças são aplicadas imediatamente.",
+        featViewNote: "Escolha quais jogos e funções usar. Somente os jogos escolhidos aparecem na tela inicial (れんそう também é uma das escolhas). “Restaurar o padrão” volta à combinação inicial (os seis jogos れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき, mais as funções básicas), e “Selecionar tudo” liga todos os jogos e funções. Depois disso, você ainda pode ajustar cada um individualmente. Suas escolhas individuais são salvas como estão. Desligar uma função não apaga seus registros nem progresso; ligue-a de novo para continuar. As mudanças são aplicadas imediatamente.",
         presetDefault: "↩️ Restaurar o padrão", presetAll: "✅ Selecionar tudo",
         customAddTitle: "Adicionar suas próprias palavras",
         customViewNote: "Você pode registrar palavras suas — nomes de familiares e animais de estimação, brinquedos favoritos, lugares próximos e assim por diante. As palavras registradas vão para o 「うちの子の ことば」 do dicionário ilustrado, aparecem nos cartões e podem ser tocadas para jogar com elas no centro. Palavras da categoria escolhida aparecem ao redor como palavras relacionadas. As palavras registradas são tratadas como as mais comuns (8 estrelas), então sempre aparecem, mesmo com o vocabulário reduzido. Os registros são salvos neste navegador.",
@@ -3605,7 +3614,7 @@
         licensePost: " para ver los detalles de la licencia.",
         warranty: "Este juego se ofrece sin garantía. El creador no garantiza su funcionamiento ni el guardado de registros, y no se responsabiliza de los problemas o daños derivados de su uso. Úsalo bajo tu propia responsabilidad.",
         backSettings: "← Volver a los ajustes",
-        featViewNote: "Elige qué juegos y funciones usar. Solo los juegos elegidos aparecen en la pantalla de inicio (れんそう también es una de las opciones). «Restaurar el valor predeterminado» vuelve a la combinación inicial (los seis juegos れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, más las funciones básicas), y «Seleccionar todo» activa todos los juegos y funciones. Después, aún puedes ajustar cada uno individualmente. Tus elecciones individuales se guardan tal cual. Desactivar una función no borra sus registros ni su progreso; vuelve a activarla para continuar. Los cambios se aplican de inmediato.",
+        featViewNote: "Elige qué juegos y funciones usar. Solo los juegos elegidos aparecen en la pantalla de inicio (れんそう también es una de las opciones). «Restaurar el valor predeterminado» vuelve a la combinación inicial (los seis juegos れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき, más las funciones básicas), y «Seleccionar todo» activa todos los juegos y funciones. Después, aún puedes ajustar cada uno individualmente. Tus elecciones individuales se guardan tal cual. Desactivar una función no borra sus registros ni su progreso; vuelve a activarla para continuar. Los cambios se aplican de inmediato.",
         presetDefault: "↩️ Restaurar el valor predeterminado", presetAll: "✅ Seleccionar todo",
         customAddTitle: "Añadir tus propias palabras",
         customViewNote: "Puedes registrar palabras tuyas: nombres de familiares y mascotas, juguetes favoritos, lugares cercanos, etc. Las palabras registradas van al 「うちの子の ことば」 del diccionario ilustrado, aparecen en las tarjetas y se pueden tocar para jugar con ellas en el centro. Las palabras de la categoría elegida aparecen alrededor como palabras relacionadas. Las palabras registradas se tratan como las más comunes (8 estrellas), así que siempre aparecen, incluso con el vocabulario reducido. Los registros se guardan en este navegador.",
@@ -3825,7 +3834,7 @@
         licensePost: ".",
         warranty: "Trò chơi này được cung cấp không kèm bảo đảm. Tác giả không bảo đảm hoạt động hay việc lưu bản ghi, và không chịu trách nhiệm về sự cố, thiệt hại phát sinh do việc sử dụng. Xin vui lòng tự chịu trách nhiệm khi sử dụng.",
         backSettings: "← Quay lại Cài đặt",
-        featViewNote: "Có thể chọn dùng hay không dùng từng trò chơi/chức năng. Chỉ những trò chơi đã chọn mới xếp trên màn hình chính (「れんそう」 cũng là một trong các trò chơi có thể chọn). “Khôi phục mặc định” đưa về tổ hợp ban đầu (6 trò chơi れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき + các chức năng cơ bản), “Chọn tất cả” bật mọi trò chơi/chức năng. Sau khi chuyển đổi hàng loạt, vẫn có thể chỉnh từng cái một. Trạng thái chỉnh riêng được lưu nguyên như vậy. Tắt đi thì bản ghi và tiến độ của chức năng đó cũng không mất; bật lại là dùng tiếp được. Thay đổi được áp dụng ngay lên màn hình.",
+        featViewNote: "Có thể chọn dùng hay không dùng từng trò chơi/chức năng. Chỉ những trò chơi đã chọn mới xếp trên màn hình chính (「れんそう」 cũng là một trong các trò chơi có thể chọn). “Khôi phục mặc định” đưa về tổ hợp ban đầu (6 trò chơi れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき + các chức năng cơ bản), “Chọn tất cả” bật mọi trò chơi/chức năng. Sau khi chuyển đổi hàng loạt, vẫn có thể chỉnh từng cái một. Trạng thái chỉnh riêng được lưu nguyên như vậy. Tắt đi thì bản ghi và tiến độ của chức năng đó cũng không mất; bật lại là dùng tiếp được. Thay đổi được áp dụng ngay lên màn hình.",
         presetDefault: "↩️ Khôi phục mặc định", presetAll: "✅ Chọn tất cả",
         customAddTitle: "Thêm từ riêng của bạn",
         customViewNote: "Có thể đăng ký các từ riêng như tên người thân và thú cưng, đồ chơi yêu thích, địa điểm gần nhà. Từ đã đăng ký sẽ vào 「うちの子の ことば」 trong từ điển tranh, xuất hiện trên thẻ, chạm vào là có thể chơi với từ đó ở giữa. Các từ thuộc lĩnh vực đã chọn sẽ xếp xung quanh như từ liên quan. Từ đã đăng ký được coi là từ dùng thường xuyên nhất (★8), nên luôn xuất hiện ngay cả khi giảm số lượng từ. Nội dung đăng ký được lưu trong trình duyệt này.",
@@ -4044,7 +4053,7 @@
         licensePost: "",
         warranty: "เกมนี้ให้บริการโดยไม่มีการรับประกัน ไม่รับประกันการทำงานหรือการบันทึกข้อมูล และผู้สร้างไม่รับผิดชอบต่อปัญหาหรือความเสียหายที่เกิดจากการใช้งาน โปรดใช้งานด้วยความรับผิดชอบของตนเอง",
         backSettings: "← กลับไปการตั้งค่า",
-        featViewNote: "เลือกใช้หรือไม่ใช้ทีละเกม/ฟังก์ชันได้ เฉพาะเกมที่เลือกเท่านั้นที่จะเรียงบนหน้าจอหลัก (「れんそう」 ก็เลือกเป็นเกมหนึ่งได้) “คืนค่าเริ่มต้น” จะกลับไปเป็นชุดเริ่มต้น (เกม 6 อย่าง れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき + ฟังก์ชันพื้นฐาน) “เลือกทั้งหมด” จะเปิดทุกเกม/ฟังก์ชัน หลังจากสลับพร้อมกันแล้ว ยังปรับทีละรายการได้อีก สถานะที่เปลี่ยนทีละรายการจะถูกบันทึกไว้ตามนั้น แม้ปิดไป บันทึกและความคืบหน้าของฟังก์ชันนั้นก็ไม่หาย เปิดกลับก็ใช้ต่อได้ การเปลี่ยนแปลงจะมีผลบนหน้าจอทันที",
+        featViewNote: "เลือกใช้หรือไม่ใช้ทีละเกม/ฟังก์ชันได้ เฉพาะเกมที่เลือกเท่านั้นที่จะเรียงบนหน้าจอหลัก (「れんそう」 ก็เลือกเป็นเกมหนึ่งได้) “คืนค่าเริ่มต้น” จะกลับไปเป็นชุดเริ่มต้น (เกม 6 อย่าง れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき + ฟังก์ชันพื้นฐาน) “เลือกทั้งหมด” จะเปิดทุกเกม/ฟังก์ชัน หลังจากสลับพร้อมกันแล้ว ยังปรับทีละรายการได้อีก สถานะที่เปลี่ยนทีละรายการจะถูกบันทึกไว้ตามนั้น แม้ปิดไป บันทึกและความคืบหน้าของฟังก์ชันนั้นก็ไม่หาย เปิดกลับก็ใช้ต่อได้ การเปลี่ยนแปลงจะมีผลบนหน้าจอทันที",
         presetDefault: "↩️ คืนค่าเริ่มต้น", presetAll: "✅ เลือกทั้งหมด",
         customAddTitle: "เพิ่มคำเฉพาะของคุณ",
         customViewNote: "ลงทะเบียนคำเฉพาะของคุณได้ เช่น ชื่อคนในครอบครัวและสัตว์เลี้ยง ของเล่นที่ชอบ สถานที่ใกล้บ้าน คำที่ลงทะเบียนจะเข้าไปอยู่ใน 「うちの子の ことば」 ของพจนานุกรมภาพ ปรากฏบนการ์ด และแตะเพื่อให้มาอยู่ตรงกลางเพื่อเล่นได้ คำของหมวดที่เลือกจะเรียงอยู่รอบ ๆ เป็นคำที่เกี่ยวข้อง คำที่ลงทะเบียนจะถือเป็นคำที่ใช้บ่อยที่สุด (★8) จึงปรากฏเสมอแม้ลดจำนวนคำลง เนื้อหาที่ลงทะเบียนจะถูกบันทึกในเบราว์เซอร์นี้",
@@ -4264,7 +4273,7 @@
         licensePost: "에서 확인할 수 있습니다.",
         warranty: "이 게임은 무보증으로 제공됩니다. 동작이나 기록 저장을 보증하는 것이 아니며, 이용으로 생긴 문제·손해에 대해 제작자는 책임을 지지 않습니다. 이용은 자기 책임으로 부탁드립니다.",
         backSettings: "← 설정으로 돌아가기",
-        featViewNote: "게임·기능별로 사용할지 사용하지 않을지 선택할 수 있습니다. 선택한 게임만 홈 화면에 늘어섭니다('れんそう'도 게임 중 하나로 선택할 수 있습니다). '기본값으로 되돌리기'로는 처음 조합(게임은 れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき 6개 + 기본 기능)으로, '전부 선택'으로는 모든 게임·기능을 켤 수 있습니다. 한꺼번에 전환한 뒤에도 하나씩 조정할 수 있습니다. 개별적으로 바꾼 상태는 그대로 저장됩니다. 꺼도 그 기능의 기록이나 진행 상황은 사라지지 않습니다. 다시 켜면 이어서 사용할 수 있습니다. 변경은 즉시 화면에 반영됩니다.",
+        featViewNote: "게임·기능별로 사용할지 사용하지 않을지 선택할 수 있습니다. 선택한 게임만 홈 화면에 늘어섭니다('れんそう'도 게임 중 하나로 선택할 수 있습니다). '기본값으로 되돌리기'로는 처음 조합(게임은 れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき 6개 + 기본 기능)으로, '전부 선택'으로는 모든 게임·기능을 켤 수 있습니다. 한꺼번에 전환한 뒤에도 하나씩 조정할 수 있습니다. 개별적으로 바꾼 상태는 그대로 저장됩니다. 꺼도 그 기능의 기록이나 진행 상황은 사라지지 않습니다. 다시 켜면 이어서 사용할 수 있습니다. 변경은 즉시 화면에 반영됩니다.",
         presetDefault: "↩️ 기본값으로 되돌리기", presetAll: "✅ 전부 선택",
         customAddTitle: "나만의 단어 추가",
         customViewNote: "가족이나 반려동물의 이름, 좋아하는 장난감, 근처 장소 등 나만의 단어를 등록할 수 있습니다. 등록한 단어는 도감의 'うちの子の ことば'에 들어가고, 카드에도 나오며, 누르면 중심이 되어 플레이할 수 있습니다. 선택한 분야의 단어가 관계있는 단어로 주변에 늘어섭니다. 등록한 단어는 가장 자주 쓰는 단어(★8개)로 취급되어, 단어 수를 줄여도 항상 나옵니다. 등록 내용은 이 브라우저 안에 저장됩니다.",
@@ -4511,7 +4520,7 @@
         licensePost: "で かくにん できます。",
         warranty: "この ゲームは ほしょう なしで 出されます。動きや きろくの ほぞんは たしかでは ありません。使って もんだいが あっても 作者は せきにんを もちません。自分の せきにんで 使って ください。",
         backSettings: "← せっていに もどる",
-        featViewNote: "あそび・きのうごとに 使う・使わないを えらべます。えらんだ あそびだけが ホーム画面に ならびます（「れんそう」も あそびの 1つとして えらべます）。「デフォルトに もどす」で はじめの 組み合わせ（あそびは れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがきの 6つ＋きほんの きのう）に、「全部 えらぶ」で すべての あそび・きのうを オンに できます。まとめて かえた あと、1つずつ かえることも できます。1つずつ かえた ことは、そのまま ほぞん されます。オフにしても、その きのうの きろくや 進み方は 消えません。オンに もどせば つづきから 使えます。かえた ことは すぐに 画面に 出ます。",
+        featViewNote: "あそび・きのうごとに 使う・使わないを えらべます。えらんだ あそびだけが ホーム画面に ならびます（「れんそう」も あそびの 1つとして えらべます）。「デフォルトに もどす」で はじめの 組み合わせ（あそびは れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがきの 6つ＋きほんの きのう）に、「全部 えらぶ」で すべての あそび・きのうを オンに できます。まとめて かえた あと、1つずつ かえることも できます。1つずつ かえた ことは、そのまま ほぞん されます。オフにしても、その きのうの きろくや 進み方は 消えません。オンに もどせば つづきから 使えます。かえた ことは すぐに 画面に 出ます。",
         presetDefault: "↩️ デフォルトに もどす",
         presetAll: "✅ 全部 えらぶ",
         customAddTitle: "うちの子の ことばを ついか",
@@ -4760,7 +4769,7 @@
         licensePost: " pour les détails de la licence.",
         warranty: "Ce jeu est fourni sans garantie. Le créateur ne garantit pas son fonctionnement ni l'enregistrement des données, et n'est pas responsable des problèmes ou dommages résultant de son utilisation. Veuillez l'utiliser sous votre propre responsabilité.",
         backSettings: "← Retour aux réglages",
-        featViewNote: "Choisissez quels jeux et quelles fonctions utiliser. Seuls les jeux choisis apparaissent sur l'écran d'accueil (れんそう fait aussi partie des choix). « Rétablir par défaut » restaure la combinaison de départ (les six jeux れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, plus les fonctions de base), et « Tout sélectionner » active tous les jeux et toutes les fonctions. Après les avoir utilisés, vous pouvez toujours ajuster chacun individuellement. Vos choix individuels sont enregistrés tels quels. Désactiver une fonction ne supprime ni ses données ni sa progression ; réactivez-la pour continuer. Les changements s'appliquent immédiatement.",
+        featViewNote: "Choisissez quels jeux et quelles fonctions utiliser. Seuls les jeux choisis apparaissent sur l'écran d'accueil (れんそう fait aussi partie des choix). « Rétablir par défaut » restaure la combinaison de départ (les six jeux れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき, plus les fonctions de base), et « Tout sélectionner » active tous les jeux et toutes les fonctions. Après les avoir utilisés, vous pouvez toujours ajuster chacun individuellement. Vos choix individuels sont enregistrés tels quels. Désactiver une fonction ne supprime ni ses données ni sa progression ; réactivez-la pour continuer. Les changements s'appliquent immédiatement.",
         presetDefault: "↩️ Rétablir par défaut", presetAll: "✅ Tout sélectionner",
         customAddTitle: "Ajouter vos propres mots",
         customViewNote: "Vous pouvez enregistrer vos propres mots — noms des membres de la famille et des animaux, jouets préférés, lieux proches, etc. Les mots enregistrés vont dans le 「うちの子の ことば」 du dictionnaire en images, apparaissent sur les cartes, et peuvent être touchés pour jouer avec eux au centre. Les mots de la catégorie choisie apparaissent autour comme mots liés. Les mots enregistrés sont traités comme les mots les plus fréquents (8 étoiles), donc ils apparaissent toujours même quand la taille du vocabulaire est réduite. Les enregistrements sont conservés dans ce navigateur.",
@@ -4979,7 +4988,7 @@
         licensePost: " für die Einzelheiten der Lizenz.",
         warranty: "Dieses Spiel wird ohne Gewährleistung bereitgestellt. Der Ersteller garantiert weder seinen Betrieb noch das Speichern von Daten und ist nicht verantwortlich für Probleme oder Schäden, die aus seiner Nutzung entstehen. Bitte nutzen Sie es in eigener Verantwortung.",
         backSettings: "← Zurück zu den Einstellungen",
-        featViewNote: "Wählen Sie, welche Spiele und Funktionen verwendet werden. Nur die gewählten Spiele erscheinen auf dem Startbildschirm (れんそう ist auch eine der Auswahlmöglichkeiten). „Auf Standard zurücksetzen“ stellt die Anfangskombination wieder her (die sechs Spiele れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき plus die Grundfunktionen), und „Alle auswählen“ schaltet jedes Spiel und jede Funktion ein. Danach können Sie jedes Element weiterhin einzeln anpassen. Ihre einzelnen Auswahlentscheidungen werden so gespeichert, wie sie sind. Das Ausschalten einer Funktion löscht weder ihre Daten noch ihren Fortschritt; schalten Sie sie wieder ein, um fortzufahren. Änderungen wirken sich sofort aus.",
+        featViewNote: "Wählen Sie, welche Spiele und Funktionen verwendet werden. Nur die gewählten Spiele erscheinen auf dem Startbildschirm (れんそう ist auch eine der Auswahlmöglichkeiten). „Auf Standard zurücksetzen“ stellt die Anfangskombination wieder her (die sechs Spiele れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき plus die Grundfunktionen), und „Alle auswählen“ schaltet jedes Spiel und jede Funktion ein. Danach können Sie jedes Element weiterhin einzeln anpassen. Ihre einzelnen Auswahlentscheidungen werden so gespeichert, wie sie sind. Das Ausschalten einer Funktion löscht weder ihre Daten noch ihren Fortschritt; schalten Sie sie wieder ein, um fortzufahren. Änderungen wirken sich sofort aus.",
         presetDefault: "↩️ Auf Standard zurücksetzen", presetAll: "✅ Alle auswählen",
         customAddTitle: "Eigene Wörter hinzufügen",
         customViewNote: "Sie können eigene Wörter registrieren — Namen von Familienmitgliedern und Haustieren, Lieblingsspielzeuge, Orte in der Nähe und so weiter. Registrierte Wörter kommen in das 「うちの子の ことば」 des Bildwörterbuchs, erscheinen auf Karten und können angetippt werden, um mit ihnen in der Mitte zu spielen. Wörter aus der gewählten Kategorie erscheinen als verwandte Wörter um sie herum. Registrierte Wörter werden wie die häufigsten Wörter behandelt (8 Sterne), sodass sie immer erscheinen, auch wenn die Wortschatzgröße verringert wird. Registrierungen werden in diesem Browser gespeichert.",
@@ -5198,7 +5207,7 @@
         licensePost: " per i dettagli della licenza.",
         warranty: "Questo gioco è fornito senza garanzia. Il creatore non garantisce il suo funzionamento né il salvataggio dei dati, e non è responsabile di problemi o danni derivanti dal suo utilizzo. Usalo sotto la tua responsabilità.",
         backSettings: "← Torna alle impostazioni",
-        featViewNote: "Scegli quali giochi e funzioni usare. Solo i giochi scelti appaiono nella schermata iniziale (anche れんそう è tra le scelte). «Ripristina predefiniti» riporta la combinazione iniziale (i sei giochi れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, più le funzioni di base), e «Seleziona tutto» attiva ogni gioco e funzione. Dopo averli usati, puoi comunque regolare ciascuno singolarmente. Le tue scelte individuali vengono salvate così come sono. Disattivare una funzione non elimina i suoi dati né i suoi progressi; riattivala per continuare. Le modifiche si applicano subito.",
+        featViewNote: "Scegli quali giochi e funzioni usare. Solo i giochi scelti appaiono nella schermata iniziale (anche れんそう è tra le scelte). «Ripristina predefiniti» riporta la combinazione iniziale (i sei giochi れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき, più le funzioni di base), e «Seleziona tutto» attiva ogni gioco e funzione. Dopo averli usati, puoi comunque regolare ciascuno singolarmente. Le tue scelte individuali vengono salvate così come sono. Disattivare una funzione non elimina i suoi dati né i suoi progressi; riattivala per continuare. Le modifiche si applicano subito.",
         presetDefault: "↩️ Ripristina predefiniti", presetAll: "✅ Seleziona tutto",
         customAddTitle: "Aggiungi le tue parole",
         customViewNote: "Puoi registrare parole tue — nomi dei familiari e degli animali, giocattoli preferiti, luoghi vicini e così via. Le parole registrate vanno in 「うちの子の ことば」 del dizionario illustrato, appaiono sulle carte e possono essere toccate per giocarci al centro. Le parole della categoria scelta appaiono intorno come parole collegate. Le parole registrate sono trattate come le parole più frequenti (8 stelle), quindi appaiono sempre anche quando la dimensione del vocabolario è ridotta. Le registrazioni vengono salvate in questo browser.",
@@ -5417,7 +5426,7 @@
         licensePost: " untuk rincian lisensinya.",
         warranty: "Permainan ini disediakan tanpa jaminan. Pembuat tidak menjamin pengoperasiannya maupun penyimpanan catatan, dan tidak bertanggung jawab atas masalah atau kerusakan yang timbul dari penggunaannya. Silakan gunakan dengan tanggung jawab Anda sendiri.",
         backSettings: "← Kembali ke Pengaturan",
-        featViewNote: "Pilih permainan dan fitur mana yang akan digunakan. Hanya permainan yang dipilih yang muncul di layar utama (れんそう juga salah satu pilihannya). “Kembalikan ke default” memulihkan kombinasi awal (enam permainan れんそう・しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき, ditambah fitur dasar), dan “Pilih semua” menghidupkan setiap permainan dan fitur. Setelah menggunakannya, Anda tetap dapat menyesuaikan masing-masing secara terpisah. Pilihan Anda disimpan apa adanya. Mematikan fitur tidak menghapus catatan atau kemajuannya; hidupkan kembali untuk melanjutkan. Perubahan langsung diterapkan.",
+        featViewNote: "Pilih permainan dan fitur mana yang akan digunakan. Hanya permainan yang dipilih yang muncul di layar utama (れんそう juga salah satu pilihannya). “Kembalikan ke default” memulihkan kombinasi awal (enam permainan れんそう・しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき, ditambah fitur dasar), dan “Pilih semua” menghidupkan setiap permainan dan fitur. Setelah menggunakannya, Anda tetap dapat menyesuaikan masing-masing secara terpisah. Pilihan Anda disimpan apa adanya. Mematikan fitur tidak menghapus catatan atau kemajuannya; hidupkan kembali untuk melanjutkan. Perubahan langsung diterapkan.",
         presetDefault: "↩️ Kembalikan ke default", presetAll: "✅ Pilih semua",
         customAddTitle: "Tambahkan kata Anda sendiri",
         customViewNote: "Anda dapat mendaftarkan kata Anda sendiri — nama anggota keluarga dan hewan peliharaan, mainan favorit, tempat di sekitar, dan sebagainya. Kata yang didaftarkan masuk ke 「うちの子の ことば」 pada kamus bergambar, muncul di kartu, dan dapat diketuk untuk dimainkan di tengah. Kata dari kategori yang dipilih muncul di sekitarnya sebagai kata terkait. Kata yang didaftarkan diperlakukan sebagai kata yang paling umum (8 bintang), jadi selalu muncul bahkan saat ukuran kosakata dikurangi. Pendaftaran disimpan di browser ini.",
@@ -6984,7 +6993,7 @@
       var FEATURE_FULL = { rensou: 1, mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1, nazori: 1, oto: 1, tanken: 1, moji: 1, narabe: 1 };
       /* デフォルト（初期状態・「デフォルトに戻す」の戻し先）: FEATURE_SIMPLE が
          そのままそれにあたる。ホームに並ぶ遊びで初期オンなのは、れんそう・
-         しりとり・もじあそび・五十音ならべ・おととことば・なぞりがき の6つだけ。
+         しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき の6つだけ。
          それ以外の遊び（クイズ・ことばたんけん・かずあそび等）は初期オフ。
          おだい（mission）と今日の言葉（today）はデフォルトでオフ: この2つは
          盤面専用ではなく、ホーム表示＋全ての遊びの図鑑登録で達成が進む機能だが、
@@ -10959,7 +10968,7 @@
         { k: "oto", label: "おととことば", note: "本物の録音の音を聞いて言葉と合わせる神経衰弱（えあわせ）と、音を聞いて合うカードを選ぶ聞き取りで遊べます。そろった言葉は、ずかんに集まります。", noteKey: "d_featNoteOto" },
         { k: "tanken", label: "ことばたんけん", note: "場面に合う言葉を集める探検の遊びです。集めた言葉は、ずかんに集まります。", noteKey: "d_featNoteTanken" },
         { k: "moji", label: "もじあそび（あなうめ・ことば みっけ）", note: "抜けた文字を当てる・言葉を探す、の2種類で遊べる文字の遊びです。", noteKey: "d_featNoteMoji" },
-        { k: "narabe", label: "五十音ならべ", note: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。", noteKey: "d_featNoteNarabe" }
+        { k: "narabe", label: "ごじゅうおん ならべ", note: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。", noteKey: "d_featNoteNarabe" }
       ];
       function applyFeatures() {
         FEATURE_DEFS.forEach(function (d) {
@@ -13624,7 +13633,7 @@
       /* ===== もじあそび（あなうめ・ことば みっけ）と 五十音ならべ =====
          あなうめ・ことば みっけは1つの入口「🔡 もじあそび」にまとめ、中でタブで
          切り替える。五十音ならべは v3.1 で もじあそびから独立させ、専用の入口
-         「🔤 五十音ならべ」から直接開く別の遊びにした（機能トグルも独立）。
+         「🔤 ごじゅうおん ならべ」から直接開く別の遊びにした（機能トグルも独立）。
          共通方針（他の遊びと同じ）: 得点なし・失敗なし。違う文字を選んでも
          失敗扱いにせず、言葉を読み上げて一緒に確認し、正しい置き方・文字を
          見つけたらほめる。あなうめ・みっけで扱った言葉は、他の遊びと
@@ -13843,7 +13852,7 @@
          カタカナが使えない設定（ひらがなだけ）では切り替え自体を隠し、選択もひらがなに戻す */
       function narabeSyncControls() {
         var titleEl = document.getElementById("narabeTitle");
-        if (titleEl) titleEl.textContent = narabeKataAllowed() ? "🔤 五十音ならべ" : "🔤 ごじゅうおん ならべ";
+        if (titleEl) titleEl.textContent = narabeKataAllowed() ? "🔤 ごじゅうおん ならべ" : "🔤 ごじゅうおん ならべ";
         var allowed = narabeKataAllowed();
         if (!allowed) narabeKataOn = false;
         var srow = document.getElementById("mojiNarabeScriptRow");
@@ -13864,15 +13873,23 @@
       var MOJI_OK_EX = MOJI_OK + "ゃゅょっ";
       /* ===== 完成後の単語カード: そろった行の文字から言葉を探す =====
          探し方: その文字で始まる言葉を優先し、無ければ途中に含む言葉。
-         ただし例外として、その文字で始まる言葉が全体で3つ以下しかない
-         文字（「ん」のように始まる言葉がほぼ無い文字）は、始まる言葉と
+         ただし例外として、始まる言葉が少ない文字は、始まる言葉と
          含む言葉を同じ候補プールに入れて探す（毎回同じ言葉しか出ない
          のを避け、「みかん」「らいおん」のような含む言葉も出るように）。
-         始まる言葉が0の場合は、従来どおり含む言葉だけが候補になる。
+         「少ない」の判定は2通り: 始まる言葉が全体で10以下、または
+         今の語彙数の範囲内では3つ以下。「ん」は全体では6語ある
+         （「んまい」の他は「ンジャメナ」等の外国の固有名詞で、範囲内には
+         1語も入らない）ため、以前の「全体で3つ以下」の判定では対象に
+         ならず、範囲外の「んまい」だけが毎回選ばれ続けていた。
          どちらの場合も、まず今の語彙数の範囲内から、レーティング
          （8段階レベル）の高い順に探し（8→7→6…）、同じレベルの候補が
          複数あればランダムに1つ選ぶ。範囲内に無ければ範囲外（ただし
-         「出さない言葉」は除く）から同じ順で探す。拗音（きゃ等）は
+         「出さない言葉」は除く）から同じ順で探す。
+         さらに、1つのプールの中で最高レベルの帯に1語しかない場合は、
+         その1語が毎回出続けないように、候補が2つ以上になるまで
+         下のレベルの帯も候補に足す。それでも候補が1つしかない
+         プール（例: 「を」は範囲内の候補自体が「えをかく」1語だけ）は
+         飛ばして、より広いプールを試す。拗音（きゃ等）は
          2文字を1単位として、促音「っ」も1単位として探す。
          読みはカタカナをひらがなに直して比べ、読みが かなだけで
          書けている言葉だけを候補にする（数字などが混ざる言葉は除く） */
@@ -13896,39 +13913,59 @@
         }
         return out;
       }
-      function narabePickWordId(unit) {
-        /* その文字で始まる言葉の総数（「出さない言葉」を除き、候補に
-           なりうる かなだけの言葉で数える）。3つ以下なら「始まる」を
-           優先せず、含む言葉も同じプールに入れて選ぶ */
-        var startAll = narabeWordCandidates(unit, true, false);
-        var pools;
-        if (startAll.length <= 3) {
-          pools = [
-            narabeWordCandidates(unit, false, true),
-            narabeWordCandidates(unit, false, false)
-          ];
-        } else {
-          pools = [
-            narabeWordCandidates(unit, true, true),
-            startAll,
-            narabeWordCandidates(unit, false, true),
-            narabeWordCandidates(unit, false, false)
-          ];
+      /* プールの中から実際に選ぶ候補の集まりを決める: レベルの高い帯から
+         順に集め、候補が2つ以上になったら止める。最高レベルの帯に
+         1語しかないプールで、その1語が毎回出続ける（独占）のを防ぐ。
+         最高レベルの帯に2つ以上あれば、今までどおりその帯だけが候補 */
+      function narabeBandCandidates(pool) {
+        var levels = [];
+        pool.forEach(function (id) { var lv = LEVEL[id] || 0; if (levels.indexOf(lv) < 0) levels.push(lv); });
+        levels.sort(function (a, b) { return b - a; });
+        var out = [];
+        for (var li = 0; li < levels.length; li++) {
+          var bandLv = levels[li];
+          pool.forEach(function (id) { if ((LEVEL[id] || 0) === bandLv) out.push(id); });
+          if (out.length >= 2) break;
         }
+        return out;
+      }
+      function narabePickWordId(unit) {
+        /* その文字で始まる言葉の数（「出さない言葉」を除き、候補に
+           なりうる かなだけの言葉で数える）。全体で10以下、または
+           今の語彙数の範囲内で3つ以下なら「始まる」を優先せず、
+           含む言葉も同じプールに入れて選ぶ */
+        var startScope = narabeWordCandidates(unit, true, true);
+        var startAll = narabeWordCandidates(unit, true, false);
+        var fewStarts = startAll.length <= 10 || startScope.length <= 3;
+        var pools = fewStarts
+          ? [
+              narabeWordCandidates(unit, false, true),
+              narabeWordCandidates(unit, false, false)
+            ]
+          : [
+              startScope,
+              startAll,
+              narabeWordCandidates(unit, false, true),
+              narabeWordCandidates(unit, false, false)
+            ];
+        var fallback = null;
         for (var k = 0; k < pools.length; k++) {
           var pool = pools[k];
           if (!pool.length) continue;
-          var best = -1;
-          pool.forEach(function (id) { var lv = LEVEL[id] || 0; if (lv > best) best = lv; });
-          var ties = pool.filter(function (id) { return (LEVEL[id] || 0) === best; });
+          var ties = narabeBandCandidates(pool);
+          if (!fallback) fallback = ties;
+          /* 候補が1つしかないプールは飛ばして、より広いプールを試す
+             （「を」は範囲内の候補自体が「えをかく」1語しかない） */
+          if (ties.length < 2) continue;
           /* 同じ文字を続けて選んだときは、いま出ている言葉と違う言葉を優先する */
-          if (narabeWordUnit === unit && ties.length > 1) {
+          if (narabeWordUnit === unit) {
             var alt = ties.filter(function (id) { return id !== narabeWordId; });
             if (alt.length) ties = alt;
           }
           return ties[Math.floor(Math.random() * ties.length)];
         }
-        return null;
+        /* どのプールでも候補が1つしかない文字は、その1語を出す */
+        return fallback && fallback.length ? fallback[0] : null;
       }
       /* 単語カードの言葉の中で、選んだ文字にあたる部分をハイライトする。
          表示文字列（disp）と読み（ひらがな）の共通の前後を手がかりに、
@@ -14638,7 +14675,7 @@
         narabeStart(narabeRow, false);
         narabeEl.hidden = false;
         narabeEl.scrollTop = 0;
-        speak((narabeKataAllowed() ? "五十音ならべ" : "ごじゅうおん ならべ") + "！もじを じゅんばんに ならべよう！");
+        speak((narabeKataAllowed() ? "ごじゅうおん ならべ" : "ごじゅうおん ならべ") + "！もじを じゅんばんに ならべよう！");
       });
       document.getElementById("narabeClose").addEventListener("click", function () { narabeEl.hidden = true; });
       document.getElementById("mojiTabAna").addEventListener("click", function () { mojiSetTab("anaume", true); });
@@ -14927,7 +14964,7 @@
           { k: "clap", btn: "clapBtn", icon: "👏", title: "てびょうし" },
           { k: "clock", btn: "clockBtn", icon: "🕐", title: "とけい あそび" },
           { k: "shiritori", btn: "shiritoriBtn", icon: "🔤", title: "しりとり" },
-          { k: "narabe", btn: "narabeBtn", icon: "🔤", title: "五十音ならべ" },
+          { k: "narabe", btn: "narabeBtn", icon: "🔤", title: "ごじゅうおん ならべ" },
           { k: "moji", btn: "mojiBtn", icon: "🔡", title: "もじあそび" },
           { k: "pick", btn: "pickBtn", icon: "💗", title: "どっちが すき？" }
         ];
@@ -15371,7 +15408,7 @@
           { k: "oto", btn: "otoBtn", icon: "🔊", title: "おととことば", desc: "おとと ことばを あわせよう" },
           { k: "tanken", btn: "tankenBtn", icon: "🧭", title: "ことばたんけん", desc: "ばめんに あう ことばを あつめよう" },
           { k: "moji", btn: "mojiBtn", icon: "🔡", title: "もじあそび", desc: "あなうめ・ことば みっけ" },
-          { k: "narabe", btn: "narabeBtn", icon: "🔤", title: "五十音ならべ", desc: "もじを じゅんばんに ならべよう" },
+          { k: "narabe", btn: "narabeBtn", icon: "🔤", title: "ごじゅうおん ならべ", desc: "もじを じゅんばんに ならべよう" },
           { k: "shiritori", btn: "shiritoriBtn", icon: "🔤", title: "しりとり", desc: "ことばを つなげて あそぼう" },
           { k: "kazu", btn: "kazuBtn", icon: "🔢", title: "かずあそび", desc: "かぞえたり じゅんばんを あてよう" },
           { k: "antonym", btn: "hantaiBtn", icon: "↔️", title: "はんたい ことば", desc: "はんたいの ことばは どっち？" },
