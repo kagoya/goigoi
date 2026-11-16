@@ -1095,8 +1095,10 @@
       .moji-target .timg { width: 88px; height: 88px; object-fit: cover; border-radius: 20px; }
       .moji-target .twd { font-size: 28px; font-weight: 800; }
       /* 五十音ならべ: カードも わくも 横ではなく 上から下へ縦一列に並べる。
-         左に「もじの カード」の列、右に「ならべる わく」の列を置き、
-         カードを選んで右の列へ置く流れにする（五十音表の列と同じ縦方向）。
+         左に「ならべる わく」の列、右に その行の候補カードの列を置き、
+         枠と候補が離れないよう すぐ横同士にする（候補を画面の下には出さない）。
+         枠を選んで候補と入れ替えることも、候補を選んで枠へ置くこともできる
+         （五十音表の列と同じ縦方向）。
          あなうめ・みっけのカード並びには影響しないよう、このステージ内だけに効かせる */
       .moji-narabe-board {
         display: flex; justify-content: center; align-items: flex-start; gap: 14px;
@@ -1134,6 +1136,10 @@
       #mojiRows .narabe-cell-circle.on {
         background: color-mix(in srgb, #ffd94d 45%, var(--card)); border-color: #f5b301; color: #8a6d1f;
       }
+      /* 五十音ならべの行えらび表: あ行〜な行の塊と は行〜わ行の塊を切り替えるタブ。
+         見た目は ひらがな／カタカナ切り替え（.nazori-tabs）とそろえる */
+      #mojiRows .narabe-block-tabs { margin-bottom: 8px; }
+      #mojiRows .narabe-block-tabs button { padding: 8px 14px; font-size: 15px; }
       /* ===== ことばたんけん ===== */
       .tanken-tray {
         display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center;
@@ -2336,13 +2342,13 @@
         <p id="mojiNarabeQ" class="play-q">もじを じゅんばんに ならべよう</p>
         <div class="moji-narabe-board">
           <div class="moji-narabe-col">
-            <div class="moji-narabe-col-label" aria-hidden="true">もじの カード</div>
-            <div id="mojiTiles" class="moji-tiles" aria-label="もじの カード"></div>
-          </div>
-          <div class="moji-narabe-arrow" aria-hidden="true">→</div>
-          <div class="moji-narabe-col">
             <div class="moji-narabe-col-label" aria-hidden="true">ならべる わく</div>
             <div id="mojiSlots" class="moji-slots" aria-label="ならべる わく"></div>
+          </div>
+          <div class="moji-narabe-arrow" aria-hidden="true">←</div>
+          <div class="moji-narabe-col">
+            <div class="moji-narabe-col-label" aria-hidden="true">もじの カード</div>
+            <div id="mojiTiles" class="moji-tiles" aria-label="もじの カード"></div>
           </div>
         </div>
         <p id="mojiNarabeMsg" class="play-msg" aria-live="polite"></p>
@@ -13686,6 +13692,7 @@
       var narabeDone = false;
       var narabeDakuOn = false;   /* 濁点・半濁点の行に切り替えているか */
       var narabeKataOn = false;   /* カタカナ表示に切り替えているか（mix のときだけ有効） */
+      var narabeBlock = 0;   /* 行えらび表の塊: 0=あ・か・さ・た・な行、1=は・ま・や・ら・わ（・ん）行 */
       function narabeRows() { return narabeDakuOn ? MOJI_ROWS_DAKU : MOJI_ROWS_BASIC; }
       function narabeCurrentRow() { return narabeRows()[narabeRow]; }
       function narabeHiraToKata(c) { return c ? String.fromCharCode(c.charCodeAt(0) + 0x60) : c; }
@@ -13755,7 +13762,10 @@
       }
       /* 行えらびは五十音表から選ぶ（なぞりがきの文字えらびと同じ並び:
          列が縦並びで右端が あ行、各列は上から あいうえお。表の1列が そのまま
-         練習する「行」に対応する）。ただし文字を全部は見せず、各行で文字が
+         練習する「行」に対応する）。表全体は一度に出さず、塊A（あ・か・さ・
+         た・な行）と塊B（は・ま・や・ら・わ行と ん）の2つの塊に分けて、
+         上のタブで切り替えて表示する（濁点の表は行数が少ないので塊には
+         分けず従来どおり全部出す）。ただし文字を全部は見せず、各行で文字が
          見えるのは最初の字だけ。それ以外のマスは「○」で示し（文字は出さない）、
          押せるのは最初の字だけ: 最初の字をタップすると その行を選ぶ。
          選ばれた行は、最初の字と その行の ○ が色付きで分かるようにする。
@@ -13789,15 +13799,45 @@
         { ri: 3, cells: ["ば", "び", "ぶ", "べ", "ぼ"] },
         { ri: 4, cells: ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"] }
       ];
+      /* 行番号から塊を求める（基本の表だけ: 0〜4=塊A、5〜9=塊B。ん の列は ri 9 なので塊B） */
+      function narabeBlockOf(ri) { return ri <= 4 ? 0 : 1; }
       function narabeRenderRows() {
         var box = document.getElementById("mojiRows");
         box.innerHTML = "";
         var rows = narabeRows();
+        if (!narabeDakuOn) {
+          /* 塊の切り替えタブ: タブの文字は各行の最初の字から作るので、
+             カタカナ表示中はタブもカタカナになる。塊を切り替えても、
+             並べかけの行や状態はそのまま（行はタブの中の最初の字で選ぶ） */
+          var tabs = document.createElement("div");
+          tabs.className = "nazori-tabs narabe-block-tabs";
+          tabs.setAttribute("role", "group");
+          tabs.setAttribute("aria-label", "五十音表の かたまりを きりかえる");
+          [0, 1].forEach(function (blk) {
+            var labelRis = blk === 0 ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9];
+            var label = labelRis.map(function (ri) { return narabeDispChar(rows[ri].chars[0]); }).join("・");
+            if (blk === 1) label += "・" + narabeDispChar("ん");
+            var tb = document.createElement("button");
+            tb.type = "button";
+            tb.textContent = label;
+            if (blk === narabeBlock) tb.className = "on";
+            tb.setAttribute("aria-pressed", blk === narabeBlock ? "true" : "false");
+            tb.setAttribute("aria-label", label + "の かたまりを みる");
+            tb.addEventListener("click", function () {
+              if (narabeBlock === blk) return;
+              narabeBlock = blk;
+              narabeRenderRows();
+            });
+            tabs.appendChild(tb);
+          });
+          box.appendChild(tabs);
+        }
         var table = document.createElement("div");
         table.className = "nazori-table";
         table.setAttribute("role", "group");
         table.setAttribute("aria-label", narabeDakuOn ? "だくてんの 五十音表" : "五十音表");
         (narabeDakuOn ? NARABE_TABLE_DAKU : NARABE_TABLE_BASIC).forEach(function (colDef) {
+          if (!narabeDakuOn && narabeBlockOf(colDef.ri) !== narabeBlock) return;   /* いまの塊の列だけ出す */
           var ri = colDef.ri;
           var row = rows[ri];
           var colEl = document.createElement("div");
@@ -13866,6 +13906,8 @@
       function narabeStart(ri, sayIt) {
         var rows = narabeRows();
         narabeRow = Math.max(0, Math.min(ri, rows.length - 1));
+        /* 選んだ行が含まれる塊を表示する（「つぎの ぎょう」で塊をまたいでも表が追いつく） */
+        if (!narabeDakuOn) narabeBlock = narabeBlockOf(narabeRow);
         var row = rows[narabeRow];
         narabeSlots = row.chars.map(function () { return null; });
         narabeTray = shuffleArr(row.chars.slice());
