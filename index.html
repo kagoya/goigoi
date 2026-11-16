@@ -1255,6 +1255,66 @@
       #albumEl { z-index: 70; background: var(--bg); }
       #albumEl .play-head { max-width: 680px; }
       #albumEl .play-head h1 { font-size: 20px; }
+      /* ===== 子供用きろく（図鑑から開く・絵中心のお祝いページ） =====
+         大人用の「きろく」（日付と文字の時系列リスト）とは別画面。
+         図鑑の一部として常時使えるので、機能のオン・オフの対象にはしない。
+         得点・競争の要素は入れず、集めた数・はじめて言えた言葉・スタンプ・
+         おはなばたけの育ち具合を、絵と短い言葉で見せるだけにする。 */
+      #ckirokuBtn {
+        min-height: 44px; padding: 8px 18px; border-radius: 999px;
+        border: 2px solid #f5b301; background: color-mix(in srgb, #ffd94d 45%, var(--card));
+        font-weight: 800; box-shadow: var(--shadow); color: var(--ink);
+      }
+      #ckirokuBtn:active { transform: scale(0.96); }
+      .ck-hero {
+        display: block; width: 100%; max-width: 620px; margin: 6px auto 0;
+        background: var(--card); border: 3px solid #f5b301; border-radius: 26px;
+        padding: 18px 16px 16px; box-shadow: var(--shadow); text-align: center; color: var(--ink);
+      }
+      .ck-hero:active { transform: scale(0.98); }
+      .ck-hero .ck-hero-star { font-size: 40px; line-height: 1.1; display: block; }
+      .ck-hero .ck-hero-label { font-size: 16px; font-weight: 800; margin-top: 2px; }
+      .ck-hero .ck-big-num { font-size: 72px; font-weight: 800; line-height: 1.05; color: var(--accent-text); }
+      .ck-hero .ck-big-num .ck-unit { font-size: 30px; }
+      .ck-hero .ck-hero-sub { font-size: 17px; font-weight: 800; margin-top: 2px; }
+      .ck-sec { max-width: 620px; margin: 22px auto 0; }
+      .ck-sec-title { font-size: 20px; font-weight: 800; margin: 0 2px 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .ck-sec-hint { font-size: 13.5px; font-weight: 700; color: var(--sub); margin: 0 2px 10px; line-height: 1.6; }
+      .ck-guide {
+        max-width: 620px; margin: 0 auto; text-align: center; color: var(--sub); font-weight: 700;
+        font-size: 15px; line-height: 1.7; background: var(--card); border: 2px dashed var(--line);
+        border-radius: 18px; padding: 14px 16px; white-space: pre-line;
+      }
+      .ck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+      .ck-card {
+        min-height: 118px; border-radius: 18px; padding: 8px 4px 6px;
+        border: 2.5px solid rgba(255, 255, 255, 0.95);
+        background: color-mix(in srgb, var(--c, #ffe1b8) 55%, var(--card));
+        box-shadow: var(--shadow); overflow: hidden; line-height: 1.05;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        font-family: "M PLUS Rounded 1c", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+      }
+      .ck-card:active { filter: brightness(0.95); }
+      .ck-card .em { display: block; font-size: 46px; }
+      .ck-card .em-img { width: 58px; height: 58px; object-fit: cover; border-radius: 14px; display: block; }
+      .ck-card .wd {
+        display: block; font-weight: 800; color: var(--ink); text-align: center;
+        background: color-mix(in srgb, var(--card) 82%, transparent);
+        border-radius: 999px; padding: 0 0.35em; white-space: nowrap; max-width: 96%; margin-top: 3px;
+      }
+      .ck-stamps { display: flex; flex-direction: column; gap: 8px; }
+      .ck-stamp {
+        display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+        min-height: 56px; padding: 8px 14px; border-radius: 18px;
+        border: 2px solid var(--line); background: var(--card); box-shadow: var(--shadow);
+        font-weight: 800; font-size: 17px; color: var(--ink);
+      }
+      .ck-stamp:active { transform: scale(0.98); }
+      .ck-stamp .ck-stamp-em { font-size: 30px; flex: none; line-height: 1.1; }
+      .ck-stamp .ck-stamp-cat { font-size: 22px; flex: none; line-height: 1.1; }
+      .ck-stamp.scope { border-color: #f5b301; background: color-mix(in srgb, #ffd94d 32%, var(--card)); font-size: 18px; }
+      .ck-garden-specials { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 10px; font-size: 30px; line-height: 1.25; }
+      .ck-more { text-align: center; color: var(--sub); font-weight: 700; font-size: 14px; margin: 10px auto 0; line-height: 1.6; }
       /* ===== アクセシビリティ（音と動き・タップ領域・フォーカス・色だけに頼らない表示） =====
          ・「動きを減らす」（body.rm）: 大人用設定のトグル。オンのときは紙吹雪を含む
            すべてのアニメーション／トランジションを止める。お祝いの箱（絵＋文字）は
@@ -2058,6 +2118,16 @@
       <div id="albumBody" class="album-list"></div>
     </div>
 
+    <!-- 子供用きろく: 図鑑の「⭐ きろく」から開く。記録は大人用きろくと同じ
+         プロフィールごとのデータを使い、絵中心で見せる -->
+    <div id="ckirokuEl" class="play-el" hidden role="dialog" aria-label="きろく">
+      <div class="play-head">
+        <h1>⭐ きろく</h1>
+        <button id="ckirokuClose" class="play-close" type="button">🏠 ホームへ もどる</button>
+      </div>
+      <div id="ckirokuBody"></div>
+    </div>
+
     <div id="endSignal" hidden role="status">
       <div class="es-title">⏰ おしまいの じかんだよ</div>
       <p class="es-note">きょうも たくさん あそんだね。おかたづけして、また あした あそぼうね。</p>
@@ -2080,6 +2150,7 @@
       <div id="zukanHead">
         <h1>📖 ずかん</h1>
         <span id="zukanCount"></span>
+        <button id="ckirokuBtn" type="button">⭐ きろく</button>
         <button id="zukanPrintBtn" type="button">🖨️ ことばカード（いんさつ用）</button>
         <button id="zukanClose" type="button">🏠 ホームへ もどる</button>
       </div>
@@ -10083,6 +10154,204 @@
       });
       document.getElementById("albumClose").addEventListener("click", function () { albumEl.hidden = true; });
 
+      /* ===== 3b. 子供用きろく（図鑑の「⭐ きろく」から開く・絵中心のお祝いページ） =====
+         大人用きろく（上の renderAlbum）と同じ記録（今のプロフィールの
+         collected / saidFirst / コンプリート状態 / 集めた数）を使うが、
+         日付や長い文章は出さず、絵と短い言葉だけで見せる。得点・競争の
+         要素は入れない。図鑑の一部として常時使える（機能トグルの対象外）。
+         記録がまだ無い項目は、無理に埋めず短い案内だけを出す。 */
+      var ckirokuEl = document.getElementById("ckirokuEl");
+      function ckSection(title, hint) {
+        var sec = document.createElement("section");
+        sec.className = "ck-sec";
+        var h = document.createElement("h2");
+        h.className = "ck-sec-title";
+        h.textContent = title;
+        sec.appendChild(h);
+        if (hint) {
+          var p = document.createElement("p");
+          p.className = "ck-sec-hint";
+          p.textContent = hint;
+          sec.appendChild(p);
+        }
+        return sec;
+      }
+      function ckGuide(text) {
+        var g = document.createElement("p");
+        g.className = "ck-guide";
+        g.textContent = text;
+        return g;
+      }
+      function renderChildKiroku() {
+        var body = document.getElementById("ckirokuBody");
+        if (!body) return;
+        body.innerHTML = "";
+        var n = collectedScopeCount();
+        var pname = (typeof profileNames !== "undefined" && profileNames[activeProfile]) ? String(profileNames[activeProfile]).trim() : "";
+
+        /* 1. 集めた言葉の数を大きく表示 */
+        var hero = document.createElement("button");
+        hero.type = "button";
+        hero.className = "ck-hero";
+        hero.setAttribute("aria-label", "あつめた ことば " + n + "こ");
+        var star = document.createElement("span");
+        star.className = "ck-hero-star"; star.setAttribute("aria-hidden", "true"); star.textContent = "⭐";
+        var label = document.createElement("div");
+        label.className = "ck-hero-label";
+        label.textContent = (pname ? pname + " が " : "") + "あつめた ことば";
+        var big = document.createElement("div");
+        big.className = "ck-big-num";
+        big.appendChild(document.createTextNode(fmt(n)));
+        var unit = document.createElement("span");
+        unit.className = "ck-unit"; unit.textContent = " こ";
+        big.appendChild(unit);
+        var sub = document.createElement("div");
+        sub.className = "ck-hero-sub";
+        sub.textContent = n > 0 ? "すごい！ よく あつめたね！" : "これから たのしみだね！";
+        hero.appendChild(star); hero.appendChild(label); hero.appendChild(big); hero.appendChild(sub);
+        hero.addEventListener("click", function () {
+          speak(n > 0 ? "あつめた ことば、" + n + "こ。すごい！" : "ことばを あつめよう！");
+        });
+        body.appendChild(hero);
+
+        /* 2. 「はじめて言えた」言葉を絵カードで並べる（新しい順） */
+        var saidIds = Object.keys(saidFirst).map(Number).filter(function (id) { return isValidId(id) && saidFirst[id]; });
+        saidIds.sort(function (a, b) {
+          var da = saidFirst[a], db = saidFirst[b];
+          return da < db ? 1 : da > db ? -1 : a - b;
+        });
+        var saidSec = ckSection("🗣️ はじめて いえた ことば", saidIds.length ? "タップすると こえが でるよ" : "");
+        if (!saidIds.length) {
+          saidSec.appendChild(ckGuide("はじめて いえた ことばは、ここに たまるよ。\nこれから たのしみだね！"));
+        } else {
+          var grid = document.createElement("div");
+          grid.className = "ck-grid";
+          var CK_SAID_MAX = 60;
+          saidIds.slice(0, CK_SAID_MAX).forEach(function (id) {
+            var w = WORDS[id];
+            var card = document.createElement("button");
+            card.type = "button";
+            card.className = "ck-card";
+            card.style.setProperty("--c", CAT_COL[w.c] || "#ffe1b8");
+            card.setAttribute("aria-label", disp(w));
+            if (w.img) {
+              var im = document.createElement("img");
+              im.className = "em-img"; im.src = w.img; im.alt = "";
+              card.appendChild(im);
+            } else {
+              var em = document.createElement("span");
+              em.className = "em"; em.textContent = w.e;
+              card.appendChild(em);
+            }
+            var wd = document.createElement("span");
+            wd.className = "wd"; setWordHTML(wd, w);
+            card.appendChild(wd);
+            card.addEventListener("click", function () { speak(w.h); });
+            grid.appendChild(card);
+          });
+          saidSec.appendChild(grid);
+          if (saidIds.length > CK_SAID_MAX) {
+            var moreS = document.createElement("p");
+            moreS.className = "ck-more";
+            moreS.textContent = "ほかにも " + fmt(saidIds.length - CK_SAID_MAX) + "こ あるよ";
+            saidSec.appendChild(moreS);
+          }
+        }
+        body.appendChild(saidSec);
+
+        /* 3. もらったスタンプ（🏅小分類・👑大分類・🏆全体） */
+        var stampSec = ckSection("🎖️ もらった スタンプ", "");
+        var stamps = document.createElement("div");
+        stamps.className = "ck-stamps";
+        var stampCount = 0;
+        function addStamp(emoji, catEmoji, name, phrase, isScope) {
+          stampCount++;
+          var row = document.createElement("button");
+          row.type = "button";
+          row.className = "ck-stamp" + (isScope ? " scope" : "");
+          row.setAttribute("aria-label", name + "、" + phrase);
+          var se = document.createElement("span");
+          se.className = "ck-stamp-em"; se.setAttribute("aria-hidden", "true"); se.textContent = emoji;
+          row.appendChild(se);
+          if (catEmoji) {
+            var ce = document.createElement("span");
+            ce.className = "ck-stamp-cat"; ce.setAttribute("aria-hidden", "true"); ce.textContent = catEmoji;
+            row.appendChild(ce);
+          }
+          var nm = document.createElement("span");
+          nm.textContent = name;
+          row.appendChild(nm);
+          row.addEventListener("click", function () { speak(phrase); });
+          stamps.appendChild(row);
+        }
+        if (isScopeComplete()) {
+          addStamp("🏆", "", "ぜんぶの ことば", "ぜんぶの ことば、ぜんぶ あつめたよ！すごい！", true);
+        }
+        BIG_CATS.forEach(function (b, bi) {
+          if (isBigComplete(bi)) addStamp("👑", b.e, b.name, b.name + "、ぜんぶ あつめたよ！", false);
+        });
+        CATS.forEach(function (cn, ci) {
+          if (scopedMembers(ci).length > 0 && isSmallComplete(ci)) {
+            addStamp("🏅", CAT_E[ci] || "", cn, cn + "、ぜんぶ あつめたよ！", false);
+          }
+        });
+        if (!stampCount) {
+          stampSec.appendChild(ckGuide("スタンプは まだ ないよ。\nなかまの ことばを ぜんぶ あつめると、ここに たまるよ。"));
+        } else {
+          stampSec.appendChild(stamps);
+        }
+        body.appendChild(stampSec);
+
+        /* 4. おはなばたけの育ち具合（今の状態を絵で表示。おはなばたけ本体と
+           同じ花・節目の飾りを使い、集めた数に連動させる） */
+        var gardenSec = ckSection("🌷 おはなばたけ", n > 0 ? "あつめた ことばの かずだけ、おはなが さいているよ" : "");
+        if (!n) {
+          gardenSec.appendChild(ckGuide("ことばを あつめると、おはなが さくよ。\nこれから たのしみだね！"));
+        } else {
+          var field = document.createElement("div");
+          field.className = "garden-field";
+          var showF = Math.min(n, 120);
+          for (var fi = 0; fi < showF; fi++) {
+            var f = document.createElement("span");
+            f.className = "garden-flower";
+            f.textContent = GARDEN_FLOWERS[fi % GARDEN_FLOWERS.length];
+            field.appendChild(f);
+          }
+          gardenSec.appendChild(field);
+          if (n > 120) {
+            var moreF = document.createElement("p");
+            moreF.className = "ck-more";
+            moreF.textContent = "ほかにも たくさん さいているよ（ぜんぶで " + fmt(n) + "こ）";
+            gardenSec.appendChild(moreF);
+          }
+          var gotSpecials = [];
+          if (typeof GARDEN_MILES !== "undefined" && typeof GARDEN_SPECIAL !== "undefined") {
+            GARDEN_MILES.forEach(function (m, idx) { if (n >= m) gotSpecials.push(GARDEN_SPECIAL[idx % GARDEN_SPECIAL.length]); });
+          }
+          if (gotSpecials.length) {
+            var sp = document.createElement("div");
+            sp.className = "ck-garden-specials";
+            sp.setAttribute("aria-label", "とくべつな おかざり");
+            gotSpecials.forEach(function (e) {
+              var s = document.createElement("span");
+              s.textContent = e;
+              sp.appendChild(s);
+            });
+            gardenSec.appendChild(sp);
+          }
+        }
+        body.appendChild(gardenSec);
+      }
+      document.getElementById("ckirokuBtn").addEventListener("click", function () {
+        renderChildKiroku();
+        ckirokuEl.hidden = false;
+        ckirokuEl.scrollTop = 0;
+      });
+      document.getElementById("ckirokuClose").addEventListener("click", function () {
+        ckirokuEl.hidden = true;
+        zukanEl.hidden = true;   /* 「🏠 ホームへ もどる」なので、図鑑も閉じてホームへ */
+      });
+
       /* あそびパネルは廃止した。盤面の操作と盤面に付随する遊びのボタンは
          盤面ページ内の #boardTools に直接置いてあり、単独の遊びの入口ボタンは
          #playLaunchers（非表示）に残してホームのカードから押す。 */
@@ -10198,7 +10467,7 @@
            戻る）が先に走り、コース画面がホームの上に開くので、そのまま続けて遊べる。 */
         ["kazuClose", "hantaiClose", "clapClose", "clockClose", "courseClose", "shiritoriClose",
          "nazoriClose", "otoClose", "tankenClose", "mojiClose", "mapClose",
-         "gardenClose", "bedClose", "storyClose", "pickClose", "quizHomeBtn", "zukanClose"].forEach(function (cid) {
+         "gardenClose", "bedClose", "storyClose", "pickClose", "quizHomeBtn", "zukanClose", "ckirokuClose"].forEach(function (cid) {
           var el = document.getElementById(cid);
           if (el) el.addEventListener("click", window.showHomeScreen);
         });
