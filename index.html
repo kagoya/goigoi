@@ -17,10 +17,11 @@
         --card: #ffffff;
         --line: #e8d9c3;
         --accent: #f0762b;
+        --accent-text: #b9511a;
         --accent-ink: #ffffff;
         --board-bg: #fffdf7;
         --ring-line: #ecd9bd;
-        --sub: #8a7a63;
+        --sub: #77644a;
         --shadow: 0 3px 10px rgba(120, 84, 40, 0.18);
       }
       @media (prefers-color-scheme: dark) {
@@ -30,6 +31,7 @@
           --card: #2e333d;
           --line: #4a505c;
           --accent: #ff8c4a;
+          --accent-text: #ff8c4a;
           --board-bg: #262b33;
           --ring-line: #454c58;
           --sub: #b3a98f;
@@ -81,12 +83,68 @@
         background: transparent;
         border-radius: 999px;
         padding: 6px 13px;
-        min-height: 38px;
+        min-height: 44px;
         font-weight: 700;
         font-size: 14px;
       }
       .seg button.on { background: var(--accent); color: var(--accent-ink); }
       #zukanBtn { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+      /* ===== あそびボタン＋あそびパネル（機能ボタンはここに集約する） ===== */
+      #asobiBtn { background: #ffd94d; border-color: #f5b301; color: #5c4300; }
+      #asobiBtn[aria-expanded="true"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+      #asobiBackdrop {
+        position: fixed; inset: 0; z-index: 57;
+        background: rgba(40, 28, 10, 0.45);
+      }
+      #asobiBackdrop[hidden] { display: none; }
+      #asobiPanel {
+        position: fixed; left: 0; right: 0; bottom: 0; top: auto;
+        max-height: 82dvh; background: var(--bg); z-index: 58;
+        overflow-y: auto; padding: 0 14px 26px;
+        border-top: 2px solid var(--line);
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 -10px 34px rgba(60, 40, 10, 0.3);
+        animation: sheetUp 0.28s ease;
+      }
+      #asobiPanel[hidden] { display: none; }
+      @media (prefers-reduced-motion: reduce) { #asobiPanel { animation: none; } }
+      #asobiHead {
+        position: sticky; top: 0; background: var(--bg); padding: 14px 0 10px;
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap; z-index: 2;
+        max-width: 680px; margin: 0 auto;
+      }
+      #asobiHead .asobi-title { font-size: 22px; font-weight: 800; }
+      #asobiClose {
+        margin-left: auto; min-height: 44px; padding: 8px 18px; border-radius: 999px;
+        border: none; background: var(--accent); color: var(--accent-ink);
+        font-weight: 800; box-shadow: var(--shadow);
+      }
+      .asobi-sec { max-width: 680px; margin: 0 auto; }
+      .asobi-sec + .asobi-sec { margin-top: 16px; }
+      .asobi-sec-title { font-size: 13px; font-weight: 800; color: var(--sub); letter-spacing: 0.06em; margin: 2px 2px 8px; }
+      .asobi-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      @media (min-width: 560px) { .asobi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+      .asobi-grid > button {
+        min-height: 58px; min-width: 0; padding: 10px 8px; border-radius: 18px;
+        border: 2px solid var(--line); background: var(--card);
+        box-shadow: var(--shadow); font-weight: 800; font-size: 15px; line-height: 1.3;
+      }
+      .asobi-grid > button:active { transform: scale(0.97); }
+      .asobi-utils { display: flex; flex-wrap: wrap; gap: 8px; }
+      .asobi-utils > button {
+        flex: 1 1 100px; min-height: 50px; min-width: 0; padding: 8px 10px; border-radius: 999px;
+        border: 2px solid var(--line); background: var(--card);
+        box-shadow: var(--shadow); font-weight: 700; font-size: 14.5px;
+      }
+      .asobi-utils > button:disabled { opacity: 0.4; cursor: default; }
+      .asobi-utils > button:active { transform: scale(0.96); }
+      #asobiEmpty {
+        max-width: 680px; margin: 4px auto 0; text-align: center;
+        color: var(--sub); font-size: 15px; font-weight: 700; line-height: 1.7;
+        background: var(--card); border: 2px solid var(--line); border-radius: 16px;
+        padding: 14px 16px; box-shadow: var(--shadow);
+      }
+      #asobiEmpty[hidden] { display: none; }
       /* ===== ボード ===== */
       #boardWrap { margin-top: 12px; }
       #board {
@@ -166,16 +224,21 @@
       /* ===== いまの ことば ===== */
       #nowBar {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
-        gap: 12px;
+        justify-content: center;
+        gap: 8px 10px;
         margin-top: 14px;
         background: var(--card);
         border: 2px solid var(--line);
-        border-radius: 999px;
-        padding: 6px 18px 6px 6px;
+        border-radius: 28px;
+        padding: 8px 12px;
         box-shadow: var(--shadow);
+        width: min(94vw, 640px);
         max-width: 94vw;
+        box-sizing: border-box;
       }
+      #nowBar > div { flex: 1 1 auto; min-width: 0; }
       #speakBtn {
         width: 54px;
         height: 54px;
@@ -336,13 +399,13 @@
       }
       .miss-ico { font-size: 30px; flex: none; }
       .miss-main { flex: 1; min-width: 0; }
-      .miss-label { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: 0.08em; }
+      .miss-label { font-size: 12px; font-weight: 800; color: var(--accent-text); letter-spacing: 0.08em; }
       #missionText { font-size: 16.5px; font-weight: 800; line-height: 1.35; }
-      .miss-prog { font-size: 14px; color: var(--accent); font-weight: 800; margin-top: 2px; letter-spacing: 0.15em; }
+      .miss-prog { font-size: 14px; color: var(--accent-text); font-weight: 800; margin-top: 2px; letter-spacing: 0.15em; }
       .miss-prog .miss-note { color: var(--sub); letter-spacing: 0; font-size: 12.5px; }
       .miss-btns { display: flex; flex-direction: column; gap: 6px; flex: none; }
       .miss-btns button {
-        min-height: 40px; padding: 6px 12px; border-radius: 999px;
+        min-height: 44px; padding: 6px 12px; border-radius: 999px;
         border: 2px solid var(--line); background: var(--card);
         font-weight: 800; font-size: 13.5px; box-shadow: var(--shadow);
       }
@@ -356,7 +419,7 @@
       }
       .today-head { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; flex-wrap: wrap; }
       #todayDate { color: var(--sub); font-size: 13px; }
-      #todayStamp { margin-left: auto; font-size: 13.5px; color: var(--accent); font-weight: 800; }
+      #todayStamp { margin-left: auto; font-size: 13.5px; color: var(--accent-text); font-weight: 800; }
       #todayChips { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
       .today-chip {
         display: flex; align-items: center; gap: 7px;
@@ -390,7 +453,7 @@
       #quizBar[hidden] { display: none; }
       .quiz-txt { font-weight: 800; font-size: 15px; flex: 1; min-width: 180px; }
       #quizBar button {
-        min-height: 42px; padding: 6px 14px; border-radius: 999px; border: none;
+        min-height: 44px; padding: 6px 14px; border-radius: 999px; border: none;
         background: var(--card); color: var(--ink); font-weight: 800; font-size: 14px;
       }
       #quizBar button:active { transform: scale(0.95); }
@@ -418,7 +481,7 @@
         pointer-events: none;
       }
       .b-center .first-badge { width: 5.4cqw; height: 5.4cqw; font-size: 3.1cqw; }
-      .zchip .zrate { font-size: 11px; color: #d99a00; letter-spacing: 1px; flex: none; font-weight: 800; }
+      .zchip .zrate { font-size: 11px; color: #8a5f00; letter-spacing: 1px; flex: none; font-weight: 800; }
       .bubble.shake { animation: shakeX 0.5s ease; }
       @keyframes shakeX {
         0%, 100% { transform: translateX(0); }
@@ -429,11 +492,11 @@
       #sentenceBtn {
         min-height: 54px; padding: 8px 14px; border-radius: 999px; border: none;
         background: var(--card); color: var(--ink); font-weight: 800; font-size: 15px;
-        border: 2px solid var(--line); flex: none;
+        border: 2px solid var(--line); flex: none; white-space: nowrap; max-width: 100%;
       }
       #sentenceBtn:active { transform: scale(0.94); }
       #sentenceLine {
-        margin: 10px 4px 0; max-width: 94vw; text-align: center;
+        margin: 10px 4px 0; width: min(94vw, 620px); max-width: 94vw; box-sizing: border-box; overflow-wrap: anywhere; text-align: center;
         font-size: 16px; font-weight: 700; line-height: 1.5;
         background: var(--card); border: 2px solid var(--line); border-radius: 16px;
         padding: 8px 16px; box-shadow: var(--shadow);
@@ -492,7 +555,7 @@
       @media (prefers-color-scheme: dark) { .stamp-banner { background: #274b66; color: #d8ecfa; border-color: #5b93bd; } }
       .map-big-title { max-width: 760px; margin: 16px auto 8px; font-size: 18px; font-weight: 800; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
       .map-big-title .cnt { font-size: 13px; color: var(--sub); font-weight: 700; }
-      #celSub { font-size: 15px; font-weight: 800; color: var(--accent); margin-top: 2px; min-height: 1.2em; }
+      #celSub { font-size: 15px; font-weight: 800; color: var(--accent-text); margin-top: 2px; min-height: 1.2em; }
       #celebrate.tier-small .cel-box { border-color: #7fb6d9; padding: 16px 22px; }
       #celebrate.tier-big .cel-box { border-width: 4px; padding: 26px 34px; }
       #celebrate.tier-scope { background: radial-gradient(circle, rgba(255, 217, 77, 0.45), rgba(240, 118, 43, 0.22)); }
@@ -619,7 +682,7 @@
       .vocab-opt:active { transform: scale(0.97); }
       .adult-now { font-size: 15px; font-weight: 800; margin: 0 0 10px; }
       .credit-line { font-size: 16px; font-weight: 800; margin: 14px 0 8px; }
-      .adult-card a { color: var(--accent); font-weight: 800; }
+      .adult-card a { color: var(--accent-text); font-weight: 800; }
       .adult-intro { max-width: 760px; margin: 0 auto 12px; color: var(--sub); font-size: 13.5px; font-weight: 700; line-height: 1.6; }
       .reset-btn {
         min-height: 52px; padding: 10px 18px; border-radius: 16px;
@@ -690,13 +753,13 @@
       #mimicBtn {
         min-height: 54px; padding: 8px 14px; border-radius: 999px;
         background: var(--card); color: var(--ink); font-weight: 800; font-size: 15px;
-        border: 2px solid var(--line); flex: none;
+        border: 2px solid var(--line); flex: none; white-space: nowrap; max-width: 100%;
       }
       #mimicBtn:active { transform: scale(0.94); }
       #mimicBtn:disabled { opacity: 0.45; cursor: default; }
       #mimicBtn.listening { background: #ffd94d; border-color: #f5b301; color: #5c4300; }
       #mimicLine {
-        margin: 10px 4px 0; max-width: 94vw; text-align: center;
+        margin: 10px 4px 0; width: min(94vw, 620px); max-width: 94vw; box-sizing: border-box; overflow-wrap: anywhere; text-align: center;
         font-size: 15.5px; font-weight: 700; line-height: 1.5;
         background: var(--card); border: 2px solid var(--line); border-radius: 16px;
         padding: 8px 16px; box-shadow: var(--shadow);
@@ -747,7 +810,7 @@
         border: none; background: var(--accent); color: var(--accent-ink);
         font-weight: 800; font-size: 16px; box-shadow: var(--shadow); width: 100%;
       }
-      .custom-msg { font-size: 13.5px; font-weight: 800; color: var(--accent); margin: 8px 0 0; min-height: 1.2em; }
+      .custom-msg { font-size: 13.5px; font-weight: 800; color: var(--accent-text); margin: 8px 0 0; min-height: 1.2em; }
       .custom-item {
         display: flex; align-items: center; gap: 8px; padding: 8px 4px;
         border-bottom: 1px solid var(--line); font-weight: 800; font-size: 16px;
@@ -755,7 +818,7 @@
       .custom-item .em { font-size: 24px; }
       .custom-item .meta { color: var(--sub); font-size: 12.5px; font-weight: 700; }
       .custom-del {
-        margin-left: auto; min-height: 40px; padding: 6px 14px; border-radius: 999px;
+        margin-left: auto; min-height: 44px; padding: 6px 14px; border-radius: 999px;
         border: 2px solid #c0392b; background: var(--card); color: #c0392b; font-weight: 800; font-size: 13.5px; flex: none;
       }
       .report-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -763,7 +826,7 @@
         flex: 1 1 140px; background: var(--bg); border: 2px solid var(--line); border-radius: 16px;
         padding: 10px 12px; text-align: center;
       }
-      .report-stat .num { font-size: 26px; font-weight: 800; color: var(--accent); }
+      .report-stat .num { font-size: 26px; font-weight: 800; color: var(--accent-text); }
       .report-stat .lbl { font-size: 12.5px; font-weight: 700; color: var(--sub); }
       .report-h { font-size: 15px; font-weight: 800; margin: 14px 0 6px; }
       .report-list { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -780,7 +843,7 @@
       .zchip .zimg { width: 36px; height: 36px; object-fit: cover; border-radius: 10px; flex: none; }
       .today-chip .cimg, .review-chip .cimg { width: 30px; height: 30px; object-fit: cover; border-radius: 8px; flex: none; }
       #descLine {
-        margin: 10px 4px 0; max-width: 94vw; text-align: center;
+        margin: 10px 4px 0; width: min(94vw, 620px); max-width: 94vw; box-sizing: border-box; overflow-wrap: anywhere; text-align: center;
         font-size: 16px; font-weight: 700; line-height: 1.5;
         background: var(--card); border: 2px solid var(--line); border-radius: 16px;
         padding: 8px 16px; box-shadow: var(--shadow);
@@ -789,7 +852,7 @@
       #descBtn {
         min-height: 54px; padding: 8px 14px; border-radius: 999px;
         background: var(--card); color: var(--ink); font-weight: 800; font-size: 15px;
-        border: 2px solid var(--line); flex: none;
+        border: 2px solid var(--line); flex: none; white-space: nowrap; max-width: 100%;
       }
       #descBtn:active { transform: scale(0.94); }
       .prof-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
@@ -797,7 +860,7 @@
         flex: 1 1 140px; min-height: 44px; border-radius: 12px; border: 2px solid var(--line);
         padding: 6px 10px; font: inherit; font-size: 15px; background: var(--card); color: var(--ink);
       }
-      .prof-now { font-size: 13px; font-weight: 800; color: var(--accent); flex: none; }
+      .prof-now { font-size: 13px; font-weight: 800; color: var(--accent-text); flex: none; }
       .prof-switch {
         min-height: 44px; padding: 6px 16px; border-radius: 999px; flex: none;
         border: 2px solid var(--line); background: var(--card); font-weight: 800; font-size: 14px; box-shadow: var(--shadow);
@@ -833,13 +896,28 @@
       #enSpeakBtn {
         min-height: 54px; padding: 8px 14px; border-radius: 999px;
         background: var(--card); color: var(--ink); font-weight: 800; font-size: 15px;
-        border: 2px solid var(--line); flex: none;
+        border: 2px solid var(--line); flex: none; white-space: nowrap; max-width: 100%;
       }
       #enSpeakBtn:active { transform: scale(0.94); }
       body.fx-garden-off #gardenBtn { display: none !important; }
       body.fx-story-off #storyBtn { display: none !important; }
       body.fx-pick-off #pickBtn { display: none !important; }
       body.fx-english-off #enSpeakBtn, body.fx-english-off #nowEn { display: none !important; }
+      /* ===== いまの ことば バー: スマホ縦画面では ボタンを 2段目に 折り返して 横幅に 収める =====
+         1段目: スピーカー＋いまの言葉 / 2段目: ぶん・なあに？・まねっこ（・えいご） を均等に並べる。
+         セレクタを #nowBar 配下に強めて、各ボタンの flex: none より優先させる。 */
+      @media (max-width: 560px) {
+        #nowBar { gap: 8px; padding: 8px 10px; border-radius: 24px; }
+        #speakBtn { order: 1; }
+        #nowBar > div { order: 2; flex: 1 1 calc(100% - 64px); min-width: 0; }
+        #nowWord { font-size: 24px; }
+        #nowBar #sentenceBtn, #nowBar #descBtn, #nowBar #mimicBtn, #nowBar #enSpeakBtn {
+          order: 3; flex: 1 1 28%; min-width: 0; min-height: 48px;
+          padding: 8px 4px; font-size: 13px; white-space: nowrap;
+        }
+        /* 聞き取り中は ラベルが長くなるので、まねっこボタンは 自分の段を 広く使う */
+        #nowBar #mimicBtn.listening { flex-basis: 46%; }
+      }
       /* おはなばたけ */
       #gardenEl { position: fixed; inset: 0; background: var(--bg); z-index: 50; overflow-y: auto; padding: 0 14px 40px; }
       #gardenHead { position: sticky; top: 0; background: var(--bg); padding: 14px 0 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; z-index: 2; }
@@ -935,6 +1013,49 @@
       body.fx-favboard-off #favBoardBtn, body.fx-favboard-off #favBoardNote { display: none !important; }
       body.fx-clock-off #clockBtn { display: none !important; }
       body.fx-album-off #albumBtn { display: none !important; }
+      body.fx-shiritori-off #shiritoriBtn { display: none !important; }
+      /* ===== しりとり ===== */
+      .shiri-chain { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; margin: 2px auto; max-width: 620px; }
+      .shiri-chip {
+        display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 5px 12px;
+        border-radius: 999px; border: 2px solid var(--line); background: var(--card);
+        box-shadow: var(--shadow); font-weight: 800; font-size: 16px;
+      }
+      .shiri-chip .em { font-size: 22px; line-height: 1.1; }
+      .shiri-chip .cimg { width: 28px; height: 28px; object-fit: cover; border-radius: 8px; flex: none; }
+      .shiri-chip.now { border-color: #f5b301; background: color-mix(in srgb, #ffd94d 35%, var(--card)); }
+      .shiri-arrow { color: var(--accent); font-weight: 800; font-size: 18px; }
+      .shiri-count { text-align: center; font-weight: 800; font-size: 15px; color: var(--accent-text); margin-top: 6px; min-height: 1.4em; }
+      .shiri-kana {
+        display: inline-flex; align-items: center; justify-content: center; min-width: 52px; height: 52px;
+        padding: 0 8px; border-radius: 50%; vertical-align: middle;
+        background: color-mix(in srgb, #ffd94d 55%, var(--card)); border: 2.5px solid #f5b301; font-size: 26px;
+      }
+      .shiri-cands { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; max-width: 620px; margin: 14px auto 0; }
+      .shiri-cand {
+        position: relative; min-height: 118px; border-radius: 18px; padding: 8px 4px 6px;
+        border: 2.5px solid rgba(255, 255, 255, 0.95);
+        background: color-mix(in srgb, var(--c, #ffe1b8) 55%, var(--card));
+        box-shadow: var(--shadow); overflow: hidden; line-height: 1.05;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        font-family: "M PLUS Rounded 1c", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+      }
+      .shiri-cand:active { filter: brightness(0.95); }
+      .shiri-cand .em { display: block; font-size: 46px; }
+      .shiri-cand .em-img { width: 58px; height: 58px; object-fit: cover; border-radius: 14px; display: block; }
+      .shiri-cand .wd {
+        display: block; font-weight: 800; color: var(--ink); text-align: center;
+        background: color-mix(in srgb, var(--card) 82%, transparent);
+        border-radius: 999px; padding: 0 0.35em; white-space: nowrap; max-width: 96%; margin-top: 3px;
+      }
+      .shiri-cand .shiri-cat {
+        position: absolute; top: 5px; left: 5px; z-index: 2; pointer-events: none;
+        font-size: 11px; font-weight: 800; color: var(--ink); line-height: 1.3;
+        background: color-mix(in srgb, var(--card) 88%, transparent);
+        border-radius: 999px; padding: 0.18em 0.6em;
+        max-width: 82%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .shiri-cand.good { border-color: #f5b301; background: color-mix(in srgb, #ffd94d 45%, var(--card)); }
       #favBoardBtn.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
       #favBoardNote {
         width: min(96vw, 620px); margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -942,14 +1063,14 @@
         border-radius: 16px; padding: 8px 14px; box-shadow: var(--shadow); font-weight: 800; font-size: 14px;
       }
       #favBoardNote[hidden] { display: none; }
-      #favBoardNote button { min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); font-weight: 800; font-size: 13.5px; }
+      #favBoardNote button { min-height: 44px; padding: 6px 14px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); font-weight: 800; font-size: 13.5px; }
       .play-el { position: fixed; inset: 0; background: var(--bg); z-index: 55; overflow-y: auto; padding: 0 14px 40px; }
       .play-head { position: sticky; top: 0; background: var(--bg); padding: 14px 0 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; z-index: 2; max-width: 760px; margin: 0 auto; }
       .play-head h1 { font-size: 22px; margin: 0; font-weight: 800; }
       .play-close { margin-left: auto; min-height: 44px; padding: 8px 18px; border-radius: 999px; border: none; background: var(--accent); color: var(--accent-ink); font-weight: 800; box-shadow: var(--shadow); }
       .play-stage { max-width: 620px; margin: 12px auto 0; background: var(--card); border: 2px solid var(--line); border-radius: 26px; padding: 20px 16px; box-shadow: var(--shadow); text-align: center; }
       .play-q { font-size: 19px; font-weight: 800; line-height: 1.5; margin: 0 0 6px; }
-      .play-msg { font-size: 16.5px; font-weight: 800; line-height: 1.6; min-height: 1.6em; margin: 10px 0 0; color: var(--accent); }
+      .play-msg { font-size: 16.5px; font-weight: 800; line-height: 1.6; min-height: 1.6em; margin: 10px 0 0; color: var(--accent-text); }
       .play-tabs { display: flex; gap: 8px; max-width: 620px; margin: 0 auto; }
       .play-tabs button { flex: 1; min-height: 48px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); box-shadow: var(--shadow); font-weight: 800; font-size: 15.5px; padding: 6px 8px; }
       .play-tabs button.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
@@ -1009,6 +1130,34 @@
       .album-ev { font-size: 15.5px; font-weight: 700; line-height: 1.55; }
       .album-note { max-width: 760px; margin: 0 auto 12px; color: var(--sub); font-size: 13.5px; font-weight: 700; line-height: 1.7; }
       #albumEl { z-index: 70; }
+      /* ===== アクセシビリティ（音と動き・タップ領域・フォーカス・色だけに頼らない表示） =====
+         ・「動きを減らす」（body.rm）: 大人用設定のトグル。オンのときは紙吹雪を含む
+           すべてのアニメーション／トランジションを止める。お祝いの箱（絵＋文字）は
+           静止したまま表示されるので、動きがなくても達成が分かる。
+         ・キーボード操作では :focus-visible で輪郭をはっきり出す。
+         ・小さいアイコンボタンは見た目を変えず、当たり判定だけ 44px 以上に広げる。
+         ・盤面カードには分野名の小さなラベル（.bcat）を付け、色だけに頼らない。 */
+      body.rm *, body.rm *::before, body.rm *::after { animation: none !important; transition: none !important; }
+      body.rm #celRain { display: none !important; }
+      button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, label:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .zchip .zplay, .zchip .favbtn, .zchip .stickerbtn { position: relative; }
+      .zchip .zplay::after, .zchip .favbtn::after, .zchip .stickerbtn::after {
+        content: ""; position: absolute; inset: -6px; border-radius: 50%;
+      }
+      .bubble .bcat {
+        position: absolute; top: 5px; left: 5px; z-index: 2;
+        font-size: 2.5cqw; font-weight: 800; color: var(--ink);
+        background: color-mix(in srgb, var(--card) 88%, transparent);
+        border-radius: 999px; padding: 0.18em 0.6em; line-height: 1.3;
+        max-width: 82%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        pointer-events: none;
+      }
+      .b-center .bcat { font-size: 3.1cqw; top: 7px; left: 7px; }
+      .b-out .bcat { display: none; }
+      @media (prefers-color-scheme: dark) { .zchip .zrate { color: #d99a00; } }
       @media print {
         body { background: #fff; padding: 0; }
         body > *:not(#printArea) { display: none !important; }
@@ -1020,22 +1169,43 @@
   <body class="simple">
     <div class="bar">
       <button id="uiModeBtn" type="button" aria-pressed="true">✨ フルモード</button>
-      <button id="soundBtn" class="full-only" type="button">🔊 おと オン</button>
-      <button id="backBtn" class="full-only" type="button" disabled>← もどる</button>
-      <button id="randBtn" class="full-only" type="button">🎲 ランダム</button>
-      <button id="quizBtn" type="button">👂 ききとりクイズ</button>
-      <button id="mapBtn" type="button">🗺️ ぼうけんマップ</button>
-      <button id="bedBtn" type="button">🌙 おやすみ ふりかえり</button>
-      <button id="gardenBtn" type="button">🌷 おはなばたけ</button>
-      <button id="storyBtn" type="button">📖 おはなし</button>
-      <button id="pickBtn" type="button">💗 どっちが すき？</button>
-      <button id="kazuBtn" type="button">🔢 かずあそび</button>
-      <button id="hantaiBtn" type="button">↔️ はんたい</button>
-      <button id="clapBtn" type="button">👏 てびょうし</button>
-      <button id="clockBtn" type="button">🕐 とけい</button>
-      <button id="courseBtn" type="button">⭐ おまかせコース</button>
-      <button id="favBoardBtn" type="button" aria-pressed="false">💗 おきにいり盤面</button>
+      <button id="asobiBtn" type="button" aria-expanded="false" aria-controls="asobiPanel">🎈 あそび</button>
       <button id="zukanBtn" type="button">📖 ずかん <span id="zukanBadge">0</span></button>
+    </div>
+
+    <div id="asobiBackdrop" hidden></div>
+    <div id="asobiPanel" hidden role="dialog" aria-label="あそびを えらぶ">
+      <div id="asobiHead">
+        <span class="asobi-title">🎈 あそびを えらぼう</span>
+        <button id="asobiClose" type="button">✕ 閉じる</button>
+      </div>
+      <div class="asobi-sec" id="asobiPlaySec">
+        <div class="asobi-sec-title">あそび・きのう</div>
+        <div class="asobi-grid">
+          <button id="quizBtn" type="button" aria-pressed="false">👂 ききとりクイズ</button>
+          <button id="mapBtn" type="button">🗺️ ぼうけんマップ</button>
+          <button id="bedBtn" type="button">🌙 おやすみ ふりかえり</button>
+          <button id="gardenBtn" type="button">🌷 おはなばたけ</button>
+          <button id="storyBtn" type="button">📖 おはなし</button>
+          <button id="pickBtn" type="button">💗 どっちが すき？</button>
+          <button id="kazuBtn" type="button">🔢 かずあそび</button>
+          <button id="hantaiBtn" type="button">↔️ はんたい</button>
+          <button id="clapBtn" type="button">👏 てびょうし</button>
+          <button id="clockBtn" type="button">🕐 とけい</button>
+          <button id="shiritoriBtn" type="button">🔤 しりとり</button>
+          <button id="courseBtn" type="button">⭐ おまかせコース</button>
+          <button id="favBoardBtn" type="button" aria-pressed="false">💗 おきにいり盤面</button>
+        </div>
+      </div>
+      <p id="asobiEmpty" hidden>いまは あそびが おやすみ中だよ。<br />✨ フルモードに したり、大人用設定で きのうを オンに すると、ここに でてくるよ。</p>
+      <div class="asobi-sec full-only">
+        <div class="asobi-sec-title">盤面の操作</div>
+        <div class="asobi-utils">
+          <button id="soundBtn" class="full-only" type="button" aria-pressed="true">🔊 おと オン</button>
+          <button id="backBtn" class="full-only" type="button" disabled>← もどる</button>
+          <button id="randBtn" class="full-only" type="button">🎲 ランダム</button>
+        </div>
+      </div>
     </div>
 
     <div id="missionBar" aria-live="polite">
@@ -1101,7 +1271,7 @@
       <button id="adultBtn" type="button">⚙️ 大人用設定</button>
     </div>
 
-    <div id="adultPanel" hidden>
+    <div id="adultPanel" hidden role="dialog" aria-label="大人用設定">
       <div id="adultHead">
         <h1>⚙️ 大人用設定</h1>
         <button id="adultClose" type="button">✕ 閉じる</button>
@@ -1137,8 +1307,8 @@
         <h2>文字の表示</h2>
         <p class="adult-note">カードに表示する文字を選べます。「ひらがなだけ」は、すべての言葉をひらがなで表示します。「漢字・カタカナあり」は、漢字やカタカナで書く言葉はそのまま表示します。変更はすぐに画面に反映されます。</p>
         <div class="seg" role="group" aria-label="文字の切り替え">
-          <button id="modeHira" class="on" type="button">ひらがなだけ</button>
-          <button id="modeMix" type="button">漢字・カタカナあり</button>
+          <button id="modeHira" class="on" type="button" aria-pressed="true">ひらがなだけ</button>
+          <button id="modeMix" type="button" aria-pressed="false">漢字・カタカナあり</button>
         </div>
         <p class="adult-note" style="margin-top:12px;">ふりがな： 「漢字・カタカナあり」のときに、漢字の上に読み（ふりがな）を付けます。盤面のカード・図鑑・今日の言葉などに反映されます。「ひらがなだけ」のときは影響しません。</p>
         <div class="seg" role="group" aria-label="ふりがなの切り替え">
@@ -1161,6 +1331,20 @@
         <div id="voiceBox"></div>
       </div>
       <div class="adult-card">
+        <h2>音と動き</h2>
+        <p class="adult-note">効果音は、カードをタップしたときや、お祝いのとき、正解したときに出る短い音です。読み上げの声とは別に、効果音だけを消せます。「動きを減らす」をオンにすると、紙吹雪やカードが飛び出すアニメーションなどの動きが止まります。お祝いの表示そのものは、絵と文字の静止した形でそのまま出ます。はじめて開いたときの「動きを減らす」は、端末の「視差効果を減らす／動きを減らす」設定に合わせてあります。どちらの設定も保存され、バックアップにも含まれます。</p>
+        <p class="report-h">効果音</p>
+        <div class="seg" role="group" aria-label="効果音の切り替え">
+          <button id="sfxOff" type="button" aria-pressed="false">効果音 オフ</button>
+          <button id="sfxOnBtn" class="on" type="button" aria-pressed="true">効果音 オン</button>
+        </div>
+        <p class="report-h">動きを減らす</p>
+        <div class="seg" role="group" aria-label="動きを減らすの切り替え">
+          <button id="motionOff" class="on" type="button" aria-pressed="true">動き ふつう</button>
+          <button id="motionOn" type="button" aria-pressed="false">動きを減らす オン</button>
+        </div>
+      </div>
+      <div class="adult-card">
         <h2>おしまいの合図タイマー</h2>
         <p class="adult-note">ページを開いてから選んだ時間がたつと、「おしまいの時間だよ」という合図を1回だけ出します。合図だけで、遊びが強制的に終わることはありません。そのまま続けることもできます。</p>
         <div class="seg" role="group" aria-label="おしまいの合図タイマー">
@@ -1172,7 +1356,7 @@
       </div>
       <div class="adult-card">
         <h2>機能のオン・オフ</h2>
-        <p class="adult-note">おだい、クイズ、まねっこなど24の機能を、1つずつ使う・使わないで切り替えられます。設定は専用ページで行います。</p>
+        <p class="adult-note">おだい、クイズ、まねっこなど25の機能を、1つずつ使う・使わないで切り替えられます。設定は専用ページで行います。</p>
         <button id="openFeaturePage" class="adult-nav-btn" type="button"><span>機能のオン・オフを設定する</span><span class="chev" aria-hidden="true">›</span></button>
         <p id="featureSummary" class="adult-note adult-nav-summary"></p>
       </div>
@@ -1306,7 +1490,7 @@
       </div>
     </div>
 
-    <div id="bedEl" hidden>
+    <div id="bedEl" hidden role="dialog" aria-label="おやすみ ふりかえり">
       <div id="bedHead">
         <h1>🌙 おやすみ ふりかえり</h1>
         <button id="bedClose" type="button">✕ とじる</button>
@@ -1325,7 +1509,7 @@
 
     <div id="printArea" aria-hidden="true"></div>
 
-    <div id="mapEl" hidden>
+    <div id="mapEl" hidden role="dialog" aria-label="ぼうけんマップ">
       <div id="mapHead">
         <h1>🗺️ ぼうけんマップ</h1>
         <button id="mapClose" type="button">✕ とじる</button>
@@ -1333,7 +1517,7 @@
       <div id="mapBody"></div>
     </div>
 
-    <div id="gardenEl" hidden>
+    <div id="gardenEl" hidden role="dialog" aria-label="ことばの おはなばたけ">
       <div id="gardenHead">
         <h1>🌷 ことばの おはなばたけ</h1>
         <button id="gardenClose" type="button">✕ とじる</button>
@@ -1342,7 +1526,7 @@
       <p class="garden-note">ことばを あつめると、おはなが さくよ。たくさん あつめて、おはなばたけを いっぱいに しよう！</p>
     </div>
 
-    <div id="storyEl" hidden>
+    <div id="storyEl" hidden role="dialog" aria-label="おはなし">
       <div id="storyHead">
         <h1>📖 おはなし</h1>
         <button id="storyClose" type="button">✕ とじる</button>
@@ -1358,7 +1542,7 @@
       <p class="bed-note">あつめた ことばで つくった おはなしだよ。きいろい ことばを タップすると こえが でるよ。</p>
     </div>
 
-    <div id="pickEl" hidden>
+    <div id="pickEl" hidden role="dialog" aria-label="どっちが すき？">
       <div id="pickHead">
         <h1>💗 どっちが すき？</h1>
         <button id="pickClose" type="button">✕ とじる</button>
@@ -1370,7 +1554,7 @@
       </div>
     </div>
 
-    <div id="kazuEl" class="play-el" hidden>
+    <div id="kazuEl" class="play-el" hidden role="dialog" aria-label="かずあそび">
       <div class="play-head">
         <h1>🔢 かずあそび</h1>
         <button id="kazuClose" class="play-close" type="button">✕ とじる</button>
@@ -1392,7 +1576,7 @@
       </div>
     </div>
 
-    <div id="hantaiEl" class="play-el" hidden>
+    <div id="hantaiEl" class="play-el" hidden role="dialog" aria-label="はんたい ことば">
       <div class="play-head">
         <h1>↔️ はんたい ことば</h1>
         <button id="hantaiClose" class="play-close" type="button">✕ とじる</button>
@@ -1417,7 +1601,7 @@
       </div>
     </div>
 
-    <div id="clapEl" class="play-el" hidden>
+    <div id="clapEl" class="play-el" hidden role="dialog" aria-label="てびょうし あそび">
       <div class="play-head">
         <h1>👏 てびょうし あそび</h1>
         <button id="clapClose" class="play-close" type="button">✕ とじる</button>
@@ -1436,7 +1620,7 @@
       </div>
     </div>
 
-    <div id="clockEl" class="play-el" hidden>
+    <div id="clockEl" class="play-el" hidden role="dialog" aria-label="とけい あそび">
       <div class="play-head">
         <h1>🕐 とけい あそび</h1>
         <button id="clockClose" class="play-close" type="button">✕ とじる</button>
@@ -1456,7 +1640,7 @@
       </div>
     </div>
 
-    <div id="courseEl" class="play-el" hidden>
+    <div id="courseEl" class="play-el" hidden role="dialog" aria-label="おまかせコース">
       <div class="play-head">
         <h1>⭐ おまかせコース</h1>
         <button id="courseClose" class="play-close" type="button">✕ やめる</button>
@@ -1474,7 +1658,27 @@
       </div>
     </div>
 
-    <div id="albumEl" class="play-el" hidden>
+    <div id="shiritoriEl" class="play-el" hidden role="dialog" aria-label="しりとり">
+      <div class="play-head">
+        <h1>🔤 しりとり</h1>
+        <button id="shiritoriClose" class="play-close" type="button">✕ とじる</button>
+      </div>
+      <div class="play-stage">
+        <div id="shiriChain" class="shiri-chain" aria-label="つながった ことば"></div>
+        <div id="shiriCount" class="shiri-count" aria-live="polite"></div>
+        <div id="shiriCurrent"></div>
+        <p id="shiriPrompt" class="play-q">すきな ことばを タップして はじめよう！</p>
+        <div id="shiriCands" class="shiri-cands"></div>
+        <p id="shiriMsg" class="play-msg" aria-live="polite"></p>
+        <div class="play-btns">
+          <button id="shiriHearBtn" type="button">🔊 もういちど きく</button>
+          <button id="shiriRestartBtn" type="button">🔀 べつの ことばから はじめる</button>
+        </div>
+      </div>
+      <p class="bed-note">ことばの おわりと おなじ おとで はじまる ことばを つなげよう。「ん」で おわる ことばは おしまい。つぎの ことばが なくなったら、すきな ことばから また はじめられるよ。</p>
+    </div>
+
+    <div id="albumEl" class="play-el" hidden role="dialog" aria-label="成長アルバム">
       <div class="play-head">
         <h1>📅 成長アルバム</h1>
         <button id="albumClose" class="play-close" type="button">✕ とじる</button>
@@ -1501,7 +1705,7 @@
       </div>
     </div>
 
-    <div id="zukan" hidden>
+    <div id="zukan" hidden role="dialog" aria-label="ずかん">
       <div id="zukanHead">
         <h1>📖 ずかん</h1>
         <span id="zukanCount"></span>
@@ -2662,6 +2866,9 @@
       var timerMin = 0;
       var furiganaOn = false;   /* ふりがな表示（漢字・カタカナありのときだけ効く） */
       var voiceURI = "";        /* 選んだ日本語の声の voiceURI（空＝自動で最初の日本語の声） */
+      var sfxOn = true;         /* 効果音（読み上げとは別の短い音）のオン・オフ（初期値オン） */
+      var reduceMotion = false; /* 動きを減らす（初期値は端末の prefers-reduced-motion に連動） */
+      try { if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) reduceMotion = true; } catch (eRM0) { /* 判定できない環境では通常の動きで始める */ }
       var favPicks = {};        /* 「どっちが すき？」で選んだ回数: 番号 → 回数（プロフィールごと） */
       var saidFirst = {};
       var profilesData = [];
@@ -2672,8 +2879,8 @@
          大人用設定で1つずつ切り替えでき、状態は保存・バックアップの対象になる。
          シンプル／フルは「まとめて切り替えるプリセット」として残し、選ぶと
          下の組み合わせに一括設定される。その後の個別変更はそのまま保持される。 */
-      var FEATURE_SIMPLE = { mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, album: 0, antonym: 0, clap: 0, favboard: 0, clock: 0 };
-      var FEATURE_FULL = { mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, album: 1, antonym: 1, clap: 1, favboard: 1, clock: 1 };
+      var FEATURE_SIMPLE = { mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, album: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 0 };
+      var FEATURE_FULL = { mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, album: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1 };
       var features = {};
       for (var fsk in FEATURE_SIMPLE) features[fsk] = FEATURE_SIMPLE[fsk];
       var favBoardMode = false;   /* 第4弾: おきにいり盤面モード（共通設定として保存する） */
@@ -2771,6 +2978,8 @@
         if (st2.furigana) furiganaOn = true;
         if (st2.favBoard) favBoardMode = true;
         if (typeof st2.voiceURI === "string") voiceURI = st2.voiceURI;
+        if (typeof st2.sfx === "number" || typeof st2.sfx === "boolean") sfxOn = !!st2.sfx;
+        if (typeof st2.motion === "number" || typeof st2.motion === "boolean") reduceMotion = !!st2.motion;
         if (Array.isArray(st2.exclCats)) exclCatNames = st2.exclCats.filter(function (n) { return typeof n === "string"; });
         if (Array.isArray(st2.exclWords)) exclWordHs = st2.exclWords.filter(function (n) { return typeof n === "string"; });
         rebuildExclusions();
@@ -2847,6 +3056,8 @@
             favBoard: favBoardMode ? 1 : 0,
             furigana: furiganaOn ? 1 : 0,
             voiceURI: voiceURI,
+            sfx: sfxOn ? 1 : 0,
+            motion: reduceMotion ? 1 : 0,
             exclCats: exclCatNames.slice(),
             exclWords: exclWordHs.slice()
           },
@@ -2959,6 +3170,63 @@
         } catch (e) { /* 音声が使えない環境では何もしない */ }
       }
 
+      /* ===== 効果音（読み上げとは別の短い音。Web Audio でその場で合成するので外部ファイル不要） =====
+         大人用設定の「効果音」トグル（sfxOn）でのみ止まり、読み上げのオン・オフ（sound）とは独立。
+         AudioContext は最初のタップなどの操作のときに作る（ブラウザの自動再生制限のため）。 */
+      var audioCtx = null;
+      function ensureAudio() {
+        if (!sfxOn) return null;
+        try {
+          if (!audioCtx) {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return null;
+            audioCtx = new AC();
+          }
+          if (audioCtx.state === "suspended") audioCtx.resume();
+          return audioCtx;
+        } catch (eAC) { return null; }
+      }
+      function playTone(freq, delaySec, durSec, vol) {
+        var ctx = ensureAudio();
+        if (!ctx) return;
+        try {
+          var t0 = ctx.currentTime + (delaySec || 0);
+          var osc = ctx.createOscillator();
+          var gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq, t0);
+          gain.gain.setValueAtTime(0.0001, t0);
+          gain.gain.exponentialRampToValueAtTime(vol || 0.07, t0 + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t0 + (durSec || 0.12));
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(t0); osc.stop(t0 + (durSec || 0.12) + 0.05);
+        } catch (eTone) { /* 音が出ない環境では何もしない */ }
+      }
+      function playClapNoise() {
+        var ctx = ensureAudio();
+        if (!ctx) return;
+        try {
+          var len = Math.floor(ctx.sampleRate * 0.07);
+          var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+          var d = buf.getChannelData(0);
+          for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+          var src = ctx.createBufferSource(); src.buffer = buf;
+          var flt = ctx.createBiquadFilter(); flt.type = "bandpass"; flt.frequency.value = 1800; flt.Q.value = 0.8;
+          var gain = ctx.createGain(); gain.gain.value = 0.12;
+          src.connect(flt); flt.connect(gain); gain.connect(ctx.destination);
+          src.start();
+        } catch (eClap) { /* 音が出ない環境では何もしない */ }
+      }
+      function sfx(kind) {
+        if (!sfxOn) return;
+        if (kind === "pop") { playTone(620, 0, 0.09, 0.06); playTone(930, 0.045, 0.1, 0.05); }
+        else if (kind === "good") { playTone(659, 0, 0.11, 0.06); playTone(880, 0.08, 0.14, 0.06); }
+        else if (kind === "fanfare") { playTone(523, 0, 0.12, 0.06); playTone(659, 0.09, 0.12, 0.06); playTone(784, 0.18, 0.12, 0.06); playTone(1047, 0.27, 0.22, 0.07); }
+        else if (kind === "clap") { playClapNoise(); }
+      }
+      /* 「動きを減らす」の画面への反映（body.rm でアニメーション／トランジションを止める） */
+      function applyMotion() { document.body.classList.toggle("rm", !!reduceMotion); }
+
       /* ===== ボード描画 ===== */
       function wScale(len, base) {
         var f = len <= 3 ? 1 : len === 4 ? 0.88 : len === 5 ? 0.78 : len === 6 ? 0.68 : len === 7 ? 0.6 : len === 8 ? 0.54 : len === 9 ? 0.48 : len === 10 ? 0.44 : len <= 12 ? 0.38 : len <= 15 ? 0.32 : len <= 20 ? 0.26 : 0.2;
@@ -2980,7 +3248,7 @@
            開いて中心になったとき（＝初めて中身が表示されたとき）に付く。 */
         var isFirst = !opts.mystery && !seenOnBoard[id];
         if (isFirst) seenOnBoard[id] = 1;
-        b.setAttribute("aria-label", opts.mystery ? "ひみつの ことば" : (isFirst ? txt + "（はじめての ことば）" : txt));
+        b.setAttribute("aria-label", opts.mystery ? "ひみつの ことば" : (txt + "（" + CATS[w.c] + "の ことば）" + (isFirst ? "・はじめての ことば" : "")));
         var em;
         if (!opts.mystery && w.img) {
           em = document.createElement("img"); em.className = "em-img"; em.src = w.img; em.alt = "";
@@ -2995,6 +3263,14 @@
         wd.style.fontSize = wScale(wd.textContent.length, base) + "cqw";
         if (!opts.mystery && txt.length >= 11) { wd.style.whiteSpace = "normal"; wd.style.overflowWrap = "anywhere"; wd.style.lineHeight = "1.1"; wd.style.borderRadius = "10px"; }
         b.appendChild(em); b.appendChild(wd);
+        if (!opts.mystery) {
+          /* 分野は色だけでなく名前の文字でも分かるように、小さなラベルを付ける */
+          var catEl = document.createElement("span");
+          catEl.className = "bcat";
+          catEl.setAttribute("aria-hidden", "true");
+          catEl.textContent = CATS[w.c];
+          b.appendChild(catEl);
+        }
         if (!opts.mystery && typeof features !== "undefined" && features.english && typeof enOf === "function") {
           var enTxtB = enOf(id);
           if (enTxtB) { var enElB = document.createElement("span"); enElB.className = "en"; enElB.textContent = enTxtB; b.appendChild(enElB); }
@@ -3108,6 +3384,7 @@
         }
         render();
         speak(WORDS[id].h);
+        sfx("pop");
         if (typeof checkToday === "function") checkToday(id);
         if (typeof checkMission === "function") checkMission(id);
         checkCompletions();
@@ -3120,6 +3397,8 @@
         mode = m;
         modeHira.classList.toggle("on", m === "hira");
         modeMix.classList.toggle("on", m === "mix");
+        modeHira.setAttribute("aria-pressed", m === "hira" ? "true" : "false");
+        modeMix.setAttribute("aria-pressed", m === "mix" ? "true" : "false");
         render();
         if (!zukanEl.hidden) renderZukan();
       }
@@ -3155,6 +3434,7 @@
           var n = Number(b.getAttribute("data-n"));
           var on = n === 0 ? vocabLimit >= TOTAL : vocabLimit === n;
           b.classList.toggle("on", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
         });
         adultScopeNow.textContent = "現在：" + fmt(scopeCount()) + "語が対象です（収録している言葉は全部で " + fmt(TOTAL) + "語）";
         /* 年齢プリセット・タイマーの選択状態も現在の設定に合わせて表示する */
@@ -3164,13 +3444,17 @@
                    (a === "4-6" && vocabLimit === 5000 && mode === "hira") ||
                    (a === "6-plus" && vocabLimit === 25000 && mode === "mix");
           ab.classList.toggle("on", on);
+          ab.setAttribute("aria-pressed", on ? "true" : "false");
         });
         document.querySelectorAll(".timer-opt").forEach(function (tb) {
-          tb.classList.toggle("on", Number(tb.getAttribute("data-t")) === timerMin);
+          var tOn = Number(tb.getAttribute("data-t")) === timerMin;
+          tb.classList.toggle("on", tOn);
+          tb.setAttribute("aria-pressed", tOn ? "true" : "false");
         });
         if (typeof renderRateUI === "function") renderRateUI();
         if (typeof renderVoiceUI === "function") renderVoiceUI();
         if (typeof renderFuriganaUI === "function") renderFuriganaUI();
+        if (typeof renderA11yUI === "function") renderA11yUI();
       }
       function setVocab(n) {
         vocabLimit = n === 0 ? TOTAL : n;
@@ -3190,6 +3474,7 @@
         visitSeed++;
         refreshKnownComplete();   /* 語数設定の変更では達成状態を静かに覚え直す（お祝いは出さない） */
         if (typeof buildAntoIds === "function") buildAntoIds();   /* はんたい言葉のペアも語数範囲に合わせ直す */
+        if (typeof refreshShiritori === "function") refreshShiritori();   /* しりとりを開いたままなら語数範囲に合わせ直す */
         if (typeof newMission === "function") newMission();
         render();
         renderAdult();
@@ -3253,9 +3538,13 @@
       renderAdult();
 
       var soundBtn = document.getElementById("soundBtn");
+      function syncSoundBtn() {
+        soundBtn.textContent = sound ? "🔊 おと オン" : "🔇 おと オフ";
+        soundBtn.setAttribute("aria-pressed", sound ? "true" : "false");
+      }
       soundBtn.addEventListener("click", function () {
         sound = !sound;
-        soundBtn.textContent = sound ? "🔊 おと オン" : "🔇 おと オフ";
+        syncSoundBtn();
         if (!sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
         if (sound) speak(WORDS[centerId].h);
         saveState();
@@ -3276,7 +3565,7 @@
         if (id != null && id !== centerId) setCenter(id, true);
       });
       document.getElementById("speakBtn").addEventListener("click", function () {
-        if (!sound) { sound = true; soundBtn.textContent = "🔊 おと オン"; }
+        if (!sound) { sound = true; syncSoundBtn(); }
         speak(WORDS[centerId].h);
       });
 
@@ -3305,7 +3594,9 @@
         celebrateEl.className = tier ? "tier-" + tier : "";
         celRain.innerHTML = "";
         var rain = tier === "scope" ? ["🏆", "🎉", "⭐", "🌸", "🎊", "✨", "👑"] : ["🎉", "⭐", "🌸", "🎊", "💮", "✨"];
-        for (var i = 0; i < rainCount; i++) {
+        /* 動きを減らすときは紙吹雪を出さない。お祝いの箱（絵＋文字）は静止したまま出るので、達成は伝わる */
+        var rainN = reduceMotion ? 0 : rainCount;
+        for (var i = 0; i < rainN; i++) {
           var s = document.createElement("span");
           s.textContent = rain[i % rain.length];
           s.style.left = (4 + (i * 61) % 92) + "%";
@@ -3313,6 +3604,7 @@
           celRain.appendChild(s);
         }
         celebrateEl.hidden = false;
+        if (rainCount > 0) sfx("fanfare"); else sfx("good");
         if (celTimer) clearTimeout(celTimer);
         celTimer = setTimeout(function () { celebrateEl.hidden = true; }, dur);
       }
@@ -3399,7 +3691,7 @@
       }
       function updateSentence() { sentenceLine.textContent = "💬 " + makeSentence(centerId); }
       document.getElementById("sentenceBtn").addEventListener("click", function () {
-        if (!sound) { sound = true; soundBtn.textContent = "🔊 おと オン"; }
+        if (!sound) { sound = true; syncSoundBtn(); }
         speak(makeSentence(centerId));
       });
 
@@ -3656,6 +3948,7 @@
         quizMode = on;
         quizBar.hidden = !on;
         quizBtn.classList.toggle("on", on);
+        quizBtn.setAttribute("aria-pressed", on ? "true" : "false");
         quizBtn.textContent = on ? "👂 クイズ中…" : "👂 ききとりクイズ";
         if (!on) quizTarget = null;
         render();
@@ -4982,7 +5275,7 @@
         var text = makeDesc(centerId);
         descLine.hidden = false;
         descLine.textContent = "❓ " + text;
-        if (!sound) { sound = true; soundBtn.textContent = "🔊 おと オン"; }
+        if (!sound) { sound = true; syncSoundBtn(); }
         speak(text);
       });
 
@@ -5002,7 +5295,7 @@
         var pairs = [[0.78, "rateSlow"], [0.95, "rateNormal"], [1.12, "rateFast"]];
         pairs.forEach(function (p) {
           var el = document.getElementById(p[1]);
-          if (el) el.classList.toggle("on", Math.abs(speechRate - p[0]) < 0.01);
+          if (el) { var onR = Math.abs(speechRate - p[0]) < 0.01; el.classList.toggle("on", onR); el.setAttribute("aria-pressed", onR ? "true" : "false"); }
         });
       }
       function setRate(r) {
@@ -5070,15 +5363,15 @@
       document.getElementById("enSpeakBtn").addEventListener("click", function () {
         var en = enOf(centerId);
         if (!en) return;
-        if (!sound) { sound = true; soundBtn.textContent = "🔊 おと オン"; }
+        if (!sound) { sound = true; syncSoundBtn(); }
         speakEn(en);
       });
 
       /* ===== 第3弾: ふりがな設定 ===== */
       function renderFuriganaUI() {
         var onEl = document.getElementById("furiganaOn"), offEl = document.getElementById("furiganaOff");
-        if (onEl) onEl.classList.toggle("on", furiganaOn);
-        if (offEl) offEl.classList.toggle("on", !furiganaOn);
+        if (onEl) { onEl.classList.toggle("on", furiganaOn); onEl.setAttribute("aria-pressed", furiganaOn ? "true" : "false"); }
+        if (offEl) { offEl.classList.toggle("on", !furiganaOn); offEl.setAttribute("aria-pressed", !furiganaOn ? "true" : "false"); }
       }
       function setFurigana(on) {
         furiganaOn = !!on;
@@ -5090,6 +5383,39 @@
       document.getElementById("furiganaOn").addEventListener("click", function () { setFurigana(true); });
       document.getElementById("furiganaOff").addEventListener("click", function () { setFurigana(false); });
       renderFuriganaUI();
+
+      /* ===== 音と動き（アクセシビリティ設定）: 効果音／動きを減らす =====
+         どちらも共通設定として保存され、バックアップにも含まれる（buildSaveData の settings）。 */
+      function renderA11yUI() {
+        var sOn = document.getElementById("sfxOnBtn"), sOff = document.getElementById("sfxOff");
+        if (sOn) { sOn.classList.toggle("on", sfxOn); sOn.setAttribute("aria-pressed", sfxOn ? "true" : "false"); }
+        if (sOff) { sOff.classList.toggle("on", !sfxOn); sOff.setAttribute("aria-pressed", !sfxOn ? "true" : "false"); }
+        var mOn = document.getElementById("motionOn"), mOff = document.getElementById("motionOff");
+        if (mOn) { mOn.classList.toggle("on", reduceMotion); mOn.setAttribute("aria-pressed", reduceMotion ? "true" : "false"); }
+        if (mOff) { mOff.classList.toggle("on", !reduceMotion); mOff.setAttribute("aria-pressed", !reduceMotion ? "true" : "false"); }
+      }
+      function setSfx(on) {
+        sfxOn = !!on;
+        renderA11yUI();
+        saveState();
+        if (sfxOn) sfx("good");   /* オンにしたことが音でも分かるように短く鳴らす */
+      }
+      function setMotion(on) {
+        reduceMotion = !!on;
+        applyMotion();
+        renderA11yUI();
+        saveState();
+      }
+      var sfxOnBtnEl = document.getElementById("sfxOnBtn");
+      if (sfxOnBtnEl) sfxOnBtnEl.addEventListener("click", function () { setSfx(true); });
+      var sfxOffEl = document.getElementById("sfxOff");
+      if (sfxOffEl) sfxOffEl.addEventListener("click", function () { setSfx(false); });
+      var motionOnEl = document.getElementById("motionOn");
+      if (motionOnEl) motionOnEl.addEventListener("click", function () { setMotion(true); });
+      var motionOffEl = document.getElementById("motionOff");
+      if (motionOffEl) motionOffEl.addEventListener("click", function () { setMotion(false); });
+      applyMotion();
+      renderA11yUI();
 
       /* ===== 第3弾: 読み上げの声の選択 ===== */
       function jaVoices() {
@@ -5165,6 +5491,7 @@
         Object.keys(todayFound).forEach(function (k) { if (todayIds.indexOf(Number(k)) < 0) delete todayFound[k]; });
         if (typeof newMission === "function") newMission();
         if (typeof buildAntoIds === "function") buildAntoIds();   /* はんたい言葉のペアも除外設定に合わせ直す */
+        if (typeof refreshShiritori === "function") refreshShiritori();   /* しりとりを開いたままなら除外設定に合わせ直す */
         refreshKnownComplete();
         render();
         renderExcludeUI();
@@ -5625,7 +5952,8 @@
         { k: "antonym", label: "はんたい言葉あそび" },
         { k: "clap", label: "てびょうし あそび" },
         { k: "favboard", label: "おきにいり盤面" },
-        { k: "clock", label: "とけい あそび" }
+        { k: "clock", label: "とけい あそび" },
+        { k: "shiritori", label: "しりとり" }
       ];
       function applyFeatures() {
         FEATURE_DEFS.forEach(function (d) {
@@ -5643,6 +5971,7 @@
         if (!features.clock && typeof clockEl !== "undefined" && clockEl) clockEl.hidden = true;
         if (!features.course && typeof courseEl !== "undefined" && courseEl) courseEl.hidden = true;
         if (!features.album && typeof albumEl !== "undefined" && albumEl) albumEl.hidden = true;
+        if (!features.shiritori && typeof shiritoriEl !== "undefined" && shiritoriEl) shiritoriEl.hidden = true;
         if (!features.favboard && typeof favBoardMode !== "undefined" && favBoardMode && typeof setFavBoard === "function") setFavBoard(false);
         if (!features.review && typeof renderReview === "function") renderReview();
         if (features.review && typeof renderReview === "function") renderReview();
@@ -5917,8 +6246,10 @@
         /* 文字設定のボタン表示を復元後の mode に合わせる */
         modeHira.classList.toggle("on", mode === "hira");
         modeMix.classList.toggle("on", mode === "mix");
+        modeHira.setAttribute("aria-pressed", mode === "hira" ? "true" : "false");
+        modeMix.setAttribute("aria-pressed", mode === "mix" ? "true" : "false");
         /* 音のオン・オフ表示 */
-        soundBtn.textContent = sound ? "🔊 おと オン" : "🔇 おと オフ";
+        syncSoundBtn();
         /* シンプル／フルモード */
         setUiMode(typeof loadedSave.simpleMode === "boolean" ? loadedSave.simpleMode : true, true);
         /* うちの子の言葉: 先に登録してからでないと、番号で保存された記録がずれるため最初に復元する */
@@ -6033,14 +6364,20 @@
         mode = "hira";
         modeHira.classList.toggle("on", true);
         modeMix.classList.toggle("on", false);
+        modeHira.setAttribute("aria-pressed", "true");
+        modeMix.setAttribute("aria-pressed", "false");
         sound = true;
-        soundBtn.textContent = "🔊 おと オン";
+        syncSoundBtn();
         speechRate = 0.78;
         renderRateUI();
         furiganaOn = false;
         if (typeof renderFuriganaUI === "function") renderFuriganaUI();
         voiceURI = "";
         if (typeof pickVoice === "function") pickVoice();
+        sfxOn = true;
+        try { reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); } catch (eRMr) { reduceMotion = false; }
+        if (typeof applyMotion === "function") applyMotion();
+        if (typeof renderA11yUI === "function") renderA11yUI();
         exclCatNames = [];
         exclWordHs = [];
         rebuildExclusions();
@@ -6520,6 +6857,291 @@
         if (hantaiPair) speak(WORDS[hantaiPair[hantaiFrom]].h + "の はんたいは どっち？");
       });
 
+      /* ===== しりとり（読みの最後の音と最初の音で言葉をつなぐ） =====
+         判定は幼児向けにゆるくする:
+         ・小さい文字（ゃゅょ・ぁぃぅぇぉ・ゎ）は大きい文字として扱う（っ は つ として扱う）
+         ・濁点・半濁点は区別しない（ご⇔こ、ぱ⇔は などはつながる扱い）
+         ・最後が長音「ー」の言葉は、その前の音そのものと、その母音から始まる言葉の
+           両方をつながる扱いにする
+         ・最後が「ん」の言葉は続きがないものとして扱い、再開フローへ進む
+         候補・判定はすべて、いまの設定語数（語彙数）の範囲内＋出さない言葉の除外を守る。
+         うちの子の言葉は登録時に最高スコア（210）で並ぶため、範囲内として扱われる。
+         範囲内に続きが1つもないときは、つながった数をほめてから、範囲内の好きな言葉で
+         新しい列を始められるようにする。間違えても失敗扱いはせず、探す音を伝えて促す。 */
+      var shiritoriEl = document.getElementById("shiritoriEl");
+      var shiriChain = [];        /* つながった言葉の列（番号の配列） */
+      var shiriUsed = {};         /* いまの列で使った言葉（同じ列では繰り返さない） */
+      var shiriMode = "start";    /* start=最初の言葉を選ぶ / play=つなげる / restart=続きがなく別の言葉から始める */
+      var shiriLock = false;
+      var SHIRI_SMALL = { "ぁ": "あ", "ぃ": "い", "ぅ": "う", "ぇ": "え", "ぉ": "お", "ゃ": "や", "ゅ": "ゆ", "ょ": "よ", "ゎ": "わ", "っ": "つ" };
+      var SHIRI_DAKU = { "が": "か", "ぎ": "き", "ぐ": "く", "げ": "け", "ご": "こ", "ざ": "さ", "じ": "し", "ず": "す", "ぜ": "せ", "ぞ": "そ", "だ": "た", "ぢ": "ち", "づ": "つ", "で": "て", "ど": "と", "ば": "は", "び": "ひ", "ぶ": "ふ", "べ": "へ", "ぼ": "ほ", "ぱ": "は", "ぴ": "ひ", "ぷ": "ふ", "ぺ": "へ", "ぽ": "ほ", "ゔ": "う" };
+      var SHIRI_VOWEL_ROWS = ["あかさたなはまやらわ", "いきしちにひみり", "うくすつぬふむゆる", "えけせてねへめれ", "おこそとのほもよろを"];
+      function shiriNormCh(ch) {
+        ch = kataToHira(String(ch || ""));
+        if (SHIRI_SMALL[ch]) ch = SHIRI_SMALL[ch];
+        if (SHIRI_DAKU[ch]) ch = SHIRI_DAKU[ch];
+        return ch;
+      }
+      function shiriVowelOf(ch) {
+        ch = shiriNormCh(ch);
+        for (var i = 0; i < SHIRI_VOWEL_ROWS.length; i++) { if (SHIRI_VOWEL_ROWS[i].indexOf(ch) >= 0) return "あいうえお".charAt(i); }
+        return ch;
+      }
+      function shiriCleanH(id) { return String(WORDS[id].h || "").replace(/_/g, "").replace(/・/g, ""); }
+      function shiriFirstKey(id) {
+        var h = shiriCleanH(id);
+        return h ? shiriNormCh(h.charAt(0)) : "";
+      }
+      /* 続きとして受け付ける「最初の音」のキー一覧。最後が「ん」の言葉は null（続きなし） */
+      function shiriLastKeys(id) {
+        var h = shiriCleanH(id);
+        if (!h) return null;
+        var last = h.charAt(h.length - 1);
+        if (last === "ん") return null;
+        if (last === "ー") {
+          var i = h.length - 2;
+          while (i >= 0 && h.charAt(i) === "ー") i--;
+          if (i < 0) return null;
+          var prev = shiriNormCh(h.charAt(i));
+          var keys = [prev];
+          var v = shiriVowelOf(prev);
+          if (keys.indexOf(v) < 0) keys.push(v);
+          return keys;
+        }
+        return [shiriNormCh(last)];
+      }
+      function shiriCanFollow(prevId, nextId) {
+        var keys = shiriLastKeys(prevId);
+        if (!keys) return false;
+        return keys.indexOf(shiriFirstKey(nextId)) >= 0;
+      }
+      /* 画面と読み上げに出す「つぎの音」。長音で終わる言葉は母音を主に出す */
+      function shiriNeedText(id) {
+        var keys = shiriLastKeys(id);
+        if (!keys) return "";
+        var h = shiriCleanH(id);
+        if (h.charAt(h.length - 1) === "ー") return shiriVowelOf(keys[0]);
+        return keys[0];
+      }
+      function shiriHasNext(id, used, list) {
+        list = list || scopeList();
+        for (var i = 0; i < list.length; i++) {
+          var nid = list[i];
+          if (nid === id || (used && used[nid])) continue;
+          if (shiriCanFollow(id, nid)) return true;
+        }
+        return false;
+      }
+      /* 最初の言葉の候補プール: 範囲内のよく使う言葉（レベル7以上）で、続きがあるもの。
+         重い全件走査を避けるため、集めるのは最大120語まで */
+      function shiriStartPool() {
+        var list = scopeList();
+        var pool = [];
+        for (var i = 0; i < list.length && pool.length < 120; i++) {
+          var id = list[i];
+          if (LEVEL[id] >= 7 && shiriLastKeys(id) && shiriHasNext(id, null, list)) pool.push(id);
+        }
+        if (pool.length < 6) {
+          for (var j = 0; j < list.length && pool.length < 6; j++) {
+            var id2 = list[j];
+            if (pool.indexOf(id2) < 0 && shiriLastKeys(id2) && shiriHasNext(id2, null, list)) pool.push(id2);
+          }
+        }
+        return pool;
+      }
+      /* 遊んだ言葉は他の遊びと同じく図鑑に集める（中心になったときと同じ記録の付け方） */
+      function shiriCollect(id) {
+        if (!collectedSet[id]) {
+          collectedSet[id] = 1; collected.push(id);
+          var cd = new Date();
+          collectedDates[id] = cd.getFullYear() + "-" + (cd.getMonth() + 1) + "-" + cd.getDate();
+        }
+        zukanBadge.textContent = "（" + collectedScopeCount() + "）";
+        if (typeof checkToday === "function") checkToday(id);
+        if (typeof checkMission === "function") checkMission(id);
+        checkCompletions();
+        saveState();
+      }
+      function shiriCandCard(id) {
+        var w = WORDS[id];
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "shiri-cand";
+        b.style.setProperty("--c", CAT_COL[w.c] || "#ffe1b8");
+        b.setAttribute("aria-label", disp(w) + "（" + CATS[w.c] + "の ことば）");
+        if (w.img) {
+          var im = document.createElement("img");
+          im.className = "em-img"; im.src = w.img; im.alt = "";
+          b.appendChild(im);
+        } else {
+          var em = document.createElement("span");
+          em.className = "em"; em.textContent = w.e;
+          b.appendChild(em);
+        }
+        var catEl = document.createElement("span");
+        catEl.className = "shiri-cat";
+        catEl.setAttribute("aria-hidden", "true");
+        catEl.textContent = CATS[w.c];
+        b.appendChild(catEl);
+        var wd = document.createElement("span");
+        wd.className = "wd";
+        setWordHTML(wd, w);
+        var len = disp(w).replace(/_/g, "").length;
+        wd.style.fontSize = (len <= 4 ? 20 : len === 5 ? 18 : len === 6 ? 17 : len === 7 ? 15.5 : len === 8 ? 14.5 : 13) + "px";
+        if (len >= 9) { wd.style.whiteSpace = "normal"; wd.style.overflowWrap = "anywhere"; wd.style.lineHeight = "1.15"; wd.style.borderRadius = "10px"; }
+        b.appendChild(wd);
+        b.addEventListener("click", function () { shiriTap(id, b); });
+        return b;
+      }
+      function renderShiriChain() {
+        var box = document.getElementById("shiriChain");
+        box.innerHTML = "";
+        shiriChain.forEach(function (id, i) {
+          if (i > 0) {
+            var ar = document.createElement("span");
+            ar.className = "shiri-arrow"; ar.setAttribute("aria-hidden", "true"); ar.textContent = "➜";
+            box.appendChild(ar);
+          }
+          var w = WORDS[id];
+          var chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "shiri-chip" + (i === shiriChain.length - 1 ? " now" : "");
+          chip.setAttribute("aria-label", disp(w));
+          if (w.img) {
+            var im = document.createElement("img");
+            im.className = "cimg"; im.src = w.img; im.alt = "";
+            chip.appendChild(im);
+          } else {
+            var em = document.createElement("span");
+            em.className = "em"; em.textContent = w.e;
+            chip.appendChild(em);
+          }
+          var tx = document.createElement("span");
+          setWordHTML(tx, w);
+          chip.appendChild(tx);
+          chip.addEventListener("click", function () { speak(w.h); });
+          box.appendChild(chip);
+        });
+        document.getElementById("shiriCount").textContent = shiriChain.length ? ("いま " + shiriChain.length + "こ つながっているよ") : "";
+      }
+      function shiriRenderRound(msg, speakText) {
+        shiriLock = false;
+        renderShiriChain();
+        var curBox = document.getElementById("shiriCurrent");
+        var promptEl = document.getElementById("shiriPrompt");
+        var msgEl = document.getElementById("shiriMsg");
+        var candBox = document.getElementById("shiriCands");
+        candBox.innerHTML = "";
+        curBox.innerHTML = "";
+        var curId = shiriChain.length ? shiriChain[shiriChain.length - 1] : null;
+        if (shiriMode === "play" && curId != null) {
+          curBox.appendChild(makeWordCard(curId));
+          var need = shiriNeedText(curId);
+          promptEl.innerHTML = "";
+          var s1 = document.createElement("span"); s1.textContent = "つぎは ";
+          var k = document.createElement("span"); k.className = "shiri-kana"; k.textContent = need;
+          var s2 = document.createElement("span"); s2.textContent = " ではじまる ことばは どれ？";
+          promptEl.appendChild(s1); promptEl.appendChild(k); promptEl.appendChild(s2);
+          var list = scopeList();
+          var nexts = shuffleArr(list.filter(function (id) { return id !== curId && !shiriUsed[id] && shiriCanFollow(curId, id); }));
+          var correct = nexts.slice(0, 3);
+          var dummies = shuffleArr(list.filter(function (id) { return id !== curId && !shiriUsed[id] && !shiriCanFollow(curId, id); })).slice(0, 3);
+          shuffleArr(correct.concat(dummies)).forEach(function (id) { candBox.appendChild(shiriCandCard(id)); });
+        } else {
+          promptEl.textContent = shiriMode === "restart" ? "すきな ことばを タップして、また はじめよう！" : "すきな ことばを タップして はじめよう！";
+          var pool = shuffleArr(shiriStartPool().slice());
+          pool.slice(0, 6).forEach(function (id) { candBox.appendChild(shiriCandCard(id)); });
+        }
+        msgEl.textContent = msg || "";
+        if (shiriMode !== "play" && (!pool || !pool.length)) msgEl.textContent = "ことばが みつからなかったよ。";
+        if (speakText) speak(speakText);
+      }
+      /* 続きがないとき: つながった数をほめて、別の言葉から始められる状態にする */
+      function shiriEnterRestart(reasonText) {
+        var n = shiriChain.length;
+        shiriMode = "restart";
+        var praise = n >= 2 ? (n + "こ つながったね！すごい！") : "";
+        var msg = (reasonText ? reasonText + " " : "") + "つぎの ことばが ないよ。" + (praise ? praise + " " : "") + "すきな ことばから はじめよう！";
+        shiriRenderRound(msg, msg);
+        if (n >= 3) celebrate(praise, "🎉");
+      }
+      function shiriStartWith(id) {
+        shiriChain = [id];
+        shiriUsed = {}; shiriUsed[id] = 1;
+        shiriMode = "play";
+        shiriCollect(id);
+        sfx("good");
+        if (!shiriHasNext(id, shiriUsed, scopeList())) { shiriEnterRestart(""); return; }
+        shiriRenderRound("", WORDS[id].h + "！つぎは「" + shiriNeedText(id) + "」ではじまる ことばは どれ？");
+      }
+      function shiriTap(id, btn) {
+        if (shiriLock) return;
+        if (shiriMode !== "play") { shiriStartWith(id); return; }
+        var curId = shiriChain[shiriChain.length - 1];
+        if (shiriCanFollow(curId, id)) {
+          shiriLock = true;
+          btn.classList.add("good");
+          sfx("good");
+          shiriChain.push(id);
+          shiriUsed[id] = 1;
+          shiriCollect(id);
+          speak(WORDS[id].h);
+          setTimeout(function () {
+            if (shiritoriEl.hidden) return;
+            if (!shiriHasNext(id, shiriUsed, scopeList())) {
+              var reason = shiriLastKeys(id) ? "" : ("「" + WORDS[id].h + "」は「ん」で おわるね。");
+              shiriEnterRestart(reason);
+              return;
+            }
+            shiriRenderRound("つながったね！", "つながったね！つぎは「" + shiriNeedText(id) + "」ではじまる ことばは どれ？");
+          }, 900);
+        } else {
+          sfx("pop");
+          speak(WORDS[id].h);
+          var need = shiriNeedText(curId);
+          document.getElementById("shiriMsg").textContent = "それは「" + WORDS[id].h + "」だね。「" + need + "」ではじまる ことばを さがそう！";
+          setTimeout(function () { if (!shiritoriEl.hidden) speak("「" + need + "」ではじまる ことばを さがそう"); }, 850);
+        }
+      }
+      /* 語数・除外の設定が変わったとき、開いたままなら列を保てるか確認し直す */
+      function refreshShiritori() {
+        if (shiritoriEl.hidden) return;
+        var ok = true;
+        shiriChain.forEach(function (id) { if (!inScope(id)) ok = false; });
+        if (!ok) {
+          shiriChain = []; shiriUsed = {}; shiriMode = "start";
+          shiriRenderRound("ことばの かずが かわったよ。すきな ことばから はじめよう！", "");
+          return;
+        }
+        if (shiriMode === "play" && shiriChain.length) {
+          var curId = shiriChain[shiriChain.length - 1];
+          if (!shiriHasNext(curId, shiriUsed, scopeList())) { shiriEnterRestart(""); return; }
+        }
+        shiriRenderRound("", "");
+      }
+      document.getElementById("shiritoriBtn").addEventListener("click", function () {
+        shiriChain = [];
+        shiriUsed = {};
+        shiriMode = "start";
+        shiriRenderRound("", "しりとり！すきな ことばを タップして はじめよう！");
+        shiritoriEl.hidden = false;
+        shiritoriEl.scrollTop = 0;
+      });
+      document.getElementById("shiritoriClose").addEventListener("click", function () { shiritoriEl.hidden = true; });
+      document.getElementById("shiriHearBtn").addEventListener("click", function () {
+        if (shiriMode === "play" && shiriChain.length) {
+          var curId = shiriChain[shiriChain.length - 1];
+          speak(WORDS[curId].h + "。つぎは「" + shiriNeedText(curId) + "」ではじまる ことばは どれ？");
+        } else {
+          speak("すきな ことばを タップして はじめよう！");
+        }
+      });
+      document.getElementById("shiriRestartBtn").addEventListener("click", function () {
+        if (shiriMode === "play" && shiriChain.length >= 2) { shiriEnterRestart(""); return; }
+        shiriChain = []; shiriUsed = {}; shiriMode = "start";
+        shiriRenderRound("", "すきな ことばを タップして はじめよう！");
+      });
+
       /* ===== 5. てびょうし あそび（モーラ数だけ手を叩く） ===== */
       var clapEl = document.getElementById("clapEl");
       function moraCount(h) {
@@ -6583,6 +7205,7 @@
         if (clapPhase !== "play" || clapId == null) return;
         if (clapCount >= 12) return;
         clapCount++;
+        sfx("clap");
         renderClapDots("play");
       });
       document.getElementById("clapDoneBtn").addEventListener("click", function () {
@@ -6737,6 +7360,7 @@
           { k: "antonym", btn: "hantaiBtn", icon: "↔️", title: "はんたい ことば" },
           { k: "clap", btn: "clapBtn", icon: "👏", title: "てびょうし" },
           { k: "clock", btn: "clockBtn", icon: "🕐", title: "とけい あそび" },
+          { k: "shiritori", btn: "shiritoriBtn", icon: "🔤", title: "しりとり" },
           { k: "pick", btn: "pickBtn", icon: "💗", title: "どっちが すき？" }
         ];
         var playStep = null;
@@ -6824,7 +7448,7 @@
         if (b) b.click();
       });
       /* コースから開いた遊びを閉じたら、コースの次のステップへ戻る */
-      ["kazuClose", "hantaiClose", "clapClose", "clockClose", "pickClose", "storyClose", "bedClose"].forEach(function (cid) {
+      ["kazuClose", "hantaiClose", "clapClose", "clockClose", "shiritoriClose", "pickClose", "storyClose", "bedClose"].forEach(function (cid) {
         var el = document.getElementById(cid);
         if (el) el.addEventListener("click", function () {
           if (!courseReturn) return;
@@ -6921,6 +7545,45 @@
         albumEl.scrollTop = 0;
       });
       document.getElementById("albumClose").addEventListener("click", function () { albumEl.hidden = true; });
+
+      /* ===== あそびパネル（上部の機能ボタンはここに集約。開閉だけを担当し、各ボタンの動作は従来どおり） =====
+         パネル内のボタンは元のボタンのままなので、機能オフ（body.fx-*-off）や
+         シンプルモード（.full-only）で隠れる仕組みがそのまま効く。
+         タイルを押したら、そのボタンの本来の処理のあとにパネルを閉じる。 */
+      var asobiBtn = document.getElementById("asobiBtn");
+      var asobiPanel = document.getElementById("asobiPanel");
+      var asobiBackdrop = document.getElementById("asobiBackdrop");
+      function asobiSetOpen(open) {
+        asobiPanel.hidden = !open;
+        asobiBackdrop.hidden = !open;
+        asobiBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) {
+          asobiPanel.scrollTop = 0;
+          /* 表示されている遊びボタンが1つもないときは、案内文だけを出す */
+          var grid = asobiPanel.querySelector(".asobi-grid");
+          var anyVisible = false;
+          if (grid) {
+            Array.prototype.forEach.call(grid.children, function (b) {
+              if (window.getComputedStyle(b).display !== "none") anyVisible = true;
+            });
+          }
+          var playSec = document.getElementById("asobiPlaySec");
+          if (playSec) playSec.hidden = !anyVisible;
+          var emptyMsg = document.getElementById("asobiEmpty");
+          if (emptyMsg) emptyMsg.hidden = anyVisible;
+          var closeBtn = document.getElementById("asobiClose");
+          if (closeBtn) { try { closeBtn.focus({ preventScroll: true }); } catch (eAF) { closeBtn.focus(); } }
+        }
+      }
+      asobiBtn.addEventListener("click", function () { asobiSetOpen(asobiPanel.hidden); });
+      document.getElementById("asobiClose").addEventListener("click", function () { asobiSetOpen(false); });
+      asobiBackdrop.addEventListener("click", function () { asobiSetOpen(false); });
+      document.addEventListener("keydown", function (e) {
+        if ((e.key === "Escape" || e.key === "Esc") && !asobiPanel.hidden) asobiSetOpen(false);
+      });
+      asobiPanel.querySelectorAll(".asobi-grid > button, .asobi-utils > button").forEach(function (b) {
+        b.addEventListener("click", function () { asobiSetOpen(false); });
+      });
 
       updateFavBoardUI();   /* おきにいり盤面モードの復元状態をボタンと案内に反映する */
 
