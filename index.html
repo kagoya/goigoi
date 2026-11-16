@@ -13858,40 +13858,10 @@
         if (yb) { yb.classList.toggle("on", narabeYouonOn); yb.setAttribute("aria-pressed", narabeYouonOn ? "true" : "false"); }
         mojiSyncSubScriptRows(allowed);
       }
-      /* 例の言葉さがし専用のかな判定: 小さい「ゃゅょ」と促音「っ」を含む言葉も
-         例にできるようにする（あなうめ・みっけの MOJI_OK は変えない） */
+      /* 完成後の単語カードさがし用のかな判定の土台: 小さい「ゃゅょ」と
+         促音「っ」を含む言葉も候補にできるようにする
+         （あなうめ・みっけの MOJI_OK は変えない） */
       var MOJI_OK_EX = MOJI_OK + "ゃゅょっ";
-      function mojiAllKanaEx(h) {
-        if (!h) return false;
-        for (var i = 0; i < h.length; i++) { if (MOJI_OK_EX.indexOf(h.charAt(i)) < 0) return false; }
-        return true;
-      }
-      function narabeRowExampleId(row) {
-        var first = row.chars[0];
-        /* 拗音（2文字）で始まる言葉や、促音を含む言葉は身近でも少し長く
-           なりがちなので、拗音・促音の行だけ例の言葉を5文字まで許す */
-        var maxLen = (first.length > 1 || row.sokuon) ? 5 : 4;
-        var best = null, bestScore = -1, fb = null, fbScore = -1;
-        for (var i = 0; i < WORDS.length; i++) {
-          var h = mojiCleanH(i);
-          if (h.length < 2 || h.length > maxLen || h.indexOf(first) !== 0 || !mojiAllKanaEx(h)) continue;
-          var sc = (LEVEL[i] || 0) * 10 - h.length;
-          if (inScope(i)) { if (sc > bestScore) { bestScore = sc; best = i; } }
-          else if (!isExcluded(i)) { if (sc > fbScore) { fbScore = sc; fb = i; } }
-        }
-        if (best != null) return best;
-        if (fb != null) return fb;
-        /* 濁点の行など、その文字で始まる言葉が無いときは、その文字を含む言葉を例にする */
-        var cBest = null, cScore = -1, cFb = null, cFbScore = -1;
-        for (var j = 0; j < WORDS.length; j++) {
-          var h2 = mojiCleanH(j);
-          if (h2.length < 2 || h2.length > maxLen || h2.indexOf(first) < 0 || !mojiAllKanaEx(h2)) continue;
-          var sc2 = (LEVEL[j] || 0) * 10 - h2.length;
-          if (inScope(j)) { if (sc2 > cScore) { cScore = sc2; cBest = j; } }
-          else if (!isExcluded(j)) { if (sc2 > cFbScore) { cFbScore = sc2; cFb = j; } }
-        }
-        return cBest != null ? cBest : cFb;
-      }
       /* ===== 完成後の単語カード: そろった行の文字から言葉を探す =====
          探し方: その文字で始まる言葉を優先し、無ければ途中に含む言葉。
          どちらの場合も、まず今の語彙数の範囲内から、レーティング
@@ -14342,22 +14312,17 @@
         if (allCorrect && !narabeDone) {
           narabeDone = true;
           narabeSel = null;
-          var exId = narabeRowExampleId(row);
           var seq = row.chars.join("");
           var seqDisp = row.chars.map(narabeDispChar).join("");
           narabeRender("やったね！" + seqDisp + "、ぜんぶ そろったね！すきな もじを タップすると ことばが でるよ");
           sfx("fanfare");
           celebrate(seqDisp + " できたね！", "🎉");
           /* 促音だけの行は、並んだ文字列が「っ」1文字なので名前で読む。
-             行がそろった時点では図鑑には集めない: 例の言葉は読み上げるだけ。
+             行がそろった時点では図鑑には集めない。
              図鑑に集まるのは、そろった後に文字を選んで単語カードが出た
              言葉だけ（narabeShowWordForChar） */
           var seqSay = narabeSayChar(seq);
-          if (exId != null) {
-            speak(seqSay + "！やったね！たとえば「" + WORDS[exId].h + "」だね。もじを タップすると ことばが でるよ");
-          } else {
-            speak(seqSay + "！やったね！もじを タップすると ことばが でるよ");
-          }
+          speak(seqSay + "！やったね！もじを タップすると ことばが でるよ");
           return;
         }
         if (wasCorrect) {
