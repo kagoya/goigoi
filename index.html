@@ -1121,6 +1121,19 @@
       .moji-narabe-toggles .nazori-tabs { margin-bottom: 8px; }
       .moji-narabe-toggles .nazori-daku-row { margin-top: 0; }
       .moji-narabe-toggles .nazori-daku-row button.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+      /* 五十音ならべの行えらび表: 文字が見えるのは各行の最初の字だけで、
+         それ以外のマスは ○ で示す（押せるのは最初の字だけ）。
+         マスの大きさ・並びは文字のマス（.nazori-col button）とそろえる */
+      #mojiRows .narabe-cell-circle {
+        min-height: 46px; display: flex; align-items: center; justify-content: center;
+        border-radius: 10px; border: 2px solid var(--line); background: var(--card);
+        box-shadow: var(--shadow); line-height: 1.1;
+        font-size: clamp(14px, 4.2vw, 21px); font-weight: 800; color: var(--sub);
+      }
+      /* 選ばれている行の ○ も色を付けて、その行が選ばれていることが分かるようにする */
+      #mojiRows .narabe-cell-circle.on {
+        background: color-mix(in srgb, #ffd94d 45%, var(--card)); border-color: #f5b301; color: #8a6d1f;
+      }
       /* ===== ことばたんけん ===== */
       .tanken-tray {
         display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center;
@@ -13740,15 +13753,21 @@
         }
         return cBest != null ? cBest : cFb;
       }
-      /* 行えらびは五十音表から選ぶ（なぞりがきの文字えらびと同じ作り・見た目:
+      /* 行えらびは五十音表から選ぶ（なぞりがきの文字えらびと同じ並び:
          列が縦並びで右端が あ行、各列は上から あいうえお。表の1列が そのまま
-         練習する「行」に対応し、どのマスをタップしても その列の行を選ぶ。
+         練習する「行」に対応する）。ただし文字を全部は見せず、各行で文字が
+         見えるのは最初の字だけ。それ以外のマスは「○」で示し（文字は出さない）、
+         押せるのは最初の字だけ: 最初の字をタップすると その行を選ぶ。
+         選ばれた行は、最初の字と その行の ○ が色付きで分かるようにする。
          や行・わ行は空きマスで段をそろえ、ん は わ行の左に1列置く
-         （この遊びでは ん も わ行の文字なので、タップすると わ行を選ぶ）。
-         濁点・半濁点は上の「゛だくてん」切り替えで表ごと切り替わる
+         （この遊びでは ん も わ行の文字なので、わ行の最初の字は わ で、
+         ん のマスも ○ になる）。
+         濁点・半濁点は上の「゛だくてん」切り替えで表ごと切り替わり、
+         濁点の表でも各行の最初の字（が・ざ・だ・ば・ぱ）だけ文字で出す
          （narabeRows が MOJI_ROWS_DAKU になるのと対になる）。
-         表示文字は narabeDispChar を通すので、カタカナ表示中は表もカタカナに
-         なり、ひらがなだけの設定では切り替え自体が出ない（なぞりがきと同じ）。
+         表示文字は narabeDispChar を通すので、カタカナ表示中は最初の字も
+         カタカナになり、ひらがなだけの設定では切り替え自体が出ない
+         （なぞりがきと同じ）。
          ri は narabeRows() の行番号、cells は常にひらがなで段順に並べる */
       var NARABE_TABLE_BASIC = [
         { ri: 0, cells: ["あ", "い", "う", "え", "お"] },
@@ -13788,6 +13807,16 @@
               var sp = document.createElement("div");
               sp.className = "nazori-cell-empty"; sp.setAttribute("aria-hidden", "true");
               colEl.appendChild(sp);
+              return;
+            }
+            if (c !== row.chars[0]) {
+              /* 最初の字以外のマスは文字を出さず ○ で示す（押せない。
+                 選ばれている行の ○ は色を付けて示す） */
+              var cir = document.createElement("div");
+              cir.className = "narabe-cell-circle" + (ri === narabeRow ? " on" : "");
+              cir.textContent = "○";
+              cir.setAttribute("aria-hidden", "true");
+              colEl.appendChild(cir);
               return;
             }
             var b = document.createElement("button");
