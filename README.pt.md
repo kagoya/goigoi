@@ -4,7 +4,7 @@
 
 Um jogo de palavras para crianças pequenas ampliarem o vocabulário brincando, jogável no navegador. **Totalmente grátis, sem cobranças.**
 
-Versão atual: **3.2**
+Versão atual: **3.3**
 
 **▶ Jogar: https://kagoya.github.io/goigoi/**
 
@@ -29,6 +29,7 @@ Versão atual: **3.2**
 - 33 tipos de carimbos no total (3 de conclusão, 9 de "primeira vez", 5 de marcos de quantidade de palavras coletadas, 11 de conquistas, 5 de dias totais de brincadeira). Podem ser vistos em formato de carimbo redondo no 「きろく」 infantil, aberto a partir do ずかん
 - No ずかん, cada palavra mostra quantas vezes foi usada para brincar, em um selo "×N". Na visualização em cartões, uma palavra usada 5 vezes ou mais ganha uma borda prateada, e 10 vezes ou mais, uma borda dourada e um 👑. O 「きろく」 infantil enfileira as palavras mais brincadas como 「たくさん あそんだ ことば」, e a contagem também entra no 保護者レポート e nos cartões de palavras impressos
 - O ずかん pode ser alternado pela própria criança entre a exibição em lista e a exibição em cartões com imagens grandes
+- Palavras com a mesma leitura, mas significados diferentes (por exemplo, はな = 花 "flor" e 鼻 "nariz"; たこ = タコ "polvo" e 凧 "pipa") são diferenciadas pela imagem e pelo kanji, e são coletadas separadamente no ずかん
 - A imagem de uma palavra pode ser trocada por uma foto em Configurações, em 「言葉の絵を変える」 (a foto é reduzida automaticamente e salva; está incluída no backup e pode voltar ao padrão)
 - A avaliação do なぞりがき pode ser ajustada nas Configurações, item por item: número de traços, ordem dos traços, direção, forma e forma exata (também é possível escolher pelos níveis 1–5; o padrão equivale ao nível 4)
 - As explicações da página de Configurações estão disponíveis em 14 idiomas (japonês, japonês fácil com furigana, English, chinês simplificado, chinês tradicional, Português, Español, vietnamita, tailandês, coreano, francês, alemão, italiano, indonésio). Os termos e as palavras do jogo permanecem em japonês

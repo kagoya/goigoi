@@ -4,7 +4,7 @@
 
 Ein Wortspiel für Kleinkinder, das im Browser gespielt wird und spielerisch den Wortschatz erweitert. **Komplett kostenlos – keine Gebühren.**
 
-Aktuelle Version: **3.2**
+Aktuelle Version: **3.3**
 
 **▶ Spielen: https://kagoya.github.io/goigoi/**
 
@@ -29,6 +29,7 @@ Aktuelle Version: **3.2**
 - Insgesamt 33 Arten von Stempeln (3 für Vervollständigung, 9 „zum ersten Mal“, 5 Meilensteine für die Anzahl gesammelter Wörter, 11 Erfolge, 5 für die Gesamtzahl der Spieltage). Man kann sie als runde Stempel im 「きろく」 für Kinder ansehen, das vom ずかん aus geöffnet wird
 - Im ずかん zeigt jedes Wort mit einem „×N“-Abzeichen, wie oft mit ihm gespielt wurde. In der Kartenansicht erhält ein Wort ab 5 Mal einen silbernen Rand und ab 10 Mal einen goldenen Rand und eine 👑. Im 「きろく」 für Kinder stehen die am häufigsten gespielten Wörter als 「たくさん あそんだ ことば」, und die Anzahl steht auch im 保護者レポート und auf gedruckten Wortkarten
 - Das ずかん kann vom Kind selbst zwischen Listenansicht und Kartenansicht mit großen Bildern umgeschaltet werden
+- Wörter mit gleicher Lesung, aber unterschiedlicher Bedeutung (zum Beispiel はな = 花 „Blume“ und 鼻 „Nase“; たこ = タコ „Tintenfisch“ und 凧 „Drachen“) werden durch Bild und Kanji unterschieden und im ずかん getrennt gesammelt
 - Das Bild eines Wortes kann in den Einstellungen unter 「言葉の絵を変える」 durch ein Foto ersetzt werden (das Foto wird automatisch verkleinert und gespeichert; es ist in Sicherungen enthalten und kann auf den Standard zurückgesetzt werden)
 - Die Bewertung von なぞりがき kann in den Einstellungen einzeln eingestellt werden: Strichzahl, Strichfolge, Richtung, Form und exakte Form (auch über die Stufen 1–5 wählbar; die Anfangseinstellung entspricht Stufe 4)
 - Die Erklärungen auf der Seite „Einstellungen“ können in 14 Sprachen gewählt werden (Japanisch, einfaches Japanisch mit Furigana, English, vereinfachtes Chinesisch, traditionelles Chinesisch, Português, Español, Vietnamesisch, Thailändisch, Koreanisch, Français, Deutsch, Italiano, Bahasa Indonesia). Die Begriffe und Wörter im Spiel bleiben auf Japanisch

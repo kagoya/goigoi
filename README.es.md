@@ -4,7 +4,7 @@
 
 Un juego de palabras para que los niños pequeños amplíen su vocabulario jugando, disponible en el navegador. **Completamente gratis, sin cargos.**
 
-Versión actual: **3.2**
+Versión actual: **3.3**
 
 **▶ Jugar: https://kagoya.github.io/goigoi/**
 
@@ -29,6 +29,7 @@ Versión actual: **3.2**
 - 33 tipos de sellos en total (3 de finalización, 9 de «primera vez», 5 de hitos de palabras coleccionadas, 11 de logros, 5 de días totales jugados). Se pueden ver con forma de sello redondo en el 「きろく」 infantil, que se abre desde el ずかん
 - En el ずかん, cada palabra muestra cuántas veces se ha jugado con ella, con una insignia «×N». En la vista de tarjetas, una palabra jugada 5 veces o más recibe un borde plateado, y 10 veces o más, un borde dorado y un 👑. El 「きろく」 infantil reúne las palabras más jugadas como «たくさん あそんだ ことば», y el recuento también se incluye en el 保護者レポート y en las tarjetas de palabras impresas
 - El ずかん puede cambiarse entre la vista de lista y la vista de tarjetas con imágenes grandes, por el propio niño
+- Las palabras con la misma lectura pero significados diferentes (por ejemplo, はな = 花 «flor» y 鼻 «nariz»; たこ = タコ «pulpo» y 凧 «cometa») se distinguen por la imagen y el kanji, y se recogen por separado en el ずかん
 - La imagen de una palabra puede cambiarse por una foto en Ajustes, en 「言葉の絵を変える」 (la foto se reduce automáticamente y se guarda; se incluye en la copia de seguridad y puede restablecerse al valor predeterminado)
 - La evaluación de なぞりがき puede ajustarse en Ajustes, elemento por elemento: número de trazos, orden de los trazos, dirección, forma y forma exacta (también se puede elegir por niveles 1–5; el valor predeterminado equivale al nivel 4)
 - Las explicaciones de la página de Ajustes están disponibles en 14 idiomas (japonés, japonés fácil con furigana, English, chino simplificado, chino tradicional, Português, Español, vietnamita, tailandés, coreano, francés, alemán, italiano, indonesio). Los términos y las palabras del juego permanecen en japonés

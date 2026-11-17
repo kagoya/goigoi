@@ -4,7 +4,7 @@
 
 Một trò chơi từ vựng để trẻ nhỏ vừa chơi vừa mở rộng vốn từ, chơi được trên trình duyệt. **Hoàn toàn miễn phí, không thu phí.**
 
-Phiên bản hiện tại: **3.2**
+Phiên bản hiện tại: **3.3**
 
 **▶ Chơi: https://kagoya.github.io/goigoi/**
 
@@ -29,6 +29,7 @@ Phiên bản hiện tại: **3.2**
 - Tổng cộng 33 loại con dấu (3 loại hoàn thành, 9 loại "lần đầu tiên", 5 loại mốc số từ đã sưu tầm, 11 loại thành tích, 5 loại tổng số ngày đã chơi). Có thể xem dưới dạng con dấu tròn trong 「きろく」 dành cho trẻ em, mở từ ずかん
 - Trong ずかん, mỗi từ hiển thị số lần đã chơi với từ đó bằng huy hiệu "×N". Ở chế độ thẻ, từ được chơi 5 lần trở lên có viền bạc, 10 lần trở lên có viền vàng và 👑. 「きろく」 dành cho trẻ em xếp các từ được chơi nhiều nhất thành 「たくさん あそんだ ことば」, và số lần cũng có trong 保護者レポート và thẻ từ in ra
 - ずかん có thể chuyển đổi giữa hiển thị dạng danh sách và hiển thị dạng thẻ với hình ảnh lớn, do chính trẻ thao tác
+- Những từ có cùng cách đọc nhưng khác nghĩa (ví dụ: はな = 花 "hoa" và 鼻 "mũi"; たこ = タコ "bạch tuộc" và 凧 "diều") được phân biệt bằng hình ảnh và chữ Hán, và được sưu tầm riêng trong ずかん
 - Hình ảnh của một từ có thể đổi thành ảnh chụp trong Cài đặt, tại 「言葉の絵を変える」 (ảnh được tự động thu nhỏ dung lượng và lưu lại; được bao gồm trong bản sao lưu và có thể khôi phục về mặc định)
 - Việc chấm なぞりがき có thể cài đặt từng mục trong Cài đặt: số nét, thứ tự nét, hướng, hình dạng và hình dạng chính xác (cũng có thể chọn theo cấp độ 1–5; mặc định tương đương cấp độ 4)
 - Phần giải thích trên trang Cài đặt có 14 ngôn ngữ (tiếng Nhật, tiếng Nhật dễ hiểu kèm furigana, English, tiếng Trung giản thể, tiếng Trung phồn thể, Português, Español, Tiếng Việt, tiếng Thái, tiếng Hàn, tiếng Pháp, tiếng Đức, tiếng Ý, tiếng Indonesia). Các thuật ngữ và từ vựng trong trò chơi vẫn giữ nguyên tiếng Nhật

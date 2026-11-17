@@ -4,7 +4,7 @@
 
 A word game for toddlers to enjoy growing their vocabulary, playable in a web browser. **Completely free — no charges.**
 
-Current version: **3.2**
+Current version: **3.3**
 
 **▶ Play: https://kagoya.github.io/goigoi/**
 
@@ -29,6 +29,7 @@ Current version: **3.2**
 - 33 kinds of stamps in total (3 completion stamps, 9 "first time" stamps, 5 word-count milestone stamps, 11 achievement stamps, 5 total-days-played stamps). You can view them as round stamps in the children's 「きろく」, opened from the ずかん
 - In the ずかん, each word shows how many times it has been played with, as a "×N" badge. In the card view, a word played with 5 or more times gets a silver border, and 10 or more times a gold border and a 👑. The children's 「きろく」 lines up the most-played words as 「たくさん あそんだ ことば」, and the count is also included in the 保護者レポート and in printed word cards
 - The ずかん can be switched between a list view and a card view with big pictures, by the child
+- Words with the same reading but different meanings (for example はな = 花 "flower" and 鼻 "nose"; たこ = タコ "octopus" and 凧 "kite") are distinguished by their pictures and kanji, and are collected separately in the ずかん
 - The picture for a word can be replaced with a photo from Settings, in 「言葉の絵を変える」 (the photo is automatically reduced in size and saved; it is included in backups and can be reset to the default)
 - The なぞりがき tracing checks can be set individually in Settings: stroke count, stroke order, direction, shape, and exact shape (levels 1–5 can also be chosen; the default is equivalent to level 4)
 - The explanations on the Settings page are available in 14 languages (Japanese, Easy Japanese with furigana, English, Simplified Chinese, Traditional Chinese, Portuguese, Spanish, Vietnamese, Thai, Korean, French, German, Italian, Indonesian). In-game terms and words remain in Japanese

@@ -4,7 +4,7 @@
 
 Un jeu de mots pour les tout-petits, à jouer dans le navigateur, pour enrichir leur vocabulaire en s'amusant. **Entièrement gratuit, sans aucun frais.**
 
-Version actuelle : **3.2**
+Version actuelle : **3.3**
 
 **▶ Jouer : https://kagoya.github.io/goigoi/**
 
@@ -29,6 +29,7 @@ Version actuelle : **3.2**
 - 33 types de tampons au total (3 de complétion, 9 « première fois », 5 de paliers de nombre de mots recueillis, 11 de réussite, 5 de jours de jeu cumulés). On peut les admirer sous forme de tampons ronds dans le 「きろく」 pour enfants, ouvert depuis le ずかん
 - Dans le ずかん, chaque mot affiche le nombre de fois où l'on a joué avec lui, sous forme de badge « ×N ». Dans la vue en cartes, un mot joué 5 fois ou plus reçoit une bordure argentée, et 10 fois ou plus, une bordure dorée et un 👑. Le 「きろく」 pour enfants présente les mots les plus joués sous le titre « たくさん あそんだ ことば », et le nombre figure aussi dans le 保護者レポート et sur les cartes de mots imprimées
 - L'enfant peut lui-même basculer le ずかん entre l'affichage en liste et l'affichage en cartes avec de grandes images
+- Les mots qui se lisent de la même façon mais ont des sens différents (par exemple はな = 花 « fleur » et 鼻 « nez » ; たこ = タコ « poulpe » et 凧 « cerf-volant ») se distinguent par l'image et le kanji, et sont recueillis séparément dans le ずかん
 - L'image d'un mot peut être remplacée par une photo depuis les Réglages, dans 「言葉の絵を変える」 (la photo est automatiquement réduite et enregistrée ; elle est incluse dans les sauvegardes et peut être réinitialisée)
 - L'évaluation de なぞりがき peut être réglée individuellement dans les Réglages : nombre de traits, ordre des traits, direction, forme et forme exacte (choix possible aussi par les niveaux 1 à 5 ; le réglage initial équivaut au niveau 4)
 - Les explications de la page des Réglages peuvent être choisies parmi 14 langues (japonais, japonais facile avec furigana, English, chinois simplifié, chinois traditionnel, Português, Español, vietnamien, thaï, coréen, Français, Deutsch, Italiano, Bahasa Indonesia). Les termes et les mots du jeu restent en japonais

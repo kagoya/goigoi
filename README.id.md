@@ -4,7 +4,7 @@
 
 Permainan kata untuk anak usia dini yang dapat dimainkan di peramban, untuk menambah kosakata sambil bermain. **Sepenuhnya gratis, tanpa biaya.**
 
-Versi saat ini: **3.2**
+Versi saat ini: **3.3**
 
 **▶ Main: https://kagoya.github.io/goigoi/**
 
@@ -29,6 +29,7 @@ Versi saat ini: **3.2**
 - Total 33 jenis stempel (3 stempel penyelesaian, 9 stempel "pertama kali", 5 stempel pencapaian jumlah kata yang dikumpulkan, 11 stempel prestasi, 5 stempel total hari bermain). Dapat dilihat dalam bentuk stempel bulat di 「きろく」 untuk anak, yang dibuka dari ずかん
 - Di ずかん, setiap kata menampilkan berapa kali kata itu dimainkan, dengan lencana "×N". Dalam tampilan kartu, kata yang dimainkan 5 kali atau lebih mendapat bingkai perak, dan 10 kali atau lebih mendapat bingkai emas dan 👑. 「きろく」 untuk anak menampilkan kata yang paling sering dimainkan sebagai 「たくさん あそんだ ことば」, dan jumlahnya juga tercantum di 保護者レポート dan kartu kata yang dicetak
 - ずかん dapat dialihkan oleh anak sendiri antara tampilan daftar dan tampilan kartu dengan gambar besar
+- Kata-kata dengan bacaan yang sama tetapi arti berbeda (misalnya はな = 花 "bunga" dan 鼻 "hidung"; たこ = タコ "gurita" dan 凧 "layang-layang") dibedakan dengan gambar dan kanji, dan dikumpulkan secara terpisah di ずかん
 - Gambar suatu kata dapat diganti dengan foto dari Pengaturan, di 「言葉の絵を変える」 (foto otomatis diperkecil ukurannya dan disimpan; termasuk dalam cadangan dan dapat dikembalikan ke bawaan)
 - Penilaian なぞりがき dapat diatur satu per satu di Pengaturan: jumlah goresan, urutan goresan, arah, bentuk, dan bentuk persis (dapat juga dipilih dengan level 1–5; pengaturan awal setara dengan level 4)
 - Penjelasan di halaman Pengaturan dapat dipilih dari 14 bahasa (bahasa Jepang, bahasa Jepang mudah dengan furigana, English, bahasa Tionghoa sederhana, bahasa Tionghoa tradisional, Português, Español, bahasa Vietnam, bahasa Thai, bahasa Korea, Français, Deutsch, Italiano, Bahasa Indonesia). Istilah dan kata di dalam permainan tetap dalam bahasa Jepang

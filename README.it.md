@@ -4,7 +4,7 @@
 
 Un gioco di parole per bambini piccoli, giocabile nel browser, per arricchire il vocabolario divertendosi. **Completamente gratuito, senza costi.**
 
-Versione attuale: **3.2**
+Versione attuale: **3.3**
 
 **▶ Gioca: https://kagoya.github.io/goigoi/**
 
@@ -29,6 +29,7 @@ Versione attuale: **3.2**
 - 33 tipi di timbri in totale (3 di completamento, 9 «prima volta», 5 di traguardi sul numero di parole raccolte, 11 di successi, 5 di giorni totali di gioco). Si possono ammirare come timbri rotondi nel 「きろく」 per bambini, che si apre dal ずかん
 - Nel ずかん, ogni parola mostra quante volte è stata usata per giocare, con un distintivo «×N». Nella vista a schede, una parola giocata 5 volte o più riceve un bordo argentato, e 10 volte o più un bordo dorato e un 👑. Il 「きろく」 per bambini raccoglie le parole più giocate come «たくさん あそんだ ことば», e il conteggio compare anche nel 保護者レポート e nelle schede di parole stampate
 - Il bambino può cambiare da solo il ずかん tra la visualizzazione a elenco e la visualizzazione a carte con immagini grandi
+- Le parole con la stessa lettura ma significati diversi (ad esempio はな = 花 «fiore» e 鼻 «naso»; たこ = タコ «polpo» e 凧 «aquilone») si distinguono per l'immagine e il kanji, e vengono raccolte separatamente nello ずかん
 - L'immagine di una parola può essere sostituita con una foto dalle Impostazioni, in 「言葉の絵を変える」 (la foto viene ridotta automaticamente e salvata; è inclusa nei backup e può essere ripristinata al valore predefinito)
 - La valutazione di なぞりがき può essere impostata singolarmente nelle Impostazioni: numero di tratti, ordine dei tratti, direzione, forma e forma esatta (si può scegliere anche con i livelli 1–5; l'impostazione iniziale corrisponde al livello 4)
 - Le spiegazioni nella pagina delle Impostazioni possono essere scelte tra 14 lingue (giapponese, giapponese facile con furigana, English, cinese semplificato, cinese tradizionale, Português, Español, vietnamita, tailandese, coreano, Français, Deutsch, Italiano, Bahasa Indonesia). I termini e le parole del gioco restano in giapponese

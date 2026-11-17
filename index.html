@@ -1995,7 +1995,7 @@
         <p class="adult-note" data-i18n="about2">言葉のカードをタップすると、その言葉が声で読み上げられ、関係のある言葉が周りに並びます。気になる言葉を次々とたどっていくうちに、知っている言葉が少しずつ増えていきます。</p>
         <p class="adult-note" data-i18n="about3">クイズで別の答えを選んでも失敗にはせず、正解を一緒に確認して褒める作りです。競争もありません。言葉を見つけてずかんに集める楽しさの中で、自分のペースで遊べます。出てくる言葉は、日常生活でよく使うものを中心に出るよう調整しています。上の設定で、言葉の数や文字の表示を、使う人に合わせて変えられます。</p>
         <p class="credit-line" data-i18n="creditAuthor">作者： @kagoya</p>
-        <p class="credit-line">バージョン 3.2</p>
+        <p class="credit-line">バージョン 3.3</p>
         <p class="credit-line" data-i18n="creditKanji">書き順データ：KanjiVG © Ulrich Apel（CC BY-SA 3.0）</p>
         <p class="credit-line" data-i18n="creditSfx">効果音（おととことば）：CC0の録音素材（Freesound等）</p>
         <p class="adult-note"><span data-i18n="licensePre">このゲームは、クリエイティブ・コモンズ表示 4.0 国際ライセンス（CC BY 4.0）で公開しています。作者名を表示すれば、複製や再配布、改変もできます。ライセンスの内容は</span><a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener" data-i18n="licenseLink">クリエイティブ・コモンズのページ</a><span data-i18n="licensePost">で確認できます。</span></p>
@@ -6271,20 +6271,77 @@
       var HAND = {};         /* 番号 → 手作業の関連（番号の配列） */
       var LEVEL = [];        /* 番号 → 8段階レーティング（8=最もよく使う … 1=最もレア） */
       var SCORE = [];        /* 番号 → レーティングの素点（同じ絵の別名グループ内での調整済み。語彙数を絞る順位付けにも使う） */
+      /* ===== 同音異義語の意味の入れ替え・修正（KDATA.fix） =====
+         収録済みの読みについて、意味を取り違えているもの（例: かん=棺→缶、
+         しま=地名の志摩→島、ひく=引き算→引っ張る）を正しい意味に直す指定。
+         形式は [読み, 表示, 絵, 分野名, ゲーム対応id, 英語, 説明文] で、
+         null の項目は変更しない（絵が "" のときは分野の絵を使う）。
+         分野が変わる言葉は、元の「同じ絵の別名グループ」から切り離して
+         単独のグループにする（例: かん は ひつぎ と同じグループだった） */
+      var FIX = {};
+      if (KDATA && KDATA.fix) KDATA.fix.forEach(function (f) { FIX[f[0]] = f; });
+      /* ===== 同音異義語の統合（KDATA.merge） =====
+         元データに「読み_番号」「読み_ヒント」キーで既にあった同音異義語へ、
+         後から追加した意味（旧 KDATA.homo / fix の一部）を一本化するための
+         上書き指定。形式は fix と同じだが、先頭は元データのキーそのもの
+         （例: たこ_2）。表示・絵・分野・素点・ゲーム対応・英語・説明を、
+         番号を変えずに元のエントリーへ反映する */
+      var MERGE = {};
+      if (KDATA && KDATA.merge) KDATA.merge.forEach(function (f) { MERGE[f[0]] = f; });
+      var FIXALL = {};
+      Object.keys(FIX).forEach(function (k) { FIXALL[k] = FIX[k]; });
+      Object.keys(MERGE).forEach(function (k) { FIXALL[k] = MERGE[k]; });
+      /* 「_」キーで管理されている言葉の本来の読み（ベースの読み）を返す。
+         ベースの読みが単独の言葉として存在しないキー（例: こ_2）は対象外で null */
+      function baseReadingOf(h) {
+        if (typeof h !== "string") return null;
+        var u = h.indexOf("_");
+        if (u <= 0) return null;
+        var b = h.slice(0, u);
+        return IDX[b] != null ? b : null;
+      }
+      /* 読み上げ・文字数えなどに使う、その言葉の読み（「_」キーはベースの読みだけ） */
+      function cleanReading(h) {
+        var b = baseReadingOf(h);
+        return b || String(h || "").replace(/_/g, "");
+      }
+      /* カタカナ表記など、読みにヒントが付いた文字列からヒント部分を除いた形を返す */
+      function hintStrip(s, h) {
+        var str = String(s || "");
+        if (!str) return str;
+        if (baseReadingOf(h) && str.indexOf("_") > 0) return str.slice(0, str.indexOf("_"));
+        return str.replace(/_/g, "");
+      }
+      /* 漢字・カタカナ表示（w.d）の正規化: 「_」キーの言葉は「_」以降を見せない */
+      function normDispD(w) {
+        var d = w.d;
+        if (!d) return d;
+        var b = baseReadingOf(w.h);
+        if (!b) return d;
+        if (d === w.h) return b;
+        var u = d.indexOf("_");
+        if (u > 0) return d.slice(0, u);
+        return d;
+      }
       (function buildWords() {
         if (!KDATA) return;
+        var detached = [];
         KDATA.groups.forEach(function (g, gi) {
           var ci = g[0];
           var arr = [];
           g[1].split(" ").forEach(function (h) {
             if (!h || IDX[h] != null) return;
+            var fx = FIXALL[h];
+            var eci = ci;
+            if (fx && fx[3]) { var nci = CATS.indexOf(fx[3]); if (nci >= 0) eci = nci; }
             var i = WORDS.length;
             IDX[h] = i;
-            WORDS.push({ h: h, d: (KDATA.kata[h] || h), e: (KDATA.emo[h] || CAT_E[ci] || "✨"), c: ci, g: gi });
-            arr.push(i);
+            WORDS.push({ h: h, d: (KDATA.kata[h] || h), e: (KDATA.emo[h] || CAT_E[eci] || "✨"), c: eci, g: gi });
+            if (fx && fx[3] && eci !== ci) detached.push(i); else arr.push(i);
           });
           GROUPS.push(arr);
         });
+        detached.forEach(function (i) { WORDS[i].g = GROUPS.length; GROUPS.push([i]); });
         /* ゲームの言葉の漢字表示・絵・関連を上書き（同じ読みの言葉は1つにまとめ、関連は合体） */
         var id2h = {};
         GAME_RAW.forEach(function (a) { id2h[a[0]] = a[1]; });
@@ -6298,6 +6355,16 @@
             var ri = IDX[id2h[rid]];
             if (ri != null && ri !== i && rel.indexOf(ri) < 0) rel.push(ri);
           });
+        });
+        /* 同音異義語の修正（KDATA.fix）の表示・絵は、ゲームの言葉の上書きより
+           優先する（例: はち はゲーム側では蜂が先に当たるが、収録語のはちは
+           数字の八。蜂は同音の別エントリーとして後段で登録する） */
+        Object.keys(FIXALL).forEach(function (h) {
+          var i = IDX[h];
+          if (i == null) return;
+          var fx = FIXALL[h];
+          if (fx[1] != null) WORDS[i].d = fx[1];
+          if (fx[2] != null) WORDS[i].e = fx[2] === "" ? (CAT_E[WORDS[i].c] || "✨") : fx[2];
         });
         /* 分野ごとの一覧（ひらがな順＝先頭の文字が近い言葉が隣り合う） */
         CATS.forEach(function () { MEMBERS.push([]); });
@@ -6503,6 +6570,161 @@
         if (IDX["しち"] != null) NUM_EN_ID[IDX["しち"]] = "seven";
         rebuildOrder();
       })();
+      /* ===== 同音異義語（同じ読み・違う意味を、別の言葉として登録する） =====
+         KDATA.homo の言葉を、既存の言葉の番号を変えないよう末尾に追加する。
+         形式は fix と同じ [読み, 表示, 絵, 分野名, ゲーム対応id, 英語, 説明文]。
+         図鑑・累積回数・お気に入りなどは番号で記録されるため、意味ごとに
+         別々に集まる。IDX（読み→番号）は従来どおり最初の言葉を指し、
+         IDX_ALL（読み→番号の配列）で同じ読みの全エントリーを引ける。
+         レーティングは素点165（レベル8相当）: 幼児に身近な言葉ばかりなので、
+         語彙数1,000語の範囲でも出てくるようにする。ただし8番目に素点の
+         指定がある言葉は、同じ読みの既存の言葉のレベルを基準に付け替える
+         （例: 柵は咲くより2段低いレベル3＝素点35、速いは早いと同じ素点） */
+      var IDX_ALL = {};          /* 読み → 番号の配列（同音異義語は複数） */
+      var GAME_ID_TARGET = {};   /* GAME_RAW の id → 対応する言葉の番号（同音の振り分け） */
+      var EN_ID = {};            /* 番号 → 英語（読みでは引けない同音異義語用） */
+      var DESC_ID = {};          /* 番号 → 説明文（読みでは引けない同音異義語用） */
+      (function registerHomophones() {
+        if (!KDATA) return;
+        WORDS.forEach(function (w, i) {
+          (IDX_ALL[w.h] || (IDX_ALL[w.h] = [])).push(i);
+          /* 「_」キーの言葉は、ベースの読みからも引けるようにする
+             （関連の振り分けや同音の候補探しで、意味ごとのエントリーを扱えるように） */
+          var b = baseReadingOf(w.h);
+          if (b && b !== w.h) (IDX_ALL[b] || (IDX_ALL[b] = [])).push(i);
+        });
+        var gameById = {};
+        var id2h = {};
+        GAME_RAW.forEach(function (a) { gameById[a[0]] = a; id2h[a[0]] = a[1]; });
+        /* fix 側の対応付け（例: 収録語のはち=八 は GAME_RAW の hachi2 に対応） */
+        (KDATA.fix || []).forEach(function (f) {
+          var i = IDX[f[0]];
+          if (i == null) return;
+          if (f[4]) GAME_ID_TARGET[f[4]] = i;
+          if (f[5]) EN_ID[i] = f[5];
+          if (f[6]) DESC_ID[i] = f[6];
+          /* 意味を入れ替えた言葉は、元の意味の素点のままだと埋もれるため、
+             指定があれば素点を付け直す（例: かん=棺→缶） */
+          if (typeof f[7] === "number") { SCORE[i] = f[7]; LEVEL[i] = f[7] >= 150 ? 8 : f[7] >= 118 ? 7 : f[7] >= 66 ? 6 : f[7] >= 50 ? 5 : f[7] >= 40 ? 4 : f[7] >= 30 ? 3 : f[7] >= 10 ? 2 : 1; }
+        });
+        /* 統合（KDATA.merge）側の対応付け: 元の「_」エントリーへ、ゲーム対応・
+           英語・説明・素点を移す（表示・絵・分野は buildWords の FIXALL で適用済み） */
+        (KDATA.merge || []).forEach(function (mg) {
+          var i = IDX[mg[0]];
+          if (i == null) return;
+          if (mg[4]) GAME_ID_TARGET[mg[4]] = i;
+          if (mg[5]) EN_ID[i] = mg[5];
+          if (mg[6]) DESC_ID[i] = mg[6];
+          if (typeof mg[7] === "number") { SCORE[i] = mg[7]; LEVEL[i] = mg[7] >= 150 ? 8 : mg[7] >= 118 ? 7 : mg[7] >= 66 ? 6 : mg[7] >= 50 ? 5 : mg[7] >= 40 ? 4 : mg[7] >= 30 ? 3 : mg[7] >= 10 ? 2 : 1; }
+        });
+        /* 同音の別エントリーを追加登録する */
+        var touchedCats = {};
+        (KDATA.homo || []).forEach(function (hm) {
+          var ci = CATS.indexOf(hm[3]);
+          if (ci < 0) return;
+          var i = WORDS.length;
+          WORDS.push({ h: hm[0], d: hm[1] || hm[0], e: hm[2] || CAT_E[ci] || "✨", c: ci, g: GROUPS.length });
+          GROUPS.push([i]);
+          (IDX_ALL[hm[0]] || (IDX_ALL[hm[0]] = [])).push(i);
+          MEMBERS[ci].push(i);
+          OMEMBERS[ci].push(i); OPOS[i] = OMEMBERS[ci].length - 1;
+          SCORE[i] = 165; LEVEL[i] = 8;
+          /* 素点の指定（8番目）があれば付け替える。fix の素点指定と同じ変換 */
+          if (typeof hm[7] === "number") { SCORE[i] = hm[7]; LEVEL[i] = hm[7] >= 150 ? 8 : hm[7] >= 118 ? 7 : hm[7] >= 66 ? 6 : hm[7] >= 50 ? 5 : hm[7] >= 40 ? 4 : hm[7] >= 30 ? 3 : hm[7] >= 10 ? 2 : 1; }
+          touchedCats[ci] = 1;
+          if (hm[4]) GAME_ID_TARGET[hm[4]] = i;
+          if (hm[5]) EN_ID[i] = hm[5];
+          if (hm[6]) DESC_ID[i] = hm[6];
+        });
+        Object.keys(touchedCats).forEach(function (ck) {
+          var mem = MEMBERS[Number(ck)];
+          mem.sort(function (a, b) { var x = WORDS[a].h, y = WORDS[b].h; return x < y ? -1 : x > y ? 1 : 0; });
+          mem.forEach(function (idx, p) { POS[idx] = p; });
+        });
+        function resolveRel(rid, self) {
+          var t = GAME_ID_TARGET[rid] != null ? GAME_ID_TARGET[rid] : IDX[id2h[rid]];
+          return (t != null && t !== self) ? t : null;
+        }
+        function gameRels(gk, self) {
+          var out = [];
+          var a = gk ? gameById[gk] : null;
+          if (a) (a[5] || []).forEach(function (rid) { var t = resolveRel(rid, self); if (t != null && out.indexOf(t) < 0) out.push(t); });
+          return out;
+        }
+        function catRels(id) {
+          var out = [];
+          (MEMBERS[WORDS[id].c] || []).slice().sort(function (a, b) { return SCORE[b] - SCORE[a]; }).forEach(function (mid) {
+            if (out.length < 6 && mid !== id && WORDS[mid].h !== WORDS[id].h) out.push(mid);
+          });
+          return out;
+        }
+        /* 同音で分かれた言葉どうしの関連を組み直す: それぞれの意味に対応する
+           ゲームの言葉の関連を使い、合体していた関連は分け直す。ゲーム側に
+           対応が無い意味は、同じ分野の代表的な言葉を関連にする。数字の言葉
+           など後付けで付いた関連（extras）は、従来の言葉（最初のエントリー）
+           に残す */
+        var splitHs = {};
+        (KDATA.fix || []).forEach(function (f) { splitHs[f[0]] = 1; });
+        (KDATA.homo || []).forEach(function (hm) { splitHs[hm[0]] = 1; });
+        (KDATA.merge || []).forEach(function (mg) { splitHs[baseReadingOf(mg[0]) || mg[0]] = 1; });
+        Object.keys(splitHs).forEach(function (h) {
+          var ids = IDX_ALL[h] || [];
+          if (ids.length < 2 && !FIX[h]) return;
+          var primary = IDX[h];
+          var merged = (HAND[primary] || []).slice();
+          var allGame = {};
+          GAME_RAW.forEach(function (a) {
+            if (a[1] !== h) return;
+            /* 合体時に使われた引き方（読み→最初の言葉）で数える。extras の
+               切り分けはこの基準で行い、意味ごとの関連は gameRels で引き直す */
+            (a[5] || []).forEach(function (rid) { var t = IDX[id2h[rid]]; if (t != null && t !== primary) allGame[t] = 1; });
+          });
+          var extras = merged.filter(function (id) { return !allGame[id]; });
+          var gkOf = {};
+          if (FIX[h] && FIX[h][4]) gkOf[primary] = FIX[h][4];
+          (KDATA.homo || []).forEach(function (hm) { if (hm[0] === h && hm[4] && GAME_ID_TARGET[hm[4]] != null) gkOf[GAME_ID_TARGET[hm[4]]] = hm[4]; });
+          (KDATA.merge || []).forEach(function (mg) { if ((baseReadingOf(mg[0]) || mg[0]) === h && mg[4] && GAME_ID_TARGET[mg[4]] != null) gkOf[GAME_ID_TARGET[mg[4]]] = mg[4]; });
+          ids.forEach(function (id) {
+            var rel = gameRels(gkOf[id], id);
+            if (id === primary) extras.forEach(function (ex) { if (ex !== id && rel.indexOf(ex) < 0) rel.push(ex); });
+            if (!rel.length) rel = catRels(id);
+            HAND[id] = rel;
+          });
+        });
+        /* 他の言葉の関連に同音の言葉が含まれるとき、意味の合う側へ付け替える
+           （例: 花の関連の「はち」は、八ではなく蜂を指すようにする） */
+        var desired = {};
+        GAME_RAW.forEach(function (a) {
+          var t = GAME_ID_TARGET[a[0]] != null ? GAME_ID_TARGET[a[0]] : IDX[a[1]];
+          if (t == null) return;
+          var set = desired[t] || (desired[t] = {});
+          (a[5] || []).forEach(function (rid) { var r = resolveRel(rid, t); if (r != null) set[r] = 1; });
+        });
+        Object.keys(HAND).forEach(function (oid) {
+          var set = desired[oid];
+          if (!set) return;
+          var seenR = {};
+          HAND[oid] = HAND[oid].map(function (r) {
+            if (IDX[WORDS[r].h] !== r) return r;
+            var cands = (IDX_ALL[WORDS[r].h] || []).filter(function (cid) { return set[cid] && cid !== r; });
+            return cands.length ? cands[0] : r;
+          }).filter(function (r) { if (seenR[r]) return false; seenR[r] = 1; return true; });
+        });
+        rebuildOrder();
+      })();
+      /* ===== 読み上げの正規化 =====
+         「_」キーで管理されている言葉が文の中に出てきたら、「_」以降ではなく
+         ベースの読みだけで読み上げる（例: はな_かお → はな、たこ_2 → たこ）。
+         対象外のキー（ベースが単独で存在しないもの）は従来どおり「_」を除く */
+      var NORM_MAP = {};
+      WORDS.forEach(function (w) { var b = baseReadingOf(w.h); if (b) NORM_MAP[w.h] = b; });
+      var NORM_KEYS = Object.keys(NORM_MAP).sort(function (a, b) { return b.length - a.length; });
+      var NORM_RE = NORM_KEYS.length ? new RegExp(NORM_KEYS.map(function (k) { return k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }).join("|"), "g") : null;
+      function speakTextNorm(text) {
+        var s = String(text);
+        if (NORM_RE) s = s.replace(NORM_RE, function (m) { return NORM_MAP[m] || m; });
+        return s.replace(/_/g, "");
+      }
       /* ===== 絵文字の対応チェック（端末で描けない絵は分野の絵に差し替える） =====
          新しいOSで追加された絵文字は、古い端末では豆腐（□）や空白になってしまう。
          ここで、使う絵文字を canvas に描いて「未収録グリフ（豆腐）と同じ見た目」
@@ -6569,14 +6791,34 @@
          ここで img を差し替えるだけで全ての表示場所に反映される。言葉の文字・
          読み上げ・図鑑登録などの扱いは変えない。対象は収録語だけ（先頭
          BUILTIN_TOTAL 語）で、カスタム語の img には触れない。保存キーは
-         読み（ひらがな）で、データ更新で番号がずれても読みで引き直す
-         （除外設定の exclWordHs と同じ考え方）。実データ（wordPhotos 本体）は
-         保存まわりの変数の並びで宣言する */
+         言葉ごと（wordKeyOf: その読みの最初の言葉は読み、同音の2つ目以降は
+         「読み#番号」）で、同音異義語どうしで混ざらないようにする
+         （除外設定の exclWordHs も同じキーを使う）。実データ（wordPhotos
+         本体）は保存まわりの変数の並びで宣言する */
+      /* 言葉ごとの保存キー: 同音異義語が混ざらないよう、その読みの最初の
+         言葉は従来どおり読みだけ、2つ目以降の意味は「読み#番号」にする。
+         写真の差し替えと「出さない言葉」の両方で使う。従来の保存データ
+         （読みだけのキー）は、従来の言葉（最初の意味）にそのまま残る */
+      function wordKeyOf(id) {
+        if (id == null || !WORDS[id]) return null;
+        var h = WORDS[id].h;
+        return IDX[h] === id ? h : h + "#" + id;
+      }
+      function wordIdOfKey(k) {
+        if (typeof k !== "string" || !k) return null;
+        var hp = k.indexOf("#");
+        if (hp >= 0) {
+          var cand = Number(k.slice(hp + 1));
+          return (WORDS[cand] && wordKeyOf(cand) === k) ? cand : null;
+        }
+        var id = IDX[k];
+        return (id != null && WORDS[id].h === k) ? id : null;
+      }
       function applyWordPhotos() {
         if (typeof wordPhotos === "undefined" || !wordPhotos) return;
         var lim = (typeof BUILTIN_TOTAL === "number" && BUILTIN_TOTAL >= 0) ? Math.min(BUILTIN_TOTAL, WORDS.length) : WORDS.length;
         for (var i = 0; i < lim; i++) {
-          var p = wordPhotos[WORDS[i].h];
+          var p = wordPhotos[wordKeyOf(i)];
           WORDS[i].img = (typeof p === "string" && p) ? p : null;
         }
       }
@@ -6590,7 +6832,7 @@
       /* ===== 出さない言葉・分野（除外設定） =====
          大人用設定で選んだ分野・言葉を対象範囲から外す。記録自体は消さず、
          除外中は盤面等に出ず、母数（scopeCount）にも数えない。戻せば数え直す。
-         保存は分野名・読み（ひらがな）のリストで行い、読み込み時に現在の
+         保存は分野名・言葉ごとのキー（wordKeyOf）のリストで行い、読み込み時に現在の
          番号へ変換し直す（exclCatSet / exclWordSet） */
       var exclCatNames = [];
       var exclWordHs = [];
@@ -6599,7 +6841,7 @@
       function rebuildExclusions() {
         exclCatSet = {}; exclWordSet = {};
         (exclCatNames || []).forEach(function (n) { var ci = CATS.indexOf(n); if (ci >= 0) exclCatSet[ci] = 1; });
-        (exclWordHs || []).forEach(function (h) { var id = IDX[h]; if (id != null) exclWordSet[id] = 1; });
+        (exclWordHs || []).forEach(function (k) { var id = wordIdOfKey(k); if (id != null) exclWordSet[id] = 1; });
       }
       function isExcluded(id) {
         if (id == null || !WORDS[id]) return false;
@@ -6636,7 +6878,7 @@
       }
       function setWordHTML(el, w) {
         if (!el || !w) return;
-        if (typeof furiganaOn !== "undefined" && furiganaOn && mode === "mix") el.innerHTML = furiganaHTML(disp(w), w.h);
+        if (typeof furiganaOn !== "undefined" && furiganaOn && mode === "mix") el.innerHTML = furiganaHTML(disp(w), baseReadingOf(w.h) || w.h);
         else el.textContent = disp(w);
       }
       function scopedMembers(ci) { return MEMBERS[ci].filter(function (id) { return inScope(id); }); }
@@ -6988,7 +7230,7 @@
         ensurePlayCounts();
       }
       var customWords = [];           /* 大人が登録した「うちの子の言葉」: {h, d, e, cat, img?} の配列 */
-      var wordPhotos = {};            /* 収録語の絵の写真差し替え: 読み（ひらがな）→ 圧縮済み写真データ(dataURL)。「うちの子の言葉」の写真（customWords[].img）とは別の仕組み。共通設定として保存され、バックアップにも含まれる（buildSaveData の settings.wordPhotos） */
+      var wordPhotos = {};            /* 収録語の絵の写真差し替え: 言葉ごとのキー（wordKeyOf）→ 圧縮済み写真データ(dataURL)。「うちの子の言葉」の写真（customWords[].img）とは別の仕組み。共通設定として保存され、バックアップにも含まれる（buildSaveData の settings.wordPhotos） */
       var BUILTIN_TOTAL = TOTAL;      /* 収録語（カスタム語を足す前）の総数。差し替えの対象は先頭 BUILTIN_TOTAL 語だけ */
       /* ===== 第2弾の追加状態 =====
          speechRate: 読み上げ速度（0.78=ゆっくり・従来相当 / 0.95=ふつう / 1.12=はやい）
@@ -7347,7 +7589,9 @@
       var zukanBadge = document.getElementById("zukanBadge");
       var zukanEl = document.getElementById("zukan");
 
-      function disp(w) { return mode === "hira" ? w.h : w.d; }
+      /* 表示形: 「_」キーで管理されている言葉は、ひらがな表示でも漢字表示でも
+         「_」以降を見せず、ベースの読み・表示で出す（意味の違いは絵と分野で見分ける） */
+      function disp(w) { return mode === "hira" ? (baseReadingOf(w.h) || w.h) : normDispD(w); }
 
       /* ===== おと（音声読み上げ） ===== */
       var jaVoice = null;
@@ -7391,7 +7635,7 @@
         if (!effectiveSound() || !("speechSynthesis" in window)) return;
         try {
           window.speechSynthesis.cancel();
-          var u = new SpeechSynthesisUtterance(String(text).replace(/_/g, ""));
+          var u = new SpeechSynthesisUtterance(speakTextNorm(text));
           u.lang = "ja-JP";
           if (jaVoice) u.voice = jaVoice;
           u.rate = speechRate;   /* 大人用設定の読み上げ速度（初期値は従来のゆっくり相当） */
@@ -7912,13 +8156,22 @@
       /* ===== ゲーム性（おだい・クイズ・ぶん・きょうの ことば・マップ・おきにいり） ===== */
       /* 482語の タイプ（品詞・テーマ）: 文づくりと おだいに使う */
       var TYPE_OF = {};
+      var TYPE_ID = {};   /* 番号 → タイプ（同音異義語は意味ごとに持つ） */
       var TYPE_LABEL = { animal: "どうぶつ", food: "たべもの", vehicle: "のりもの", nature: "しぜん", place: "ばしょ", hito: "ひと", body: "からだ", home: "うちの もの", play: "あそび", verb: "うごき", adj: "ようす・きもち", pos: "いち・ほうこう", ono: "おとの ことば", color: "いろ・かず・かたち" };
       var TYPE_MEMBERS = {};
       GAME_RAW.forEach(function (a) {
-        if (IDX[a[1]] == null) return;
+        /* 同音異義語は GAME_ID_TARGET で意味の合うエントリーへ振り分ける */
+        var tid = (typeof GAME_ID_TARGET !== "undefined" && GAME_ID_TARGET[a[0]] != null) ? GAME_ID_TARGET[a[0]] : IDX[a[1]];
+        if (tid == null) return;
         if (!TYPE_OF[a[1]]) TYPE_OF[a[1]] = a[4];
-        (TYPE_MEMBERS[a[4]] || (TYPE_MEMBERS[a[4]] = [])).push(IDX[a[1]]);
+        if (TYPE_ID[tid] == null) TYPE_ID[tid] = a[4];
+        (TYPE_MEMBERS[a[4]] || (TYPE_MEMBERS[a[4]] = [])).push(tid);
       });
+      /* 言葉のタイプを番号で引く（同音異義語は意味ごとのタイプを優先する） */
+      function typeOfId(id) {
+        if (id == null || !WORDS[id]) return null;
+        return TYPE_ID[id] || TYPE_OF[WORDS[id].h] || null;
+      }
 
       /* ===== お祝い ===== */
       var celebrateEl = document.getElementById("celebrate");
@@ -8223,7 +8476,7 @@
       function makeSentence(id) {
         var w = WORDS[id];
         var x = disp(w);
-        var t = TYPE_OF[w.h];
+        var t = typeOfId(id);
         if (t === "animal") return x + "が いるよ。" + x + "、げんきだね！";
         if (t === "food") return x + "は おいしいよ。" + x + "を もぐもぐ たべよう！";
         if (t === "vehicle") return x + "が はしっているよ。" + x + "、かっこいいね！";
@@ -8362,7 +8615,7 @@
         if (missionSeen[id]) return;
         var hit = false;
         if (mission.kind === "cat") hit = WORDS[id].c === mission.cat;
-        else if (mission.kind === "type") hit = TYPE_OF[WORDS[id].h] === mission.type;
+        else if (mission.kind === "type") hit = typeOfId(id) === mission.type;
         else if (mission.kind === "head") hit = !!mission.head && WORDS[id].h.charAt(0) === mission.head;
         if (!hit) return;
         missionSeen[id] = 1;
@@ -9996,8 +10249,9 @@
         if (typeof CUSTOM_CAT !== "undefined" && CUSTOM_CAT >= 0 && w.c === CUSTOM_CAT) {
           return disp(w) + "は、うちの子の ことばだよ。かぞくの だいじな ことばだね。";
         }
+        if (typeof DESC_ID !== "undefined" && DESC_ID[id]) return DESC_ID[id];
         if (DESC_MAP[w.h]) return DESC_MAP[w.h];
-        var t = TYPE_OF[w.h];
+        var t = typeOfId(id);
         if (t && DESC_TYPE[t]) return disp(w) + "は " + DESC_TYPE[t];
         return disp(w) + "は「" + (CATS[w.c] || "") + "」の なかまだよ。";
       }
@@ -10092,6 +10346,7 @@
       function enOf(id) {
         if (id == null || !WORDS[id]) return null;
         if (typeof NUM_EN_ID !== "undefined" && NUM_EN_ID[id]) return NUM_EN_ID[id];
+        if (typeof EN_ID !== "undefined" && EN_ID[id]) return EN_ID[id];
         return EN_MAP[WORDS[id].h] || null;
       }
       document.getElementById("enSpeakBtn").addEventListener("click", function () {
@@ -10370,9 +10625,10 @@
         applyExclusions();
       }
       function toggleExcludeWord(id) {
-        var h = WORDS[id].h;
-        var i = exclWordHs.indexOf(h);
-        if (i >= 0) exclWordHs.splice(i, 1); else exclWordHs.push(h);
+        var k = wordKeyOf(id);
+        if (k == null) return;
+        var i = exclWordHs.indexOf(k);
+        if (i >= 0) exclWordHs.splice(i, 1); else exclWordHs.push(k);
         applyExclusions();
       }
       function exclToggleBtn(label, on, onClick) {
@@ -10387,7 +10643,7 @@
       /* 除外画面の言葉名: 写真に差し替えた収録語は、絵文字の代わりに写真の小さい画像を添える */
       function setExclName(nm, id, suffix) {
         var w = WORDS[id];
-        var cur = (id != null && id < BUILTIN_TOTAL) ? wordPhotos[w.h] : null;
+        var cur = (id != null && id < BUILTIN_TOTAL) ? photoOf(id) : null;
         if (cur) {
           var pim = document.createElement("img"); pim.className = "photo-thumb"; pim.src = cur; pim.alt = "";
           nm.appendChild(pim);
@@ -10417,8 +10673,8 @@
             none.textContent = ST("d_exclNone");
             wordBox.appendChild(none);
           } else {
-            exclWordHs.slice().forEach(function (h) {
-              var id = IDX[h];
+            exclWordHs.slice().forEach(function (k) {
+              var id = wordIdOfKey(k);
               if (id == null) return;
               var row = document.createElement("div"); row.className = "feat-row";
               var nm = document.createElement("span"); nm.className = "feat-name";
@@ -10471,7 +10727,7 @@
 
       /* ===== 言葉の絵を変える（収録語の絵文字を写真に差し替える） =====
          「うちの子の言葉」の写真登録とは別の仕組み。対象は収録語だけ。
-         差し替えデータは wordPhotos（読み→圧縮済み dataURL）で持ち、
+         差し替えデータは wordPhotos（言葉ごとのキー→圧縮済み dataURL）で持ち、
          applyWordPhotos() で WORDS[i].img に載せることで、既存の写真優先の
          表示経路（盤面・図鑑・各遊び・子供用きろく等）すべてに反映する。
          保存できなかったとき（容量不足など）は変更前に戻し、既存の保存警告と
@@ -10498,8 +10754,17 @@
       var photoSearchList = null;  /* 検索結果の言葉番号（未検索は null） */
 
       function isPhotoWord(id) { return id != null && typeof id === "number" && id >= 0 && id < BUILTIN_TOTAL && !!WORDS[id]; }
-      function photoOf(id) { return isPhotoWord(id) ? (wordPhotos[WORDS[id].h] || null) : null; }
+      function photoOf(id) { return isPhotoWord(id) ? (wordPhotos[wordKeyOf(id)] || null) : null; }
 
+      /* 大人用「言葉の絵を変える」画面での言葉の名札: 読みに漢字・カタカナ形を
+         併記し、同音異義語を見分けられるようにする（例: たこ（凧）／たこ（タコ））。
+         子供の表示設定（ひらがな／漢字あり）によらず、この画面では常に併記する */
+      function photoNameLabel(w) {
+        var r = baseReadingOf(w.h) || w.h;
+        var d = normDispD(w);
+        if (d && d !== r) return r + "（" + d + "）";
+        return r;
+      }
       function photoRow(id, btnLabel, onBtn) {
         var w = WORDS[id];
         var row = document.createElement("div"); row.className = "custom-item";
@@ -10507,15 +10772,15 @@
         var em;
         if (cur) { em = document.createElement("img"); em.className = "photo-thumb"; em.src = cur; em.alt = ""; }
         else { em = document.createElement("span"); em.className = "em"; em.textContent = w.e; }
-        var tx = document.createElement("span"); tx.textContent = disp(w);
+        var tx = document.createElement("span"); tx.textContent = photoNameLabel(w);
         var meta = document.createElement("span"); meta.className = "meta";
-        meta.textContent = "（" + w.h + "・" + (CATS[w.c] || "") + "）";
+        meta.textContent = "（" + (CATS[w.c] || "") + "）";
         row.appendChild(em); row.appendChild(tx); row.appendChild(meta);
         if (cur) { var bd = document.createElement("span"); bd.className = "photo-badge"; bd.textContent = ST("d_photoBadge"); row.appendChild(bd); }
         var btn = document.createElement("button");
         btn.type = "button"; btn.className = "adult-btn"; btn.style.marginLeft = "auto"; btn.style.flex = "none";
         btn.textContent = btnLabel;
-        btn.setAttribute("aria-label", ST("d_photoAria", { name: disp(w), action: btnLabel }));
+        btn.setAttribute("aria-label", ST("d_photoAria", { name: photoNameLabel(w), action: btnLabel }));
         btn.addEventListener("click", function () { onBtn(id); });
         row.appendChild(btn);
         return row;
@@ -10570,8 +10835,8 @@
           var em = document.createElement("span"); em.className = "photo-cur-emoji"; em.textContent = w.e;
           photoCurPicEl.appendChild(em);
         }
-        photoEditNameEl.textContent = disp(w);
-        photoEditMetaEl.textContent = ST("d_photoMeta", { h: w.h, cat: CATS[w.c] || "", e: w.e });
+        photoEditNameEl.textContent = photoNameLabel(w);
+        photoEditMetaEl.textContent = ST("d_photoMeta", { h: baseReadingOf(w.h) || w.h, cat: CATS[w.c] || "", e: w.e });
         photoEditStateEl.textContent = photoPending
           ? ST("d_photoStateNew")
           : (cur ? ST("d_photoStateCur") : ST("d_photoStateOrig"));
@@ -10605,9 +10870,9 @@
           return;
         }
         keys.sort();
-        keys.forEach(function (h) {
-          var id = IDX[h];
-          if (!isPhotoWord(id) || WORDS[id].h !== h) return;
+        keys.forEach(function (k) {
+          var id = wordIdOfKey(k);
+          if (!isPhotoWord(id)) return;
           photoListEl.appendChild(photoRow(id, ST("d_photoEditBack"), function (selId) { openPhotoEditor(selId); }));
         });
       }
@@ -10701,7 +10966,7 @@
         if (!isPhotoWord(photoEditId) || !photoPending) return;
         var w = WORDS[photoEditId];
         var prev = copyWordPhotos();
-        wordPhotos[w.h] = photoPending;
+        wordPhotos[wordKeyOf(photoEditId)] = photoPending;
         var okSave = commitWordPhotos(prev);
         if (!okSave) {
           photoMsgEl.textContent = ST("d_pmsgQuota2");
@@ -10709,7 +10974,7 @@
           return;
         }
         clearPhotoPending();
-        photoMsgEl.textContent = ST("d_pmsgApplied", { name: disp(w) }) + (storageUsable ? "" : ST("d_pmsgAppliedTemp"));
+        photoMsgEl.textContent = ST("d_pmsgApplied", { name: photoNameLabel(w) }) + (storageUsable ? "" : ST("d_pmsgAppliedTemp"));
         refreshPhotoEverywhere();
       });
       if (photoResetBtn) photoResetBtn.addEventListener("click", function () { photoResetConfirmEl.hidden = false; });
@@ -10718,7 +10983,7 @@
         if (!isPhotoWord(photoEditId)) return;
         var w = WORDS[photoEditId];
         var prev = copyWordPhotos();
-        delete wordPhotos[w.h];
+        delete wordPhotos[wordKeyOf(photoEditId)];
         var okSave = commitWordPhotos(prev);
         photoResetConfirmEl.hidden = true;
         if (!okSave) {
@@ -10727,7 +10992,7 @@
           return;
         }
         clearPhotoPending();
-        photoMsgEl.textContent = ST("d_pmsgRestored", { name: disp(w), e: w.e });
+        photoMsgEl.textContent = ST("d_pmsgRestored", { name: photoNameLabel(w), e: w.e });
         refreshPhotoEverywhere();
       });
       document.getElementById("photoResetAllBtn").addEventListener("click", function () { photoResetAllConfirmEl.hidden = false; });
@@ -10838,7 +11103,7 @@
       function storyRole(id) {
         var w = WORDS[id];
         if (!w) return null;
-        var t = TYPE_OF[w.h];
+        var t = typeOfId(id);
         if (t === "verb" || t === "adj" || t === "pos" || t === "ono" || t === "color") return null;
         if (t === "animal" || t === "hito") return "actor";
         if (t === "food") return "food";
@@ -10938,7 +11203,7 @@
       function storyPlainText() {
         return storySegs.map(function (s, i) {
           if (typeof s === "string") return s;
-          var h = WORDS[s.w].h;
+          var h = cleanReading(WORDS[s.w].h);
           var next = storySegs[i + 1];
           if (typeof next === "string" && next && WORD_PARTICLES.indexOf(next.charAt(0)) >= 0) h += "、";
           return h;
@@ -12127,7 +12392,7 @@
           }
           setTimeout(function () { speak(WORDS[fromId].h + "、の はんたいは、" + WORDS[toId].h + "だね！"); }, 900);
         } else {
-          document.getElementById("hantaiMsg").textContent = "それは " + WORDS[id].h + " だね。はんたいは こっちだよ！";
+          document.getElementById("hantaiMsg").textContent = "それは " + disp(WORDS[id]) + " だね。はんたいは こっちだよ！";
           var ch = document.getElementById("hantaiChoices");
           for (var i = 0; i < ch.children.length; i++) { /* 正解カードを光らせる */ }
           setTimeout(function () { speak(WORDS[fromId].h + "、の はんたいは、" + WORDS[toId].h + "だね！"); }, 900);
@@ -12220,7 +12485,7 @@
         for (var i = 0; i < SHIRI_VOWEL_ROWS.length; i++) { if (SHIRI_VOWEL_ROWS[i].indexOf(ch) >= 0) return "あいうえお".charAt(i); }
         return ch;
       }
-      function shiriCleanH(id) { return String(WORDS[id].h || "").replace(/_/g, "").replace(/・/g, ""); }
+      function shiriCleanH(id) { return cleanReading(WORDS[id].h).replace(/・/g, ""); }
       function shiriFirstKey(id) {
         var h = shiriCleanH(id);
         return h ? shiriNormCh(h.charAt(0)) : "";
@@ -12407,7 +12672,7 @@
         shiriCollect(id);
         sfx("good");
         if (!shiriHasNext(id, shiriUsed, scopeList())) { shiriEnterRestart(""); return; }
-        shiriRenderRound("", WORDS[id].h + "！つぎは「" + shiriNeedText(id) + "」ではじまる ことばは どれ？");
+        shiriRenderRound("", disp(WORDS[id]) + "！つぎは「" + shiriNeedText(id) + "」ではじまる ことばは どれ？");
       }
       function shiriTap(id, btn) {
         if (shiriLock) return;
@@ -12426,7 +12691,7 @@
           setTimeout(function () {
             if (shiritoriEl.hidden) return;
             if (!shiriHasNext(id, shiriUsed, scopeList())) {
-              var reason = shiriLastKeys(id) ? "" : ("「" + WORDS[id].h + "」は「ん」で おわるね。");
+              var reason = shiriLastKeys(id) ? "" : ("「" + disp(WORDS[id]) + "」は「ん」で おわるね。");
               shiriEnterRestart(reason);
               return;
             }
@@ -12436,7 +12701,7 @@
           sfx("pop");
           speak(WORDS[id].h);
           var need = shiriNeedText(curId);
-          document.getElementById("shiriMsg").textContent = "それは「" + WORDS[id].h + "」だね。「" + need + "」ではじまる ことばを さがそう！";
+          document.getElementById("shiriMsg").textContent = "それは「" + disp(WORDS[id]) + "」だね。「" + need + "」ではじまる ことばを さがそう！";
           setTimeout(function () { if (!shiritoriEl.hidden) speak("「" + need + "」ではじまる ことばを さがそう"); }, 850);
         }
       }
@@ -12542,7 +12807,7 @@
         var best = null, bestScore = -1, contain = null, containScore = -1;
         for (var i = 0; i < WORDS.length; i++) {
           var w = WORDS[i];
-          var h = String(w.h || "").replace(/_/g, "");
+          var h = cleanReading(w.h);
           if (h.length < 2 || h.length > 4) continue;
           var sc = (LEVEL[i] || 0) * 10 - h.length + (w.e ? 3 : 0);
           if (h.charAt(0) === c) { if (sc > bestScore) { bestScore = sc; best = i; } }
@@ -12560,7 +12825,7 @@
         var best = null, bestScore = -1;
         for (var i = 0; i < WORDS.length; i++) {
           var w = WORDS[i];
-          var k = String(w.k || "").replace(/_/g, "");
+          var k = hintStrip(w.k, w.h);
           if (k.indexOf(c) < 0 || k.length > 6) continue;
           var sc = (LEVEL[i] || 0) * 10 - k.length + (w.e ? 3 : 0);
           if (sc > bestScore) { bestScore = sc; best = i; }
@@ -12661,13 +12926,13 @@
         if (nazoriMode === "kata") {
           id = nazoriExampleForKata(nazoriChar);
           if (id == null) { exBtn.style.display = "none"; return; }
-          var kw = String(WORDS[id].k || "").replace(/_/g, "");
+          var kw = hintStrip(WORDS[id].k, WORDS[id].h);
           if (kw.indexOf(nazoriChar) >= 0) { dispStr = kw; markChar = nazoriChar; }
-          else { dispStr = String(WORDS[id].h || "").replace(/_/g, ""); markChar = nazoriKataToHira(nazoriChar); }
+          else { dispStr = cleanReading(WORDS[id].h); markChar = nazoriKataToHira(nazoriChar); }
         } else {
           id = nazoriExampleFor(nazoriChar);
           if (id == null) { exBtn.style.display = "none"; return; }
-          dispStr = String(WORDS[id].h || "").replace(/_/g, "");
+          dispStr = cleanReading(WORDS[id].h);
           markChar = nazoriChar;
         }
         exBtn.style.display = "";
@@ -12690,12 +12955,12 @@
           tx2.appendChild(document.createTextNode(dispStr.slice(pos + 1)));
         } else tx2.textContent = dispStr;
         exBtn.appendChild(tx2);
-        exBtn.setAttribute("aria-label", String(w.h || "").replace(/_/g, "") + "。おすと よむよ");
+        exBtn.setAttribute("aria-label", cleanReading(w.h) + "。おすと よむよ");
       }
       function nazoriSpeakCurrent() {
         if (nazoriMode === "num") { speak("すうじの " + NAZORI_NUM_READING[nazoriChar]); return; }
         var id = nazoriMode === "kata" ? nazoriExampleForKata(nazoriChar) : nazoriExampleFor(nazoriChar);
-        if (id != null) speak(nazoriChar + "。" + String(WORDS[id].h || "").replace(/_/g, ""));
+        if (id != null) speak(nazoriChar + "。" + cleanReading(WORDS[id].h));
         else speak(nazoriChar);
       }
       function nazoriUpdateMarker() {
@@ -12852,7 +13117,7 @@
           msg = "「" + nazoriChar + "」が かけたね！";
           if (id != null) {
             nazoriCollect(id);
-            msg += "「" + String(WORDS[id].h || "").replace(/_/g, "") + "」を ずかんに あつめたよ。";
+            msg += "「" + cleanReading(WORDS[id].h) + "」を ずかんに あつめたよ。";
           }
         }
         document.getElementById("nazoriStatus").textContent = msg;
@@ -13824,7 +14089,7 @@
       var MOJI_OK = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ";
       var MOJI_ALL = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
       var mojiTab = "anaume";
-      function mojiCleanH(id) { return String(WORDS[id].h || "").replace(/_/g, "").replace(/・/g, ""); }
+      function mojiCleanH(id) { return cleanReading(WORDS[id].h).replace(/・/g, ""); }
       function mojiAllKana(h) {
         if (!h) return false;
         for (var i = 0; i < h.length; i++) { if (MOJI_OK.indexOf(h.charAt(i)) < 0) return false; }
@@ -14916,7 +15181,7 @@
       /* ===== 5. てびょうし あそび（モーラ数だけ手を叩く） ===== */
       var clapEl = document.getElementById("clapEl");
       function moraCount(h) {
-        var s = String(h || "").replace(/_/g, "");
+        var s = cleanReading(h);
         var n = 0;
         for (var i = 0; i < s.length; i++) {
           if ("ゃゅょぁぃぅぇぉ".indexOf(s.charAt(i)) >= 0) continue;   /* 小さいかなは前の音と合わせて1つ */
@@ -15251,7 +15516,7 @@
           .map(function (id) { return { id: id, d: collectedDates[id] }; })
           .sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : a.id - b.id; });
         if (dated.length) {
-          events.push({ d: dated[0].d, text: ST("d_albumStart", { word: mode === "hira" ? WORDS[dated[0].id].h : WORDS[dated[0].id].d }) });
+          events.push({ d: dated[0].d, text: ST("d_albumStart", { word: disp(WORDS[dated[0].id]) }) });
           var ALBUM_MILES = [10, 50, 100, 500, 1000, 5000, 10000];
           var GARDEN_ONLY_MILES = (typeof GARDEN_MILES !== "undefined" ? GARDEN_MILES : []).filter(function (m) { return ALBUM_MILES.indexOf(m) < 0; });
           dated.forEach(function (r, i) {
@@ -15286,7 +15551,7 @@
         Object.keys(saidFirst).forEach(function (k) {
           var id = Number(k);
           if (isValidId(id) && saidFirst[k]) {
-            events.push({ d: saidFirst[k], text: ST("d_albumSaid", { word: mode === "hira" ? WORDS[id].h : WORDS[id].d }) });
+            events.push({ d: saidFirst[k], text: ST("d_albumSaid", { word: disp(WORDS[id]) }) });
           }
         });
         Object.keys(stampDays).forEach(function (dk) {
