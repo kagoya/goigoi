@@ -34,8 +34,9 @@ Phiên bản hiện tại: **3.6**
 - Hình ảnh của một từ có thể đổi thành ảnh chụp trong Cài đặt, tại 「言葉の絵を変える」 (ảnh được tự động thu nhỏ dung lượng và lưu lại; được bao gồm trong bản sao lưu và có thể khôi phục về mặc định)
 - Việc chấm なぞりがき có thể cài đặt từng mục trong Cài đặt: số nét, thứ tự nét, hướng, hình dạng và hình dạng chính xác (cũng có thể chọn theo cấp độ 1–5; mặc định tương đương cấp độ 4)
 - Phần giải thích trên trang Cài đặt có 14 ngôn ngữ (tiếng Nhật, tiếng Nhật dễ hiểu kèm furigana, English, tiếng Trung giản thể, tiếng Trung phồn thể, Português, Español, Tiếng Việt, tiếng Thái, tiếng Hàn, tiếng Pháp, tiếng Đức, tiếng Ý, tiếng Indonesia). Các thuật ngữ và từ vựng trong trò chơi vẫn giữ nguyên tiếng Nhật
+- Màn hình Cài đặt cũng có nút mở danh mục cho người lớn (PDF) bằng ngôn ngữ đã chọn
 - Hồ sơ cho tối đa 3 anh chị em. Ngoài ra còn có 保護者レポート, 「きろく」 và sao lưu bản ghi
-- 「なあに？」 là trò chơi nhìn hình và nói từ thành tiếng. Người lớn ngồi nghe bên cạnh chạm vào nút 「いえたね」 để ghi lại rằng trẻ đã nói được từ đó (mặc định tắt trong cài đặt ban đầu)
+- 「なあに？」 là trò chơi nhìn hình và nói từ thành tiếng. Người lớn ngồi nghe bên cạnh chạm vào nút 「いえたね」 để ghi lại rằng trẻ đã nói được từ đó (mặc định tắt trong cài đặt ban đầu) Ngoài ra còn có phần hiển thị đáp án chỉ dành cho người lớn và hướng dẫn đánh giá (ví dụ, đúng âm đầu là được)
 - 「おはなばたけ」 là một khung cảnh lớn lên theo số từ đã thu thập: hạt giống → mầm → lá non → hoa → cây. Côn trùng cũng ngày càng nhiều, và khi nở rộ sẽ xuất hiện cầu vồng
 - 保護者レポート còn hiển thị "mức độ gặp gỡ" (であいの深さ) của từng từ theo các giai đoạn — であった (đã gặp) / えらべた (đã chọn được) / しっかり えらべた (đã chọn được trong các trò chơi khác nhau hoặc vào các ngày khác nhau) / こえに だせた (đã nói thành tiếng) — kèm số lượng và danh sách theo từng giai đoạn. Đây chỉ là thông tin tham khảo từ bản ghi chơi, không phải là đánh giá về mức độ hiểu của trẻ
 - Trong Cài đặt, 「集めた言葉の管理」 cho phép người lớn xóa từng từ đã thu thập, có xác nhận, cho từng hồ sơ (không thể xóa từ ずかん)

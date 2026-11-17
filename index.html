@@ -732,6 +732,8 @@
       .lang-bar { max-width: 760px; margin: 0 auto 12px; background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 14px 18px; box-shadow: var(--shadow); }
       .lang-bar label { display: block; font-weight: 800; font-size: 15px; margin-bottom: 8px; }
       .lang-bar select { width: 100%; min-height: 50px; border-radius: 12px; border: 2px solid var(--line); padding: 8px 12px; font: inherit; font-size: 16.5px; font-weight: 700; background: var(--bg); color: var(--ink); }
+      .catalog-pdf-btn { display: flex; align-items: center; justify-content: center; min-height: 52px; margin-top: 12px; padding: 10px 16px; border-radius: 14px; border: 2px solid transparent; background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: 16px; text-decoration: none; box-shadow: var(--shadow); }
+      .catalog-pdf-btn:active { transform: scale(0.98); }
       .adult-intro { max-width: 760px; margin: 0 auto 12px; color: var(--sub); font-size: 13.5px; font-weight: 700; line-height: 1.6; }
       .reset-btn {
         min-height: 52px; padding: 10px 18px; border-radius: 16px;
@@ -1400,6 +1402,12 @@
       .naani-adult .naani-adult-label { font-size: 13px; font-weight: 700; color: var(--sub); }
       #naaniSaidBtn { min-height: 44px; padding: 8px 18px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); font-weight: 800; font-size: 14.5px; box-shadow: var(--shadow); }
       #naaniSaidBtn.done { border-color: #f5b301; background: color-mix(in srgb, #ffd94d 40%, var(--card)); }
+      /* 大人用「こたえ」: 普段は隠し、押したときだけ小さく出す。子どもの目に付きにくいよう淡い色で、答えは読み上げない */
+      #naaniAnsBtn { min-height: 44px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--line); background: transparent; color: var(--sub); font-weight: 700; font-size: 12.5px; }
+      .naani-ans { flex-basis: 100%; text-align: center; font-size: 13.5px; font-weight: 700; color: var(--sub); line-height: 1.6; }
+      .naani-ans[hidden] { display: none; }
+      /* 大人向けの判断の目安: 「いえたね」のそばに小さく常時表示する */
+      .naani-guide { flex-basis: 100%; margin: 2px 0 0; text-align: center; font-size: 12.5px; font-weight: 600; line-height: 1.65; color: var(--sub); }
       .play-el { position: fixed; inset: 0; background: var(--bg); z-index: 55; overflow-y: auto; padding: 0 14px 40px; }
       .play-head { position: sticky; top: 0; background: var(--bg); padding: 14px 0 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; z-index: 2; max-width: 760px; margin: 0 auto; }
       .play-head h1 { font-size: 22px; margin: 0; font-weight: 800; }
@@ -1841,6 +1849,8 @@
           <option value="id">Bahasa Indonesia</option>
         </select>
         <p class="adult-note" style="margin:8px 0 0;" data-i18n="langNote">この設定ページの説明だけが選んだ言語になります。ゲームの中の言葉や遊びの名前は、日本語のままです。選んだ言語は保存され、バックアップにも含まれます。</p>
+        <a id="catalogPdfBtn" class="catalog-pdf-btn" href="https://kagoya.github.io/goigoi/docs/goigoi-game-catalog.pdf" target="_blank" rel="noopener"><span data-i18n="pdfBtn">📄 説明のPDFを開く</span></a>
+        <p class="adult-note" style="margin:8px 0 0;" data-i18n="pdfNote">説明をまとめたPDF（カタログ）を、新しいタブで開きます。選んでいる言語のPDFが開くので、読んだり印刷したりできます。</p>
       </div>
       <div id="adultMainView">
       <p class="adult-intro" data-i18n="intro">設定と遊んだ記録は、このブラウザの中に自動で保存されます。ページを閉じても消えず、次に開いたときも続きから遊べます。</p>
@@ -2567,6 +2577,9 @@
         <div class="naani-adult">
           <span class="naani-adult-label">おとな用（そばで きいている ひとへ）</span>
           <button id="naaniSaidBtn" type="button">✓ いえたね</button>
+          <button id="naaniAnsBtn" type="button" aria-expanded="false" aria-controls="naaniAns">おとな用：こたえ</button>
+          <span id="naaniAns" class="naani-ans" hidden></span>
+          <p class="naani-guide">目安：はじめの音が合っていればOKです。幼い言い方や別の呼び方でも、指すものが合っていればOK。発音が少し違っても、気にしなくて大丈夫です。</p>
         </div>
       </div>
       <p class="bed-note">えを みて、ことばを こえに だして いう あそびだよ。いえたかどうかは、そばの おとなが「いえたね」で おしらせてね。おさなくても、つぎの ことばへ すすめるよ。</p>
@@ -2648,6 +2661,7 @@
     <script>
       var I18N = {
       ja: {
+        pdfBtn: "📄 説明のPDFを開く", pdfNote: "説明をまとめたPDF（カタログ）を、新しいタブで開きます。選んでいる言語のPDFが開くので、読んだり印刷したりできます。",
         d_featSummary: "現在：{total}個の機能のうち {on}個がオンです。",
         d_customSummary: "現在：{n}語を登録中です。",
         d_customSummaryNone: "まだ登録した言葉はありません。",
@@ -2695,7 +2709,7 @@
         d_featNoteTanken: "場面に合う言葉を集める探検の遊びです。集めた言葉は、ずかんに集まります。",
         d_featNoteMoji: "抜けた文字を当てる・言葉を探す、の2種類で遊べる文字の遊びです。",
         d_featNoteNarabe: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。",
-        d_featNoteNaani: "大きな絵を見て、その言葉を声に出して言う遊びです。そばで聞いている大人が「いえたね」ボタンを押すと、声に出して言えた記録が保護者レポートの「であいの深さ」に残ります。押さなくても、そのまま次の言葉へ進んで遊べます。",
+        d_featNoteNaani: "大きな絵を見て、その言葉を声に出して言う遊びです。そばで聞いている大人が「いえたね」ボタンを押すと、声に出して言えた記録が保護者レポートの「であいの深さ」に残ります。押さなくても、そのまま次の言葉へ進んで遊べます。画面の隅の「おとな用：こたえ」を押すと、答えが大人にだけ小さく表示されます（次の言葉に進むと再び隠れます）。「いえたね」のそばには、大人が判断するときの目安も書いてあります。",
         d_nzNoteCount: "お手本と同じ本数の線で書けているかを見ます。1本の線を途中で分けたり、2本分を続けて1本で書いたりしたときに案内します。",
         d_nzNoteOrder: "お手本の順番どおりに線を書いているかを見ます。違う線を先に書いたときに案内します。",
         d_nzNoteDir: "線の書き始めから書き終わりへの向きが、お手本と合っているかを見ます。反対向きに書いたときに案内します。",
@@ -2743,7 +2757,7 @@
         d_repWeek: "今週（直近7日）集めた言葉", d_repTotal: "これまで集めた言葉（累計）", d_repTarget: "対象の言葉",
         d_statWords: "{n} 語", d_repCats: "よく遊んだ分野", d_join: "、", d_repNone: "まだ記録がありません。",
         d_repRecent: "新しく集めた言葉（直近）", d_repDatedNote: "日付の記録は、これから遊ぶ分から残ります。",
-        d_repSaid: "初めて言えた言葉（まねっこ）", d_repSaidNone: "まだ記録がありません。まねっこで上手に言えると、ここに残ります。",
+        d_repSaid: "初めて言えた言葉（まねっこ・なあに？）", d_repSaidNone: "まだ記録がありません。まねっこや「なあに？」で上手に言えると、ここに残ります。",
         d_repDepth: "であいの深さ（目安）", d_repDepthNote: "遊びの記録から見た、言葉との出会いの深さの目安です。段階1「であった」は図鑑に集めた言葉、段階2「えらべた」は選ぶ遊びで最初に正しく選べた言葉、段階3「しっかり えらべた」は別の遊びや別の日にも最初に選べた言葉、段階4「こえに だせた」は声に出して言えた記録がある言葉です。理解できているかを断定するものではありません。選ぶ遊びの記録は、これから遊んだ分から付きます。",
         d_repDepth1: "であった", d_repDepth2: "えらべた", d_repDepth3: "しっかり えらべた", d_repDepth4: "こえに だせた", d_repDepthLv: "段階{lv}：{name}", d_repDepthMore: "ほか {n}語",
         d_repPicks: "よく選ぶ言葉（どっちが すき？）", d_repPicksNone: "まだ記録がありません。「どっちが すき？」で選ぶと、ここに残ります。",
@@ -2776,6 +2790,7 @@
         saveBlocked: "⚠️ Saving to the browser is not available in this viewing environment (for example, an in-app browser). You can still play, but records will not remain after you close the page. Opening the page in a regular browser may enable saving.",
         langLabel: "Display language / Language",
         langNote: "Only the explanations on this settings page change to the selected language. The words and the names of games and features inside the game stay in Japanese. Your language choice is saved and included in backups.",
+        pdfBtn: "📄 Open the guide PDF", pdfNote: "Opens the guide (catalog) PDF in a new tab, in the language you selected. You can read it or print it.",
         ageTitle: "Choose all at once (age guide)",
         ageNote1: "A preset is a shortcut that selects the vocabulary size and the script (hiragana / kanji & katakana) together. After choosing one, you can still adjust each setting separately below. If you are an adult learner, use the presets as a guide to the amount of words, not the age.",
         age1: "Around 3–4 years old", age1sub: "1,000 words · Hiragana only",
@@ -2930,7 +2945,7 @@
         d_featNoteTanken: "An exploration game: collect the words that fit each scene. Collected words go into the ずかん.",
         d_featNoteMoji: "Two letter games: guessing the missing letter and finding words.",
         d_featNoteNarabe: "A game of putting the letters of a 五十音 row in order. When a row is complete, a card with a word containing one of its letters appears, and that word goes into the ずかん.",
-        d_featNoteNaani: "A game where the child looks at a big picture and says the word out loud. There is no automatic judging: an adult nearby presses the “I said it” button, and the word is recorded as spoken in the “Depth of encounters” section of the parent report. The game can also be played without pressing it.",
+        d_featNoteNaani: "A game where the child looks at a big picture and says the word out loud. There is no automatic judging: an adult nearby presses the “I said it” button, and the word is recorded as spoken in the “Depth of encounters” section of the parent report. The game can also be played without pressing it. Tapping “For adults: answer” in a corner of the screen shows the answer to adults only, in small text (it hides again when you move to the next word). A short guide for judging is also written next to the “I said it” button.",
         d_nzNoteCount: "Checks whether the character is written with the same number of strokes as the model. Guidance is shown when one stroke is split into two, or two strokes are written as one.",
         d_nzNoteOrder: "Checks whether the strokes are written in the same order as the model. Guidance is shown when a different stroke is written first.",
         d_nzNoteDir: "Checks whether each stroke's direction, from its start to its end, matches the model. Guidance is shown when a stroke is written in the opposite direction.",
@@ -2978,7 +2993,7 @@
         d_repWeek: "Words collected this week (last 7 days)", d_repTotal: "Words collected so far (total)", d_repTarget: "Words in scope",
         d_statWords: "{n}", d_repCats: "Favorite categories", d_join: ", ", d_repNone: "No records yet.",
         d_repRecent: "Newly collected words (recent)", d_repDatedNote: "Date records will be kept from words collected from now on.",
-        d_repSaid: "Words said for the first time (まねっこ)", d_repSaidNone: "No records yet. When a word is said well in まねっこ, it will appear here.",
+        d_repSaid: "Words said for the first time (まねっこ / なあに？)", d_repSaidNone: "No records yet. When a word is said well in まねっこ or confirmed in なあに？, it will appear here.",
         d_repDepth: "Depth of encounters (a guide)", d_repDepthNote: "A rough guide, from play records, of how deeply each word has been encountered. Level 1 “Met” = collected in the ずかん. Level 2 “Picked it” = chosen correctly on the first try in a picking game. Level 3 “Picked it solidly” = also picked correctly on the first try in a different game or on a different day. Level 4 “Said it aloud” = there is a record of saying the word out loud. This does not prove understanding. Records from picking games build up from plays from now on.",
         d_repDepth1: "Met", d_repDepth2: "Picked it", d_repDepth3: "Picked it solidly", d_repDepth4: "Said it aloud", d_repDepthLv: "Level {lv}: {name}", d_repDepthMore: "and {n} more",
         d_repPicks: "Words chosen often (どっちが すき？)", d_repPicksNone: "No records yet. Choices in どっちが すき？ will appear here.",
@@ -3012,6 +3027,7 @@
         saveBlocked: "⚠️ 当前显示环境无法使用浏览器保存功能（例如应用内浏览器的限制）。仍可游玩，但关闭页面后记录不会保留。在普通浏览器中打开可能可以保存。",
         langLabel: "显示语言 / Language",
         langNote: "只有本设置页面的说明会切换为所选语言。游戏中的词语以及游戏和功能的名称仍保持日语。所选语言会被保存，并包含在备份中。",
+        pdfBtn: "📄 打开说明 PDF", pdfNote: "在新标签页中打开所选语言的说明 PDF（目录），可以阅读或打印。",
         ageTitle: "一并选择（年龄参考）",
         ageNote1: "预设可以一次选好词汇量和文字（平假名／汉字·片假名）。选择后，仍可在下方分别调整词汇量和文字设置。成年学习者请把它当作词语数量的参考，而不是年龄。",
         age1: "3〜4岁左右", age1sub: "1,000词・仅平假名",
@@ -3166,7 +3182,7 @@
         d_featNoteTanken: "收集与场景相符的词语的探险游戏。收集的词语会进入ずかん。",
         d_featNoteMoji: "2种文字游戏：猜缺失的文字、找词语。",
         d_featNoteNarabe: "把五十音一行的文字按顺序排列的游戏。排好一行后，会出现包含该行文字的词语卡片，那个词语会收集到ずかん中。",
-        d_featNoteNaani: "看一张大图，把词语大声说出来的游戏。不进行自动判定：旁边的大人按下“说出来了”按钮后，该词会作为“说出来过”记录在家长报告的“相遇的深度”中。不按也可以继续玩。",
+        d_featNoteNaani: "看一张大图，把词语大声说出来的游戏。不进行自动判定：旁边的大人按下“说出来了”按钮后，该词会作为“说出来过”记录在家长报告的“相遇的深度”中。不按也可以继续玩。点击画面角落的“大人用：答案”，答案会以小字只显示给大人看（换到下一个词时会自动隐藏）。“说出来了”按钮旁边还写有供大人参考的判断标准。",
         d_nzNoteCount: "检查是否用与范本相同数量的线条书写。在把1条线中途分开、或把2条线连成1条时给出提示。",
         d_nzNoteOrder: "检查是否按范本的顺序书写线条。在先写了其他线条时给出提示。",
         d_nzNoteDir: "检查线条从起笔到收笔的方向是否与范本一致。在反方向书写时给出提示。",
@@ -3214,7 +3230,7 @@
         d_repWeek: "本周（最近7天）收集的词语", d_repTotal: "至今收集的词语（累计）", d_repTarget: "对象词语",
         d_statWords: "{n} 词", d_repCats: "常玩的分野", d_join: "、", d_repNone: "还没有记录。",
         d_repRecent: "新收集的词语（最近）", d_repDatedNote: "日期记录将从今后游玩的部分开始保留。",
-        d_repSaid: "第一次说出的词语（まねっこ）", d_repSaidNone: "还没有记录。在まねっこ中说得好时，会记录在这里。",
+        d_repSaid: "第一次说出的词语（まねっこ・なあに？）", d_repSaidNone: "还没有记录。在まねっこ中说得好，或在なあに？中被确认说出时，会记录在这里。",
         d_repDepth: "相遇的深度（参考）", d_repDepthNote: "这是根据游戏记录估算的与词语相遇深度的参考。阶段1“相遇过”＝收集到ずかん的词语；阶段2“选对过”＝在选择类游戏中第一次就选对的词语；阶段3“稳稳选对”＝在其他游戏或其他日子也第一次就选对的词语；阶段4“说出来过”＝有大声说出记录的词语。这并不能断定是否真正理解。选择类游戏的记录从今后的游戏开始积累。",
         d_repDepth1: "相遇过", d_repDepth2: "选对过", d_repDepth3: "稳稳选对", d_repDepth4: "说出来过", d_repDepthLv: "阶段{lv}：{name}", d_repDepthMore: "还有 {n} 个",
         d_repPicks: "常选的词语（どっちが すき？）", d_repPicksNone: "还没有记录。在「どっちが すき？」中选择后，会记录在这里。",
@@ -3245,6 +3261,7 @@
         saveBlocked: "⚠️ 目前顯示環境無法使用瀏覽器保存功能（例如應用程式內瀏覽器的限制）。仍可遊玩，但關閉頁面後紀錄不會保留。在普通瀏覽器中打開可能可以保存。",
         langLabel: "顯示語言 / Language",
         langNote: "只有本設定頁面的說明會切換為所選語言。遊戲中的詞語以及遊戲和功能的名稱仍保持日語。所選語言會被保存，並包含在備份中。",
+        pdfBtn: "📄 開啟說明 PDF", pdfNote: "在新分頁中開啟所選語言的說明 PDF（目錄），可以閱讀或列印。",
         ageTitle: "一併選擇（年齡參考）",
         ageNote1: "預設可以一次選好詞彙量和文字（平假名／漢字·片假名）。選擇後，仍可在下方分別調整詞彙量和文字設定。成年學習者請把它當作詞語數量的參考，而不是年齡。",
         age1: "3〜4歲左右", age1sub: "1,000詞・僅平假名",
@@ -3399,7 +3416,7 @@
         d_featNoteTanken: "收集與場景相符的詞語的探險遊戲。收集的詞語會進入ずかん。",
         d_featNoteMoji: "2種文字遊戲：猜缺失的文字、找詞語。",
         d_featNoteNarabe: "把五十音一行的文字按順序排列的遊戲。排好一行後，會出現包含該行文字的詞語卡片，那個詞語會收集到ずかん中。",
-        d_featNoteNaani: "看一張大圖，把詞語大聲說出來的遊戲。不進行自動判定：旁邊的大人按下「說出來了」按鈕後，該詞會記錄在家長報告的「相遇的深度」裡。不按也可以繼續玩。",
+        d_featNoteNaani: "看一張大圖，把詞語大聲說出來的遊戲。不進行自動判定：旁邊的大人按下「說出來了」按鈕後，該詞會記錄在家長報告的「相遇的深度」裡。不按也可以繼續玩。點選畫面角落的「大人用：答案」，答案會以小字只顯示給大人看（換到下一個詞時會自動隱藏）。「說出來了」按鈕旁邊也寫有供大人參考的判斷標準。",
         d_nzNoteCount: "檢查是否用與範本相同數量的線條書寫。在把1條線中途分開、或把2條線連成1條時給出提示。",
         d_nzNoteOrder: "檢查是否按範本的順序書寫線條。在先寫了其他線條時給出提示。",
         d_nzNoteDir: "檢查線條從起筆到收筆的方向是否與範本一致。在反方向書寫時給出提示。",
@@ -3447,7 +3464,7 @@
         d_repWeek: "本週（最近7天）收集的詞語", d_repTotal: "至今收集的詞語（累計）", d_repTarget: "對象詞語",
         d_statWords: "{n} 詞", d_repCats: "常玩的分野", d_join: "、", d_repNone: "還沒有紀錄。",
         d_repRecent: "新收集的詞語（最近）", d_repDatedNote: "日期紀錄將從今後遊玩的部分開始保留。",
-        d_repSaid: "第一次說出的詞語（まねっこ）", d_repSaidNone: "還沒有紀錄。在まねっこ中說得好時，會記錄在這裡。",
+        d_repSaid: "第一次說出的詞語（まねっこ・なあに？）", d_repSaidNone: "還沒有紀錄。在まねっこ中說得好，或在なあに？中被確認說出時，會記錄在這裡。",
         d_repDepth: "相遇的深度（參考）", d_repDepthNote: "這是根據遊戲記錄估算的與詞語相遇深度的參考。階段1「相遇過」＝收集到ずかん的詞語；階段2「選對過」＝在選擇類遊戲中第一次就選對的詞語；階段3「穩穩選對」＝在其他遊戲或其他日子也第一次就選對的詞語；階段4「說出來過」＝有大聲說出記錄的詞語。這並不能斷定是否真正理解。選擇類遊戲的記錄從今後的遊戲開始累積。",
         d_repDepth1: "相遇過", d_repDepth2: "選對過", d_repDepth3: "穩穩選對", d_repDepth4: "說出來過", d_repDepthLv: "階段{lv}：{name}", d_repDepthMore: "還有 {n} 個",
         d_repPicks: "常選的詞語（どっちが すき？）", d_repPicksNone: "還沒有紀錄。在「どっちが すき？」中選擇後，會記錄在這裡。",
@@ -3479,6 +3496,7 @@
         saveBlocked: "⚠️ O salvamento no navegador não está disponível neste ambiente de exibição (por exemplo, limitações de um navegador dentro de um aplicativo). Você ainda pode jogar, mas os registros não permanecerão depois de fechar a página. Abrir em um navegador comum pode permitir o salvamento.",
         langLabel: "Idioma de exibição / Language",
         langNote: "Somente as explicações desta página de configurações mudam para o idioma escolhido. As palavras e os nomes dos jogos e das funções dentro do jogo permanecem em japonês. O idioma escolhido é salvo e incluído nos backups.",
+        pdfBtn: "📄 Abrir o PDF do guia", pdfNote: "Abre o PDF do guia (catálogo) em uma nova guia, no idioma selecionado. Você pode ler ou imprimir.",
         ageTitle: "Escolher tudo de uma vez (guia de idade)",
         ageNote1: "Uma predefinição é um atalho que escolhe o tamanho do vocabulário e a escrita (hiragana / kanji e katakana) ao mesmo tempo. Depois de escolher, você ainda pode ajustar cada item separadamente abaixo. Se você é um adulto aprendendo japonês, use as predefinições como guia da quantidade de palavras, não da idade.",
         age1: "Cerca de 3–4 anos", age1sub: "1.000 palavras · Só hiragana",
@@ -3633,7 +3651,7 @@
         d_featNoteTanken: "Um jogo de exploração: colete as palavras que combinam com cada cena. As palavras coletadas vão para o ずかん.",
         d_featNoteMoji: "Dois jogos com letras: adivinhar a letra que falta e encontrar palavras.",
         d_featNoteNarabe: "Um jogo de colocar as letras de uma linha do 五十音 em ordem. Quando a linha fica completa, aparece um cartão com uma palavra que contém uma de suas letras, e essa palavra vai para o ずかん.",
-        d_featNoteNaani: "Um jogo em que a criança olha uma figura grande e diz a palavra em voz alta. Não há avaliação automática: um adulto por perto aperta o botão “Consegui dizer”, e a palavra fica registrada como falada na seção “Profundidade dos encontros” do relatório dos pais. Também dá para jogar sem apertar.",
+        d_featNoteNaani: "Um jogo em que a criança olha uma figura grande e diz a palavra em voz alta. Não há avaliação automática: um adulto por perto aperta o botão “Consegui dizer”, e a palavra fica registrada como falada na seção “Profundidade dos encontros” do relatório dos pais. Também dá para jogar sem apertar. Ao tocar em “Para adultos: resposta”, num canto da tela, a resposta aparece em letras pequenas só para o adulto (e some de novo ao passar para a palavra seguinte). Ao lado do botão “Consegui dizer” há também um pequeno guia para ajudar na avaliação.",
         d_nzNoteCount: "Verifica se o caractere foi escrito com o mesmo número de traços do modelo. Uma orientação aparece quando um traço é dividido em dois, ou dois traços são escritos como um só.",
         d_nzNoteOrder: "Verifica se os traços foram escritos na mesma ordem do modelo. Uma orientação aparece quando um traço diferente é escrito primeiro.",
         d_nzNoteDir: "Verifica se a direção de cada traço, do início ao fim, corresponde ao modelo. Uma orientação aparece quando um traço é escrito na direção oposta.",
@@ -3681,7 +3699,7 @@
         d_repWeek: "Palavras coletadas esta semana (últimos 7 dias)", d_repTotal: "Palavras coletadas até agora (total)", d_repTarget: "Palavras no escopo",
         d_statWords: "{n}", d_repCats: "Categorias favoritas", d_join: ", ", d_repNone: "Nenhum registro ainda.",
         d_repRecent: "Palavras coletadas recentemente", d_repDatedNote: "Os registros de data serão guardados das palavras coletadas daqui em diante.",
-        d_repSaid: "Palavras ditas pela primeira vez (まねっこ)", d_repSaidNone: "Nenhum registro ainda. Quando uma palavra for bem dita em まねっこ, ela aparecerá aqui.",
+        d_repSaid: "Palavras ditas pela primeira vez (まねっこ / なあに？)", d_repSaidNone: "Nenhum registro ainda. Quando uma palavra for bem dita em まねっこ ou confirmada em なあに？, ela aparecerá aqui.",
         d_repDepth: "Profundidade dos encontros (um guia)", d_repDepthNote: "Um guia aproximado, a partir dos registros de jogo, de quão profundamente cada palavra foi encontrada. Nível 1 “Encontrou” = coletada no ずかん. Nível 2 “Acertou de primeira” = escolhida corretamente na primeira tentativa em um jogo de escolher. Nível 3 “Acertou bem” = também acertou de primeira em outro jogo ou em outro dia. Nível 4 “Disse em voz alta” = há registro de ter dito a palavra em voz alta. Isso não comprova compreensão. Os registros dos jogos de escolher se acumulam a partir das próximas brincadeiras.",
         d_repDepth1: "Encontrou", d_repDepth2: "Acertou de primeira", d_repDepth3: "Acertou bem", d_repDepth4: "Disse em voz alta", d_repDepthLv: "Nível {lv}: {name}", d_repDepthMore: "e mais {n}",
         d_repPicks: "Palavras escolhidas com frequência (どっちが すき？)", d_repPicksNone: "Nenhum registro ainda. As escolhas em どっちが すき？ aparecerão aqui.",
@@ -3712,6 +3730,7 @@
         saveBlocked: "⚠️ El guardado en el navegador no está disponible en este entorno de visualización (por ejemplo, las limitaciones de un navegador dentro de una aplicación). Aun así puedes jugar, pero los registros no permanecerán después de cerrar la página. Abrirlo en un navegador normal puede permitir el guardado.",
         langLabel: "Idioma de visualización / Language",
         langNote: "Solo las explicaciones de esta página de ajustes cambian al idioma elegido. Las palabras y los nombres de los juegos y las funciones dentro del juego permanecen en japonés. El idioma elegido se guarda y se incluye en las copias de seguridad.",
+        pdfBtn: "📄 Abrir el PDF de la guía", pdfNote: "Abre el PDF de la guía (catálogo) en una pestaña nueva, en el idioma seleccionado. Puedes leerlo o imprimirlo.",
         ageTitle: "Elegir todo a la vez (guía de edad)",
         ageNote1: "Un preajuste es un atajo que elige el tamaño del vocabulario y la escritura (hiragana / kanji y katakana) a la vez. Después de elegirlo, aún puedes ajustar cada elemento por separado más abajo. Si eres un adulto que aprende japonés, usa los preajustes como guía de la cantidad de palabras, no de la edad.",
         age1: "Unos 3–4 años", age1sub: "1.000 palabras · Solo hiragana",
@@ -3866,7 +3885,7 @@
         d_featNoteTanken: "Un juego de exploración: colecciona las palabras que encajan con cada escena. Las palabras coleccionadas van al ずかん.",
         d_featNoteMoji: "Dos juegos con letras: adivinar la letra que falta y encontrar palabras.",
         d_featNoteNarabe: "Un juego para poner las letras de una fila del 五十音 en orden. Cuando la fila está completa, aparece una tarjeta con una palabra que contiene una de sus letras, y esa palabra va al ずかん.",
-        d_featNoteNaani: "Un juego en el que el niño mira una imagen grande y dice la palabra en voz alta. No hay evaluación automática: un adulto cercano pulsa el botón «Lo dije», y la palabra queda registrada como dicha en la sección «Profundidad de los encuentros» del informe para padres. También se puede jugar sin pulsarlo.",
+        d_featNoteNaani: "Un juego en el que el niño mira una imagen grande y dice la palabra en voz alta. No hay evaluación automática: un adulto cercano pulsa el botón «Lo dije», y la palabra queda registrada como dicha en la sección «Profundidad de los encuentros» del informe para padres. También se puede jugar sin pulsarlo. Al pulsar «Para adultos: respuesta», en una esquina de la pantalla, la respuesta se muestra en letra pequeña solo para el adulto (y se oculta de nuevo al pasar a la palabra siguiente). Junto al botón «Lo dije» hay también una breve guía para ayudar a juzgar.",
         d_nzNoteCount: "Comprueba si el carácter se escribió con el mismo número de trazos que el modelo. Aparece una guía cuando un trazo se divide en dos, o dos trazos se escriben como uno solo.",
         d_nzNoteOrder: "Comprueba si los trazos se escribieron en el mismo orden que el modelo. Aparece una guía cuando se escribe primero un trazo distinto.",
         d_nzNoteDir: "Comprueba si la dirección de cada trazo, desde su inicio hasta su fin, coincide con el modelo. Aparece una guía cuando un trazo se escribe en dirección contraria.",
@@ -3914,7 +3933,7 @@
         d_repWeek: "Palabras coleccionadas esta semana (últimos 7 días)", d_repTotal: "Palabras coleccionadas hasta ahora (total)", d_repTarget: "Palabras en el ámbito",
         d_statWords: "{n}", d_repCats: "Categorías favoritas", d_join: ", ", d_repNone: "Aún no hay registros.",
         d_repRecent: "Palabras coleccionadas recientemente", d_repDatedNote: "Los registros de fecha se guardarán de las palabras que se coleccionen a partir de ahora.",
-        d_repSaid: "Palabras dichas por primera vez (まねっこ)", d_repSaidNone: "Aún no hay registros. Cuando una palabra se diga bien en まねっこ, aparecerá aquí.",
+        d_repSaid: "Palabras dichas por primera vez (まねっこ / なあに？)", d_repSaidNone: "Aún no hay registros. Cuando una palabra se diga bien en まねっこ o se confirme en なあに？, aparecerá aquí.",
         d_repDepth: "Profundidad de los encuentros (una guía)", d_repDepthNote: "Una guía aproximada, a partir de los registros de juego, de la profundidad con que se ha encontrado cada palabra. Nivel 1 «Encontrada» = recogida en el ずかん. Nivel 2 «Acertó a la primera» = elegida correctamente al primer intento en un juego de elegir. Nivel 3 «Acertó con seguridad» = también acertó a la primera en otro juego o en otro día. Nivel 4 «La dijo en voz alta» = hay registro de haber dicho la palabra en voz alta. Esto no demuestra la comprensión. Los registros de los juegos de elegir se acumulan a partir de ahora.",
         d_repDepth1: "Encontrada", d_repDepth2: "Acertó a la primera", d_repDepth3: "Acertó con seguridad", d_repDepth4: "La dijo en voz alta", d_repDepthLv: "Nivel {lv}: {name}", d_repDepthMore: "y {n} más",
         d_repPicks: "Palabras elegidas con frecuencia (どっちが すき？)", d_repPicksNone: "Aún no hay registros. Las elecciones en どっちが すき？ aparecerán aquí.",
@@ -3946,6 +3965,7 @@
         saveBlocked: "⚠️ Môi trường hiển thị này không dùng được tính năng lưu vào trình duyệt (ví dụ do giới hạn của trình duyệt trong ứng dụng). Bạn vẫn chơi được, nhưng bản ghi sẽ không còn sau khi đóng trang. Mở bằng trình duyệt thông thường có thể lưu được.",
         langLabel: "Ngôn ngữ hiển thị / Language",
         langNote: "Chỉ phần giải thích trên trang cài đặt này mới đổi sang ngôn ngữ đã chọn. Các từ và tên của trò chơi, chức năng trong game vẫn giữ nguyên tiếng Nhật. Ngôn ngữ đã chọn sẽ được lưu và có trong bản sao lưu.",
+        pdfBtn: "📄 Mở PDF hướng dẫn", pdfNote: "Mở PDF hướng dẫn (danh mục) trong tab mới, bằng ngôn ngữ đã chọn. Bạn có thể đọc hoặc in.",
         ageTitle: "Chọn tất cả cùng lúc (mốc tuổi tham khảo)",
         ageNote1: "Cài sẵn là lối tắt để chọn cùng lúc số lượng từ vựng và chữ viết (hiragana / kanji & katakana). Sau khi chọn, bạn vẫn có thể chỉnh riêng từng mục ở dưới. Nếu bạn là người lớn học tiếng Nhật, hãy dùng các mức này làm tham khảo về lượng từ, không phải về tuổi.",
         age1: "Khoảng 3–4 tuổi", age1sub: "1.000 từ · Chỉ hiragana",
@@ -4100,7 +4120,7 @@
         d_featNoteTanken: "Trò chơi thám hiểm: thu thập các từ phù hợp với mỗi cảnh. Từ thu thập được sẽ vào ずかん.",
         d_featNoteMoji: "Hai trò chơi chữ: đoán chữ còn thiếu và tìm từ.",
         d_featNoteNarabe: "Trò chơi xếp các chữ trong một hàng 五十音 theo thứ tự. Khi xếp xong một hàng, sẽ xuất hiện thẻ từ chứa một chữ trong hàng đó, và từ đó được thu vào ずかん.",
-        d_featNoteNaani: "Trò chơi nhìn một bức tranh lớn và nói từ đó thành tiếng. Không có chấm tự động: người lớn ở bên cạnh nhấn nút “Đã nói được”, và từ đó được ghi lại là đã nói trong mục “Mức độ gặp gỡ” của báo cáo phụ huynh. Không nhấn vẫn chơi tiếp được.",
+        d_featNoteNaani: "Trò chơi nhìn một bức tranh lớn và nói từ đó thành tiếng. Không có chấm tự động: người lớn ở bên cạnh nhấn nút “Đã nói được”, và từ đó được ghi lại là đã nói trong mục “Mức độ gặp gỡ” của báo cáo phụ huynh. Không nhấn vẫn chơi tiếp được. Nhấn “Dành cho người lớn: đáp án” ở góc màn hình, đáp án sẽ hiện bằng chữ nhỏ chỉ cho người lớn xem (và tự ẩn khi chuyển sang từ tiếp theo). Bên cạnh nút “Đã nói được” cũng có hướng dẫn ngắn giúp người lớn đánh giá.",
         d_nzNoteCount: "Kiểm tra xem có viết đúng số nét như mẫu không. Sẽ hướng dẫn khi một nét bị chia làm đôi giữa chừng, hoặc hai nét bị viết liền thành một.",
         d_nzNoteOrder: "Kiểm tra xem có viết các nét đúng thứ tự của mẫu không. Sẽ hướng dẫn khi viết một nét khác trước.",
         d_nzNoteDir: "Kiểm tra xem hướng từ đầu nét đến cuối nét có khớp với mẫu không. Sẽ hướng dẫn khi viết ngược hướng.",
@@ -4148,7 +4168,7 @@
         d_repWeek: "Từ đã thu thập tuần này (7 ngày gần nhất)", d_repTotal: "Từ đã thu thập đến nay (tổng cộng)", d_repTarget: "Từ thuộc phạm vi",
         d_statWords: "{n} từ", d_repCats: "Lĩnh vực hay chơi", d_join: ", ", d_repNone: "Chưa có bản ghi.",
         d_repRecent: "Từ mới thu thập (gần đây)", d_repDatedNote: "Bản ghi ngày tháng sẽ được lưu từ phần chơi sắp tới.",
-        d_repSaid: "Từ lần đầu nói được (まねっこ)", d_repSaidNone: "Chưa có bản ghi. Khi nói giỏi trong まねっこ, sẽ được ghi lại ở đây.",
+        d_repSaid: "Từ lần đầu nói được (まねっこ / なあに？)", d_repSaidNone: "Chưa có bản ghi. Khi nói giỏi trong まねっこ hoặc được xác nhận trong なあに？, sẽ được ghi lại ở đây.",
         d_repDepth: "Mức độ gặp gỡ (tham khảo)", d_repDepthNote: "Đây là ước lượng tham khảo từ bản ghi trò chơi về mức độ trẻ đã gặp mỗi từ. Mức 1 “Đã gặp” = đã thu thập vào ずかん. Mức 2 “Đã chọn đúng” = chọn đúng ngay lần đầu trong trò chơi chọn lựa. Mức 3 “Chọn đúng vững vàng” = cũng chọn đúng ngay lần đầu trong trò chơi khác hoặc ngày khác. Mức 4 “Đã nói thành tiếng” = có bản ghi đã nói từ đó thành tiếng. Điều này không khẳng định trẻ đã hiểu. Bản ghi của các trò chơi chọn lựa sẽ tích lũy từ những lần chơi tiếp theo.",
         d_repDepth1: "Đã gặp", d_repDepth2: "Đã chọn đúng", d_repDepth3: "Chọn đúng vững vàng", d_repDepth4: "Đã nói thành tiếng", d_repDepthLv: "Mức {lv}: {name}", d_repDepthMore: "và {n} từ nữa",
         d_repPicks: "Từ hay chọn (どっちが すき？)", d_repPicksNone: "Chưa có bản ghi. Khi chọn trong 「どっちが すき？」, sẽ được ghi lại ở đây.",
@@ -4179,6 +4199,7 @@
         saveBlocked: "⚠️ สภาพแวดล้อมการแสดงผลนี้ใช้การบันทึกในเบราว์เซอร์ไม่ได้ (เช่น ข้อจำกัดของเบราว์เซอร์ในแอป) ยังเล่นได้ แต่บันทึกจะไม่เหลือหลังปิดหน้า หากเปิดในเบราว์เซอร์ปกติอาจบันทึกได้",
         langLabel: "ภาษาที่แสดง / Language",
         langNote: "เฉพาะคำอธิบายในหน้าการตั้งค่านี้เท่านั้นที่จะเปลี่ยนเป็นภาษาที่เลือก คำศัพท์และชื่อเกมและฟังก์ชันภายในเกมยังคงเป็นภาษาญี่ปุ่น ภาษาที่เลือกจะถูกบันทึกและรวมอยู่ในข้อมูลสำรองด้วย",
+        pdfBtn: "📄 เปิด PDF คำอธิบาย", pdfNote: "เปิด PDF คำอธิบาย (แคตตาล็อก) ในแท็บใหม่ เป็นภาษาที่เลือกไว้ อ่านหรือพิมพ์ได้",
         ageTitle: "เลือกพร้อมกัน (เกณฑ์อายุโดยประมาณ)",
         ageNote1: "ค่าที่ตั้งไว้ล่วงหน้าเป็นทางลัดในการเลือกขนาดคำศัพท์และตัวอักษร (ฮิรางานะ / คันจิและคาตากานะ) พร้อมกัน หลังจากเลือกแล้ว ยังปรับขนาดคำศัพท์และการตั้งค่าตัวอักษรแยกกันได้ที่ด้านล่าง หากคุณเป็นผู้ใหญ่ที่เรียนภาษาญี่ปุ่น โปรดใช้ค่าล่วงหน้านี้เป็นเกณฑ์ของปริมาณคำ ไม่ใช่อายุ",
         age1: "ประมาณ 3–4 ขวบ", age1sub: "1,000 คำ · ฮิรางานะอย่างเดียว",
@@ -4333,7 +4354,7 @@
         d_featNoteTanken: "เกมสำรวจ: เก็บคำที่เข้ากับแต่ละฉาก คำที่เก็บได้จะเข้า ずかん",
         d_featNoteMoji: "เกมตัวอักษร 2 แบบ: ทายตัวอักษรที่หายไป และค้นหาคำ",
         d_featNoteNarabe: "เกมเรียงตัวอักษรในแถวของ 五十音 ตามลำดับ เมื่อเรียงครบหนึ่งแถว จะมีบัตรคำที่มีตัวอักษรในแถวนั้นปรากฏขึ้น และคำนั้นจะเก็บเข้า ずかん",
-        d_featNoteNaani: "เกมที่ให้เด็กดูภาพใหญ่แล้วพูดคำนั้นออกเสียง ไม่มีการตัดสินอัตโนมัติ ผู้ใหญ่ที่อยู่ข้าง ๆ กดปุ่ม “พูดได้แล้ว” คำนั้นจะถูกบันทึกว่าพูดได้ในส่วน “ความลึกของการพบคำ” ของรายงานผู้ปกครอง ไม่กดก็เล่นต่อได้",
+        d_featNoteNaani: "เกมที่ให้เด็กดูภาพใหญ่แล้วพูดคำนั้นออกเสียง ไม่มีการตัดสินอัตโนมัติ ผู้ใหญ่ที่อยู่ข้าง ๆ กดปุ่ม “พูดได้แล้ว” คำนั้นจะถูกบันทึกว่าพูดได้ในส่วน “ความลึกของการพบคำ” ของรายงานผู้ปกครอง ไม่กดก็เล่นต่อได้ เมื่อกด “สำหรับผู้ใหญ่: คำตอบ” ที่มุมจอ คำตอบจะแสดงเป็นตัวอักษรเล็ก ๆ ให้ผู้ใหญ่เห็นเท่านั้น (และจะซ่อนอีกครั้งเมื่อไปคำถัดไป) ข้างปุ่ม “พูดได้แล้ว” ยังมีคำแนะนำสั้น ๆ สำหรับการตัดสินของผู้ใหญ่ด้วย",
         d_nzNoteCount: "ตรวจว่าเขียนด้วยจำนวนเส้นเท่ากับต้นแบบหรือไม่ จะแนะนำเมื่อแยก 1 เส้นออกกลางคัน หรือเขียน 2 เส้นต่อกันเป็น 1 เส้น",
         d_nzNoteOrder: "ตรวจว่าเขียนเส้นตามลำดับเดียวกับต้นแบบหรือไม่ จะแนะนำเมื่อเขียนเส้นอื่นก่อน",
         d_nzNoteDir: "ตรวจว่าทิศทางจากจุดเริ่มถึงจุดจบของเส้นตรงกับต้นแบบหรือไม่ จะแนะนำเมื่อเขียนทิศตรงข้าม",
@@ -4381,7 +4402,7 @@
         d_repWeek: "คำที่เก็บสัปดาห์นี้ (7 วันล่าสุด)", d_repTotal: "คำที่เก็บจนถึงตอนนี้ (รวม)", d_repTarget: "คำในขอบเขต",
         d_statWords: "{n} คำ", d_repCats: "หมวดที่เล่นบ่อย", d_join: ", ", d_repNone: "ยังไม่มีบันทึก",
         d_repRecent: "คำที่เก็บใหม่ (ล่าสุด)", d_repDatedNote: "บันทึกวันที่จะเหลือจากส่วนที่เล่นต่อจากนี้",
-        d_repSaid: "คำที่พูดได้ครั้งแรก (まねっこ)", d_repSaidNone: "ยังไม่มีบันทึก เมื่อพูดได้ดีใน まねっこ จะถูกบันทึกไว้ที่นี่",
+        d_repSaid: "คำที่พูดได้ครั้งแรก (まねっこ / なあに？)", d_repSaidNone: "ยังไม่มีบันทึก เมื่อพูดได้ดีใน まねっこ หรือได้รับการยืนยันใน なあに？ จะถูกบันทึกไว้ที่นี่",
         d_repDepth: "ความลึกของการพบคำ (แนวทาง)", d_repDepthNote: "เป็นแนวทางคร่าว ๆ จากบันทึกการเล่นว่าคำแต่ละคำถูกพบลึกแค่ไหน ระดับ 1 “พบแล้ว” = เก็บเข้า ずかん แล้ว ระดับ 2 “เลือกถูก” = เลือกถูกตั้งแต่ครั้งแรกในเกมแบบเลือก ระดับ 3 “เลือกถูกอย่างมั่นคง” = เลือกถูกตั้งแต่ครั้งแรกในเกมอื่นหรือวันอื่นด้วย ระดับ 4 “พูดออกเสียงได้” = มีบันทึกว่าเคยพูดคำนั้นออกเสียง สิ่งนี้ไม่ได้ยืนยันว่าเข้าใจแล้ว บันทึกของเกมแบบเลือกจะสะสมจากการเล่นต่อจากนี้",
         d_repDepth1: "พบแล้ว", d_repDepth2: "เลือกถูก", d_repDepth3: "เลือกถูกอย่างมั่นคง", d_repDepth4: "พูดออกเสียงได้", d_repDepthLv: "ระดับ {lv}: {name}", d_repDepthMore: "และอีก {n} คำ",
         d_repPicks: "คำที่เลือกบ่อย (どっちが すき？)", d_repPicksNone: "ยังไม่มีบันทึก เมื่อเลือกใน 「どっちが すき？」 จะถูกบันทึกไว้ที่นี่",
@@ -4413,6 +4434,7 @@
         saveBlocked: "⚠️ 이 표시 환경에서는 브라우저 저장 기능을 사용할 수 없습니다(앱 내 브라우저의 제한 등). 그대로 플레이할 수는 있지만, 페이지를 닫으면 기록이 남지 않습니다. 일반 브라우저에서 열면 저장할 수 있는 경우가 있습니다.",
         langLabel: "표시 언어 / Language",
         langNote: "이 설정 페이지의 설명만 선택한 언어로 바뀝니다. 게임 안의 단어와 게임·기능의 이름은 일본어 그대로입니다. 선택한 언어는 저장되며 백업에도 포함됩니다.",
+        pdfBtn: "📄 설명 PDF 열기", pdfNote: "선택한 언어의 설명 PDF(카탈로그)를 새 탭에서 엽니다. 읽거나 인쇄할 수 있습니다.",
         ageTitle: "한꺼번에 선택하기(연령 기준)",
         ageNote1: "프리셋은 어휘 수와 문자(히라가나/한자·가타카나)를 한 번에 선택하는 지름길입니다. 누른 뒤에는 아래의 어휘 수와 문자 설정에서 개별적으로 바꿀 수 있습니다. 성인 학습자분은 연령이 아니라 단어 양의 기준으로 선택해 주세요.",
         age1: "3~4세 무렵", age1sub: "1,000단어 · 히라가나만",
@@ -4567,7 +4589,7 @@
         d_featNoteTanken: "장면에 맞는 단어를 모으는 탐험 놀이입니다. 모은 단어는 ずかん에 모여요.",
         d_featNoteMoji: "빠진 문자 맞히기, 단어 찾기, 2가지로 노는 문자 놀이입니다.",
         d_featNoteNarabe: "五十音 한 줄의 문자를 순서대로 나열하는 놀이입니다. 한 줄이 완성되면 그 줄의 문자가 들어간 단어 카드가 나오고, 그 단어가 ずかん에 모입니다.",
-        d_featNoteNaani: "큰 그림을 보고 그 단어를 소리 내어 말하는 놀이입니다. 자동 판정은 하지 않습니다. 곁에 있는 어른이 “말했어요” 버튼을 누르면, 그 단어가 보호자 리포트의 “만남의 깊이”에 말한 기록으로 남습니다. 누르지 않아도 그대로 놀 수 있습니다.",
+        d_featNoteNaani: "큰 그림을 보고 그 단어를 소리 내어 말하는 놀이입니다. 자동 판정은 하지 않습니다. 곁에 있는 어른이 “말했어요” 버튼을 누르면, 그 단어가 보호자 리포트의 “만남의 깊이”에 말한 기록으로 남습니다. 누르지 않아도 그대로 놀 수 있습니다. 화면 구석의 “어른용: 정답”을 누르면 정답이 어른에게만 작은 글씨로 표시됩니다(다음 단어로 넘어가면 다시 숨겨집니다). “말했어요” 버튼 옆에는 어른이 판단할 때의 기준도 적혀 있습니다.",
         d_nzNoteCount: "모범과 같은 개수의 선으로 쓰고 있는지 봅니다. 1개의 선을 중간에 나누거나, 2개 분량을 이어서 1개로 썼을 때 안내합니다.",
         d_nzNoteOrder: "모범의 순서대로 선을 쓰고 있는지 봅니다. 다른 선을 먼저 썼을 때 안내합니다.",
         d_nzNoteDir: "선의 쓰기 시작부터 쓰기 끝까지의 방향이 모범과 맞는지 봅니다. 반대 방향으로 썼을 때 안내합니다.",
@@ -4615,7 +4637,7 @@
         d_repWeek: "이번 주(최근 7일) 모은 단어", d_repTotal: "지금까지 모은 단어(누적)", d_repTarget: "대상 단어",
         d_statWords: "{n} 단어", d_repCats: "자주 플레이한 분야", d_join: ", ", d_repNone: "아직 기록이 없습니다.",
         d_repRecent: "새로 모은 단어(최근)", d_repDatedNote: "날짜 기록은 앞으로 플레이하는 분부터 남습니다.",
-        d_repSaid: "처음 말한 단어(まねっこ)", d_repSaidNone: "아직 기록이 없습니다. まねっこ에서 잘 말하면 여기에 남습니다.",
+        d_repSaid: "처음 말한 단어(まねっこ・なあに？)", d_repSaidNone: "아직 기록이 없습니다. まねっこ에서 잘 말하거나 なあに？에서 말한 것이 확인되면 여기에 남습니다.",
         d_repDepth: "만남의 깊이 (기준)", d_repDepthNote: "놀이 기록으로 본, 단어와의 만남의 깊이에 대한 대략적인 기준입니다. 단계 1 “만났어요”는 ずかん에 모은 단어, 단계 2 “골랐어요”는 고르기 놀이에서 처음에 바르게 고른 단어, 단계 3 “제대로 골랐어요”는 다른 놀이 또는 다른 날에도 처음에 고른 단어, 단계 4 “소리 내어 말했어요”는 소리 내어 말한 기록이 있는 단어입니다. 이해했는지를 단정하는 것은 아닙니다. 고르기 놀이의 기록은 앞으로의 놀이부터 쌓입니다.",
         d_repDepth1: "만났어요", d_repDepth2: "골랐어요", d_repDepth3: "제대로 골랐어요", d_repDepth4: "소리 내어 말했어요", d_repDepthLv: "단계 {lv}: {name}", d_repDepthMore: "외 {n}개",
         d_repPicks: "자주 고르는 단어(どっちが すき？)", d_repPicksNone: "아직 기록이 없습니다. 'どっちが すき？'에서 고르면 여기에 남습니다.",
@@ -4647,6 +4669,7 @@
         saveBlocked: "⚠️ この 見方（アプリの 中の ブラウザなど）では、ブラウザの きまりで、きろくを ほぞん できません。そのまま あそべますが、ページを とじると きろくは のこりません。ふつうの ブラウザで 開くと ほぞん できる ことが あります。",
         langLabel: "言語 / Language",
         langNote: "この せってい ページの せつめい だけが、えらんだ 言語に なります。ゲームの 中の ことばや、あそび・きのうの 名前は、日本語の ままです。えらんだ 言語は ほぞん され、バックアップにも 入ります。",
+        pdfBtn: "📄 せつめいの PDFを ひらく", pdfNote: "せつめいを まとめた PDFを、あたらしい タブで ひらきます。えらんでいる ことばの PDFが ひらくので、よんだり いんさつしたり できます。",
         ageTitle: "まとめて えらぶ（年の めやす）",
         ageNote1: "プリセットは、ことばの 数と 文字（ひらがな／漢字・カタカナ）を 一度に えらぶ 近道です。おした あとは、下の ことばの 数と 文字の せっていで 1つずつ かえられます。大人の 学習者の 人は、年の めやすとしてではなく、ことばの 数の めやすとして えらんで ください。",
         age1: "3〜4さいごろ",
@@ -4841,7 +4864,7 @@
         d_featNoteTanken: "ばめんに あう ことばを あつめる たんけんの あそびです。あつめた ことばは、ずかんに あつまります。",
         d_featNoteMoji: "ぬけた もじを あてる・ことばを さがす、の 2つの あそびが できる もじの あそびです。",
         d_featNoteNarabe: "五十音の もじを ぎょうごとに じゅんばんに ならべる あそびです。ぎょうが そろうと、その もじが 入った ことばの カードが 出て、その ことばが ずかんに あつまります。",
-        d_featNoteNaani: "大きな 絵を 見て、その ことばを 声に 出して 言う あそびです。そばで 聞いている 大人が「いえたね」ボタンを 押すと、声に 出して 言えた きろくが 保護者レポートの「であいの 深さ」に のこります。押さなくても、そのまま つぎの ことばへ 進んで あそべます。",
+        d_featNoteNaani: "大きな 絵を 見て、その ことばを 声に 出して 言う あそびです。そばで 聞いている 大人が「いえたね」ボタンを 押すと、声に 出して 言えた きろくが 保護者レポートの「であいの 深さ」に のこります。押さなくても、そのまま つぎの ことばへ 進んで あそべます。がめんの すみの「おとな用：こたえ」を 押すと、こたえが 大人にだけ 小さく 見えます（つぎの ことばに 進むと、また かくれます）。「いえたね」の そばには、大人が はんだんする ときの 目安も かいて あります。",
         d_nzNoteCount: "お手本と 同じ 本数の 線で 書けているかを 見ます。1本の 線を とちゅうで 分けたり、2本分を つづけて 1本で 書いたりした ときに あんない します。",
         d_nzNoteOrder: "お手本の じゅんばんどおりに 線を 書いているかを 見ます。ちがう 線を 先に 書いた ときに あんない します。",
         d_nzNoteDir: "線の 書き始めから 書き終わりへの 向きが、お手本と 合っているかを 見ます。反対の 向きに 書いた ときに あんない します。",
@@ -4907,10 +4930,10 @@
         d_repNone: "まだ きろくは ありません。",
         d_repRecent: "新しく あつめた ことば",
         d_repDatedNote: "日にちの きろくは、これから あそぶ 分から のこります。",
-        d_repSaid: "まねっこで はじめて 言えた ことば",
+        d_repSaid: "まねっこと「なあに？」で はじめて 言えた ことば",
         d_repDepth: "であいの 深さ（目安）", d_repDepthNote: "あそびの きろくから 見た、ことばとの であいの 深さの 目安です。だんかい1「であった」は ずかんに あつめた ことば、だんかい2「えらべた」は えらぶ あそびで さいしょに 正しく えらべた ことば、だんかい3「しっかり えらべた」は べつの あそびや べつの 日にも さいしょに えらべた ことば、だんかい4「こえに だせた」は 声に 出して 言えた きろくが ある ことばです。分かっているかを 決める ものでは ありません。えらぶ あそびの きろくは、これから あそんだ 分から つきます。",
         d_repDepth1: "であった", d_repDepth2: "えらべた", d_repDepth3: "しっかり えらべた", d_repDepth4: "こえに だせた", d_repDepthLv: "だんかい{lv}：{name}", d_repDepthMore: "ほか {n}語",
-        d_repSaidNone: "まだ きろくは ありません。まねっこで じょうずに 言えると、ここに のこります。",
+        d_repSaidNone: "まだ きろくは ありません。まねっこや「なあに？」で じょうずに 言えると、ここに のこります。",
         d_repPicks: "よく えらぶ ことば（どっちが すき？）",
         d_repPicksNone: "まだ きろくは ありません。「どっちが すき？」で えらぶと、ここに のこります。",
         d_timesCount: "（{n}回）",
@@ -4940,6 +4963,7 @@
         saveBlocked: "⚠️ L'enregistrement dans le navigateur n'est pas possible dans cet environnement d'affichage (par exemple, un navigateur intégré à une application). Vous pouvez quand même jouer, mais les données ne seront pas conservées après la fermeture de la page. Ouvrir la page dans un navigateur ordinaire peut permettre l'enregistrement.",
         langLabel: "Langue d'affichage / Language",
         langNote: "Seules les explications de cette page de réglages passent dans la langue choisie. Les mots et les noms des jeux et des fonctions dans le jeu restent en japonais. La langue choisie est enregistrée et incluse dans les sauvegardes.",
+        pdfBtn: "📄 Ouvrir le PDF du guide", pdfNote: "Ouvre le PDF du guide (catalogue) dans un nouvel onglet, dans la langue choisie. Vous pouvez le lire ou l'imprimer.",
         ageTitle: "Tout choisir d'un coup (repère d'âge)",
         ageNote1: "Un préréglage est un raccourci qui choisit en même temps le nombre de mots et l'écriture (hiragana / kanji et katakana). Après en avoir choisi un, vous pouvez toujours modifier chaque réglage séparément ci-dessous. Si vous êtes un apprenant adulte, utilisez les préréglages comme un repère de quantité de mots, et non d'âge.",
         age1: "Vers 3–4 ans", age1sub: "1 000 mots · Hiragana seulement",
@@ -5094,7 +5118,7 @@
         d_featNoteTanken: "Un jeu d'exploration : collectionnez les mots qui conviennent à chaque scène. Les mots collectionnés vont dans le ずかん.",
         d_featNoteMoji: "Deux jeux de lettres : deviner la lettre manquante et trouver des mots.",
         d_featNoteNarabe: "Un jeu où l'on met les lettres d'une rangée du 五十音 dans l'ordre. Quand une rangée est complète, une carte avec un mot contenant l'une de ses lettres apparaît, et ce mot va dans le ずかん.",
-        d_featNoteNaani: "Un jeu où l'enfant regarde une grande image et dit le mot à voix haute. Il n'y a pas d'évaluation automatique : un adulte à côté appuie sur le bouton « Je l'ai dit », et le mot est enregistré comme prononcé dans la section « Profondeur des rencontres » du rapport parental. On peut aussi jouer sans appuyer.",
+        d_featNoteNaani: "Un jeu où l'enfant regarde une grande image et dit le mot à voix haute. Il n'y a pas d'évaluation automatique : un adulte à côté appuie sur le bouton « Je l'ai dit », et le mot est enregistré comme prononcé dans la section « Profondeur des rencontres » du rapport parental. On peut aussi jouer sans appuyer. En touchant « Pour les adultes : réponse », dans un coin de l'écran, la réponse s'affiche en petits caractères pour l'adulte uniquement (elle se masque à nouveau au mot suivant). Un petit guide d'évaluation est aussi écrit à côté du bouton « Je l'ai dit ».",
         d_nzNoteCount: "Vérifie si le caractère est écrit avec le même nombre de traits que le modèle. Un conseil s'affiche quand un trait est coupé en deux, ou quand deux traits sont écrits en un seul.",
         d_nzNoteOrder: "Vérifie si les traits sont écrits dans le même ordre que le modèle. Un conseil s'affiche quand un autre trait est écrit en premier.",
         d_nzNoteDir: "Vérifie si la direction de chaque trait, de son début à sa fin, correspond au modèle. Un conseil s'affiche quand un trait est écrit dans le sens opposé.",
@@ -5142,7 +5166,7 @@
         d_repWeek: "Mots collectés cette semaine (7 derniers jours)", d_repTotal: "Mots collectés jusqu'ici (total)", d_repTarget: "Mots concernés",
         d_statWords: "{n} mots", d_repCats: "Catégories préférées", d_join: ", ", d_repNone: "Pas encore de données.",
         d_repRecent: "Mots nouvellement collectés (récents)", d_repDatedNote: "Les dates seront conservées pour les mots collectés à partir de maintenant.",
-        d_repSaid: "Mots dits pour la première fois (まねっこ)", d_repSaidNone: "Pas encore de données. Quand un mot sera bien dit dans まねっこ, il apparaîtra ici.",
+        d_repSaid: "Mots dits pour la première fois (まねっこ / なあに？)", d_repSaidNone: "Pas encore de données. Quand un mot sera bien dit dans まねっこ ou confirmé dans なあに？, il apparaîtra ici.",
         d_repDepth: "Profondeur des rencontres (un repère)", d_repDepthNote: "Un repère approximatif, d'après les enregistrements de jeu, de la profondeur avec laquelle chaque mot a été rencontré. Niveau 1 « Rencontré » = collecté dans le ずかん. Niveau 2 « Bien choisi » = choisi correctement du premier coup dans un jeu de choix. Niveau 3 « Bien choisi solidement » = aussi choisi correctement du premier coup dans un autre jeu ou un autre jour. Niveau 4 « Dit à voix haute » = il existe un enregistrement du mot dit à voix haute. Cela ne prouve pas la compréhension. Les enregistrements des jeux de choix s'accumulent à partir des prochaines parties.",
         d_repDepth1: "Rencontré", d_repDepth2: "Bien choisi", d_repDepth3: "Bien choisi solidement", d_repDepth4: "Dit à voix haute", d_repDepthLv: "Niveau {lv} : {name}", d_repDepthMore: "et {n} de plus",
         d_repPicks: "Mots souvent choisis (どっちが すき？)", d_repPicksNone: "Pas encore de données. Les choix dans どっちが すき？ apparaîtront ici.",
@@ -5173,6 +5197,7 @@
         saveBlocked: "⚠️ Das Speichern im Browser ist in dieser Anzeigeumgebung nicht möglich (zum Beispiel in einem In-App-Browser). Sie können trotzdem spielen, aber die Daten bleiben nach dem Schließen der Seite nicht erhalten. Wenn Sie die Seite in einem normalen Browser öffnen, kann das Speichern möglich werden.",
         langLabel: "Anzeigesprache / Language",
         langNote: "Nur die Erklärungen auf dieser Einstellungsseite wechseln in die gewählte Sprache. Die Wörter und die Namen der Spiele und Funktionen im Spiel bleiben auf Japanisch. Die gewählte Sprache wird gespeichert und ist in Sicherungen enthalten.",
+        pdfBtn: "📄 PDF-Anleitung öffnen", pdfNote: "Öffnet das Anleitungs-PDF (Katalog) in einem neuen Tab, in der gewählten Sprache. Sie können es lesen oder ausdrucken.",
         ageTitle: "Alles auf einmal wählen (Altersrichtwert)",
         ageNote1: "Eine Voreinstellung ist eine Abkürzung, die die Wortanzahl und die Schrift (Hiragana / Kanji & Katakana) gemeinsam auswählt. Nach der Auswahl können Sie jede Einstellung unten weiterhin einzeln anpassen. Wenn Sie als Erwachsener lernen, nutzen Sie die Voreinstellungen als Richtwert für die Wortmenge, nicht für das Alter.",
         age1: "Etwa 3–4 Jahre alt", age1sub: "1.000 Wörter · Nur Hiragana",
@@ -5327,7 +5352,7 @@
         d_featNoteTanken: "Ein Erkundungsspiel: Sammeln Sie die Wörter, die zu jeder Szene passen. Gesammelte Wörter kommen ins ずかん.",
         d_featNoteMoji: "Zwei Buchstabenspiele: den fehlenden Buchstaben erraten und Wörter finden.",
         d_featNoteNarabe: "Ein Spiel, bei dem man die Buchstaben einer 五十音-Reihe in die richtige Reihenfolge bringt. Ist eine Reihe vollständig, erscheint eine Karte mit einem Wort, das einen ihrer Buchstaben enthält, und dieses Wort kommt ins ずかん.",
-        d_featNoteNaani: "Ein Spiel, bei dem das Kind ein großes Bild ansieht und das Wort laut ausspricht. Es gibt keine automatische Bewertung: Ein Erwachsener in der Nähe drückt die Schaltfläche „Gesagt“, und das Wort wird im Abschnitt „Tiefe der Begegnungen“ des Elternberichts als gesprochen vermerkt. Man kann auch spielen, ohne zu drücken.",
+        d_featNoteNaani: "Ein Spiel, bei dem das Kind ein großes Bild ansieht und das Wort laut ausspricht. Es gibt keine automatische Bewertung: Ein Erwachsener in der Nähe drückt die Schaltfläche „Gesagt“, und das Wort wird im Abschnitt „Tiefe der Begegnungen“ des Elternberichts als gesprochen vermerkt. Man kann auch spielen, ohne zu drücken. Mit „Für Erwachsene: Antwort“ in einer Ecke des Bildschirms wird die Antwort nur für Erwachsene in kleiner Schrift angezeigt (beim nächsten Wort wird sie wieder ausgeblendet). Neben der Schaltfläche „Gesagt“ steht außerdem eine kurze Orientierung für die Beurteilung.",
         d_nzNoteCount: "Prüft, ob das Zeichen mit derselben Strichanzahl wie das Vorbild geschrieben wird. Ein Hinweis wird angezeigt, wenn ein Strich in zwei geteilt oder zwei Striche als einer geschrieben werden.",
         d_nzNoteOrder: "Prüft, ob die Striche in derselben Reihenfolge wie das Vorbild geschrieben werden. Ein Hinweis wird angezeigt, wenn ein anderer Strich zuerst geschrieben wird.",
         d_nzNoteDir: "Prüft, ob die Richtung jedes Strichs, von seinem Anfang bis zu seinem Ende, mit dem Vorbild übereinstimmt. Ein Hinweis wird angezeigt, wenn ein Strich in entgegengesetzter Richtung geschrieben wird.",
@@ -5375,7 +5400,7 @@
         d_repWeek: "Diese Woche gesammelte Wörter (letzte 7 Tage)", d_repTotal: "Bisher gesammelte Wörter (gesamt)", d_repTarget: "Wörter im Bereich",
         d_statWords: "{n} Wörter", d_repCats: "Beliebte Kategorien", d_join: ", ", d_repNone: "Noch keine Daten.",
         d_repRecent: "Neu gesammelte Wörter (zuletzt)", d_repDatedNote: "Datumsaufzeichnungen werden ab jetzt für gesammelte Wörter aufbewahrt.",
-        d_repSaid: "Zum ersten Mal gesagte Wörter (まねっこ)", d_repSaidNone: "Noch keine Daten. Wenn ein Wort in まねっこ gut gesagt wird, erscheint es hier.",
+        d_repSaid: "Zum ersten Mal gesagte Wörter (まねっこ / なあに？)", d_repSaidNone: "Noch keine Daten. Wenn ein Wort in まねっこ gut gesagt oder in なあに？ bestätigt wird, erscheint es hier.",
         d_repDepth: "Tiefe der Begegnungen (Orientierung)", d_repDepthNote: "Eine grobe Orientierung aus den Spielaufzeichnungen, wie tief jedes Wort angetroffen wurde. Stufe 1 „Getroffen“ = im ずかん gesammelt. Stufe 2 „Richtig gewählt“ = in einem Auswahlspiel beim ersten Versuch richtig gewählt. Stufe 3 „Sicher gewählt“ = auch in einem anderen Spiel oder an einem anderen Tag beim ersten Versuch richtig gewählt. Stufe 4 „Laut gesagt“ = es gibt eine Aufzeichnung, dass das Wort laut gesagt wurde. Das beweist kein Verständnis. Die Aufzeichnungen der Auswahlspiele sammeln sich ab den nächsten Spielen.",
         d_repDepth1: "Getroffen", d_repDepth2: "Richtig gewählt", d_repDepth3: "Sicher gewählt", d_repDepth4: "Laut gesagt", d_repDepthLv: "Stufe {lv}: {name}", d_repDepthMore: "und {n} weitere",
         d_repPicks: "Oft gewählte Wörter (どっちが すき？)", d_repPicksNone: "Noch keine Daten. Auswahlentscheidungen in どっちが すき？ erscheinen hier.",
@@ -5406,6 +5431,7 @@
         saveBlocked: "⚠️ Il salvataggio nel browser non è disponibile in questo ambiente di visualizzazione (ad esempio, un browser interno a un'app). Puoi comunque giocare, ma i dati non rimarranno dopo la chiusura della pagina. Aprire la pagina in un browser normale potrebbe consentire il salvataggio.",
         langLabel: "Lingua di visualizzazione / Language",
         langNote: "Solo le spiegazioni di questa pagina di impostazioni cambiano nella lingua scelta. Le parole e i nomi dei giochi e delle funzioni all'interno del gioco restano in giapponese. La lingua scelta viene salvata ed è inclusa nei backup.",
+        pdfBtn: "📄 Apri il PDF della guida", pdfNote: "Apre il PDF della guida (catalogo) in una nuova scheda, nella lingua selezionata. Puoi leggerlo o stamparlo.",
         ageTitle: "Scegli tutto in una volta (guida per età)",
         ageNote1: "Una preimpostazione è una scorciatoia che seleziona insieme il numero di parole e la scrittura (hiragana / kanji e katakana). Dopo averne scelta una, puoi comunque regolare ogni impostazione separatamente qui sotto. Se sei uno studente adulto, usa le preimpostazioni come guida alla quantità di parole, non all'età.",
         age1: "Circa 3–4 anni", age1sub: "1.000 parole · Solo hiragana",
@@ -5560,7 +5586,7 @@
         d_featNoteTanken: "Un gioco di esplorazione: raccogli le parole adatte a ogni scena. Le parole raccolte vanno nel ずかん.",
         d_featNoteMoji: "Due giochi con le lettere: indovinare la lettera mancante e trovare parole.",
         d_featNoteNarabe: "Un gioco in cui si mettono in ordine le lettere di una riga del 五十音. Quando una riga è completa, appare una carta con una parola che contiene una delle sue lettere, e quella parola va nello ずかん.",
-        d_featNoteNaani: "Un gioco in cui il bambino guarda una grande immagine e dice la parola ad alta voce. Non c'è una valutazione automatica: un adulto vicino preme il pulsante «L'ho detto», e la parola viene registrata come pronunciata nella sezione «Profondità degli incontri» del rapporto per i genitori. Si può giocare anche senza premerlo.",
+        d_featNoteNaani: "Un gioco in cui il bambino guarda una grande immagine e dice la parola ad alta voce. Non c'è una valutazione automatica: un adulto vicino preme il pulsante «L'ho detto», e la parola viene registrata come pronunciata nella sezione «Profondità degli incontri» del rapporto per i genitori. Si può giocare anche senza premerlo. Toccando «Per gli adulti: risposta», in un angolo dello schermo, la risposta viene mostrata in caratteri piccoli solo all'adulto (e si nasconde di nuovo alla parola successiva). Accanto al pulsante «L'ho detto» c'è anche una breve guida per la valutazione.",
         d_nzNoteCount: "Controlla se il carattere è scritto con lo stesso numero di tratti del modello. Un suggerimento viene mostrato quando un tratto viene diviso in due, o due tratti vengono scritti come uno solo.",
         d_nzNoteOrder: "Controlla se i tratti sono scritti nello stesso ordine del modello. Un suggerimento viene mostrato quando un tratto diverso viene scritto per primo.",
         d_nzNoteDir: "Controlla se la direzione di ogni tratto, dal suo inizio alla sua fine, corrisponde al modello. Un suggerimento viene mostrato quando un tratto viene scritto nella direzione opposta.",
@@ -5608,7 +5634,7 @@
         d_repWeek: "Parole raccolte questa settimana (ultimi 7 giorni)", d_repTotal: "Parole raccolte finora (totale)", d_repTarget: "Parole incluse",
         d_statWords: "{n} parole", d_repCats: "Categorie preferite", d_join: ", ", d_repNone: "Ancora nessun dato.",
         d_repRecent: "Parole raccolte di recente", d_repDatedNote: "Le date verranno conservate per le parole raccolte da ora in poi.",
-        d_repSaid: "Parole dette per la prima volta (まねっこ)", d_repSaidNone: "Ancora nessun dato. Quando una parola verrà detta bene in まねっこ, apparirà qui.",
+        d_repSaid: "Parole dette per la prima volta (まねっこ / なあに？)", d_repSaidNone: "Ancora nessun dato. Quando una parola verrà detta bene in まねっこ o confermata in なあに？, apparirà qui.",
         d_repDepth: "Profondità degli incontri (un riferimento)", d_repDepthNote: "Un riferimento approssimativo, dai registri di gioco, di quanto profondamente ogni parola è stata incontrata. Livello 1 «Incontrata» = raccolta nello ずかん. Livello 2 «Scelta giusta» = scelta correttamente al primo tentativo in un gioco di scelta. Livello 3 «Scelta sicura» = scelta correttamente al primo tentativo anche in un altro gioco o in un altro giorno. Livello 4 «Detta ad alta voce» = esiste una registrazione della parola detta ad alta voce. Questo non dimostra la comprensione. I registri dei giochi di scelta si accumulano dalle prossime partite.",
         d_repDepth1: "Incontrata", d_repDepth2: "Scelta giusta", d_repDepth3: "Scelta sicura", d_repDepth4: "Detta ad alta voce", d_repDepthLv: "Livello {lv}: {name}", d_repDepthMore: "e altri {n}",
         d_repPicks: "Parole scelte spesso (どっちが すき？)", d_repPicksNone: "Ancora nessun dato. Le scelte in どっちが すき？ appariranno qui.",
@@ -5639,6 +5665,7 @@
         saveBlocked: "⚠️ Penyimpanan ke browser tidak tersedia di lingkungan tampilan ini (misalnya browser dalam aplikasi). Anda tetap dapat bermain, tetapi catatan tidak akan tersisa setelah halaman ditutup. Membuka halaman di browser biasa mungkin mengaktifkan penyimpanan.",
         langLabel: "Bahasa tampilan / Language",
         langNote: "Hanya penjelasan di halaman pengaturan ini yang berubah ke bahasa yang dipilih. Kata-kata serta nama permainan dan fitur di dalam permainan tetap dalam bahasa Jepang. Bahasa yang dipilih akan disimpan dan disertakan dalam cadangan.",
+        pdfBtn: "📄 Buka PDF panduan", pdfNote: "Membuka PDF panduan (katalog) di tab baru, dalam bahasa yang dipilih. Anda dapat membaca atau mencetaknya.",
         ageTitle: "Pilih semuanya sekaligus (panduan usia)",
         ageNote1: "Preset adalah jalan pintas yang memilih jumlah kata dan aksara (hiragana / kanji & katakana) secara bersamaan. Setelah memilih satu, Anda tetap dapat menyesuaikan setiap pengaturan secara terpisah di bawah ini. Jika Anda pelajar dewasa, gunakan preset sebagai panduan jumlah kata, bukan usia.",
         age1: "Sekitar 3–4 tahun", age1sub: "1.000 kata · Hiragana saja",
@@ -5793,7 +5820,7 @@
         d_featNoteTanken: "Permainan penjelajahan: kumpulkan kata yang sesuai dengan tiap adegan. Kata yang dikumpulkan masuk ke ずかん.",
         d_featNoteMoji: "Dua permainan huruf: menebak huruf yang hilang, dan mencari kata.",
         d_featNoteNarabe: "Permainan menyusun huruf-huruf dalam satu baris 五十音 sesuai urutan. Saat satu baris lengkap, muncul kartu kata yang mengandung salah satu huruf dari baris itu, dan kata itu terkumpul di ずかん.",
-        d_featNoteNaani: "Permainan di mana anak melihat gambar besar dan mengucapkan kata itu dengan suara keras. Tidak ada penilaian otomatis: orang dewasa di dekatnya menekan tombol “Sudah bisa mengucapkan”, dan kata itu tercatat sebagai telah diucapkan pada bagian “Kedalaman perjumpaan” di laporan orang tua. Tanpa menekan pun tetap bisa bermain.",
+        d_featNoteNaani: "Permainan di mana anak melihat gambar besar dan mengucapkan kata itu dengan suara keras. Tidak ada penilaian otomatis: orang dewasa di dekatnya menekan tombol “Sudah bisa mengucapkan”, dan kata itu tercatat sebagai telah diucapkan pada bagian “Kedalaman perjumpaan” di laporan orang tua. Tanpa menekan pun tetap bisa bermain. Dengan mengetuk “Untuk orang dewasa: jawaban” di sudut layar, jawaban ditampilkan dengan huruf kecil hanya untuk orang dewasa (dan disembunyikan lagi saat pindah ke kata berikutnya). Di samping tombol “Sudah bisa mengucapkan” juga tertulis panduan singkat untuk menilai.",
         d_nzNoteCount: "Memeriksa apakah karakter ditulis dengan jumlah goresan yang sama seperti contoh. Panduan ditampilkan saat satu goresan dibagi menjadi dua, atau dua goresan ditulis sebagai satu.",
         d_nzNoteOrder: "Memeriksa apakah goresan ditulis dalam urutan yang sama seperti contoh. Panduan ditampilkan saat goresan yang berbeda ditulis terlebih dahulu.",
         d_nzNoteDir: "Memeriksa apakah arah setiap goresan, dari awal hingga akhir, sesuai dengan contoh. Panduan ditampilkan saat goresan ditulis dalam arah berlawanan.",
@@ -5841,7 +5868,7 @@
         d_repWeek: "Kata yang terkumpul minggu ini (7 hari terakhir)", d_repTotal: "Kata yang terkumpul sejauh ini (total)", d_repTarget: "Kata dalam cakupan",
         d_statWords: "{n} kata", d_repCats: "Kategori favorit", d_join: ", ", d_repNone: "Belum ada catatan.",
         d_repRecent: "Kata yang baru terkumpul (terbaru)", d_repDatedNote: "Catatan tanggal akan disimpan untuk kata yang terkumpul mulai sekarang.",
-        d_repSaid: "Kata yang diucapkan untuk pertama kali (まねっこ)", d_repSaidNone: "Belum ada catatan. Saat sebuah kata diucapkan dengan baik di まねっこ, kata itu akan muncul di sini.",
+        d_repSaid: "Kata yang diucapkan untuk pertama kali (まねっこ / なあに？)", d_repSaidNone: "Belum ada catatan. Saat sebuah kata diucapkan dengan baik di まねっこ atau dikonfirmasi di なあに？, kata itu akan muncul di sini.",
         d_repDepth: "Kedalaman perjumpaan (perkiraan)", d_repDepthNote: "Perkiraan kasar dari catatan permainan tentang seberapa dalam setiap kata telah dijumpai. Tingkat 1 “Dijumpai” = terkumpul di ずかん. Tingkat 2 “Dipilih dengan benar” = dipilih dengan benar pada percobaan pertama dalam permainan memilih. Tingkat 3 “Dipilih dengan mantap” = juga dipilih dengan benar pada percobaan pertama dalam permainan lain atau di hari lain. Tingkat 4 “Diucapkan” = ada catatan pernah mengucapkan kata itu. Ini tidak memastikan pemahaman. Catatan permainan memilih akan terkumpul mulai dari permainan berikutnya.",
         d_repDepth1: "Dijumpai", d_repDepth2: "Dipilih dengan benar", d_repDepth3: "Dipilih dengan mantap", d_repDepth4: "Diucapkan", d_repDepthLv: "Tingkat {lv}: {name}", d_repDepthMore: "dan {n} lagi",
         d_repPicks: "Kata yang sering dipilih (どっちが すき？)", d_repPicksNone: "Belum ada catatan. Pilihan di どっちが すき？ akan muncul di sini.",
@@ -5873,6 +5900,7 @@
         btnSettings: "⚙️ <ruby>設定<rt>せってい</rt></ruby>",
         close: "✕ <ruby>閉<rt>と</rt></ruby>じる",
         langLabel: "<ruby>表示<rt>ひょうじ</rt></ruby><ruby>言語<rt>げんご</rt></ruby> / Language",
+        pdfBtn: "📄 <ruby>説明<rt>せつめい</rt></ruby>の PDFを <ruby>開<rt>ひら</rt></ruby>く",
         ageTitle: "まとめて <ruby>選<rt>えら</rt></ruby>ぶ（<ruby>年齢<rt>ねんれい</rt></ruby>の <ruby>目安<rt>めやす</rt></ruby>）",
         age1: "3〜4<ruby>歳<rt>さい</rt></ruby>ごろ",
         age1sub: "1,000<ruby>語<rt>ご</rt></ruby>・ひらがなだけ",
@@ -5957,6 +5985,14 @@
          「やさしい日本語」(easy) は EASY_HTML のルビ付き HTML を優先する。 */
       var uiLang = "ja";
       var LANG_LOCALE = { ja: "ja-JP", easy: "ja-JP", en: "en-US", zhHans: "zh-Hans", zhHant: "zh-Hant", pt: "pt-BR", es: "es-ES", vi: "vi-VN", th: "th-TH", ko: "ko-KR", fr: "fr-FR", de: "de-DE", it: "it-IT", id: "id-ID" };
+      /* 説明PDF（カタログ）: GitHub Pages の docs/ 配下。ファイル名はリポジトリ実物で確認済み（2026-11-17）。
+         選んでいる表示言語に応じて、ボタンの飛び先を切り替える。外部リンクを開くだけで、記録・設定には影響しない。 */
+      var CATALOG_PDF_BASE = "https://kagoya.github.io/goigoi/docs/";
+      var CATALOG_PDF = { ja: "goigoi-game-catalog.pdf", easy: "goigoi-game-catalog.ja-easy.pdf", en: "goigoi-game-catalog.en.pdf", zhHans: "goigoi-game-catalog.zh-Hans.pdf", zhHant: "goigoi-game-catalog.zh-Hant.pdf", pt: "goigoi-game-catalog.pt.pdf", es: "goigoi-game-catalog.es.pdf", vi: "goigoi-game-catalog.vi.pdf", th: "goigoi-game-catalog.th.pdf", ko: "goigoi-game-catalog.ko.pdf", fr: "goigoi-game-catalog.fr.pdf", de: "goigoi-game-catalog.de.pdf", it: "goigoi-game-catalog.it.pdf", id: "goigoi-game-catalog.id.pdf" };
+      function updateCatalogPdfLink(lang) {
+        var a = document.getElementById("catalogPdfBtn");
+        if (a) a.href = CATALOG_PDF_BASE + (CATALOG_PDF[lang] || CATALOG_PDF.ja);
+      }
       function ST(key, vars) {
         var d = (typeof I18N !== "undefined" && I18N[uiLang]) || {};
         var s = d[key] != null ? d[key] : ((typeof I18N !== "undefined" && I18N.ja && I18N.ja[key] != null) ? I18N.ja[key] : key);
@@ -5978,6 +6014,7 @@
         uiLang = lang;
         var sel = document.getElementById("uiLangSel");
         if (sel) sel.value = lang;
+        updateCatalogPdfLink(lang);
         var panel = document.getElementById("adultPanel");
         if (panel) panel.setAttribute("lang", LANG_LOCALE[lang] || "ja");
         document.querySelectorAll("[data-i18n]").forEach(function (el) {
@@ -7610,7 +7647,7 @@
       /* ===== 第2弾の追加状態 =====
          speechRate: 読み上げ速度（0.78=ゆっくり・従来相当 / 0.95=ふつう / 1.12=はやい）
          timerMin: おしまいの合図タイマー（0=なし）
-         saidFirst: まねっこで「はじめて言えた」言葉: 番号 → "年-月-日"（プロフィールごと）
+         saidFirst: 「はじめて言えた」言葉（まねっこの成功と「なあに？」の大人の確認で記録）: 番号 → "年-月-日"（プロフィールごと）
          profilesData / profileNames / activeProfile: きょうだい用プロフィール（最大3人）。
            profilesData には各プロフィールの記録一式をしまい、作業中の子の記録は
            従来どおり個別の変数（collected など）で持つ。保存のたびに現在の子の記録を
@@ -9288,11 +9325,42 @@
          内部信号を付ける（保護者レポート「であいの深さ」段階4の材料。子どもの画面に
          評価は出さない）。押さなくても「つぎの ことば」で進められ、遊びはほめる
          だけで成立する。出題は今の語彙数範囲からで、遊んだ言葉は従来どおり
-         図鑑に集める（カードを出し終えるとき＝次へ進む／いえたねを押すときに登録）。 */
+         図鑑に集める（カードを出し終えるとき＝次へ進む／いえたねを押すときに登録）。
+         大人が答えを判断できるよう、大人用エリアに「おとな用：こたえ」ボタンと
+         判断の目安を置く。こたえは普段隠れていて、押したときだけ小さく表示され、
+         次のカードへ進むと再び隠れる。読み上げはしない（従来どおり「これは
+         なあに？」だけ）。表示は読みを基本に、同音異義語など区別が要る言葉では
+         「言葉の絵を変える」と同じ流儀で漢字形と分野を併記する。 */
       var naaniEl = document.getElementById("naaniEl");
       var naaniId = null;
       var naaniCounted = false;   /* 今のカードの言葉を図鑑に集め済みか */
       var naaniSaidDone = false;  /* 今のカードで「いえたね」を押し済みか */
+      var naaniAnsOpen = false;   /* 大人用こたえを表示中か */
+      /* 大人用こたえの文面: 読みを基本に、同音異義語（同じ読みの言葉が複数ある）
+         のときだけ漢字・カタカナ形と分野を併記して区別できるようにする */
+      function naaniAnswerText() {
+        if (naaniId == null || !WORDS[naaniId]) return "";
+        var w = WORDS[naaniId];
+        var r = cleanReading(w.h);
+        var ids = IDX_ALL[r] || IDX_ALL[w.h] || [];
+        var seen = {}, n = 0;
+        ids.forEach(function (x) { if (!seen[x]) { seen[x] = 1; n++; } });
+        if (n > 1) {
+          var d = normDispD(w);
+          var cat = CATS[w.c] || "";
+          if (d && d !== r) return r + "（" + d + "／" + cat + "）";
+          if (cat) return r + "（" + cat + "）";
+        }
+        return r;
+      }
+      /* こたえを隠す（カードが切り替わるたびに呼ぶ） */
+      function naaniHideAnswer() {
+        naaniAnsOpen = false;
+        var a = document.getElementById("naaniAns");
+        if (a) { a.hidden = true; a.textContent = ""; }
+        var b = document.getElementById("naaniAnsBtn");
+        if (b) b.setAttribute("aria-expanded", "false");
+      }
       function naaniDeal() {
         var pool = scopeList();
         var card = document.getElementById("naaniCard");
@@ -9300,6 +9368,7 @@
         card.innerHTML = "";
         msg.textContent = "";
         document.getElementById("naaniSaidBtn").classList.remove("done");
+        naaniHideAnswer();   /* 次のカードでは、こたえは再び隠れる */
         naaniCounted = false;
         naaniSaidDone = false;
         if (!pool.length) { naaniId = null; msg.textContent = "ことばが みつからなかったよ。"; return; }
@@ -9342,6 +9411,16 @@
         naaniSaidDone = true;
         this.classList.add("done");
         noteDepthSaid(naaniId);   /* 「こえに だせた」の内部信号（大人だけが知る記録） */
+        /* 「はじめて言えた」記録（saidFirst）にも、まねっこと同じ形で残す。
+           同じ言葉は最初の1回だけ日付を残し、既に記録がある言葉の日付は
+           上書きしない。これで保護者レポートの「初めて言えた言葉」欄と
+           「はじめて いえた」スタンプ、子供用きろくの「はじめて いえた
+           ことば」にも、なあに？で言えた言葉が出るようになる */
+        if (!saidFirst[naaniId]) {
+          saidFirst[naaniId] = todayKey;
+          saveState();
+        }
+        syncDerivedStamps(false);   /* 初めて言えたらスタンプもその場で祝う（まねっこと同じ） */
         naaniCollect();
         var w = WORDS[naaniId];
         /* 言えた確認として、ここで初めて言葉の文字を見せて読み上げる */
@@ -9354,6 +9433,17 @@
         celebrate("じょうず！", "🗣️");
         sfx("good");
         speak("じょうず！ " + w.h + "だね！");
+      });
+      /* 大人用こたえの開閉: 押したときだけ小さく表示し、もう一度押すと隠れる。
+         読み上げはしない。次のカードへ進むと naaniDeal が再び隠す */
+      document.getElementById("naaniAnsBtn").addEventListener("click", function () {
+        if (naaniId == null) return;
+        if (naaniAnsOpen) { naaniHideAnswer(); return; }
+        naaniAnsOpen = true;
+        var a = document.getElementById("naaniAns");
+        a.textContent = "こたえ：" + naaniAnswerText();
+        a.hidden = false;
+        this.setAttribute("aria-expanded", "true");
       });
 
       /* ===== おきにいり・シール（ずかんで使う） ===== */
@@ -10396,7 +10486,7 @@
           });
           el.appendChild(list);
         }
-        /* はじめて言えた言葉（まねっこで大まかに一致した言葉・日付つき・直近10語） */
+        /* はじめて言えた言葉（まねっこで大まかに一致した言葉と、「なあに？」で大人が確認した言葉・日付つき・直近10語） */
         var h3 = document.createElement("p");
         h3.className = "report-h";
         h3.textContent = ST("d_repSaid");
@@ -12253,7 +12343,7 @@
         { k: "tanken", label: "ことばたんけん", note: "場面に合う言葉を集める探検の遊びです。集めた言葉は、ずかんに集まります。", noteKey: "d_featNoteTanken" },
         { k: "moji", label: "もじあそび（あなうめ・ことば みっけ）", note: "抜けた文字を当てる・言葉を探す、の2種類で遊べる文字の遊びです。", noteKey: "d_featNoteMoji" },
         { k: "narabe", label: "ごじゅうおん ならべ", note: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。", noteKey: "d_featNoteNarabe" },
-        { k: "naani", label: "なあに？（声に出して言う）", note: "大きな絵を見て、その言葉を声に出して言う遊びです。そばで聞いている大人が「いえたね」ボタンを押すと、声に出して言えた記録が保護者レポートの「であいの深さ」に残ります。押さなくても、そのまま次の言葉へ進んで遊べます。", noteKey: "d_featNoteNaani" }
+        { k: "naani", label: "なあに？（声に出して言う）", note: "大きな絵を見て、その言葉を声に出して言う遊びです。そばで聞いている大人が「いえたね」ボタンを押すと、声に出して言えた記録が保護者レポートの「であいの深さ」に残ります。押さなくても、そのまま次の言葉へ進んで遊べます。画面の隅の「おとな用：こたえ」を押すと、答えが大人にだけ小さく表示されます（次の言葉に進むと再び隠れます）。「いえたね」のそばには、大人が判断するときの目安も書いてあります。", noteKey: "d_featNoteNaani" }
       ];
       function applyFeatures() {
         FEATURE_DEFS.forEach(function (d) {
