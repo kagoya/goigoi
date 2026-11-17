@@ -4,7 +4,7 @@
 
 A word game for toddlers to enjoy growing their vocabulary, playable in a web browser. **Completely free — no charges.**
 
-Current version: **3.3**
+Current version: **3.4**
 
 **▶ Play: https://kagoya.github.io/goigoi/**
 
@@ -24,6 +24,7 @@ Current version: **3.3**
 - 「もじあそび」 consists of two games: 「ことば あなうめ」 and 「ことば みっけ」. 「ごじゅうおん ならべ」 is a separate activity: pick a row from the gojuuon chart and arrange its characters. After completing a row, choose a character to see a word card containing that character
 - Even if you get a quiz question wrong, it is never treated as a failure — you check the right answer together and get praised. There is no competition
 - Vocabulary size can be chosen from 1,000 / 5,000 / 25,000 / all (filtered by an 8-level rating of how commonly each word is used; applies to all features)
+- The word ratings have been reviewed. With reference to public data such as the textbook corpus and BCCWJ of the National Institute for Japanese Language and Linguistics (NINJAL), the ratings have been adjusted so that basic words (such as する・いる・ある) are included in the 1,000-word range
 - Night mode can be chosen in Settings: "day / night / automatic by time (18:00–6:00)". It does not follow your device's dark mode
 - The sound on/off switch is a shared switch at the top of the screen (it cannot be turned off in おととことば or ききとりクイズ)
 - 33 kinds of stamps in total (3 completion stamps, 9 "first time" stamps, 5 word-count milestone stamps, 11 achievement stamps, 5 total-days-played stamps). You can view them as round stamps in the children's 「きろく」, opened from the ずかん

@@ -4,7 +4,7 @@
 
 Một trò chơi từ vựng để trẻ nhỏ vừa chơi vừa mở rộng vốn từ, chơi được trên trình duyệt. **Hoàn toàn miễn phí, không thu phí.**
 
-Phiên bản hiện tại: **3.3**
+Phiên bản hiện tại: **3.4**
 
 **▶ Chơi: https://kagoya.github.io/goigoi/**
 
@@ -24,6 +24,7 @@ Phiên bản hiện tại: **3.3**
 - 「もじあそび」 gồm hai trò chơi: 「ことば あなうめ」 và 「ことば みっけ」. 「ごじゅうおん ならべ」 là một trò chơi riêng: chọn một hàng trong bảng gojuuon và sắp xếp các chữ của hàng đó. Sau khi xếp xong một hàng, chạm vào một chữ để xem thẻ một từ có chứa chữ đó
 - Dù trả lời sai câu đố cũng không bị coi là thất bại: đáp án đúng sẽ được cùng nhau kiểm tra và trẻ sẽ được khen. Không có thi đua
 - Số lượng từ vựng có thể chọn từ 1.000 / 5.000 / 25.000 / tất cả (lọc theo thang đánh giá 8 mức về độ thường dùng; áp dụng cho mọi tính năng)
+- Đánh giá từ vựng đã được xem xét lại. Dựa trên dữ liệu công khai như kho ngữ liệu sách giáo khoa và BCCWJ của Viện Ngôn ngữ Quốc gia Nhật Bản (NINJAL), việc điều chỉnh đã được thực hiện để các từ cơ bản (như する・いる・ある) nằm trong phạm vi 1.000 từ
 - Chế độ ban đêm có thể chọn trong Cài đặt: "ban ngày / ban đêm / tự động theo giờ (18 giờ–6 giờ)". Không liên động với chế độ tối của thiết bị
 - Công tắc bật/tắt âm thanh là công tắc chung ở phía trên màn hình (không thể tắt trong おととことば và ききとりクイズ)
 - Tổng cộng 33 loại con dấu (3 loại hoàn thành, 9 loại "lần đầu tiên", 5 loại mốc số từ đã sưu tầm, 11 loại thành tích, 5 loại tổng số ngày đã chơi). Có thể xem dưới dạng con dấu tròn trong 「きろく」 dành cho trẻ em, mở từ ずかん

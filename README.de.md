@@ -4,7 +4,7 @@
 
 Ein Wortspiel für Kleinkinder, das im Browser gespielt wird und spielerisch den Wortschatz erweitert. **Komplett kostenlos – keine Gebühren.**
 
-Aktuelle Version: **3.3**
+Aktuelle Version: **3.4**
 
 **▶ Spielen: https://kagoya.github.io/goigoi/**
 
@@ -24,6 +24,7 @@ Aktuelle Version: **3.3**
 - 「もじあそび」 besteht aus zwei Spielen: 「ことば あなうめ」 und 「ことば みっけ」. 「ごじゅうおん ならべ」 ist ein eigenes Spiel: Man wählt eine Reihe aus der Gojuuon-Tabelle und ordnet die Zeichen. Ist eine Reihe vollständig, tippt man auf ein Zeichen und sieht eine Wortkarte mit diesem Zeichen
 - Auch wenn man im Quiz etwas falsch macht, gilt das nie als Misserfolg: Die richtige Antwort wird gemeinsam überprüft und das Kind wird gelobt. Es gibt keinen Wettbewerb
 - Die Größe des Wortschatzes kann aus 1.000 / 5.000 / 25.000 / alle gewählt werden (gefiltert nach einer 8-stufigen Bewertung, wie häufig ein Wort verwendet wird; gilt für alle Funktionen)
+- Die Wortbewertungen wurden überarbeitet. Mit Bezug auf öffentliche Daten wie das Lehrbuchkorpus und das BCCWJ des Nationalen Instituts für die japanische Sprache (NINJAL) wurden Anpassungen vorgenommen, damit grundlegende Wörter (wie する・いる・ある) im Bereich von 1.000 Wörtern enthalten sind
 - Der Nachtmodus kann in den Einstellungen gewählt werden: „Tag / Nacht / automatisch nach Uhrzeit (18–6 Uhr)“. Er richtet sich nicht nach dem Dunkelmodus des Geräts
 - Der Schalter für Ton an/aus ist ein gemeinsamer Schalter oben auf dem Bildschirm (bei おととことば und ききとりクイズ kann er nicht ausgeschaltet werden)
 - Insgesamt 33 Arten von Stempeln (3 für Vervollständigung, 9 „zum ersten Mal“, 5 Meilensteine für die Anzahl gesammelter Wörter, 11 Erfolge, 5 für die Gesamtzahl der Spieltage). Man kann sie als runde Stempel im 「きろく」 für Kinder ansehen, das vom ずかん aus geöffnet wird

@@ -4,7 +4,7 @@
 
 Permainan kata untuk anak usia dini yang dapat dimainkan di peramban, untuk menambah kosakata sambil bermain. **Sepenuhnya gratis, tanpa biaya.**
 
-Versi saat ini: **3.3**
+Versi saat ini: **3.4**
 
 **▶ Main: https://kagoya.github.io/goigoi/**
 
@@ -24,6 +24,7 @@ Versi saat ini: **3.3**
 - 「もじあそび」 terdiri dari dua permainan: 「ことば あなうめ」 dan 「ことば みっけ」. 「ごじゅうおん ならべ」 adalah permainan tersendiri: pilih satu baris dari tabel gojuuon dan susun huruf-hurufnya. Setelah satu baris lengkap, ketuk satu huruf untuk melihat kartu kata yang mengandung huruf tersebut
 - Meskipun salah menjawab kuis, itu tidak pernah dianggap sebagai kegagalan: jawaban yang benar diperiksa bersama dan anak dipuji. Tidak ada persaingan
 - Ukuran kosakata dapat dipilih dari 1.000 / 5.000 / 25.000 / semua (disaring dengan peringkat 8 tingkat berdasarkan seberapa sering kata digunakan; berlaku untuk semua fitur)
+- Peringkat kata telah ditinjau kembali. Dengan mengacu pada data publik seperti korpus buku teks dan BCCWJ dari Institut Nasional Bahasa Jepang (NINJAL), penyesuaian dilakukan agar kata-kata dasar (seperti する・いる・ある) termasuk dalam rentang 1.000 kata
 - Mode malam dapat dipilih di Pengaturan: "siang / malam / otomatis menurut waktu (18.00–06.00)". Tidak mengikuti mode gelap perangkat
 - Sakelar nyala/mati suara adalah sakelar bersama di bagian atas layar (tidak dapat dimatikan di おととことば dan ききとりクイズ)
 - Total 33 jenis stempel (3 stempel penyelesaian, 9 stempel "pertama kali", 5 stempel pencapaian jumlah kata yang dikumpulkan, 11 stempel prestasi, 5 stempel total hari bermain). Dapat dilihat dalam bentuk stempel bulat di 「きろく」 untuk anak, yang dibuka dari ずかん

@@ -4,7 +4,7 @@
 
 Un jeu de mots pour les tout-petits, à jouer dans le navigateur, pour enrichir leur vocabulaire en s'amusant. **Entièrement gratuit, sans aucun frais.**
 
-Version actuelle : **3.3**
+Version actuelle : **3.4**
 
 **▶ Jouer : https://kagoya.github.io/goigoi/**
 
@@ -24,6 +24,7 @@ Version actuelle : **3.3**
 - 「もじあそび」 comprend deux jeux : 「ことば あなうめ」 et 「ことば みっけ」. 「ごじゅうおん ならべ」 est un jeu indépendant : on choisit une ligne du tableau gojuuon et on y range les caractères. Une fois la ligne complétée, touchez un caractère pour voir une carte d'un mot contenant ce caractère
 - Même en cas d'erreur au quiz, ce n'est jamais un échec : on vérifie la bonne réponse ensemble et l'enfant est félicité. Il n'y a aucune compétition
 - La taille du vocabulaire peut être choisie parmi 1 000 / 5 000 / 25 000 / tout (filtrage selon une évaluation en 8 niveaux de la fréquence d'usage des mots ; s'applique à toutes les fonctions)
+- L'évaluation des mots a été révisée. En référence à des données publiques telles que le corpus de manuels scolaires et le BCCWJ de l'Institut national de la langue japonaise (NINJAL), des ajustements ont été effectués pour que des mots de base (comme する・いる・ある) soient inclus dans la plage de 1 000 mots
 - Le mode nuit peut être choisi dans les Réglages : « jour / nuit / automatique selon l'heure (18 h – 6 h) ». Il ne suit pas le mode sombre de l'appareil
 - L'interrupteur du son est un interrupteur commun en haut de l'écran (il ne peut pas être désactivé dans おととことば et ききとりクイズ)
 - 33 types de tampons au total (3 de complétion, 9 « première fois », 5 de paliers de nombre de mots recueillis, 11 de réussite, 5 de jours de jeu cumulés). On peut les admirer sous forme de tampons ronds dans le 「きろく」 pour enfants, ouvert depuis le ずかん
