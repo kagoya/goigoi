@@ -4,7 +4,7 @@
 
 A word game for toddlers to enjoy growing their vocabulary, playable in a web browser. **Completely free — no charges.**
 
-Current version: **3.4**
+Current version: **3.5**
 
 **▶ Play: https://kagoya.github.io/goigoi/**
 
@@ -23,7 +23,7 @@ Current version: **3.4**
 - 18 activities on the home screen (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Six are on in the initial settings (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), and each can be turned on or off in Settings
 - 「もじあそび」 consists of two games: 「ことば あなうめ」 and 「ことば みっけ」. 「ごじゅうおん ならべ」 is a separate activity: pick a row from the gojuuon chart and arrange its characters. After completing a row, choose a character to see a word card containing that character
 - Even if you get a quiz question wrong, it is never treated as a failure — you check the right answer together and get praised. There is no competition
-- Vocabulary size can be chosen from 1,000 / 5,000 / 25,000 / all (filtered by an 8-level rating of how commonly each word is used; applies to all features)
+- Vocabulary size can be chosen from 500 / 1,000 / 2,000 / 4,000 / 8,000 / 16,000 / all (filtered by an 8-level rating of how commonly each word is used; applies to all features)
 - The word ratings have been reviewed. With reference to public data such as the textbook corpus and BCCWJ of the National Institute for Japanese Language and Linguistics (NINJAL), the ratings have been adjusted so that basic words (such as する・いる・ある) are included in the 1,000-word range
 - Night mode can be chosen in Settings: "day / night / automatic by time (18:00–6:00)". It does not follow your device's dark mode
 - The sound on/off switch is a shared switch at the top of the screen (it cannot be turned off in おととことば or ききとりクイズ)

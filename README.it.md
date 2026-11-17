@@ -4,7 +4,7 @@
 
 Un gioco di parole per bambini piccoli, giocabile nel browser, per arricchire il vocabolario divertendosi. **Completamente gratuito, senza costi.**
 
-Versione attuale: **3.4**
+Versione attuale: **3.5**
 
 **▶ Gioca: https://kagoya.github.io/goigoi/**
 
@@ -23,7 +23,7 @@ Versione attuale: **3.4**
 - 18 giochi nella schermata iniziale (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Nelle impostazioni iniziali ne sono attivi 6 (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), e ciascuno può essere attivato o disattivato nelle Impostazioni
 - 「もじあそび」 è formato da due giochi: 「ことば あなうめ」 e 「ことば みっけ」. 「ごじゅうおん ならべ」 è un gioco indipendente: si sceglie una riga dalla tabella gojuuon e si dispongono i suoi caratteri. Dopo aver completato una riga, tocca un carattere per vedere una scheda di una parola che lo contiene
 - Anche se si sbaglia nel quiz, non è mai considerato un fallimento: si controlla insieme la risposta giusta e il bambino viene lodato. Non c'è competizione
-- La dimensione del vocabolario può essere scelta tra 1.000 / 5.000 / 25.000 / tutto (filtrata con una valutazione in 8 livelli della frequenza d'uso delle parole; vale per tutte le funzioni)
+- La dimensione del vocabolario può essere scelta tra 500 / 1.000 / 2.000 / 4.000 / 8.000 / 16.000 / tutto (filtrata con una valutazione in 8 livelli della frequenza d'uso delle parole; vale per tutte le funzioni)
 - La valutazione delle parole è stata rivista. Facendo riferimento a dati pubblici come il corpus dei libri di testo e il BCCWJ dell'Istituto nazionale di lingua giapponese (NINJAL), sono state apportate modifiche affinché parole di base (come する・いる・ある) siano incluse nella fascia di 1.000 parole
 - La modalità notte può essere scelta nelle Impostazioni: «giorno / notte / automatica in base all'orario (18:00–6:00)». Non segue la modalità scura del dispositivo
 - L'interruttore di attivazione/disattivazione dell'audio è un interruttore comune nella parte superiore dello schermo (non può essere disattivato in おととことば e ききとりクイズ)

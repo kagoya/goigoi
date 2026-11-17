@@ -4,7 +4,7 @@
 
 Um jogo de palavras para crianças pequenas ampliarem o vocabulário brincando, jogável no navegador. **Totalmente grátis, sem cobranças.**
 
-Versão atual: **3.4**
+Versão atual: **3.5**
 
 **▶ Jogar: https://kagoya.github.io/goigoi/**
 
@@ -23,7 +23,7 @@ Versão atual: **3.4**
 - 18 brincadeiras na tela inicial (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Na configuração inicial, seis ficam ligadas (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), e cada uma pode ser ligada ou desligada nas Configurações
 - 「もじあそび」 é formado por dois jogos: 「ことば あなうめ」 e 「ことば みっけ」. 「ごじゅうおん ならべ」 é uma brincadeira independente: você escolhe uma linha da tabela gojuuon e organiza suas letras. Depois de completar uma linha, toque em uma letra para ver um cartão de uma palavra que contém essa letra
 - Mesmo errando no quiz, isso não é tratado como fracasso: a resposta certa é conferida junto e a criança é elogiada. Não há competição
-- O tamanho do vocabulário pode ser escolhido entre 1.000 / 5.000 / 25.000 / tudo (filtrado por uma classificação de 8 níveis conforme a frequência de uso; vale para todas as funções)
+- O tamanho do vocabulário pode ser escolhido entre 500 / 1.000 / 2.000 / 4.000 / 8.000 / 16.000 / tudo (filtrado por uma classificação de 8 níveis conforme a frequência de uso; vale para todas as funções)
 - A classificação das palavras foi revisada. Com referência a dados públicos, como o corpus de livros didáticos e o BCCWJ do Instituto Nacional da Língua Japonesa (NINJAL), foram feitos ajustes para que palavras básicas (como する・いる・ある) estejam incluídas na faixa de 1.000 palavras
 - O modo noturno pode ser escolhido nas Configurações: "dia / noite / automático pelo horário (18h–6h)". Não segue o modo escuro do aparelho
 - O interruptor de som ligado/desligado é comum, no topo da tela (não pode ser desligado em おととことば e ききとりクイズ)

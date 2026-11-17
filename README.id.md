@@ -4,7 +4,7 @@
 
 Permainan kata untuk anak usia dini yang dapat dimainkan di peramban, untuk menambah kosakata sambil bermain. **Sepenuhnya gratis, tanpa biaya.**
 
-Versi saat ini: **3.4**
+Versi saat ini: **3.5**
 
 **▶ Main: https://kagoya.github.io/goigoi/**
 
@@ -23,7 +23,7 @@ Versi saat ini: **3.4**
 - 18 permainan di layar beranda (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Pada pengaturan awal, 6 permainan aktif (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), dan masing-masing dapat diaktifkan atau dinonaktifkan di Pengaturan
 - 「もじあそび」 terdiri dari dua permainan: 「ことば あなうめ」 dan 「ことば みっけ」. 「ごじゅうおん ならべ」 adalah permainan tersendiri: pilih satu baris dari tabel gojuuon dan susun huruf-hurufnya. Setelah satu baris lengkap, ketuk satu huruf untuk melihat kartu kata yang mengandung huruf tersebut
 - Meskipun salah menjawab kuis, itu tidak pernah dianggap sebagai kegagalan: jawaban yang benar diperiksa bersama dan anak dipuji. Tidak ada persaingan
-- Ukuran kosakata dapat dipilih dari 1.000 / 5.000 / 25.000 / semua (disaring dengan peringkat 8 tingkat berdasarkan seberapa sering kata digunakan; berlaku untuk semua fitur)
+- Ukuran kosakata dapat dipilih dari 500 / 1.000 / 2.000 / 4.000 / 8.000 / 16.000 / semua (disaring dengan peringkat 8 tingkat berdasarkan seberapa sering kata digunakan; berlaku untuk semua fitur)
 - Peringkat kata telah ditinjau kembali. Dengan mengacu pada data publik seperti korpus buku teks dan BCCWJ dari Institut Nasional Bahasa Jepang (NINJAL), penyesuaian dilakukan agar kata-kata dasar (seperti する・いる・ある) termasuk dalam rentang 1.000 kata
 - Mode malam dapat dipilih di Pengaturan: "siang / malam / otomatis menurut waktu (18.00–06.00)". Tidak mengikuti mode gelap perangkat
 - Sakelar nyala/mati suara adalah sakelar bersama di bagian atas layar (tidak dapat dimatikan di おととことば dan ききとりクイズ)
