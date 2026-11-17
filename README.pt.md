@@ -4,7 +4,7 @@
 
 Um jogo de palavras para crianças pequenas ampliarem o vocabulário brincando, jogável no navegador. **Totalmente grátis, sem cobranças.**
 
-Versão atual: **3.6**
+Versão atual: **3.7**
 
 **▶ Jogar: https://kagoya.github.io/goigoi/**
 

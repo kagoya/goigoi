@@ -4,7 +4,7 @@
 
 Un jeu de mots pour les tout-petits, à jouer dans le navigateur, pour enrichir leur vocabulaire en s'amusant. **Entièrement gratuit, sans aucun frais.**
 
-Version actuelle : **3.6**
+Version actuelle : **3.7**
 
 **▶ Jouer : https://kagoya.github.io/goigoi/**
 

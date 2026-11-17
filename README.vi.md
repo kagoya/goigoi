@@ -4,7 +4,7 @@
 
 Một trò chơi từ vựng để trẻ nhỏ vừa chơi vừa mở rộng vốn từ, chơi được trên trình duyệt. **Hoàn toàn miễn phí, không thu phí.**
 
-Phiên bản hiện tại: **3.6**
+Phiên bản hiện tại: **3.7**
 
 **▶ Chơi: https://kagoya.github.io/goigoi/**
 

@@ -4,7 +4,7 @@
 
 Permainan kata untuk anak usia dini yang dapat dimainkan di peramban, untuk menambah kosakata sambil bermain. **Sepenuhnya gratis, tanpa biaya.**
 
-Versi saat ini: **3.6**
+Versi saat ini: **3.7**
 
 **▶ Main: https://kagoya.github.io/goigoi/**
 

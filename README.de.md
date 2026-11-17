@@ -4,7 +4,7 @@
 
 Ein Wortspiel für Kleinkinder, das im Browser gespielt wird und spielerisch den Wortschatz erweitert. **Komplett kostenlos – keine Gebühren.**
 
-Aktuelle Version: **3.6**
+Aktuelle Version: **3.7**
 
 **▶ Spielen: https://kagoya.github.io/goigoi/**
 

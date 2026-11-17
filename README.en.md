@@ -4,7 +4,7 @@
 
 A word game for toddlers to enjoy growing their vocabulary, playable in a web browser. **Completely free — no charges.**
 
-Current version: **3.6**
+Current version: **3.7**
 
 **▶ Play: https://kagoya.github.io/goigoi/**
 
