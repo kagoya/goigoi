@@ -4,7 +4,7 @@
 
 Một trò chơi từ vựng để trẻ nhỏ vừa chơi vừa mở rộng vốn từ, chơi được trên trình duyệt. **Hoàn toàn miễn phí, không thu phí.**
 
-Phiên bản hiện tại: **3.5**
+Phiên bản hiện tại: **3.6**
 
 **▶ Chơi: https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,7 @@ Phiên bản hiện tại: **3.5**
 ## Đặc điểm
 
 - Thu thập **khoảng 39.000 từ** (ずかん có hai cấp: 11 phân loại lớn và 200 phân loại nhỏ)
-- 18 trò chơi trên màn hình chính (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Trong cài đặt ban đầu có 6 trò chơi được bật (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), và có thể bật hoặc tắt từng trò chơi trong Cài đặt
+- 19 trò chơi trên màn hình chính (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？, なあに？). Trong cài đặt ban đầu có 6 trò chơi được bật (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), và có thể bật hoặc tắt từng trò chơi trong Cài đặt
 - 「もじあそび」 gồm hai trò chơi: 「ことば あなうめ」 và 「ことば みっけ」. 「ごじゅうおん ならべ」 là một trò chơi riêng: chọn một hàng trong bảng gojuuon và sắp xếp các chữ của hàng đó. Sau khi xếp xong một hàng, chạm vào một chữ để xem thẻ một từ có chứa chữ đó
 - Dù trả lời sai câu đố cũng không bị coi là thất bại: đáp án đúng sẽ được cùng nhau kiểm tra và trẻ sẽ được khen. Không có thi đua
 - Số lượng từ vựng có thể chọn từ 500 / 1.000 / 2.000 / 4.000 / 8.000 / 16.000 / tất cả (lọc theo thang đánh giá 8 mức về độ thường dùng; áp dụng cho mọi tính năng)
@@ -35,6 +35,10 @@ Phiên bản hiện tại: **3.5**
 - Việc chấm なぞりがき có thể cài đặt từng mục trong Cài đặt: số nét, thứ tự nét, hướng, hình dạng và hình dạng chính xác (cũng có thể chọn theo cấp độ 1–5; mặc định tương đương cấp độ 4)
 - Phần giải thích trên trang Cài đặt có 14 ngôn ngữ (tiếng Nhật, tiếng Nhật dễ hiểu kèm furigana, English, tiếng Trung giản thể, tiếng Trung phồn thể, Português, Español, Tiếng Việt, tiếng Thái, tiếng Hàn, tiếng Pháp, tiếng Đức, tiếng Ý, tiếng Indonesia). Các thuật ngữ và từ vựng trong trò chơi vẫn giữ nguyên tiếng Nhật
 - Hồ sơ cho tối đa 3 anh chị em. Ngoài ra còn có 保護者レポート, 「きろく」 và sao lưu bản ghi
+- 「なあに？」 là trò chơi nhìn hình và nói từ thành tiếng. Người lớn ngồi nghe bên cạnh chạm vào nút 「いえたね」 để ghi lại rằng trẻ đã nói được từ đó (mặc định tắt trong cài đặt ban đầu)
+- 「おはなばたけ」 là một khung cảnh lớn lên theo số từ đã thu thập: hạt giống → mầm → lá non → hoa → cây. Côn trùng cũng ngày càng nhiều, và khi nở rộ sẽ xuất hiện cầu vồng
+- 保護者レポート còn hiển thị "mức độ gặp gỡ" (であいの深さ) của từng từ theo các giai đoạn — であった (đã gặp) / えらべた (đã chọn được) / しっかり えらべた (đã chọn được trong các trò chơi khác nhau hoặc vào các ngày khác nhau) / こえに だせた (đã nói thành tiếng) — kèm số lượng và danh sách theo từng giai đoạn. Đây chỉ là thông tin tham khảo từ bản ghi chơi, không phải là đánh giá về mức độ hiểu của trẻ
+- Trong Cài đặt, 「集めた言葉の管理」 cho phép người lớn xóa từng từ đã thu thập, có xác nhận, cho từng hồ sơ (không thể xóa từ ずかん)
 
 ## Tài liệu cho người lớn
 

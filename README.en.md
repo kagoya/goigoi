@@ -4,7 +4,7 @@
 
 A word game for toddlers to enjoy growing their vocabulary, playable in a web browser. **Completely free — no charges.**
 
-Current version: **3.5**
+Current version: **3.6**
 
 **▶ Play: https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,7 @@ Current version: **3.5**
 ## Features
 
 - About **39,000 words** included (the ずかん has two levels: 11 large categories and 200 small categories)
-- 18 activities on the home screen (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Six are on in the initial settings (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), and each can be turned on or off in Settings
+- 19 activities on the home screen (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？, なあに？). Six are on in the initial settings (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), and each can be turned on or off in Settings
 - 「もじあそび」 consists of two games: 「ことば あなうめ」 and 「ことば みっけ」. 「ごじゅうおん ならべ」 is a separate activity: pick a row from the gojuuon chart and arrange its characters. After completing a row, choose a character to see a word card containing that character
 - Even if you get a quiz question wrong, it is never treated as a failure — you check the right answer together and get praised. There is no competition
 - Vocabulary size can be chosen from 500 / 1,000 / 2,000 / 4,000 / 8,000 / 16,000 / all (filtered by an 8-level rating of how commonly each word is used; applies to all features)
@@ -35,6 +35,10 @@ Current version: **3.5**
 - The なぞりがき tracing checks can be set individually in Settings: stroke count, stroke order, direction, shape, and exact shape (levels 1–5 can also be chosen; the default is equivalent to level 4)
 - The explanations on the Settings page are available in 14 languages (Japanese, Easy Japanese with furigana, English, Simplified Chinese, Traditional Chinese, Portuguese, Spanish, Vietnamese, Thai, Korean, French, German, Italian, Indonesian). In-game terms and words remain in Japanese
 - Sibling profiles for up to 3 children. There is also a 保護者レポート, the 「きろく」, and backup of records
+- 「なあに？」 is an activity where the child looks at a picture and says the word out loud. A grown-up listening nearby taps the 「いえたね」 button to record that the word was said (it is off in the initial settings)
+- 「おはなばたけ」 is a scene that grows with the number of words collected: seeds → sprouts → young leaves → flowers → trees. More insects join along the way, and a rainbow appears when it is in full bloom
+- The 保護者レポート also shows each word's "depth of encounter" (であいの深さ) in stages — であった (met) / えらべた (could pick it) / しっかり えらべた (could pick it in different activities or on different days) / こえに だせた (could say it out loud) — with counts and lists for each stage. This is only a guide based on play records, not a judgment of the child's understanding
+- In Settings, 「集めた言葉の管理」 lets a grown-up delete collected words one at a time, with a confirmation, for each profile (words cannot be deleted from the ずかん itself)
 
 ## Materials for adults
 

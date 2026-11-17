@@ -4,7 +4,7 @@
 
 Um jogo de palavras para crianças pequenas ampliarem o vocabulário brincando, jogável no navegador. **Totalmente grátis, sem cobranças.**
 
-Versão atual: **3.5**
+Versão atual: **3.6**
 
 **▶ Jogar: https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,7 @@ Versão atual: **3.5**
 ## Características
 
 - **Cerca de 39.000 palavras** incluídas (o ずかん tem dois níveis: 11 categorias grandes e 200 categorias pequenas)
-- 18 brincadeiras na tela inicial (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Na configuração inicial, seis ficam ligadas (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), e cada uma pode ser ligada ou desligada nas Configurações
+- 19 brincadeiras na tela inicial (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？, なあに？). Na configuração inicial, seis ficam ligadas (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), e cada uma pode ser ligada ou desligada nas Configurações
 - 「もじあそび」 é formado por dois jogos: 「ことば あなうめ」 e 「ことば みっけ」. 「ごじゅうおん ならべ」 é uma brincadeira independente: você escolhe uma linha da tabela gojuuon e organiza suas letras. Depois de completar uma linha, toque em uma letra para ver um cartão de uma palavra que contém essa letra
 - Mesmo errando no quiz, isso não é tratado como fracasso: a resposta certa é conferida junto e a criança é elogiada. Não há competição
 - O tamanho do vocabulário pode ser escolhido entre 500 / 1.000 / 2.000 / 4.000 / 8.000 / 16.000 / tudo (filtrado por uma classificação de 8 níveis conforme a frequência de uso; vale para todas as funções)
@@ -35,6 +35,10 @@ Versão atual: **3.5**
 - A avaliação do なぞりがき pode ser ajustada nas Configurações, item por item: número de traços, ordem dos traços, direção, forma e forma exata (também é possível escolher pelos níveis 1–5; o padrão equivale ao nível 4)
 - As explicações da página de Configurações estão disponíveis em 14 idiomas (japonês, japonês fácil com furigana, English, chinês simplificado, chinês tradicional, Português, Español, vietnamita, tailandês, coreano, francês, alemão, italiano, indonésio). Os termos e as palavras do jogo permanecem em japonês
 - Perfis para até 3 irmãos. Há também o 保護者レポート, o 「きろく」 e backup dos registros
+- 「なあに？」 é uma brincadeira em que a criança olha a imagem e diz a palavra em voz alta. Um adulto que estiver ouvindo por perto toca no botão 「いえたね」 para registrar que a palavra foi dita (vem desligada na configuração inicial)
+- 「おはなばたけ」 é um cenário que cresce conforme a quantidade de palavras coletadas: sementes → brotos → folhas jovens → flores → árvores. Cada vez mais insetos aparecem, e um arco-íris surge na floração completa
+- O 保護者レポート também mostra a "profundidade do encontro" (であいの深さ) de cada palavra em etapas — であった (conheceu) / えらべた (conseguiu escolher) / しっかり えらべた (conseguiu escolher em brincadeiras diferentes ou em dias diferentes) / こえに だせた (conseguiu dizer em voz alta) — com quantidades e listas por etapa. É apenas um guia a partir dos registros de brincadeira, não um julgamento da compreensão
+- Em Configurações, 「集めた言葉の管理」 permite que um adulto apague as palavras coletadas uma a uma, com confirmação, para cada perfil (não é possível apagar a partir do ずかん)
 
 ## Material para adultos
 

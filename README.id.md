@@ -4,7 +4,7 @@
 
 Permainan kata untuk anak usia dini yang dapat dimainkan di peramban, untuk menambah kosakata sambil bermain. **Sepenuhnya gratis, tanpa biaya.**
 
-Versi saat ini: **3.5**
+Versi saat ini: **3.6**
 
 **▶ Main: https://kagoya.github.io/goigoi/**
 
@@ -20,7 +20,7 @@ Versi saat ini: **3.5**
 ## Fitur
 
 - Berisi **sekitar 39.000 kata** (ずかん memiliki dua tingkat: 11 kategori besar dan 200 kategori kecil)
-- 18 permainan di layar beranda (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？). Pada pengaturan awal, 6 permainan aktif (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), dan masing-masing dapat diaktifkan atau dinonaktifkan di Pengaturan
+- 19 permainan di layar beranda (れんそう, ききとりクイズ, なぞりがき, おととことば, ことばたんけん, もじあそび, ごじゅうおん ならべ, しりとり, かずあそび, はんたい言葉, てびょうし, とけいあそび, おまかせコース, おきにいりだけ, おはなばたけ, 冒険マップ, おやすみ振り返り, どっちがすき？, なあに？). Pada pengaturan awal, 6 permainan aktif (れんそう, しりとり, もじあそび, おととことば, なぞりがき, ごじゅうおん ならべ), dan masing-masing dapat diaktifkan atau dinonaktifkan di Pengaturan
 - 「もじあそび」 terdiri dari dua permainan: 「ことば あなうめ」 dan 「ことば みっけ」. 「ごじゅうおん ならべ」 adalah permainan tersendiri: pilih satu baris dari tabel gojuuon dan susun huruf-hurufnya. Setelah satu baris lengkap, ketuk satu huruf untuk melihat kartu kata yang mengandung huruf tersebut
 - Meskipun salah menjawab kuis, itu tidak pernah dianggap sebagai kegagalan: jawaban yang benar diperiksa bersama dan anak dipuji. Tidak ada persaingan
 - Ukuran kosakata dapat dipilih dari 500 / 1.000 / 2.000 / 4.000 / 8.000 / 16.000 / semua (disaring dengan peringkat 8 tingkat berdasarkan seberapa sering kata digunakan; berlaku untuk semua fitur)
@@ -35,6 +35,10 @@ Versi saat ini: **3.5**
 - Penilaian なぞりがき dapat diatur satu per satu di Pengaturan: jumlah goresan, urutan goresan, arah, bentuk, dan bentuk persis (dapat juga dipilih dengan level 1–5; pengaturan awal setara dengan level 4)
 - Penjelasan di halaman Pengaturan dapat dipilih dari 14 bahasa (bahasa Jepang, bahasa Jepang mudah dengan furigana, English, bahasa Tionghoa sederhana, bahasa Tionghoa tradisional, Português, Español, bahasa Vietnam, bahasa Thai, bahasa Korea, Français, Deutsch, Italiano, Bahasa Indonesia). Istilah dan kata di dalam permainan tetap dalam bahasa Jepang
 - Profil untuk saudara kandung, hingga 3 anak. Ada juga 保護者レポート, 「きろく」, dan cadangan catatan
+- 「なあに？」 adalah permainan di mana anak melihat gambar dan mengucapkan katanya dengan bersuara. Orang dewasa yang mendengarkan di dekatnya mengetuk tombol 「いえたね」 untuk mencatat bahwa kata itu telah diucapkan (nonaktif pada pengaturan awal)
+- 「おはなばたけ」 adalah pemandangan yang tumbuh seiring jumlah kata yang dikumpulkan: biji → tunas → daun muda → bunga → pohon. Serangga pun semakin banyak, dan saat mekar penuh akan muncul pelangi
+- 保護者レポート juga menampilkan "kedalaman perjumpaan" (であいの深さ) setiap kata dalam tahapan — であった (berjumpa) / えらべた (bisa memilihnya) / しっかり えらべた (bisa memilihnya dalam permainan lain atau pada hari lain) / こえに だせた (bisa mengucapkannya) — beserta jumlah dan daftar untuk setiap tahap. Ini hanya panduan dari catatan bermain, bukan penilaian atas pemahaman anak
+- Di Pengaturan, 「集めた言葉の管理」 memungkinkan orang dewasa menghapus kata yang dikumpulkan satu per satu, dengan konfirmasi, untuk setiap profil (tidak bisa dihapus dari ずかん)
 
 ## Materi untuk orang dewasa
 

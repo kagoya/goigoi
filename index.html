@@ -864,6 +864,9 @@
       }
       .custom-item .em { font-size: 24px; }
       .custom-item .meta { color: var(--sub); font-size: 12.5px; font-weight: 700; }
+      /* ===== 集めた言葉の管理（一覧の行） ===== */
+      .manage-main { flex: 1; min-width: 0; font-weight: 800; font-size: 16px; }
+      .manage-meta { display: block; color: var(--sub); font-size: 12.5px; font-weight: 700; margin-top: 2px; line-height: 1.55; overflow-wrap: anywhere; }
       .custom-del {
         margin-left: auto; min-height: 44px; padding: 6px 14px; border-radius: 999px;
         border: 2px solid #c0392b; background: var(--card); color: #c0392b; font-weight: 800; font-size: 13.5px; flex: none;
@@ -996,6 +999,16 @@
       .garden-mile { border: 2px solid var(--line); background: var(--card); border-radius: 999px; padding: 4px 12px; font-weight: 800; font-size: 13.5px; opacity: 0.45; filter: grayscale(0.9); }
       .garden-mile.got { opacity: 1; filter: none; border-color: #f5b301; background: color-mix(in srgb, #ffd94d 30%, var(--card)); }
       .garden-note { max-width: 760px; margin: 12px auto 0; text-align: center; color: var(--sub); font-size: 13.5px; font-weight: 700; line-height: 1.6; }
+      /* おはなばたけの景色（成長段階）: 空（虹）・奥の木・地面（種→芽→葉→花）・
+         遊びに来た生き物の行で1つの景色にする。本体と子供用きろくで共用する */
+      .garden-scene { max-width: 760px; margin: 0 auto; width: 100%; }
+      .garden-sky { text-align: center; font-size: 46px; line-height: 1.15; }
+      .garden-field-scene { display: block; padding: 12px 12px 14px; }
+      .garden-trees { display: flex; justify-content: space-around; font-size: 42px; line-height: 1.15; padding: 2px 6px 6px; }
+      .garden-ground { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; min-height: 44px; align-items: center; }
+      .garden-visitors { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; font-size: 30px; line-height: 1.25; margin-top: 8px; }
+      .garden-stage-label { max-width: 760px; margin: 10px auto 0; text-align: center; font-size: 17px; font-weight: 800; }
+      .garden-stage-sub { max-width: 760px; margin: 2px auto 0; text-align: center; color: var(--sub); font-size: 13.5px; font-weight: 700; line-height: 1.6; }
       /* おはなし */
       #storyEl { position: fixed; inset: 0; background: var(--bg); z-index: 50; overflow-y: auto; padding: 0 14px 40px; }
       #storyHead { position: sticky; top: 0; background: var(--bg); padding: 14px 0 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; z-index: 2; }
@@ -1377,6 +1390,16 @@
       }
       #favBoardNote[hidden] { display: none; }
       #favBoardNote button { min-height: 44px; padding: 6px 14px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); font-weight: 800; font-size: 13.5px; }
+      /* ===== なあに？（絵を見て声に出す産出型の遊び） ===== */
+      #naaniCard { margin: 10px auto 0; min-height: 158px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #naaniCard .naani-em { font-size: 118px; line-height: 1.15; }
+      #naaniCard img.naani-img { width: 168px; height: 168px; object-fit: cover; border-radius: 24px; }
+      #naaniCard .naani-word { font-size: 30px; font-weight: 800; margin-top: 8px; }
+      /* 大人用の「いえたね」は、子どもの操作の邪魔にならないよう下に小さく置く */
+      .naani-adult { margin-top: 22px; padding-top: 12px; border-top: 2px dashed var(--line); display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+      .naani-adult .naani-adult-label { font-size: 13px; font-weight: 700; color: var(--sub); }
+      #naaniSaidBtn { min-height: 44px; padding: 8px 18px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); font-weight: 800; font-size: 14.5px; box-shadow: var(--shadow); }
+      #naaniSaidBtn.done { border-color: #f5b301; background: color-mix(in srgb, #ffd94d 40%, var(--card)); }
       .play-el { position: fixed; inset: 0; background: var(--bg); z-index: 55; overflow-y: auto; padding: 0 14px 40px; }
       .play-head { position: sticky; top: 0; background: var(--bg); padding: 14px 0 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; z-index: 2; max-width: 760px; margin: 0 auto; }
       .play-head h1 { font-size: 22px; margin: 0; font-weight: 800; }
@@ -1720,6 +1743,7 @@
          どっちが すき？）のボタンは、盤面ページ内の #boardTools に直接置いてある。 -->
     <div id="playLaunchers" aria-hidden="true">
       <button id="quizBtn" type="button" aria-pressed="false">👂 ききとりクイズ</button>
+      <button id="naaniBtn" type="button">🗣️ なあに？</button>
       <button id="mapBtn" type="button">🗺️ ぼうけんマップ</button>
       <button id="bedBtn" type="button">🌙 おやすみ ふりかえり</button>
       <button id="gardenBtn" type="button">🌷 おはなばたけ</button>
@@ -1958,6 +1982,12 @@
         <p id="photoSummary" class="adult-note adult-nav-summary"></p>
       </div>
       <div class="adult-card">
+        <h2 data-i18n="manageTitle">集めた言葉の管理</h2>
+        <p class="adult-note" data-i18n="manageNote">間違えて集めてしまった言葉や、デモで大人が集めた言葉を、専用ページで1語ずつ消せます。消せるのはこの設定の中だけです。消すと、その言葉の集めた記録・あそんだ回数・お気に入り・シールが消え、ずかんやおはなばたけの数も減ります。もらったスタンプは残ります。</p>
+        <button id="openManagePage" class="adult-nav-btn" type="button"><span data-i18n="openManage">集めた言葉を管理する</span><span class="chev" aria-hidden="true">›</span></button>
+        <p id="manageSummary" class="adult-note adult-nav-summary"></p>
+      </div>
+      <div class="adult-card">
         <h2 data-i18n="reportTitle">保護者レポート</h2>
         <p class="adult-note" data-i18n="reportNote">このブラウザに保存されている記録から集計しています。</p>
         <div class="backup-row"><button id="reportPrintBtn" class="adult-btn" type="button" data-i18n="reportPrint">🖨️ レポートを印刷</button><button id="albumBtn" class="adult-btn" type="button" data-i18n="albumOpen">きろくを開く</button></div>
@@ -1998,7 +2028,7 @@
         <p class="adult-note" data-i18n="about2">言葉のカードをタップすると、その言葉が声で読み上げられ、関係のある言葉が周りに並びます。気になる言葉を次々とたどっていくうちに、知っている言葉が少しずつ増えていきます。</p>
         <p class="adult-note" data-i18n="about3">クイズで別の答えを選んでも失敗にはせず、正解を一緒に確認して褒める作りです。競争もありません。言葉を見つけてずかんに集める楽しさの中で、自分のペースで遊べます。出てくる言葉は、日常生活でよく使うものを中心に出るよう調整しています。上の設定で、言葉の数や文字の表示を、使う人に合わせて変えられます。</p>
         <p class="credit-line" data-i18n="creditAuthor">作者： @kagoya</p>
-        <p class="credit-line">バージョン 3.5</p>
+        <p class="credit-line">バージョン 3.6</p>
         <p class="credit-line" data-i18n="creditKanji">書き順データ：KanjiVG © Ulrich Apel（CC BY-SA 3.0）</p>
         <p class="credit-line" data-i18n="creditSfx">効果音（おととことば）：CC0の録音素材（Freesound等）</p>
         <p class="adult-note"><span data-i18n="licensePre">このゲームは、クリエイティブ・コモンズ表示 4.0 国際ライセンス（CC BY 4.0）で公開しています。作者名を表示すれば、複製や再配布、改変もできます。ライセンスの内容は</span><a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener" data-i18n="licenseLink">クリエイティブ・コモンズのページ</a><span data-i18n="licensePost">で確認できます。</span></p>
@@ -2107,6 +2137,28 @@
           </div>
         </div>
       </div>
+      <div id="adultManageView" hidden>
+        <div class="adult-subhead">
+          <button id="backFromManage" class="adult-back-btn" type="button" data-i18n="backSettings">← 設定に戻る</button>
+          <h2 data-i18n="manageTitle">集めた言葉の管理</h2>
+        </div>
+        <div class="adult-card">
+          <p class="adult-note" data-i18n="manageViewNote">今選んでいるプロフィールの、図鑑に集めた言葉の一覧です。言葉を1語ずつ選んで、集めた記録を消せます。消すと、その言葉は「まだ集めていない」状態に戻り、集めた日・あそんだ回数・お気に入り・シール・「であいの深さ」の記録も消えます。ずかんの数・保護者レポート・おはなばたけの花の数も、その分だけ減ります。もらったスタンプと、「言葉の絵を変える」の写真・「出さない言葉・分野」の設定は残ります。消した記録は元に戻せません。</p>
+          <p id="manageProfileLine" class="adult-now"></p>
+          <p class="report-h" data-i18n="searchWordsH">言葉を検索して選ぶ</p>
+          <input id="manageSearch" class="excl-search" type="search" placeholder="言葉を検索（ひらがな・漢字）" aria-label="集めた言葉を検索" data-i18n-ph="searchPh" data-i18n-aria="manageSearchAria" />
+          <div id="manageConfirm" class="reset-confirm" hidden>
+            <p id="manageConfirmText"></p>
+            <div class="row">
+              <button id="manageDeleteDoBtn" class="reset-btn reset-do" type="button" data-i18n="manageDeleteDo">記録を消す</button>
+              <button id="manageDeleteCancelBtn" class="reset-btn" type="button" data-i18n="cancel">やめる</button>
+            </div>
+          </div>
+          <p id="manageCountLine" class="adult-note"></p>
+          <div id="manageList"></div>
+          <p id="manageMsg" class="custom-msg" aria-live="polite"></p>
+        </div>
+      </div>
       <div id="adultExcludeView" hidden>
         <div class="adult-subhead">
           <button id="backFromExclude" class="adult-back-btn" type="button" data-i18n="backSettings">← 設定に戻る</button>
@@ -2158,7 +2210,7 @@
         <button id="gardenClose" type="button">🏠 ホームへ もどる</button>
       </div>
       <div id="gardenBody"></div>
-      <p class="garden-note">ことばを あつめると、おはなが さくよ。たくさん あつめて、おはなばたけを いっぱいに しよう！</p>
+      <p class="garden-note">ことばを あつめると、たねが そだって おはなが さくよ。たくさん あつめて、にじの かかる はたけに しよう！</p>
     </div>
 
     <div id="storyEl" hidden role="dialog" aria-label="おはなし">
@@ -2500,6 +2552,26 @@
       <p class="bed-note">おだいの こえだけを きいて あそぶよ。まちがえても だいじょうぶ。もういちど きいて、さがしてみよう。</p>
     </div>
 
+    <div id="naaniEl" class="play-el" hidden role="dialog" aria-label="なあに？">
+      <div class="play-head">
+        <h1>🗣️ なあに？</h1>
+        <button id="naaniHomeBtn" class="play-close" type="button">🏠 ホームへ もどる</button>
+      </div>
+      <div class="play-stage">
+        <p class="play-q">これは なあに？ こえに だして いってみよう</p>
+        <div id="naaniCard"></div>
+        <p id="naaniMsg" class="play-msg" aria-live="polite"></p>
+        <div class="play-btns">
+          <button id="naaniNextBtn" type="button">🔀 つぎの ことば</button>
+        </div>
+        <div class="naani-adult">
+          <span class="naani-adult-label">おとな用（そばで きいている ひとへ）</span>
+          <button id="naaniSaidBtn" type="button">✓ いえたね</button>
+        </div>
+      </div>
+      <p class="bed-note">えを みて、ことばを こえに だして いう あそびだよ。いえたかどうかは、そばの おとなが「いえたね」で おしらせてね。おさなくても、つぎの ことばへ すすめるよ。</p>
+    </div>
+
     <div id="albumEl" class="play-el" hidden role="dialog" aria-label="きろく">
       <div class="play-head">
         <h1>きろく</h1>
@@ -2581,6 +2653,11 @@
         d_customSummaryNone: "まだ登録した言葉はありません。",
         d_photoSummary: "現在：{n}語の絵を写真に差し替え中です。",
         d_photoSummaryNone: "まだ写真に差し替えた言葉はありません。",
+        d_manageSummary: "現在：{n}語を集めています。", d_manageSummaryNone: "まだ集めた言葉はありません。",
+        d_manageProfile: "対象のプロフィール：{name}", d_manageProfileNum: "対象のプロフィール：プロフィール{n}",
+        d_manageDate: "集めた日：{date}", d_manageNoDate: "集めた日の記録なし", d_manageTimes: "あそんだ回数：×{n}",
+        d_manageConfirm: "『{name}』を集めた記録から消しますか？ 集めた日・あそんだ回数・お気に入り・シール・「であいの深さ」の記録も一緒に消えます。もらったスタンプは残ります。消した記録は元に戻せません。",
+        d_manageDeleted: "「{name}」の集めた記録を消しました。", d_manageMore: "もっと見る（あと{n}語）",
         d_scopeNow: "現在：{n}語が対象です（収録している言葉は全部で {total}語）",
         d_nightNow: "今の表示：{state}{auto}",
         d_nightDark: "🌙 夜（暗い表示）",
@@ -2618,6 +2695,7 @@
         d_featNoteTanken: "場面に合う言葉を集める探検の遊びです。集めた言葉は、ずかんに集まります。",
         d_featNoteMoji: "抜けた文字を当てる・言葉を探す、の2種類で遊べる文字の遊びです。",
         d_featNoteNarabe: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。",
+        d_featNoteNaani: "大きな絵を見て、その言葉を声に出して言う遊びです。そばで聞いている大人が「いえたね」ボタンを押すと、声に出して言えた記録が保護者レポートの「であいの深さ」に残ります。押さなくても、そのまま次の言葉へ進んで遊べます。",
         d_nzNoteCount: "お手本と同じ本数の線で書けているかを見ます。1本の線を途中で分けたり、2本分を続けて1本で書いたりしたときに案内します。",
         d_nzNoteOrder: "お手本の順番どおりに線を書いているかを見ます。違う線を先に書いたときに案内します。",
         d_nzNoteDir: "線の書き始めから書き終わりへの向きが、お手本と合っているかを見ます。反対向きに書いたときに案内します。",
@@ -2666,6 +2744,8 @@
         d_statWords: "{n} 語", d_repCats: "よく遊んだ分野", d_join: "、", d_repNone: "まだ記録がありません。",
         d_repRecent: "新しく集めた言葉（直近）", d_repDatedNote: "日付の記録は、これから遊ぶ分から残ります。",
         d_repSaid: "初めて言えた言葉（まねっこ）", d_repSaidNone: "まだ記録がありません。まねっこで上手に言えると、ここに残ります。",
+        d_repDepth: "であいの深さ（目安）", d_repDepthNote: "遊びの記録から見た、言葉との出会いの深さの目安です。段階1「であった」は図鑑に集めた言葉、段階2「えらべた」は選ぶ遊びで最初に正しく選べた言葉、段階3「しっかり えらべた」は別の遊びや別の日にも最初に選べた言葉、段階4「こえに だせた」は声に出して言えた記録がある言葉です。理解できているかを断定するものではありません。選ぶ遊びの記録は、これから遊んだ分から付きます。",
+        d_repDepth1: "であった", d_repDepth2: "えらべた", d_repDepth3: "しっかり えらべた", d_repDepth4: "こえに だせた", d_repDepthLv: "段階{lv}：{name}", d_repDepthMore: "ほか {n}語",
         d_repPicks: "よく選ぶ言葉（どっちが すき？）", d_repPicksNone: "まだ記録がありません。「どっちが すき？」で選ぶと、ここに残ります。",
         d_repPlayed: "たくさん遊んだ言葉（累積回数）", d_repPlayedNone: "まだ記録がありません。同じ言葉で繰り返し遊ぶと、ここに残ります。",
         d_stageGold: "👑金色", d_stageSilver: "銀色",
@@ -2747,6 +2827,12 @@
         openCustom: "Set your own words",
         photoTitle: "Change a word's picture",
         photoNote: "You can replace the picture (emoji) of words in the game with a photo. Search for a word, choose it, and upload a photo; it is automatically made smaller and saved in this browser. The photo appears everywhere that word's picture is shown: the board, the picture dictionary, and every game. It is included in backups. You can restore the original emoji for each word, or for all words at once. This is a separate system from the photos in うちの子の言葉.",
+        manageTitle: "Manage collected words",
+        manageNote: "On a separate page, you can delete words collected by mistake, or words an adult collected during a demonstration, one word at a time. Deletion is only possible here in Settings. Deleting removes that word’s collected record, play count, favorite mark and sticker, and the counts in the picture dictionary and flower garden go down too. Stamps already earned are kept.",
+        openManage: "Manage collected words",
+        manageViewNote: "This is the list of words collected in the picture dictionary for the profile currently selected. Choose words one at a time to delete their collected records. Deleting returns the word to “not collected yet”, and its collection date, play count, favorite mark, sticker and “Depth of encounters” record are also removed. The picture dictionary count, the parent report, and the number of flowers in the flower garden go down by that much. Stamps already earned, photos set in “Change a word’s picture”, and the settings in “Words & categories to hide” are kept. Deleted records cannot be restored.",
+        manageSearchAria: "Search collected words",
+        manageDeleteDo: "Delete the record",
         reportTitle: "Parent report",
         reportNote: "Summarized from the records saved in this browser.",
         reportPrint: "🖨️ Print the report", albumOpen: "Open きろく (record)",
@@ -2804,6 +2890,11 @@
         d_customSummaryNone: "No words registered yet.",
         d_photoSummary: "Currently: {n} word(s) have a photo instead of the picture.",
         d_photoSummaryNone: "No words have been given a photo yet.",
+        d_manageSummary: "Currently: {n} word(s) collected.", d_manageSummaryNone: "No words collected yet.",
+        d_manageProfile: "Profile: {name}", d_manageProfileNum: "Profile: Profile {n}",
+        d_manageDate: "Collected on: {date}", d_manageNoDate: "No collection date recorded", d_manageTimes: "Times played: ×{n}",
+        d_manageConfirm: "Delete “{name}” from the collected records? Its collection date, play count, favorite mark, sticker and “Depth of encounters” record will also be removed. Stamps already earned are kept. Deleted records cannot be restored.",
+        d_manageDeleted: "Deleted the collected record for “{name}”.", d_manageMore: "Show more ({n} more)",
         d_scopeNow: "Currently: {n} words are in scope (the game contains {total} words in total)",
         d_nightNow: "Current display: {state}{auto}",
         d_nightDark: "🌙 Night (dark)", d_nightLight: "☀️ Day (bright)", d_nightAutoSuffix: " (automatic by time)",
@@ -2839,6 +2930,7 @@
         d_featNoteTanken: "An exploration game: collect the words that fit each scene. Collected words go into the ずかん.",
         d_featNoteMoji: "Two letter games: guessing the missing letter and finding words.",
         d_featNoteNarabe: "A game of putting the letters of a 五十音 row in order. When a row is complete, a card with a word containing one of its letters appears, and that word goes into the ずかん.",
+        d_featNoteNaani: "A game where the child looks at a big picture and says the word out loud. There is no automatic judging: an adult nearby presses the “I said it” button, and the word is recorded as spoken in the “Depth of encounters” section of the parent report. The game can also be played without pressing it.",
         d_nzNoteCount: "Checks whether the character is written with the same number of strokes as the model. Guidance is shown when one stroke is split into two, or two strokes are written as one.",
         d_nzNoteOrder: "Checks whether the strokes are written in the same order as the model. Guidance is shown when a different stroke is written first.",
         d_nzNoteDir: "Checks whether each stroke's direction, from its start to its end, matches the model. Guidance is shown when a stroke is written in the opposite direction.",
@@ -2887,6 +2979,8 @@
         d_statWords: "{n}", d_repCats: "Favorite categories", d_join: ", ", d_repNone: "No records yet.",
         d_repRecent: "Newly collected words (recent)", d_repDatedNote: "Date records will be kept from words collected from now on.",
         d_repSaid: "Words said for the first time (まねっこ)", d_repSaidNone: "No records yet. When a word is said well in まねっこ, it will appear here.",
+        d_repDepth: "Depth of encounters (a guide)", d_repDepthNote: "A rough guide, from play records, of how deeply each word has been encountered. Level 1 “Met” = collected in the ずかん. Level 2 “Picked it” = chosen correctly on the first try in a picking game. Level 3 “Picked it solidly” = also picked correctly on the first try in a different game or on a different day. Level 4 “Said it aloud” = there is a record of saying the word out loud. This does not prove understanding. Records from picking games build up from plays from now on.",
+        d_repDepth1: "Met", d_repDepth2: "Picked it", d_repDepth3: "Picked it solidly", d_repDepth4: "Said it aloud", d_repDepthLv: "Level {lv}: {name}", d_repDepthMore: "and {n} more",
         d_repPicks: "Words chosen often (どっちが すき？)", d_repPicksNone: "No records yet. Choices in どっちが すき？ will appear here.",
         d_repPlayed: "Words played many times (total plays)", d_repPlayedNone: "No records yet. Playing the same word again and again will appear here.",
         d_stageGold: "👑Gold", d_stageSilver: "Silver",
@@ -2969,6 +3063,12 @@
         openCustom: "设置自己的词语",
         photoTitle: "更换词语的图片",
         photoNote: "可以把游戏中词语的图片（表情符号）换成照片。搜索并选择词语、上传照片后，会自动缩小并保存在此浏览器中。换好的照片会显示在该词语图片出现的所有地方：棋盘、图鉴和各个游戏。也包含在备份中。可以逐个词语恢复为原来的表情符号，也可以全部一起恢复。与「うちの子の言葉」的照片是不同的机制。",
+        manageTitle: "管理收集的词语",
+        manageNote: "可以在专用页面逐个删除误收集的词语，或成年人在演示时收集的词语。只能在此设置中删除。删除后，该词语的收集记录、游玩次数、收藏标记和贴纸都会消失，图鉴和花圃的数量也会相应减少。已经获得的印章会保留。",
+        openManage: "管理收集的词语",
+        manageViewNote: "这是当前所选档案在图鉴中收集的词语列表。可以逐个选择词语，删除其收集记录。删除后，该词语会恢复为“尚未收集”的状态，收集日期、游玩次数、收藏标记、贴纸和“相遇的深度”记录也会一并消失。图鉴数量、家长报告和花圃的花数也会相应减少。已经获得的印章、「更换词语图片」的照片设置和「不显示的词语·分野」的设置会保留。删除的记录无法恢复。",
+        manageSearchAria: "搜索收集的词语",
+        manageDeleteDo: "删除记录",
         reportTitle: "家长报告",
         reportNote: "根据保存在此浏览器中的记录统计。",
         reportPrint: "🖨️ 打印报告", albumOpen: "打开 きろく（记录）",
@@ -3026,6 +3126,11 @@
         d_customSummaryNone: "还没有登记的词语。",
         d_photoSummary: "当前：{n} 个词语的图片已换成照片。",
         d_photoSummaryNone: "还没有换成照片的词语。",
+        d_manageSummary: "现在：共收集了{n}个词语。", d_manageSummaryNone: "还没有收集的词语。",
+        d_manageProfile: "对象档案：{name}", d_manageProfileNum: "对象档案：档案{n}",
+        d_manageDate: "收集日期：{date}", d_manageNoDate: "没有收集日期的记录", d_manageTimes: "游玩次数：×{n}",
+        d_manageConfirm: "要把「{name}」从收集记录中删除吗？收集日期、游玩次数、收藏标记、贴纸和“相遇的深度”记录也会一并消失。已经获得的印章会保留。删除的记录无法恢复。",
+        d_manageDeleted: "已删除「{name}」的收集记录。", d_manageMore: "查看更多（还有{n}个）",
         d_scopeNow: "当前：对象为 {n} 个词语（收录的词语共 {total} 个）",
         d_nightNow: "当前显示：{state}{auto}",
         d_nightDark: "🌙 夜（深色显示）", d_nightLight: "☀️ 昼（明亮显示）", d_nightAutoSuffix: "（按时间自动）",
@@ -3061,6 +3166,7 @@
         d_featNoteTanken: "收集与场景相符的词语的探险游戏。收集的词语会进入ずかん。",
         d_featNoteMoji: "2种文字游戏：猜缺失的文字、找词语。",
         d_featNoteNarabe: "把五十音一行的文字按顺序排列的游戏。排好一行后，会出现包含该行文字的词语卡片，那个词语会收集到ずかん中。",
+        d_featNoteNaani: "看一张大图，把词语大声说出来的游戏。不进行自动判定：旁边的大人按下“说出来了”按钮后，该词会作为“说出来过”记录在家长报告的“相遇的深度”中。不按也可以继续玩。",
         d_nzNoteCount: "检查是否用与范本相同数量的线条书写。在把1条线中途分开、或把2条线连成1条时给出提示。",
         d_nzNoteOrder: "检查是否按范本的顺序书写线条。在先写了其他线条时给出提示。",
         d_nzNoteDir: "检查线条从起笔到收笔的方向是否与范本一致。在反方向书写时给出提示。",
@@ -3109,6 +3215,8 @@
         d_statWords: "{n} 词", d_repCats: "常玩的分野", d_join: "、", d_repNone: "还没有记录。",
         d_repRecent: "新收集的词语（最近）", d_repDatedNote: "日期记录将从今后游玩的部分开始保留。",
         d_repSaid: "第一次说出的词语（まねっこ）", d_repSaidNone: "还没有记录。在まねっこ中说得好时，会记录在这里。",
+        d_repDepth: "相遇的深度（参考）", d_repDepthNote: "这是根据游戏记录估算的与词语相遇深度的参考。阶段1“相遇过”＝收集到ずかん的词语；阶段2“选对过”＝在选择类游戏中第一次就选对的词语；阶段3“稳稳选对”＝在其他游戏或其他日子也第一次就选对的词语；阶段4“说出来过”＝有大声说出记录的词语。这并不能断定是否真正理解。选择类游戏的记录从今后的游戏开始积累。",
+        d_repDepth1: "相遇过", d_repDepth2: "选对过", d_repDepth3: "稳稳选对", d_repDepth4: "说出来过", d_repDepthLv: "阶段{lv}：{name}", d_repDepthMore: "还有 {n} 个",
         d_repPicks: "常选的词语（どっちが すき？）", d_repPicksNone: "还没有记录。在「どっちが すき？」中选择后，会记录在这里。",
         d_timesCount: "（{n}次）",
         d_printClose: "✕ 关闭预览",
@@ -3188,6 +3296,12 @@
         openCustom: "設定自己的詞語",
         photoTitle: "更換詞語的圖片",
         photoNote: "可以把遊戲中詞語的圖片（表情符號）換成照片。搜尋並選擇詞語、上傳照片後，會自動縮小並保存在此瀏覽器中。換好的照片會顯示在該詞語圖片出現的所有地方：棋盤、圖鑑和各個遊戲。也包含在備份中。可以逐個詞語恢復為原來的表情符號，也可以全部一起恢復。與「うちの子の言葉」的照片是不同的機制。",
+        manageTitle: "管理收集的詞語",
+        manageNote: "可以在專用頁面逐個刪除誤收集的詞語，或成年人在示範時收集的詞語。只能在此設定中刪除。刪除後，該詞語的收集紀錄、遊玩次數、收藏標記和貼紙都會消失，圖鑑和花圃的數量也會相應減少。已經獲得的印章會保留。",
+        openManage: "管理收集的詞語",
+        manageViewNote: "這是目前所選檔案在圖鑑中收集的詞語列表。可以逐個選擇詞語，刪除其收集紀錄。刪除後，該詞語會恢復為「尚未收集」的狀態，收集日期、遊玩次數、收藏標記、貼紙和「相遇的深度」紀錄也會一併消失。圖鑑數量、家長報告和花圃的花數也會相應減少。已經獲得的印章、「更換詞語圖片」的照片設定和「不顯示的詞語·分野」的設定會保留。刪除的紀錄無法恢復。",
+        manageSearchAria: "搜尋收集的詞語",
+        manageDeleteDo: "刪除紀錄",
         reportTitle: "家長報告",
         reportNote: "根據保存在此瀏覽器中的紀錄統計。",
         reportPrint: "🖨️ 列印報告", albumOpen: "打開 きろく（紀錄）",
@@ -3245,6 +3359,11 @@
         d_customSummaryNone: "還沒有登記的詞語。",
         d_photoSummary: "目前：{n} 個詞語的圖片已換成照片。",
         d_photoSummaryNone: "還沒有換成照片的詞語。",
+        d_manageSummary: "現在：共收集了{n}個詞語。", d_manageSummaryNone: "還沒有收集的詞語。",
+        d_manageProfile: "對象檔案：{name}", d_manageProfileNum: "對象檔案：檔案{n}",
+        d_manageDate: "收集日期：{date}", d_manageNoDate: "沒有收集日期的紀錄", d_manageTimes: "遊玩次數：×{n}",
+        d_manageConfirm: "要把「{name}」從收集紀錄中刪除嗎？收集日期、遊玩次數、收藏標記、貼紙和「相遇的深度」紀錄也會一併消失。已經獲得的印章會保留。刪除的紀錄無法恢復。",
+        d_manageDeleted: "已刪除「{name}」的收集紀錄。", d_manageMore: "查看更多（還有{n}個）",
         d_scopeNow: "目前：對象為 {n} 個詞語（收錄的詞語共 {total} 個）",
         d_nightNow: "目前顯示：{state}{auto}",
         d_nightDark: "🌙 夜（深色顯示）", d_nightLight: "☀️ 晝（明亮顯示）", d_nightAutoSuffix: "（按時間自動）",
@@ -3280,6 +3399,7 @@
         d_featNoteTanken: "收集與場景相符的詞語的探險遊戲。收集的詞語會進入ずかん。",
         d_featNoteMoji: "2種文字遊戲：猜缺失的文字、找詞語。",
         d_featNoteNarabe: "把五十音一行的文字按順序排列的遊戲。排好一行後，會出現包含該行文字的詞語卡片，那個詞語會收集到ずかん中。",
+        d_featNoteNaani: "看一張大圖，把詞語大聲說出來的遊戲。不進行自動判定：旁邊的大人按下「說出來了」按鈕後，該詞會記錄在家長報告的「相遇的深度」裡。不按也可以繼續玩。",
         d_nzNoteCount: "檢查是否用與範本相同數量的線條書寫。在把1條線中途分開、或把2條線連成1條時給出提示。",
         d_nzNoteOrder: "檢查是否按範本的順序書寫線條。在先寫了其他線條時給出提示。",
         d_nzNoteDir: "檢查線條從起筆到收筆的方向是否與範本一致。在反方向書寫時給出提示。",
@@ -3328,6 +3448,8 @@
         d_statWords: "{n} 詞", d_repCats: "常玩的分野", d_join: "、", d_repNone: "還沒有紀錄。",
         d_repRecent: "新收集的詞語（最近）", d_repDatedNote: "日期紀錄將從今後遊玩的部分開始保留。",
         d_repSaid: "第一次說出的詞語（まねっこ）", d_repSaidNone: "還沒有紀錄。在まねっこ中說得好時，會記錄在這裡。",
+        d_repDepth: "相遇的深度（參考）", d_repDepthNote: "這是根據遊戲記錄估算的與詞語相遇深度的參考。階段1「相遇過」＝收集到ずかん的詞語；階段2「選對過」＝在選擇類遊戲中第一次就選對的詞語；階段3「穩穩選對」＝在其他遊戲或其他日子也第一次就選對的詞語；階段4「說出來過」＝有大聲說出記錄的詞語。這並不能斷定是否真正理解。選擇類遊戲的記錄從今後的遊戲開始累積。",
+        d_repDepth1: "相遇過", d_repDepth2: "選對過", d_repDepth3: "穩穩選對", d_repDepth4: "說出來過", d_repDepthLv: "階段{lv}：{name}", d_repDepthMore: "還有 {n} 個",
         d_repPicks: "常選的詞語（どっちが すき？）", d_repPicksNone: "還沒有紀錄。在「どっちが すき？」中選擇後，會記錄在這裡。",
         d_timesCount: "（{n}次）",
         d_printClose: "✕ 關閉預覽",
@@ -3408,6 +3530,12 @@
         openCustom: "Configurar suas próprias palavras",
         photoTitle: "Mudar a imagem de uma palavra",
         photoNote: "Você pode substituir a imagem (emoji) das palavras do jogo por uma foto. Procure uma palavra, escolha-a e envie uma foto; ela é reduzida automaticamente e salva neste navegador. A foto aparece em todos os lugares onde a imagem daquela palavra é mostrada: tabuleiro, dicionário ilustrado e todos os jogos. Também é incluída nos backups. Você pode restaurar o emoji original para cada palavra, ou para todas de uma vez. É um sistema separado das fotos de うちの子の言葉.",
+        manageTitle: "Gerenciar palavras coletadas",
+        manageNote: "Em uma página separada, você pode excluir, uma por uma, palavras coletadas por engano ou palavras que um adulto coletou durante uma demonstração. A exclusão só é possível aqui, nas Configurações. Ao excluir, o registro de coleta daquela palavra, o número de vezes jogadas, a marca de favorito e o adesivo são apagados, e os números no dicionário ilustrado e no jardim de flores também diminuem. Os selos já ganhos são mantidos.",
+        openManage: "Gerenciar palavras coletadas",
+        manageViewNote: "Esta é a lista de palavras coletadas no dicionário ilustrado do perfil selecionado no momento. Escolha as palavras uma por uma para excluir seus registros de coleta. Ao excluir, a palavra volta a “ainda não coletada”, e sua data de coleta, número de vezes jogadas, marca de favorito, adesivo e registro de “Profundidade dos encontros” também são removidos. O número no dicionário ilustrado, o relatório dos pais e o número de flores no jardim diminuem nessa medida. Os selos já ganhos, as fotos definidas em “Mudar a imagem de uma palavra” e as configurações de “Palavras e categorias para ocultar” são mantidos. Registros excluídos não podem ser restaurados.",
+        manageSearchAria: "Procurar palavras coletadas",
+        manageDeleteDo: "Excluir o registro",
         reportTitle: "Relatório para os pais",
         reportNote: "Resumido a partir dos registros salvos neste navegador.",
         reportPrint: "🖨️ Imprimir o relatório", albumOpen: "Abrir きろく (registro)",
@@ -3465,6 +3593,11 @@
         d_customSummaryNone: "Nenhuma palavra registrada ainda.",
         d_photoSummary: "No momento: {n} palavra(s) com foto no lugar da imagem.",
         d_photoSummaryNone: "Nenhuma palavra recebeu uma foto ainda.",
+        d_manageSummary: "Atualmente: {n} palavra(s) coletada(s).", d_manageSummaryNone: "Nenhuma palavra coletada ainda.",
+        d_manageProfile: "Perfil: {name}", d_manageProfileNum: "Perfil: Perfil {n}",
+        d_manageDate: "Coletada em: {date}", d_manageNoDate: "Sem registro da data de coleta", d_manageTimes: "Vezes jogadas: ×{n}",
+        d_manageConfirm: "Excluir “{name}” dos registros coletados? A data de coleta, o número de vezes jogadas, a marca de favorito, o adesivo e o registro de “Profundidade dos encontros” também serão removidos. Os selos já ganhos são mantidos. Registros excluídos não podem ser restaurados.",
+        d_manageDeleted: "O registro coletado de “{name}” foi excluído.", d_manageMore: "Mostrar mais ({n} restantes)",
         d_scopeNow: "No momento: {n} palavras no escopo (o jogo contém {total} palavras no total)",
         d_nightNow: "Exibição atual: {state}{auto}",
         d_nightDark: "🌙 Noite (escuro)", d_nightLight: "☀️ Dia (claro)", d_nightAutoSuffix: " (automático pelo horário)",
@@ -3500,6 +3633,7 @@
         d_featNoteTanken: "Um jogo de exploração: colete as palavras que combinam com cada cena. As palavras coletadas vão para o ずかん.",
         d_featNoteMoji: "Dois jogos com letras: adivinhar a letra que falta e encontrar palavras.",
         d_featNoteNarabe: "Um jogo de colocar as letras de uma linha do 五十音 em ordem. Quando a linha fica completa, aparece um cartão com uma palavra que contém uma de suas letras, e essa palavra vai para o ずかん.",
+        d_featNoteNaani: "Um jogo em que a criança olha uma figura grande e diz a palavra em voz alta. Não há avaliação automática: um adulto por perto aperta o botão “Consegui dizer”, e a palavra fica registrada como falada na seção “Profundidade dos encontros” do relatório dos pais. Também dá para jogar sem apertar.",
         d_nzNoteCount: "Verifica se o caractere foi escrito com o mesmo número de traços do modelo. Uma orientação aparece quando um traço é dividido em dois, ou dois traços são escritos como um só.",
         d_nzNoteOrder: "Verifica se os traços foram escritos na mesma ordem do modelo. Uma orientação aparece quando um traço diferente é escrito primeiro.",
         d_nzNoteDir: "Verifica se a direção de cada traço, do início ao fim, corresponde ao modelo. Uma orientação aparece quando um traço é escrito na direção oposta.",
@@ -3548,6 +3682,8 @@
         d_statWords: "{n}", d_repCats: "Categorias favoritas", d_join: ", ", d_repNone: "Nenhum registro ainda.",
         d_repRecent: "Palavras coletadas recentemente", d_repDatedNote: "Os registros de data serão guardados das palavras coletadas daqui em diante.",
         d_repSaid: "Palavras ditas pela primeira vez (まねっこ)", d_repSaidNone: "Nenhum registro ainda. Quando uma palavra for bem dita em まねっこ, ela aparecerá aqui.",
+        d_repDepth: "Profundidade dos encontros (um guia)", d_repDepthNote: "Um guia aproximado, a partir dos registros de jogo, de quão profundamente cada palavra foi encontrada. Nível 1 “Encontrou” = coletada no ずかん. Nível 2 “Acertou de primeira” = escolhida corretamente na primeira tentativa em um jogo de escolher. Nível 3 “Acertou bem” = também acertou de primeira em outro jogo ou em outro dia. Nível 4 “Disse em voz alta” = há registro de ter dito a palavra em voz alta. Isso não comprova compreensão. Os registros dos jogos de escolher se acumulam a partir das próximas brincadeiras.",
+        d_repDepth1: "Encontrou", d_repDepth2: "Acertou de primeira", d_repDepth3: "Acertou bem", d_repDepth4: "Disse em voz alta", d_repDepthLv: "Nível {lv}: {name}", d_repDepthMore: "e mais {n}",
         d_repPicks: "Palavras escolhidas com frequência (どっちが すき？)", d_repPicksNone: "Nenhum registro ainda. As escolhas em どっちが すき？ aparecerão aqui.",
         d_timesCount: " ({n} vezes)",
         d_printClose: "✕ Fechar a prévia",
@@ -3627,6 +3763,12 @@
         openCustom: "Configurar tus propias palabras",
         photoTitle: "Cambiar la imagen de una palabra",
         photoNote: "Puedes sustituir la imagen (emoji) de las palabras del juego por una foto. Busca una palabra, elígela y sube una foto; se reduce automáticamente y se guarda en este navegador. La foto aparece en todos los lugares donde se muestra la imagen de esa palabra: el tablero, el diccionario ilustrado y todos los juegos. También se incluye en las copias de seguridad. Puedes restaurar el emoji original para cada palabra, o para todas a la vez. Es un sistema distinto de las fotos de うちの子の言葉.",
+        manageTitle: "Gestionar palabras recogidas",
+        manageNote: "En una página aparte puedes eliminar, de una en una, las palabras recogidas por error o las que un adulto recogió durante una demostración. Solo se puede eliminar aquí, en Ajustes. Al eliminar, se borran el registro de esa palabra, el número de veces jugadas, la marca de favorito y la pegatina, y los números del diccionario ilustrado y del jardín de flores también disminuyen. Los sellos ya conseguidos se conservan.",
+        openManage: "Gestionar palabras recogidas",
+        manageViewNote: "Esta es la lista de palabras recogidas en el diccionario ilustrado del perfil seleccionado actualmente. Elige las palabras de una en una para eliminar sus registros. Al eliminar, la palabra vuelve a “aún no recogida”, y también se borran su fecha de recogida, el número de veces jugadas, la marca de favorito, la pegatina y su registro de «Profundidad de los encuentros». El número del diccionario ilustrado, el informe para padres y el número de flores del jardín disminuyen en esa medida. Se conservan los sellos ya conseguidos, las fotos de “Cambiar la imagen de una palabra” y los ajustes de “Palabras y categorías para ocultar”. Los registros eliminados no se pueden restaurar.",
+        manageSearchAria: "Buscar palabras recogidas",
+        manageDeleteDo: "Eliminar el registro",
         reportTitle: "Informe para los padres",
         reportNote: "Resumido a partir de los registros guardados en este navegador.",
         reportPrint: "🖨️ Imprimir el informe", albumOpen: "Abrir きろく (registro)",
@@ -3684,6 +3826,11 @@
         d_customSummaryNone: "Aún no hay palabras registradas.",
         d_photoSummary: "Actualmente: {n} palabra(s) con foto en lugar de la imagen.",
         d_photoSummaryNone: "Ninguna palabra ha recibido una foto todavía.",
+        d_manageSummary: "Actualmente: {n} palabra(s) recogida(s).", d_manageSummaryNone: "Aún no hay palabras recogidas.",
+        d_manageProfile: "Perfil: {name}", d_manageProfileNum: "Perfil: Perfil {n}",
+        d_manageDate: "Recogida el: {date}", d_manageNoDate: "Sin registro de la fecha de recogida", d_manageTimes: "Veces jugadas: ×{n}",
+        d_manageConfirm: "¿Eliminar “{name}” de los registros recogidos? También se borrarán su fecha de recogida, el número de veces jugadas, la marca de favorito, la pegatina y su registro de «Profundidad de los encuentros». Los sellos ya conseguidos se conservan. Los registros eliminados no se pueden restaurar.",
+        d_manageDeleted: "Se eliminó el registro recogido de “{name}”.", d_manageMore: "Mostrar más (quedan {n})",
         d_scopeNow: "Actualmente: {n} palabras en el ámbito (el juego contiene {total} palabras en total)",
         d_nightNow: "Visualización actual: {state}{auto}",
         d_nightDark: "🌙 Noche (oscuro)", d_nightLight: "☀️ Día (claro)", d_nightAutoSuffix: " (automático por hora)",
@@ -3719,6 +3866,7 @@
         d_featNoteTanken: "Un juego de exploración: colecciona las palabras que encajan con cada escena. Las palabras coleccionadas van al ずかん.",
         d_featNoteMoji: "Dos juegos con letras: adivinar la letra que falta y encontrar palabras.",
         d_featNoteNarabe: "Un juego para poner las letras de una fila del 五十音 en orden. Cuando la fila está completa, aparece una tarjeta con una palabra que contiene una de sus letras, y esa palabra va al ずかん.",
+        d_featNoteNaani: "Un juego en el que el niño mira una imagen grande y dice la palabra en voz alta. No hay evaluación automática: un adulto cercano pulsa el botón «Lo dije», y la palabra queda registrada como dicha en la sección «Profundidad de los encuentros» del informe para padres. También se puede jugar sin pulsarlo.",
         d_nzNoteCount: "Comprueba si el carácter se escribió con el mismo número de trazos que el modelo. Aparece una guía cuando un trazo se divide en dos, o dos trazos se escriben como uno solo.",
         d_nzNoteOrder: "Comprueba si los trazos se escribieron en el mismo orden que el modelo. Aparece una guía cuando se escribe primero un trazo distinto.",
         d_nzNoteDir: "Comprueba si la dirección de cada trazo, desde su inicio hasta su fin, coincide con el modelo. Aparece una guía cuando un trazo se escribe en dirección contraria.",
@@ -3767,6 +3915,8 @@
         d_statWords: "{n}", d_repCats: "Categorías favoritas", d_join: ", ", d_repNone: "Aún no hay registros.",
         d_repRecent: "Palabras coleccionadas recientemente", d_repDatedNote: "Los registros de fecha se guardarán de las palabras que se coleccionen a partir de ahora.",
         d_repSaid: "Palabras dichas por primera vez (まねっこ)", d_repSaidNone: "Aún no hay registros. Cuando una palabra se diga bien en まねっこ, aparecerá aquí.",
+        d_repDepth: "Profundidad de los encuentros (una guía)", d_repDepthNote: "Una guía aproximada, a partir de los registros de juego, de la profundidad con que se ha encontrado cada palabra. Nivel 1 «Encontrada» = recogida en el ずかん. Nivel 2 «Acertó a la primera» = elegida correctamente al primer intento en un juego de elegir. Nivel 3 «Acertó con seguridad» = también acertó a la primera en otro juego o en otro día. Nivel 4 «La dijo en voz alta» = hay registro de haber dicho la palabra en voz alta. Esto no demuestra la comprensión. Los registros de los juegos de elegir se acumulan a partir de ahora.",
+        d_repDepth1: "Encontrada", d_repDepth2: "Acertó a la primera", d_repDepth3: "Acertó con seguridad", d_repDepth4: "La dijo en voz alta", d_repDepthLv: "Nivel {lv}: {name}", d_repDepthMore: "y {n} más",
         d_repPicks: "Palabras elegidas con frecuencia (どっちが すき？)", d_repPicksNone: "Aún no hay registros. Las elecciones en どっちが すき？ aparecerán aquí.",
         d_timesCount: " ({n} veces)",
         d_printClose: "✕ Cerrar la vista previa",
@@ -3847,6 +3997,12 @@
         openCustom: "Cài đặt từ riêng của bạn",
         photoTitle: "Đổi hình của từ",
         photoNote: "Có thể thay hình (biểu tượng cảm xúc) của các từ trong game bằng ảnh. Tìm và chọn từ, tải ảnh lên, ảnh sẽ tự động được thu nhỏ và lưu trong trình duyệt này. Ảnh đã thay sẽ hiển thị ở mọi nơi có hình của từ đó: bàn chơi, từ điển tranh và các trò chơi. Cũng có trong bản sao lưu. Có thể khôi phục từng từ về biểu tượng gốc, hoặc khôi phục tất cả cùng lúc. Đây là cơ chế khác với ảnh của うちの子の言葉.",
+        manageTitle: "Quản lý các từ đã thu thập",
+        manageNote: "Trong trang riêng, bạn có thể xóa từng từ một — những từ thu thập nhầm, hoặc từ mà người lớn thu thập khi làm mẫu. Chỉ có thể xóa tại đây trong phần Cài đặt. Khi xóa, bản ghi thu thập của từ đó, số lần đã chơi, dấu yêu thích và nhãn dán sẽ bị xóa, và số lượng trong từ điển tranh và vườn hoa cũng giảm theo. Các con dấu đã nhận được sẽ được giữ lại.",
+        openManage: "Quản lý các từ đã thu thập",
+        manageViewNote: "Đây là danh sách các từ đã thu thập vào từ điển tranh của hồ sơ đang được chọn. Hãy chọn từng từ một để xóa bản ghi thu thập của chúng. Khi xóa, từ sẽ trở lại trạng thái “chưa thu thập”, và ngày thu thập, số lần đã chơi, dấu yêu thích, nhãn dán và bản ghi “Mức độ gặp gỡ” cũng bị xóa. Số lượng trong từ điển tranh, báo cáo cho phụ huynh và số hoa trong vườn hoa cũng giảm tương ứng. Các con dấu đã nhận, ảnh đã đặt trong “Đổi hình của từ” và cài đặt trong “Từ và分野 không hiển thị” sẽ được giữ lại. Bản ghi đã xóa không thể khôi phục.",
+        manageSearchAria: "Tìm các từ đã thu thập",
+        manageDeleteDo: "Xóa bản ghi",
         reportTitle: "Báo cáo phụ huynh",
         reportNote: "Tổng hợp từ các bản ghi được lưu trong trình duyệt này.",
         reportPrint: "🖨️ In báo cáo", albumOpen: "Mở きろく (bản ghi)",
@@ -3904,6 +4060,11 @@
         d_customSummaryNone: "Chưa có từ nào được đăng ký.",
         d_photoSummary: "Hiện tại: {n} từ đã đổi hình sang ảnh.",
         d_photoSummaryNone: "Chưa có từ nào được đổi sang ảnh.",
+        d_manageSummary: "Hiện tại: đã thu thập {n} từ.", d_manageSummaryNone: "Chưa thu thập từ nào.",
+        d_manageProfile: "Hồ sơ: {name}", d_manageProfileNum: "Hồ sơ: Hồ sơ {n}",
+        d_manageDate: "Ngày thu thập: {date}", d_manageNoDate: "Không có ghi chép ngày thu thập", d_manageTimes: "Số lần đã chơi: ×{n}",
+        d_manageConfirm: "Xóa “{name}” khỏi bản ghi đã thu thập? Ngày thu thập, số lần đã chơi, dấu yêu thích, nhãn dán và bản ghi “Mức độ gặp gỡ” cũng sẽ bị xóa. Các con dấu đã nhận được sẽ được giữ lại. Bản ghi đã xóa không thể khôi phục.",
+        d_manageDeleted: "Đã xóa bản ghi thu thập của “{name}”.", d_manageMore: "Xem thêm (còn {n} từ)",
         d_scopeNow: "Hiện tại: {n} từ thuộc phạm vi (tổng số từ đã thu thập trong game là {total} từ)",
         d_nightNow: "Hiển thị hiện tại: {state}{auto}",
         d_nightDark: "🌙 Đêm (hiển thị tối)", d_nightLight: "☀️ Ngày (hiển thị sáng)", d_nightAutoSuffix: " (tự động theo giờ)",
@@ -3939,6 +4100,7 @@
         d_featNoteTanken: "Trò chơi thám hiểm: thu thập các từ phù hợp với mỗi cảnh. Từ thu thập được sẽ vào ずかん.",
         d_featNoteMoji: "Hai trò chơi chữ: đoán chữ còn thiếu và tìm từ.",
         d_featNoteNarabe: "Trò chơi xếp các chữ trong một hàng 五十音 theo thứ tự. Khi xếp xong một hàng, sẽ xuất hiện thẻ từ chứa một chữ trong hàng đó, và từ đó được thu vào ずかん.",
+        d_featNoteNaani: "Trò chơi nhìn một bức tranh lớn và nói từ đó thành tiếng. Không có chấm tự động: người lớn ở bên cạnh nhấn nút “Đã nói được”, và từ đó được ghi lại là đã nói trong mục “Mức độ gặp gỡ” của báo cáo phụ huynh. Không nhấn vẫn chơi tiếp được.",
         d_nzNoteCount: "Kiểm tra xem có viết đúng số nét như mẫu không. Sẽ hướng dẫn khi một nét bị chia làm đôi giữa chừng, hoặc hai nét bị viết liền thành một.",
         d_nzNoteOrder: "Kiểm tra xem có viết các nét đúng thứ tự của mẫu không. Sẽ hướng dẫn khi viết một nét khác trước.",
         d_nzNoteDir: "Kiểm tra xem hướng từ đầu nét đến cuối nét có khớp với mẫu không. Sẽ hướng dẫn khi viết ngược hướng.",
@@ -3987,6 +4149,8 @@
         d_statWords: "{n} từ", d_repCats: "Lĩnh vực hay chơi", d_join: ", ", d_repNone: "Chưa có bản ghi.",
         d_repRecent: "Từ mới thu thập (gần đây)", d_repDatedNote: "Bản ghi ngày tháng sẽ được lưu từ phần chơi sắp tới.",
         d_repSaid: "Từ lần đầu nói được (まねっこ)", d_repSaidNone: "Chưa có bản ghi. Khi nói giỏi trong まねっこ, sẽ được ghi lại ở đây.",
+        d_repDepth: "Mức độ gặp gỡ (tham khảo)", d_repDepthNote: "Đây là ước lượng tham khảo từ bản ghi trò chơi về mức độ trẻ đã gặp mỗi từ. Mức 1 “Đã gặp” = đã thu thập vào ずかん. Mức 2 “Đã chọn đúng” = chọn đúng ngay lần đầu trong trò chơi chọn lựa. Mức 3 “Chọn đúng vững vàng” = cũng chọn đúng ngay lần đầu trong trò chơi khác hoặc ngày khác. Mức 4 “Đã nói thành tiếng” = có bản ghi đã nói từ đó thành tiếng. Điều này không khẳng định trẻ đã hiểu. Bản ghi của các trò chơi chọn lựa sẽ tích lũy từ những lần chơi tiếp theo.",
+        d_repDepth1: "Đã gặp", d_repDepth2: "Đã chọn đúng", d_repDepth3: "Chọn đúng vững vàng", d_repDepth4: "Đã nói thành tiếng", d_repDepthLv: "Mức {lv}: {name}", d_repDepthMore: "và {n} từ nữa",
         d_repPicks: "Từ hay chọn (どっちが すき？)", d_repPicksNone: "Chưa có bản ghi. Khi chọn trong 「どっちが すき？」, sẽ được ghi lại ở đây.",
         d_timesCount: " ({n} lần)",
         d_printClose: "✕ Đóng xem trước",
@@ -4066,6 +4230,12 @@
         openCustom: "ตั้งค่าคำเฉพาะของคุณ",
         photoTitle: "เปลี่ยนภาพของคำ",
         photoNote: "สามารถเปลี่ยนภาพ (อีโมจิ) ของคำในเกมเป็นรูปภาพได้ ค้นหาและเลือกคำ แล้วอัปโหลดรูป ระบบจะย่อให้เล็กและเบาโดยอัตโนมัติและบันทึกในเบราว์เซอร์นี้ รูปที่เปลี่ยนจะแสดงทุกที่ที่ภาพของคำนั้นปรากฏ ทั้งกระดาน พจนานุกรมภาพ และทุกเกม รวมอยู่ในข้อมูลสำรองด้วย คืนค่าเป็นอีโมจิเดิมได้ทีละคำ หรือคืนทั้งหมดพร้อมกัน เป็นกลไกคนละอย่างกับรูปของ うちの子の言葉",
+        manageTitle: "จัดการคำที่เก็บได้",
+        manageNote: "ในหน้าเฉพาะ คุณสามารถลบคำที่เก็บผิด หรือคำที่ผู้ใหญ่เก็บระหว่างสาธิตได้ทีละคำ การลบทำได้เฉพาะในหน้าการตั้งค่านี้เท่านั้น เมื่อลบแล้ว บันทึกการเก็บของคำนั้น จำนวนครั้งที่เล่น เครื่องหมายรายการโปรด และสติกเกอร์จะหายไป และจำนวนในพจนานุกรมภาพและสวนดอกไม้ก็จะลดลงด้วย ตราประทับที่ได้รับแล้วจะยังคงอยู่",
+        openManage: "จัดการคำที่เก็บได้",
+        manageViewNote: "นี่คือรายการคำที่เก็บในพจนานุกรมภาพของโปรไฟล์ที่เลือกอยู่ในขณะนี้ เลือกคำทีละคำเพื่อลบบันทึกการเก็บ เมื่อลบแล้ว คำนั้นจะกลับไปเป็นสถานะ “ยังไม่ได้เก็บ” และวันที่เก็บ จำนวนครั้งที่เล่น เครื่องหมายรายการโปรด สติกเกอร์ และบันทึก “ความลึกของการพบคำ” ก็จะถูกลบด้วย จำนวนในพจนานุกรมภาพ รายงานผู้ปกครอง และจำนวนดอกไม้ในสวนดอกไม้จะลดลงตามนั้น ตราประทับที่ได้รับแล้ว รูปภาพที่ตั้งใน “เปลี่ยนภาพของคำ” และการตั้งค่าใน “คำและ分野ที่ไม่แสดง” จะยังคงอยู่ บันทึกที่ลบแล้วไม่สามารถกู้คืนได้",
+        manageSearchAria: "ค้นหาคำที่เก็บได้",
+        manageDeleteDo: "ลบบันทึก",
         reportTitle: "รายงานผู้ปกครอง",
         reportNote: "สรุปจากบันทึกที่บันทึกไว้ในเบราว์เซอร์นี้",
         reportPrint: "🖨️ พิมพ์รายงาน", albumOpen: "เปิด きろく (บันทึก)",
@@ -4123,6 +4293,11 @@
         d_customSummaryNone: "ยังไม่มีคำที่ลงทะเบียน",
         d_photoSummary: "ปัจจุบัน: {n} คำเปลี่ยนภาพเป็นรูปภาพแล้ว",
         d_photoSummaryNone: "ยังไม่มีคำที่เปลี่ยนเป็นรูปภาพ",
+        d_manageSummary: "ปัจจุบัน: เก็บได้ {n} คำ", d_manageSummaryNone: "ยังไม่มีคำที่เก็บได้",
+        d_manageProfile: "โปรไฟล์: {name}", d_manageProfileNum: "โปรไฟล์: โปรไฟล์ {n}",
+        d_manageDate: "วันที่เก็บ: {date}", d_manageNoDate: "ไม่มีบันทึกวันที่เก็บ", d_manageTimes: "จำนวนครั้งที่เล่น: ×{n}",
+        d_manageConfirm: "ลบ “{name}” ออกจากบันทึกที่เก็บได้หรือไม่? วันที่เก็บ จำนวนครั้งที่เล่น เครื่องหมายรายการโปรด สติกเกอร์ และบันทึก “ความลึกของการพบคำ” จะถูกลบด้วย ตราประทับที่ได้รับแล้วจะยังคงอยู่ บันทึกที่ลบแล้วไม่สามารถกู้คืนได้",
+        d_manageDeleted: "ลบ “{name}” ออกจากบันทึกที่เก็บได้แล้ว", d_manageMore: "ดูเพิ่มเติม (เหลืออีก {n} คำ)",
         d_scopeNow: "ปัจจุบัน: {n} คำอยู่ในขอบเขต (คำที่เก็บในเกมทั้งหมด {total} คำ)",
         d_nightNow: "การแสดงผลปัจจุบัน: {state}{auto}",
         d_nightDark: "🌙 กลางคืน (แสดงผลมืด)", d_nightLight: "☀️ กลางวัน (แสดงผลสว่าง)", d_nightAutoSuffix: " (อัตโนมัติตามเวลา)",
@@ -4158,6 +4333,7 @@
         d_featNoteTanken: "เกมสำรวจ: เก็บคำที่เข้ากับแต่ละฉาก คำที่เก็บได้จะเข้า ずかん",
         d_featNoteMoji: "เกมตัวอักษร 2 แบบ: ทายตัวอักษรที่หายไป และค้นหาคำ",
         d_featNoteNarabe: "เกมเรียงตัวอักษรในแถวของ 五十音 ตามลำดับ เมื่อเรียงครบหนึ่งแถว จะมีบัตรคำที่มีตัวอักษรในแถวนั้นปรากฏขึ้น และคำนั้นจะเก็บเข้า ずかん",
+        d_featNoteNaani: "เกมที่ให้เด็กดูภาพใหญ่แล้วพูดคำนั้นออกเสียง ไม่มีการตัดสินอัตโนมัติ ผู้ใหญ่ที่อยู่ข้าง ๆ กดปุ่ม “พูดได้แล้ว” คำนั้นจะถูกบันทึกว่าพูดได้ในส่วน “ความลึกของการพบคำ” ของรายงานผู้ปกครอง ไม่กดก็เล่นต่อได้",
         d_nzNoteCount: "ตรวจว่าเขียนด้วยจำนวนเส้นเท่ากับต้นแบบหรือไม่ จะแนะนำเมื่อแยก 1 เส้นออกกลางคัน หรือเขียน 2 เส้นต่อกันเป็น 1 เส้น",
         d_nzNoteOrder: "ตรวจว่าเขียนเส้นตามลำดับเดียวกับต้นแบบหรือไม่ จะแนะนำเมื่อเขียนเส้นอื่นก่อน",
         d_nzNoteDir: "ตรวจว่าทิศทางจากจุดเริ่มถึงจุดจบของเส้นตรงกับต้นแบบหรือไม่ จะแนะนำเมื่อเขียนทิศตรงข้าม",
@@ -4206,6 +4382,8 @@
         d_statWords: "{n} คำ", d_repCats: "หมวดที่เล่นบ่อย", d_join: ", ", d_repNone: "ยังไม่มีบันทึก",
         d_repRecent: "คำที่เก็บใหม่ (ล่าสุด)", d_repDatedNote: "บันทึกวันที่จะเหลือจากส่วนที่เล่นต่อจากนี้",
         d_repSaid: "คำที่พูดได้ครั้งแรก (まねっこ)", d_repSaidNone: "ยังไม่มีบันทึก เมื่อพูดได้ดีใน まねっこ จะถูกบันทึกไว้ที่นี่",
+        d_repDepth: "ความลึกของการพบคำ (แนวทาง)", d_repDepthNote: "เป็นแนวทางคร่าว ๆ จากบันทึกการเล่นว่าคำแต่ละคำถูกพบลึกแค่ไหน ระดับ 1 “พบแล้ว” = เก็บเข้า ずかん แล้ว ระดับ 2 “เลือกถูก” = เลือกถูกตั้งแต่ครั้งแรกในเกมแบบเลือก ระดับ 3 “เลือกถูกอย่างมั่นคง” = เลือกถูกตั้งแต่ครั้งแรกในเกมอื่นหรือวันอื่นด้วย ระดับ 4 “พูดออกเสียงได้” = มีบันทึกว่าเคยพูดคำนั้นออกเสียง สิ่งนี้ไม่ได้ยืนยันว่าเข้าใจแล้ว บันทึกของเกมแบบเลือกจะสะสมจากการเล่นต่อจากนี้",
+        d_repDepth1: "พบแล้ว", d_repDepth2: "เลือกถูก", d_repDepth3: "เลือกถูกอย่างมั่นคง", d_repDepth4: "พูดออกเสียงได้", d_repDepthLv: "ระดับ {lv}: {name}", d_repDepthMore: "และอีก {n} คำ",
         d_repPicks: "คำที่เลือกบ่อย (どっちが すき？)", d_repPicksNone: "ยังไม่มีบันทึก เมื่อเลือกใน 「どっちが すき？」 จะถูกบันทึกไว้ที่นี่",
         d_timesCount: " ({n} ครั้ง)",
         d_printClose: "✕ ปิดตัวอย่าง",
@@ -4286,6 +4464,12 @@
         openCustom: "나만의 단어 설정하기",
         photoTitle: "단어 그림 바꾸기",
         photoNote: "게임에 수록된 단어의 그림(이모지)을 사진 등으로 바꿀 수 있습니다. 단어를 검색해 선택하고 사진을 올리면, 자동으로 작고 가볍게 만들어 이 브라우저 안에 저장합니다. 바꾼 사진은 보드·도감·각 게임 등 그 단어의 그림이 나오는 모든 곳에 표시됩니다. 백업에도 포함됩니다. 단어마다 원래 이모지로 되돌릴 수도, 전부 한꺼번에 되돌릴 수도 있습니다. 'うちの子の言葉'의 사진과는 다른 구조입니다.",
+        manageTitle: "모은 단어 관리",
+        manageNote: "전용 페이지에서 잘못 모은 단어나, 데모로 어른이 모은 단어를 1개씩 지울 수 있습니다. 지울 수 있는 곳은 이 설정 안뿐입니다. 지우면 그 단어의 모은 기록·논 횟수·즐겨찾기·스티커가 사라지고, 도감과 꽃밭의 수도 줄어듭니다. 받은 스탬프는 남습니다.",
+        openManage: "모은 단어 관리하기",
+        manageViewNote: "지금 선택한 프로필이 도감에 모은 단어의 목록입니다. 단어를 1개씩 골라 모은 기록을 지울 수 있습니다. 지우면 그 단어는 “아직 모으지 않은” 상태로 돌아가고, 모은 날·논 횟수·즐겨찾기·스티커·“만남의 깊이” 기록도 사라집니다. 도감의 수·보호자 리포트·꽃밭의 꽃 수도 그만큼 줄어듭니다. 받은 스탬프와 “단어의 그림 바꾸기”의 사진, “나오지 않는 단어·분야”의 설정은 남습니다. 지운 기록은 되돌릴 수 없습니다.",
+        manageSearchAria: "모은 단어 검색",
+        manageDeleteDo: "기록 지우기",
         reportTitle: "보호자 리포트",
         reportNote: "이 브라우저에 저장된 기록에서 집계하고 있습니다.",
         reportPrint: "🖨️ 리포트 인쇄", albumOpen: "きろく(기록) 열기",
@@ -4343,6 +4527,11 @@
         d_customSummaryNone: "아직 등록한 단어가 없습니다.",
         d_photoSummary: "현재: {n}단어의 그림을 사진으로 교체 중입니다.",
         d_photoSummaryNone: "아직 사진으로 교체한 단어가 없습니다.",
+        d_manageSummary: "현재: {n}개의 단어를 모았습니다.", d_manageSummaryNone: "아직 모은 단어가 없습니다.",
+        d_manageProfile: "대상 프로필: {name}", d_manageProfileNum: "대상 프로필: 프로필 {n}",
+        d_manageDate: "모은 날: {date}", d_manageNoDate: "모은 날의 기록 없음", d_manageTimes: "논 횟수: ×{n}",
+        d_manageConfirm: "“{name}”을(를) 모은 기록에서 지울까요? 모은 날·논 횟수·즐겨찾기·스티커·“만남의 깊이” 기록도 함께 사라집니다. 받은 스탬프는 남습니다. 지운 기록은 되돌릴 수 없습니다.",
+        d_manageDeleted: "“{name}”의 모은 기록을 지웠습니다.", d_manageMore: "더 보기 (남은 {n}개)",
         d_scopeNow: "현재: {n}단어가 대상입니다(수록된 단어는 전부 {total}단어)",
         d_nightNow: "지금 표시: {state}{auto}",
         d_nightDark: "🌙 밤(어두운 표시)", d_nightLight: "☀️ 낮(밝은 표시)", d_nightAutoSuffix: "(시간으로 자동)",
@@ -4378,6 +4567,7 @@
         d_featNoteTanken: "장면에 맞는 단어를 모으는 탐험 놀이입니다. 모은 단어는 ずかん에 모여요.",
         d_featNoteMoji: "빠진 문자 맞히기, 단어 찾기, 2가지로 노는 문자 놀이입니다.",
         d_featNoteNarabe: "五十音 한 줄의 문자를 순서대로 나열하는 놀이입니다. 한 줄이 완성되면 그 줄의 문자가 들어간 단어 카드가 나오고, 그 단어가 ずかん에 모입니다.",
+        d_featNoteNaani: "큰 그림을 보고 그 단어를 소리 내어 말하는 놀이입니다. 자동 판정은 하지 않습니다. 곁에 있는 어른이 “말했어요” 버튼을 누르면, 그 단어가 보호자 리포트의 “만남의 깊이”에 말한 기록으로 남습니다. 누르지 않아도 그대로 놀 수 있습니다.",
         d_nzNoteCount: "모범과 같은 개수의 선으로 쓰고 있는지 봅니다. 1개의 선을 중간에 나누거나, 2개 분량을 이어서 1개로 썼을 때 안내합니다.",
         d_nzNoteOrder: "모범의 순서대로 선을 쓰고 있는지 봅니다. 다른 선을 먼저 썼을 때 안내합니다.",
         d_nzNoteDir: "선의 쓰기 시작부터 쓰기 끝까지의 방향이 모범과 맞는지 봅니다. 반대 방향으로 썼을 때 안내합니다.",
@@ -4426,6 +4616,8 @@
         d_statWords: "{n} 단어", d_repCats: "자주 플레이한 분야", d_join: ", ", d_repNone: "아직 기록이 없습니다.",
         d_repRecent: "새로 모은 단어(최근)", d_repDatedNote: "날짜 기록은 앞으로 플레이하는 분부터 남습니다.",
         d_repSaid: "처음 말한 단어(まねっこ)", d_repSaidNone: "아직 기록이 없습니다. まねっこ에서 잘 말하면 여기에 남습니다.",
+        d_repDepth: "만남의 깊이 (기준)", d_repDepthNote: "놀이 기록으로 본, 단어와의 만남의 깊이에 대한 대략적인 기준입니다. 단계 1 “만났어요”는 ずかん에 모은 단어, 단계 2 “골랐어요”는 고르기 놀이에서 처음에 바르게 고른 단어, 단계 3 “제대로 골랐어요”는 다른 놀이 또는 다른 날에도 처음에 고른 단어, 단계 4 “소리 내어 말했어요”는 소리 내어 말한 기록이 있는 단어입니다. 이해했는지를 단정하는 것은 아닙니다. 고르기 놀이의 기록은 앞으로의 놀이부터 쌓입니다.",
+        d_repDepth1: "만났어요", d_repDepth2: "골랐어요", d_repDepth3: "제대로 골랐어요", d_repDepth4: "소리 내어 말했어요", d_repDepthLv: "단계 {lv}: {name}", d_repDepthMore: "외 {n}개",
         d_repPicks: "자주 고르는 단어(どっちが すき？)", d_repPicksNone: "아직 기록이 없습니다. 'どっちが すき？'에서 고르면 여기에 남습니다.",
         d_timesCount: "({n}회)",
         d_printClose: "✕ 미리 보기 닫기",
@@ -4533,6 +4725,12 @@
         openCustom: "うちの子の ことばを せっていする",
         photoTitle: "ことばの 絵を かえる",
         photoNote: "ゲームに 入っている ことばの 絵（絵文字）を、写真などに さしかえられます。ことばを さがして えらび、写真を アップすると、自動で 小さく 軽くして この ブラウザの 中に ほぞん します。さしかえた 写真は、ボード・ずかん・いろいろな あそびなど、その ことばの 絵が 出る ところ すべてに 出ます。バックアップにも 入ります。ことばごとに もとの 絵文字へ もどすことも、全部まとめて もどすことも できます。「うちの子の言葉」の 写真とは べつの しくみです。",
+        manageTitle: "あつめた ことばの かんり",
+        manageNote: "まちがえて あつめた ことばや、デモで おとなが あつめた ことばを、べつの ページで 1つずつ けせます。けせるのは この せっていの 中だけです。けすと、その ことばの あつめた きろく・あそんだ かいすう・お気に入り・シールが きえ、ずかんや おはなばたけの 数も へります。もらった スタンプは のこります。",
+        openManage: "あつめた ことばを かんりする",
+        manageViewNote: "今 えらんでいる プロフィールの、ずかんに あつめた ことばの いちらんです。ことばを 1つずつ えらんで、あつめた きろくを けせます。けすと、その ことばは「まだ あつめていない」ようすに もどり、あつめた 日・あそんだ かいすう・お気に入り・シール・「であいの 深さ」の きろくも きえます。ずかんの 数・保護者レポート・おはなばたけの 花の 数も、その分だけ へります。もらった スタンプと、「ことばの 絵を かえる」の 写真・「出さない ことば・分野」の せっていは のこります。けした きろくは もとに もどせません。",
+        manageSearchAria: "あつめた ことばを さがす",
+        manageDeleteDo: "きろくを けす",
         reportTitle: "ほごしゃレポート",
         reportNote: "この ブラウザに ほぞん されている きろくから 作っています。",
         reportPrint: "🖨️ レポートを いんさつ",
@@ -4599,6 +4797,11 @@
         d_customSummaryNone: "まだ とうろくした ことばは ありません。",
         d_photoSummary: "いま：{n}ごの 絵を 写真に さしかえて います。",
         d_photoSummaryNone: "まだ 写真に さしかえた ことばは ありません。",
+        d_manageSummary: "いま：{n}ご あつめて います。", d_manageSummaryNone: "まだ あつめた ことばは ありません。",
+        d_manageProfile: "たいしょうの プロフィール：{name}", d_manageProfileNum: "たいしょうの プロフィール：プロフィール{n}",
+        d_manageDate: "あつめた 日：{date}", d_manageNoDate: "あつめた 日の きろくは ありません", d_manageTimes: "あそんだ かいすう：×{n}",
+        d_manageConfirm: "『{name}』を あつめた きろくから けしますか？ あつめた 日・あそんだ かいすう・お気に入り・シール・「であいの 深さ」の きろくも いっしょに きえます。もらった スタンプは のこります。けした きろくは もとに もどせません。",
+        d_manageDeleted: "「{name}」の あつめた きろくを けしました。", d_manageMore: "もっと 見る（あと{n}ご）",
         d_scopeNow: "いま：{n}ごが たいしょうです（入っている ことばは 全部で {total}ご）",
         d_nightNow: "今の 見え方：{state}{auto}",
         d_nightDark: "🌙 夜（暗い 画面）",
@@ -4638,6 +4841,7 @@
         d_featNoteTanken: "ばめんに あう ことばを あつめる たんけんの あそびです。あつめた ことばは、ずかんに あつまります。",
         d_featNoteMoji: "ぬけた もじを あてる・ことばを さがす、の 2つの あそびが できる もじの あそびです。",
         d_featNoteNarabe: "五十音の もじを ぎょうごとに じゅんばんに ならべる あそびです。ぎょうが そろうと、その もじが 入った ことばの カードが 出て、その ことばが ずかんに あつまります。",
+        d_featNoteNaani: "大きな 絵を 見て、その ことばを 声に 出して 言う あそびです。そばで 聞いている 大人が「いえたね」ボタンを 押すと、声に 出して 言えた きろくが 保護者レポートの「であいの 深さ」に のこります。押さなくても、そのまま つぎの ことばへ 進んで あそべます。",
         d_nzNoteCount: "お手本と 同じ 本数の 線で 書けているかを 見ます。1本の 線を とちゅうで 分けたり、2本分を つづけて 1本で 書いたりした ときに あんない します。",
         d_nzNoteOrder: "お手本の じゅんばんどおりに 線を 書いているかを 見ます。ちがう 線を 先に 書いた ときに あんない します。",
         d_nzNoteDir: "線の 書き始めから 書き終わりへの 向きが、お手本と 合っているかを 見ます。反対の 向きに 書いた ときに あんない します。",
@@ -4704,6 +4908,8 @@
         d_repRecent: "新しく あつめた ことば",
         d_repDatedNote: "日にちの きろくは、これから あそぶ 分から のこります。",
         d_repSaid: "まねっこで はじめて 言えた ことば",
+        d_repDepth: "であいの 深さ（目安）", d_repDepthNote: "あそびの きろくから 見た、ことばとの であいの 深さの 目安です。だんかい1「であった」は ずかんに あつめた ことば、だんかい2「えらべた」は えらぶ あそびで さいしょに 正しく えらべた ことば、だんかい3「しっかり えらべた」は べつの あそびや べつの 日にも さいしょに えらべた ことば、だんかい4「こえに だせた」は 声に 出して 言えた きろくが ある ことばです。分かっているかを 決める ものでは ありません。えらぶ あそびの きろくは、これから あそんだ 分から つきます。",
+        d_repDepth1: "であった", d_repDepth2: "えらべた", d_repDepth3: "しっかり えらべた", d_repDepth4: "こえに だせた", d_repDepthLv: "だんかい{lv}：{name}", d_repDepthMore: "ほか {n}語",
         d_repSaidNone: "まだ きろくは ありません。まねっこで じょうずに 言えると、ここに のこります。",
         d_repPicks: "よく えらぶ ことば（どっちが すき？）",
         d_repPicksNone: "まだ きろくは ありません。「どっちが すき？」で えらぶと、ここに のこります。",
@@ -4785,6 +4991,12 @@
         openCustom: "Régler vos propres mots",
         photoTitle: "Changer l'image d'un mot",
         photoNote: "Vous pouvez remplacer l'image (emoji) des mots du jeu par une photo. Cherchez un mot, choisissez-le et envoyez une photo ; elle est automatiquement réduite et enregistrée dans ce navigateur. La photo apparaît partout où l'image de ce mot est montrée : le plateau, le dictionnaire en images et tous les jeux. Elle est incluse dans les sauvegardes. Vous pouvez rétablir l'emoji d'origine pour chaque mot, ou pour tous les mots à la fois. C'est un système distinct des photos de うちの子の言葉.",
+        manageTitle: "Gérer les mots collectés",
+        manageNote: "Sur une page séparée, vous pouvez supprimer, un par un, les mots collectés par erreur ou les mots qu’un adulte a collectés pendant une démonstration. La suppression n’est possible qu’ici, dans les réglages. La suppression efface l’enregistrement de ce mot, son nombre de parties, sa marque de favori et son autocollant, et les nombres du dictionnaire en images et du jardin de fleurs diminuent aussi. Les tampons déjà obtenus sont conservés.",
+        openManage: "Gérer les mots collectés",
+        manageViewNote: "Voici la liste des mots collectés dans le dictionnaire en images pour le profil actuellement sélectionné. Choisissez les mots un par un pour supprimer leur enregistrement. La suppression remet le mot à l’état « pas encore collecté », et sa date de collecte, son nombre de parties, sa marque de favori, son autocollant et son enregistrement de « Profondeur des rencontres » sont aussi supprimés. Le nombre du dictionnaire en images, le rapport pour les parents et le nombre de fleurs du jardin diminuent d’autant. Les tampons déjà obtenus, les photos définies dans « Changer l’image d’un mot » et les réglages de « Mots et catégories à masquer » sont conservés. Les enregistrements supprimés ne peuvent pas être restaurés.",
+        manageSearchAria: "Chercher des mots collectés",
+        manageDeleteDo: "Supprimer l’enregistrement",
         reportTitle: "Rapport pour les parents",
         reportNote: "Résumé à partir des données enregistrées dans ce navigateur.",
         reportPrint: "🖨️ Imprimer le rapport", albumOpen: "Ouvrir きろく (le carnet)",
@@ -4842,6 +5054,11 @@
         d_customSummaryNone: "Aucun mot enregistré pour le moment.",
         d_photoSummary: "Actuellement : {n} mot(s) ont une photo à la place de l'image.",
         d_photoSummaryNone: "Aucun mot n'a encore reçu de photo.",
+        d_manageSummary: "Actuellement : {n} mot(s) collecté(s).", d_manageSummaryNone: "Aucun mot collecté pour le moment.",
+        d_manageProfile: "Profil concerné : {name}", d_manageProfileNum: "Profil concerné : profil {n}",
+        d_manageDate: "Collecté le : {date}", d_manageNoDate: "Aucune date de collecte enregistrée", d_manageTimes: "Parties jouées : ×{n}",
+        d_manageConfirm: "Supprimer « {name} » des enregistrements collectés ? Sa date de collecte, son nombre de parties, sa marque de favori, son autocollant et son enregistrement de « Profondeur des rencontres » seront aussi supprimés. Les tampons déjà obtenus sont conservés. Les enregistrements supprimés ne peuvent pas être restaurés.",
+        d_manageDeleted: "L’enregistrement collecté de « {name} » a été supprimé.", d_manageMore: "Afficher plus (encore {n})",
         d_scopeNow: "Actuellement : {n} mots sont concernés (le jeu contient {total} mots au total)",
         d_nightNow: "Affichage actuel : {state}{auto}",
         d_nightDark: "🌙 Nuit (sombre)", d_nightLight: "☀️ Jour (clair)", d_nightAutoSuffix: " (automatique selon l'heure)",
@@ -4877,6 +5094,7 @@
         d_featNoteTanken: "Un jeu d'exploration : collectionnez les mots qui conviennent à chaque scène. Les mots collectionnés vont dans le ずかん.",
         d_featNoteMoji: "Deux jeux de lettres : deviner la lettre manquante et trouver des mots.",
         d_featNoteNarabe: "Un jeu où l'on met les lettres d'une rangée du 五十音 dans l'ordre. Quand une rangée est complète, une carte avec un mot contenant l'une de ses lettres apparaît, et ce mot va dans le ずかん.",
+        d_featNoteNaani: "Un jeu où l'enfant regarde une grande image et dit le mot à voix haute. Il n'y a pas d'évaluation automatique : un adulte à côté appuie sur le bouton « Je l'ai dit », et le mot est enregistré comme prononcé dans la section « Profondeur des rencontres » du rapport parental. On peut aussi jouer sans appuyer.",
         d_nzNoteCount: "Vérifie si le caractère est écrit avec le même nombre de traits que le modèle. Un conseil s'affiche quand un trait est coupé en deux, ou quand deux traits sont écrits en un seul.",
         d_nzNoteOrder: "Vérifie si les traits sont écrits dans le même ordre que le modèle. Un conseil s'affiche quand un autre trait est écrit en premier.",
         d_nzNoteDir: "Vérifie si la direction de chaque trait, de son début à sa fin, correspond au modèle. Un conseil s'affiche quand un trait est écrit dans le sens opposé.",
@@ -4925,6 +5143,8 @@
         d_statWords: "{n} mots", d_repCats: "Catégories préférées", d_join: ", ", d_repNone: "Pas encore de données.",
         d_repRecent: "Mots nouvellement collectés (récents)", d_repDatedNote: "Les dates seront conservées pour les mots collectés à partir de maintenant.",
         d_repSaid: "Mots dits pour la première fois (まねっこ)", d_repSaidNone: "Pas encore de données. Quand un mot sera bien dit dans まねっこ, il apparaîtra ici.",
+        d_repDepth: "Profondeur des rencontres (un repère)", d_repDepthNote: "Un repère approximatif, d'après les enregistrements de jeu, de la profondeur avec laquelle chaque mot a été rencontré. Niveau 1 « Rencontré » = collecté dans le ずかん. Niveau 2 « Bien choisi » = choisi correctement du premier coup dans un jeu de choix. Niveau 3 « Bien choisi solidement » = aussi choisi correctement du premier coup dans un autre jeu ou un autre jour. Niveau 4 « Dit à voix haute » = il existe un enregistrement du mot dit à voix haute. Cela ne prouve pas la compréhension. Les enregistrements des jeux de choix s'accumulent à partir des prochaines parties.",
+        d_repDepth1: "Rencontré", d_repDepth2: "Bien choisi", d_repDepth3: "Bien choisi solidement", d_repDepth4: "Dit à voix haute", d_repDepthLv: "Niveau {lv} : {name}", d_repDepthMore: "et {n} de plus",
         d_repPicks: "Mots souvent choisis (どっちが すき？)", d_repPicksNone: "Pas encore de données. Les choix dans どっちが すき？ apparaîtront ici.",
         d_timesCount: " ({n} fois)",
         d_printClose: "✕ Fermer l'aperçu",
@@ -5004,6 +5224,12 @@
         openCustom: "Eigene Wörter festlegen",
         photoTitle: "Das Bild eines Wortes ändern",
         photoNote: "Sie können das Bild (Emoji) der Wörter im Spiel durch ein Foto ersetzen. Suchen Sie ein Wort, wählen Sie es aus und laden Sie ein Foto hoch; es wird automatisch verkleinert und in diesem Browser gespeichert. Das Foto erscheint überall, wo das Bild dieses Wortes gezeigt wird: auf dem Brett, im Bildwörterbuch und in jedem Spiel. Es ist in Sicherungen enthalten. Sie können das ursprüngliche Emoji für jedes Wort oder für alle Wörter auf einmal wiederherstellen. Dies ist ein separates System von den Fotos in うちの子の言葉.",
+        manageTitle: "Gesammelte Wörter verwalten",
+        manageNote: "Auf einer eigenen Seite können Sie Wörter, die versehentlich gesammelt wurden, oder Wörter, die ein Erwachsener bei einer Vorführung gesammelt hat, einzeln löschen. Löschen ist nur hier in den Einstellungen möglich. Beim Löschen werden der Sammel-Eintrag dieses Wortes, die Anzahl der Spiele, die Favoriten-Markierung und der Aufkleber entfernt, und auch die Zahlen im Bildwörterbuch und im Blumengarten werden kleiner. Bereits erhaltene Stempel bleiben erhalten.",
+        openManage: "Gesammelte Wörter verwalten",
+        manageViewNote: "Dies ist die Liste der Wörter, die im Bildwörterbuch für das aktuell ausgewählte Profil gesammelt wurden. Wählen Sie Wörter einzeln aus, um ihre Sammel-Einträge zu löschen. Beim Löschen wird das Wort auf „noch nicht gesammelt“ zurückgesetzt, und auch sein Sammeldatum, die Anzahl der Spiele, die Favoriten-Markierung, der Aufkleber und sein Eintrag zur „Tiefe der Begegnungen“ werden entfernt. Die Zahl im Bildwörterbuch, der Elternbericht und die Anzahl der Blumen im Blumengarten werden entsprechend kleiner. Bereits erhaltene Stempel, Fotos aus „Bild eines Wortes ändern“ und die Einstellungen in „Nicht anzuzeigende Wörter und Bereiche“ bleiben erhalten. Gelöschte Einträge können nicht wiederhergestellt werden.",
+        manageSearchAria: "Gesammelte Wörter suchen",
+        manageDeleteDo: "Eintrag löschen",
         reportTitle: "Elternbericht",
         reportNote: "Zusammengefasst aus den in diesem Browser gespeicherten Daten.",
         reportPrint: "🖨️ Bericht drucken", albumOpen: "きろく (Aufzeichnung) öffnen",
@@ -5061,6 +5287,11 @@
         d_customSummaryNone: "Noch keine Wörter registriert.",
         d_photoSummary: "Aktuell: {n} Wort/Wörter haben ein Foto anstelle des Bildes.",
         d_photoSummaryNone: "Noch kein Wort hat ein Foto erhalten.",
+        d_manageSummary: "Aktuell: {n} Wort/Wörter gesammelt.", d_manageSummaryNone: "Noch keine Wörter gesammelt.",
+        d_manageProfile: "Profil: {name}", d_manageProfileNum: "Profil: Profil {n}",
+        d_manageDate: "Gesammelt am: {date}", d_manageNoDate: "Kein Sammeldatum verzeichnet", d_manageTimes: "Gespielt: ×{n}",
+        d_manageConfirm: "„{name}“ aus den gesammelten Einträgen löschen? Auch sein Sammeldatum, die Anzahl der Spiele, die Favoriten-Markierung, der Aufkleber und sein Eintrag zur „Tiefe der Begegnungen“ werden entfernt. Bereits erhaltene Stempel bleiben erhalten. Gelöschte Einträge können nicht wiederhergestellt werden.",
+        d_manageDeleted: "Der gesammelte Eintrag für „{name}“ wurde gelöscht.", d_manageMore: "Mehr anzeigen (noch {n})",
         d_scopeNow: "Aktuell: {n} Wörter sind im Bereich (das Spiel enthält insgesamt {total} Wörter)",
         d_nightNow: "Aktuelle Anzeige: {state}{auto}",
         d_nightDark: "🌙 Nacht (dunkel)", d_nightLight: "☀️ Tag (hell)", d_nightAutoSuffix: " (automatisch nach Uhrzeit)",
@@ -5096,6 +5327,7 @@
         d_featNoteTanken: "Ein Erkundungsspiel: Sammeln Sie die Wörter, die zu jeder Szene passen. Gesammelte Wörter kommen ins ずかん.",
         d_featNoteMoji: "Zwei Buchstabenspiele: den fehlenden Buchstaben erraten und Wörter finden.",
         d_featNoteNarabe: "Ein Spiel, bei dem man die Buchstaben einer 五十音-Reihe in die richtige Reihenfolge bringt. Ist eine Reihe vollständig, erscheint eine Karte mit einem Wort, das einen ihrer Buchstaben enthält, und dieses Wort kommt ins ずかん.",
+        d_featNoteNaani: "Ein Spiel, bei dem das Kind ein großes Bild ansieht und das Wort laut ausspricht. Es gibt keine automatische Bewertung: Ein Erwachsener in der Nähe drückt die Schaltfläche „Gesagt“, und das Wort wird im Abschnitt „Tiefe der Begegnungen“ des Elternberichts als gesprochen vermerkt. Man kann auch spielen, ohne zu drücken.",
         d_nzNoteCount: "Prüft, ob das Zeichen mit derselben Strichanzahl wie das Vorbild geschrieben wird. Ein Hinweis wird angezeigt, wenn ein Strich in zwei geteilt oder zwei Striche als einer geschrieben werden.",
         d_nzNoteOrder: "Prüft, ob die Striche in derselben Reihenfolge wie das Vorbild geschrieben werden. Ein Hinweis wird angezeigt, wenn ein anderer Strich zuerst geschrieben wird.",
         d_nzNoteDir: "Prüft, ob die Richtung jedes Strichs, von seinem Anfang bis zu seinem Ende, mit dem Vorbild übereinstimmt. Ein Hinweis wird angezeigt, wenn ein Strich in entgegengesetzter Richtung geschrieben wird.",
@@ -5144,6 +5376,8 @@
         d_statWords: "{n} Wörter", d_repCats: "Beliebte Kategorien", d_join: ", ", d_repNone: "Noch keine Daten.",
         d_repRecent: "Neu gesammelte Wörter (zuletzt)", d_repDatedNote: "Datumsaufzeichnungen werden ab jetzt für gesammelte Wörter aufbewahrt.",
         d_repSaid: "Zum ersten Mal gesagte Wörter (まねっこ)", d_repSaidNone: "Noch keine Daten. Wenn ein Wort in まねっこ gut gesagt wird, erscheint es hier.",
+        d_repDepth: "Tiefe der Begegnungen (Orientierung)", d_repDepthNote: "Eine grobe Orientierung aus den Spielaufzeichnungen, wie tief jedes Wort angetroffen wurde. Stufe 1 „Getroffen“ = im ずかん gesammelt. Stufe 2 „Richtig gewählt“ = in einem Auswahlspiel beim ersten Versuch richtig gewählt. Stufe 3 „Sicher gewählt“ = auch in einem anderen Spiel oder an einem anderen Tag beim ersten Versuch richtig gewählt. Stufe 4 „Laut gesagt“ = es gibt eine Aufzeichnung, dass das Wort laut gesagt wurde. Das beweist kein Verständnis. Die Aufzeichnungen der Auswahlspiele sammeln sich ab den nächsten Spielen.",
+        d_repDepth1: "Getroffen", d_repDepth2: "Richtig gewählt", d_repDepth3: "Sicher gewählt", d_repDepth4: "Laut gesagt", d_repDepthLv: "Stufe {lv}: {name}", d_repDepthMore: "und {n} weitere",
         d_repPicks: "Oft gewählte Wörter (どっちが すき？)", d_repPicksNone: "Noch keine Daten. Auswahlentscheidungen in どっちが すき？ erscheinen hier.",
         d_timesCount: " ({n}-mal)",
         d_printClose: "✕ Vorschau schließen",
@@ -5223,6 +5457,12 @@
         openCustom: "Imposta le tue parole",
         photoTitle: "Cambiare l'immagine di una parola",
         photoNote: "Puoi sostituire l'immagine (emoji) delle parole nel gioco con una foto. Cerca una parola, sceglila e carica una foto; viene automaticamente ridotta e salvata in questo browser. La foto appare ovunque viene mostrata l'immagine di quella parola: il tabellone, il dizionario illustrato e ogni gioco. È inclusa nei backup. Puoi ripristinare l'emoji originale per ogni parola o per tutte le parole insieme. È un sistema separato dalle foto di うちの子の言葉.",
+        manageTitle: "Gestisci le parole raccolte",
+        manageNote: "In una pagina separata puoi eliminare, una alla volta, le parole raccolte per errore o le parole che un adulto ha raccolto durante una dimostrazione. L’eliminazione è possibile solo qui, nelle Impostazioni. Eliminando, vengono rimossi il registro di quella parola, il numero di volte giocate, il segno di preferito e l’adesivo, e diminuiscono anche i numeri nel dizionario illustrato e nel giardino di fiori. I timbri già ottenuti vengono conservati.",
+        openManage: "Gestisci le parole raccolte",
+        manageViewNote: "Questo è l’elenco delle parole raccolte nel dizionario illustrato per il profilo attualmente selezionato. Scegli le parole una alla volta per eliminare i loro registri. L’eliminazione riporta la parola a “non ancora raccolta”, e vengono rimossi anche la sua data di raccolta, il numero di volte giocate, il segno di preferito, l’adesivo e il suo registro di «Profondità degli incontri». Il numero nel dizionario illustrato, il rapporto per i genitori e il numero di fiori nel giardino diminuiscono di conseguenza. Vengono conservati i timbri già ottenuti, le foto impostate in “Cambia l’immagine di una parola” e le impostazioni di “Parole e categorie da nascondere”. I registri eliminati non possono essere ripristinati.",
+        manageSearchAria: "Cerca parole raccolte",
+        manageDeleteDo: "Elimina il registro",
         reportTitle: "Rapporto per i genitori",
         reportNote: "Riepilogo dai dati salvati in questo browser.",
         reportPrint: "🖨️ Stampa il rapporto", albumOpen: "Apri きろく (il registro)",
@@ -5280,6 +5520,11 @@
         d_customSummaryNone: "Nessuna parola registrata finora.",
         d_photoSummary: "Attualmente: {n} parola/e hanno una foto al posto dell'immagine.",
         d_photoSummaryNone: "Nessuna parola ha ancora ricevuto una foto.",
+        d_manageSummary: "Attualmente: {n} parola/e raccolta/e.", d_manageSummaryNone: "Nessuna parola raccolta finora.",
+        d_manageProfile: "Profilo: {name}", d_manageProfileNum: "Profilo: Profilo {n}",
+        d_manageDate: "Raccolta il: {date}", d_manageNoDate: "Nessuna data di raccolta registrata", d_manageTimes: "Volte giocate: ×{n}",
+        d_manageConfirm: "Eliminare “{name}” dai registri raccolti? Verranno rimossi anche la sua data di raccolta, il numero di volte giocate, il segno di preferito, l’adesivo e il suo registro di «Profondità degli incontri». I timbri già ottenuti vengono conservati. I registri eliminati non possono essere ripristinati.",
+        d_manageDeleted: "Il registro raccolto di “{name}” è stato eliminato.", d_manageMore: "Mostra altro (ancora {n})",
         d_scopeNow: "Attualmente: {n} parole sono incluse (il gioco contiene {total} parole in totale)",
         d_nightNow: "Visualizzazione attuale: {state}{auto}",
         d_nightDark: "🌙 Notte (scuro)", d_nightLight: "☀️ Giorno (chiaro)", d_nightAutoSuffix: " (automatico in base all'ora)",
@@ -5315,6 +5560,7 @@
         d_featNoteTanken: "Un gioco di esplorazione: raccogli le parole adatte a ogni scena. Le parole raccolte vanno nel ずかん.",
         d_featNoteMoji: "Due giochi con le lettere: indovinare la lettera mancante e trovare parole.",
         d_featNoteNarabe: "Un gioco in cui si mettono in ordine le lettere di una riga del 五十音. Quando una riga è completa, appare una carta con una parola che contiene una delle sue lettere, e quella parola va nello ずかん.",
+        d_featNoteNaani: "Un gioco in cui il bambino guarda una grande immagine e dice la parola ad alta voce. Non c'è una valutazione automatica: un adulto vicino preme il pulsante «L'ho detto», e la parola viene registrata come pronunciata nella sezione «Profondità degli incontri» del rapporto per i genitori. Si può giocare anche senza premerlo.",
         d_nzNoteCount: "Controlla se il carattere è scritto con lo stesso numero di tratti del modello. Un suggerimento viene mostrato quando un tratto viene diviso in due, o due tratti vengono scritti come uno solo.",
         d_nzNoteOrder: "Controlla se i tratti sono scritti nello stesso ordine del modello. Un suggerimento viene mostrato quando un tratto diverso viene scritto per primo.",
         d_nzNoteDir: "Controlla se la direzione di ogni tratto, dal suo inizio alla sua fine, corrisponde al modello. Un suggerimento viene mostrato quando un tratto viene scritto nella direzione opposta.",
@@ -5363,6 +5609,8 @@
         d_statWords: "{n} parole", d_repCats: "Categorie preferite", d_join: ", ", d_repNone: "Ancora nessun dato.",
         d_repRecent: "Parole raccolte di recente", d_repDatedNote: "Le date verranno conservate per le parole raccolte da ora in poi.",
         d_repSaid: "Parole dette per la prima volta (まねっこ)", d_repSaidNone: "Ancora nessun dato. Quando una parola verrà detta bene in まねっこ, apparirà qui.",
+        d_repDepth: "Profondità degli incontri (un riferimento)", d_repDepthNote: "Un riferimento approssimativo, dai registri di gioco, di quanto profondamente ogni parola è stata incontrata. Livello 1 «Incontrata» = raccolta nello ずかん. Livello 2 «Scelta giusta» = scelta correttamente al primo tentativo in un gioco di scelta. Livello 3 «Scelta sicura» = scelta correttamente al primo tentativo anche in un altro gioco o in un altro giorno. Livello 4 «Detta ad alta voce» = esiste una registrazione della parola detta ad alta voce. Questo non dimostra la comprensione. I registri dei giochi di scelta si accumulano dalle prossime partite.",
+        d_repDepth1: "Incontrata", d_repDepth2: "Scelta giusta", d_repDepth3: "Scelta sicura", d_repDepth4: "Detta ad alta voce", d_repDepthLv: "Livello {lv}: {name}", d_repDepthMore: "e altri {n}",
         d_repPicks: "Parole scelte spesso (どっちが すき？)", d_repPicksNone: "Ancora nessun dato. Le scelte in どっちが すき？ appariranno qui.",
         d_timesCount: " ({n} volte)",
         d_printClose: "✕ Chiudi anteprima",
@@ -5442,6 +5690,12 @@
         openCustom: "Atur kata Anda sendiri",
         photoTitle: "Mengganti gambar sebuah kata",
         photoNote: "Anda dapat mengganti gambar (emoji) kata-kata dalam permainan dengan foto. Cari sebuah kata, pilih, dan unggah foto; foto otomatis diperkecil dan disimpan di browser ini. Foto muncul di mana pun gambar kata itu ditampilkan: papan, kamus bergambar, dan setiap permainan. Foto disertakan dalam cadangan. Anda dapat memulihkan emoji asli untuk setiap kata, atau untuk semua kata sekaligus. Ini adalah sistem yang terpisah dari foto di うちの子の言葉.",
+        manageTitle: "Kelola kata yang dikumpulkan",
+        manageNote: "Di halaman terpisah, Anda dapat menghapus satu per satu kata yang terkumpul karena kekeliruan, atau kata yang dikumpulkan orang dewasa saat demonstrasi. Penghapusan hanya dapat dilakukan di sini, di Pengaturan. Saat dihapus, catatan pengumpulan kata itu, jumlah kali dimainkan, tanda favorit, dan stikernya akan hilang, dan jumlah di kamus bergambar serta taman bunga juga berkurang. Stempel yang sudah diperoleh tetap dipertahankan.",
+        openManage: "Kelola kata yang dikumpulkan",
+        manageViewNote: "Ini adalah daftar kata yang dikumpulkan di kamus bergambar untuk profil yang sedang dipilih. Pilih kata satu per satu untuk menghapus catatan pengumpulannya. Saat dihapus, kata kembali ke keadaan “belum dikumpulkan”, dan tanggal pengumpulan, jumlah kali dimainkan, tanda favorit, stiker, serta catatan “Kedalaman perjumpaan”-nya juga dihapus. Jumlah di kamus bergambar, laporan orang tua, dan jumlah bunga di taman bunga berkurang sebanyak itu. Stempel yang sudah diperoleh, foto yang diatur di “Ganti gambar kata”, dan pengaturan di “Kata & kategori yang disembunyikan” tetap dipertahankan. Catatan yang dihapus tidak dapat dipulihkan.",
+        manageSearchAria: "Cari kata yang dikumpulkan",
+        manageDeleteDo: "Hapus catatan",
         reportTitle: "Laporan orang tua",
         reportNote: "Diringkas dari catatan yang tersimpan di browser ini.",
         reportPrint: "🖨️ Cetak laporan", albumOpen: "Buka きろく (catatan)",
@@ -5499,6 +5753,11 @@
         d_customSummaryNone: "Belum ada kata yang terdaftar.",
         d_photoSummary: "Saat ini: {n} kata memiliki foto sebagai pengganti gambar.",
         d_photoSummaryNone: "Belum ada kata yang diberi foto.",
+        d_manageSummary: "Saat ini: {n} kata terkumpul.", d_manageSummaryNone: "Belum ada kata yang dikumpulkan.",
+        d_manageProfile: "Profil: {name}", d_manageProfileNum: "Profil: Profil {n}",
+        d_manageDate: "Tanggal dikumpulkan: {date}", d_manageNoDate: "Tidak ada catatan tanggal pengumpulan", d_manageTimes: "Kali dimainkan: ×{n}",
+        d_manageConfirm: "Hapus “{name}” dari catatan yang dikumpulkan? Tanggal pengumpulan, jumlah kali dimainkan, tanda favorit, stiker, dan catatan “Kedalaman perjumpaan”-nya juga akan dihapus. Stempel yang sudah diperoleh tetap dipertahankan. Catatan yang dihapus tidak dapat dipulihkan.",
+        d_manageDeleted: "Catatan terkumpul untuk “{name}” telah dihapus.", d_manageMore: "Tampilkan lebih banyak ({n} lagi)",
         d_scopeNow: "Saat ini: {n} kata termasuk dalam cakupan (permainan berisi total {total} kata)",
         d_nightNow: "Tampilan saat ini: {state}{auto}",
         d_nightDark: "🌙 Malam (gelap)", d_nightLight: "☀️ Siang (terang)", d_nightAutoSuffix: " (otomatis menurut waktu)",
@@ -5534,6 +5793,7 @@
         d_featNoteTanken: "Permainan penjelajahan: kumpulkan kata yang sesuai dengan tiap adegan. Kata yang dikumpulkan masuk ke ずかん.",
         d_featNoteMoji: "Dua permainan huruf: menebak huruf yang hilang, dan mencari kata.",
         d_featNoteNarabe: "Permainan menyusun huruf-huruf dalam satu baris 五十音 sesuai urutan. Saat satu baris lengkap, muncul kartu kata yang mengandung salah satu huruf dari baris itu, dan kata itu terkumpul di ずかん.",
+        d_featNoteNaani: "Permainan di mana anak melihat gambar besar dan mengucapkan kata itu dengan suara keras. Tidak ada penilaian otomatis: orang dewasa di dekatnya menekan tombol “Sudah bisa mengucapkan”, dan kata itu tercatat sebagai telah diucapkan pada bagian “Kedalaman perjumpaan” di laporan orang tua. Tanpa menekan pun tetap bisa bermain.",
         d_nzNoteCount: "Memeriksa apakah karakter ditulis dengan jumlah goresan yang sama seperti contoh. Panduan ditampilkan saat satu goresan dibagi menjadi dua, atau dua goresan ditulis sebagai satu.",
         d_nzNoteOrder: "Memeriksa apakah goresan ditulis dalam urutan yang sama seperti contoh. Panduan ditampilkan saat goresan yang berbeda ditulis terlebih dahulu.",
         d_nzNoteDir: "Memeriksa apakah arah setiap goresan, dari awal hingga akhir, sesuai dengan contoh. Panduan ditampilkan saat goresan ditulis dalam arah berlawanan.",
@@ -5582,6 +5842,8 @@
         d_statWords: "{n} kata", d_repCats: "Kategori favorit", d_join: ", ", d_repNone: "Belum ada catatan.",
         d_repRecent: "Kata yang baru terkumpul (terbaru)", d_repDatedNote: "Catatan tanggal akan disimpan untuk kata yang terkumpul mulai sekarang.",
         d_repSaid: "Kata yang diucapkan untuk pertama kali (まねっこ)", d_repSaidNone: "Belum ada catatan. Saat sebuah kata diucapkan dengan baik di まねっこ, kata itu akan muncul di sini.",
+        d_repDepth: "Kedalaman perjumpaan (perkiraan)", d_repDepthNote: "Perkiraan kasar dari catatan permainan tentang seberapa dalam setiap kata telah dijumpai. Tingkat 1 “Dijumpai” = terkumpul di ずかん. Tingkat 2 “Dipilih dengan benar” = dipilih dengan benar pada percobaan pertama dalam permainan memilih. Tingkat 3 “Dipilih dengan mantap” = juga dipilih dengan benar pada percobaan pertama dalam permainan lain atau di hari lain. Tingkat 4 “Diucapkan” = ada catatan pernah mengucapkan kata itu. Ini tidak memastikan pemahaman. Catatan permainan memilih akan terkumpul mulai dari permainan berikutnya.",
+        d_repDepth1: "Dijumpai", d_repDepth2: "Dipilih dengan benar", d_repDepth3: "Dipilih dengan mantap", d_repDepth4: "Diucapkan", d_repDepthLv: "Tingkat {lv}: {name}", d_repDepthMore: "dan {n} lagi",
         d_repPicks: "Kata yang sering dipilih (どっちが すき？)", d_repPicksNone: "Belum ada catatan. Pilihan di どっちが すき？ akan muncul di sini.",
         d_timesCount: " ({n} kali)",
         d_printClose: "✕ Tutup pratinjau",
@@ -5645,6 +5907,9 @@
         customTitle: "うちの<ruby>子<rt>こ</rt></ruby>の <ruby>言葉<rt>ことば</rt></ruby>",
         openCustom: "うちの<ruby>子<rt>こ</rt></ruby>の <ruby>言葉<rt>ことば</rt></ruby>を <ruby>設定<rt>せってい</rt></ruby>する",
         photoTitle: "<ruby>言葉<rt>ことば</rt></ruby>の <ruby>絵<rt>え</rt></ruby>を <ruby>変<rt>か</rt></ruby>える",
+        manageTitle: "あつめた <ruby>言葉<rt>ことば</rt></ruby>の <ruby>管理<rt>かんり</rt></ruby>",
+        openManage: "あつめた <ruby>言葉<rt>ことば</rt></ruby>を <ruby>管理<rt>かんり</rt></ruby>する",
+        manageDeleteDo: "<ruby>記録<rt>きろく</rt></ruby>を けす",
         reportTitle: "<ruby>保護者<rt>ほごしゃ</rt></ruby>レポート",
         reportPrint: "🖨️ レポートを <ruby>印刷<rt>いんさつ</rt></ruby>",
         albumOpen: "きろくを <ruby>開<rt>ひら</rt></ruby>く",
@@ -5744,6 +6009,7 @@
           if (typeof renderCustomUI === "function") renderCustomUI();
           if (typeof renderExcludeUI === "function") renderExcludeUI();
           if (typeof renderPhotoUI === "function") renderPhotoUI();
+          if (typeof renderManageUI === "function") renderManageUI();
         }
       }
       document.addEventListener("DOMContentLoaded", function () {
@@ -7235,6 +7501,109 @@
         }
         ensurePlayCounts();
       }
+      /* ===== 「であいの深さ」の内部信号（プロフィールごと・言葉ごと） =====
+         子どもの画面には一切出さない、大人向けの目安（保護者レポートの
+         「であいの深さ」）のためだけの記録。失敗・評価として見せることはしない。
+         形: 番号 → { c: 選ぶ遊びで「最初に選んで正解」だった回数,
+                      g: { 遊びキー: その遊びで最初に正解した回数 },
+                      d: { "年-月-日": 1 }（最初に正解した日の集合）,
+                      a: { 遊びキー: 1 }（その言葉と出会った遊びの種類）,
+                      s: 1（「なあに？」で大人が「いえたね」を押した） }
+         まねっこの成功は既存の saidFirst（はじめて言えた）が担うので、ここには持たない。
+         保存・バックアップの対象（packCurrentProfile の depth）。
+         記録の無い言葉は「信号なし」として扱い、段階は分かる範囲からだけ付ける
+         （過去分を遡って作ることはしない）。 */
+      var depthSig = {};
+      var DEPTH_GAME_KEYS = { quiz: 1, oto: 1, anaume: 1, antonym: 1, shiritori: 1, naani: 1, moji: 1, nazori: 1, tanken: 1, rensou: 1 };
+      function depthTodayKey() {
+        var d = new Date();
+        return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      }
+      function depthSigOf(id) {
+        var s = depthSig[id];
+        return (s && typeof s === "object" && !Array.isArray(s)) ? s : null;
+      }
+      /* その言葉と、その遊びで出会ったことを記録する（種類数の材料） */
+      function noteDepthGame(id, gameKey) {
+        if (!isValidId(id) || !DEPTH_GAME_KEYS[gameKey]) return;
+        var s = depthSigOf(id);
+        if (!s) { s = {}; depthSig[id] = s; }
+        if (!s.a || typeof s.a !== "object") s.a = {};
+        if (!s.a[gameKey]) { s.a[gameKey] = 1; saveState(); }
+      }
+      /* 選ぶ系の遊びで、その言葉が出題されたときの「最初の選択」を記録する。
+         子ども向けの表示・音声・ほめ方は従来どおりで、ここは裏側の記録だけ */
+      function noteFirstPick(id, gameKey, correct) {
+        if (!isValidId(id) || !DEPTH_GAME_KEYS[gameKey]) return;
+        noteDepthGame(id, gameKey);
+        if (!correct) return;
+        var s = depthSigOf(id);
+        if (!s) { s = {}; depthSig[id] = s; }
+        s.c = (typeof s.c === "number" && isFinite(s.c) && s.c > 0 ? Math.floor(s.c) : 0) + 1;
+        if (!s.g || typeof s.g !== "object") s.g = {};
+        s.g[gameKey] = (typeof s.g[gameKey] === "number" && s.g[gameKey] > 0 ? Math.floor(s.g[gameKey]) : 0) + 1;
+        if (!s.d || typeof s.d !== "object") s.d = {};
+        s.d[depthTodayKey()] = 1;
+        saveState();
+      }
+      /* 「なあに？」で、大人が「いえたね」を押したことを記録する */
+      function noteDepthSaid(id) {
+        if (!isValidId(id)) return;
+        var s = depthSigOf(id);
+        if (!s) { s = {}; depthSig[id] = s; }
+        s.s = 1;
+        noteDepthGame(id, "naani");
+        saveState();
+      }
+      /* であいの深さの段階（0=まだ集めていない）:
+         1 であった … ずかんに集めた
+         2 えらべた … 選ぶ遊びで最初に正しく選べたことがある
+         3 しっかり えらべた … 別の遊び、または別の日にも最初に正しく選べた
+         4 こえに だせた … 声に出して言えた記録がある（まねっこの saidFirst、
+            または「なあに？」での大人の確認） */
+      function depthLevelOf(id) {
+        if (!collectedSet[id]) return 0;
+        var lv = 1;
+        var s = depthSigOf(id);
+        if (s && typeof s.c === "number" && s.c > 0) {
+          lv = 2;
+          var gN = (s.g && typeof s.g === "object") ? Object.keys(s.g).length : 0;
+          var dN = (s.d && typeof s.d === "object") ? Object.keys(s.d).length : 0;
+          if (gN >= 2 || dN >= 2) lv = 3;
+        }
+        if (saidFirst[id] || (s && s.s)) lv = 4;
+        return lv;
+      }
+      /* 保存・プロフィール読み込み用: 形の正しい信号だけ復元する */
+      function restoreDepthSig(src) {
+        depthSig = {};
+        if (!src || typeof src !== "object" || Array.isArray(src)) return;
+        Object.keys(src).forEach(function (k) {
+          var id = Number(k), v = src[k];
+          if (!isValidId(id) || !v || typeof v !== "object" || Array.isArray(v)) return;
+          var s = {};
+          if (typeof v.c === "number" && isFinite(v.c) && v.c > 0) s.c = Math.floor(v.c);
+          if (v.g && typeof v.g === "object" && !Array.isArray(v.g)) {
+            var g = {};
+            Object.keys(v.g).forEach(function (gk) {
+              if (DEPTH_GAME_KEYS[gk] && typeof v.g[gk] === "number" && v.g[gk] > 0) g[gk] = Math.floor(v.g[gk]);
+            });
+            if (Object.keys(g).length) s.g = g;
+          }
+          if (v.d && typeof v.d === "object" && !Array.isArray(v.d)) {
+            var dd = {};
+            Object.keys(v.d).forEach(function (dk) { if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dk) && v.d[dk]) dd[dk] = 1; });
+            if (Object.keys(dd).length) s.d = dd;
+          }
+          if (v.a && typeof v.a === "object" && !Array.isArray(v.a)) {
+            var aa = {};
+            Object.keys(v.a).forEach(function (gk) { if (DEPTH_GAME_KEYS[gk] && v.a[gk]) aa[gk] = 1; });
+            if (Object.keys(aa).length) s.a = aa;
+          }
+          if (v.s) s.s = 1;
+          if (Object.keys(s).length) depthSig[id] = s;
+        });
+      }
       var customWords = [];           /* 大人が登録した「うちの子の言葉」: {h, d, e, cat, img?} の配列 */
       var wordPhotos = {};            /* 収録語の絵の写真差し替え: 言葉ごとのキー（wordKeyOf）→ 圧縮済み写真データ(dataURL)。「うちの子の言葉」の写真（customWords[].img）とは別の仕組み。共通設定として保存され、バックアップにも含まれる（buildSaveData の settings.wordPhotos） */
       var BUILTIN_TOTAL = TOTAL;      /* 収録語（カスタム語を足す前）の総数。差し替えの対象は先頭 BUILTIN_TOTAL 語だけ */
@@ -7301,8 +7670,8 @@
          本人の意思でない「オフ」が残っていることがある。そのため、大人が
          バッジを明示的に切り替えた記録（firstBadgeChoice）が無い保存データでは、
          保存値にかかわらずオンとして扱い直す（下の v2 復元部を参照）。 */
-      var FEATURE_SIMPLE = { rensou: 1, mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 1, nazori: 1, oto: 1, tanken: 0, moji: 1, narabe: 1 };
-      var FEATURE_FULL = { rensou: 1, mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1, nazori: 1, oto: 1, tanken: 1, moji: 1, narabe: 1 };
+      var FEATURE_SIMPLE = { rensou: 1, mission: 0, quiz: 0, sentence: 0, map: 0, today: 0, mimic: 0, bedtime: 0, desc: 0, review: 0, firstBadge: 1, favSticker: 0, star: 0, print: 0, garden: 0, english: 0, story: 0, pick: 0, kazu: 0, course: 0, antonym: 0, clap: 0, favboard: 0, clock: 0, shiritori: 1, nazori: 1, oto: 1, tanken: 0, moji: 1, narabe: 1, naani: 0 };
+      var FEATURE_FULL = { rensou: 1, mission: 1, quiz: 1, sentence: 1, map: 1, today: 1, mimic: 1, bedtime: 1, desc: 1, review: 1, firstBadge: 1, favSticker: 1, star: 1, print: 1, garden: 1, english: 1, story: 1, pick: 1, kazu: 1, course: 1, antonym: 1, clap: 1, favboard: 1, clock: 1, shiritori: 1, nazori: 1, oto: 1, tanken: 1, moji: 1, narabe: 1, naani: 1 };
       /* デフォルト（初期状態・「デフォルトに戻す」の戻し先）: FEATURE_SIMPLE が
          そのままそれにあたる。ホームに並ぶ遊びで初期オンなのは、れんそう・
          しりとり・もじあそび・ごじゅうおん ならべ・おととことば・なぞりがき の6つだけ。
@@ -7317,7 +7686,10 @@
          そのまま出る。既存ユーザーの保存済みの個別設定は初期化しない。
          五十音ならべ（narabe）も、v3.1 で もじあそびから独立させた追加項目で、
          古い保存データには値が無い。その場合は初期値（オン）のままになる。
-         もじあそび側の保存値はそのまま尊重し、壊さない。 */
+         もじあそび側の保存値はそのまま尊重し、壊さない。
+         なあに？（naani）も後から追加した項目で、初期値はオフ（ホームに並ぶ
+         遊びの初期オン6種には含めない）。古い保存データに項目が無ければ、
+         初期値どおりオフのままになる。 */
       var FEATURE_DEFAULT = FEATURE_SIMPLE;
       var firstBadgeChoiceSaved = false;   /* 大人が初めてバッジを明示的に切り替えたことがあるか（保存に残す） */
       var features = {};
@@ -7380,6 +7752,7 @@
         loadedSave.stickers = migrateIdMap(loadedSave.stickers);
         loadedSave.collectedDates = migrateIdMap(loadedSave.collectedDates);
         loadedSave.playCounts = migrateIdMap(loadedSave.playCounts);
+        loadedSave.depth = migrateIdMap(loadedSave.depth);
         loadedSave.todayFound = migrateIdMap(loadedSave.todayFound);
         loadedSave.missionSeen = migrateIdMap(loadedSave.missionSeen);
         if (Array.isArray(loadedSave.customWords)) {
@@ -7503,7 +7876,8 @@
           playDays: (typeof playDays !== "undefined" && playDays) ? playDays : {},
           achv: (typeof achv !== "undefined" && achv) ? achv : { nz: [], hp: [] },
           picks: (typeof favPicks !== "undefined" && favPicks) ? favPicks : {},
-          playCounts: (typeof playCounts !== "undefined" && playCounts) ? playCounts : {}
+          playCounts: (typeof playCounts !== "undefined" && playCounts) ? playCounts : {},
+          depth: (typeof depthSig !== "undefined" && depthSig) ? depthSig : {}
         };
       }
       function buildSaveData() {
@@ -8029,6 +8403,7 @@
       var adultCustomView = document.getElementById("adultCustomView");
       var adultExcludeView = document.getElementById("adultExcludeView");
       var adultPhotoView = document.getElementById("adultPhotoView");
+      var adultManageView = document.getElementById("adultManageView");
       function updateAdultSummaries() {
         var fs = document.getElementById("featureSummary");
         if (fs) {
@@ -8040,6 +8415,8 @@
         if (cs) cs.textContent = customWords.length ? ST("d_customSummary", { n: customWords.length }) : ST("d_customSummaryNone");
         var ps = document.getElementById("photoSummary");
         if (ps) { var pn = Object.keys(wordPhotos).length; ps.textContent = pn ? ST("d_photoSummary", { n: pn }) : ST("d_photoSummaryNone"); }
+        var ms = document.getElementById("manageSummary");
+        if (ms) ms.textContent = collected.length ? ST("d_manageSummary", { n: fmt(collected.length) }) : ST("d_manageSummaryNone");
         if (typeof updateExcludeSummary === "function") updateExcludeSummary();
       }
       function showAdultView(name) {
@@ -8048,10 +8425,12 @@
         if (adultCustomView) adultCustomView.hidden = name !== "custom";
         if (adultExcludeView) adultExcludeView.hidden = name !== "exclude";
         if (adultPhotoView) adultPhotoView.hidden = name !== "photo";
+        if (adultManageView) adultManageView.hidden = name !== "manage";
         if (name === "feature" && typeof renderFeatureToggles === "function") renderFeatureToggles();
         if (name === "custom" && typeof renderCustomUI === "function") renderCustomUI();
         if (name === "exclude" && typeof renderExcludeUI === "function") renderExcludeUI();
         if (name === "photo" && typeof renderPhotoUI === "function") renderPhotoUI();
+        if (name === "manage") { if (typeof resetManageConfirm === "function") resetManageConfirm(); if (typeof renderManageUI === "function") renderManageUI(); }
         if (name === "main") updateAdultSummaries();
         adultPanel.scrollTop = 0;
       }
@@ -8071,6 +8450,10 @@
       if (openPhotoPageBtn) openPhotoPageBtn.addEventListener("click", function () { showAdultView("photo"); });
       var backFromPhotoBtn = document.getElementById("backFromPhoto");
       if (backFromPhotoBtn) backFromPhotoBtn.addEventListener("click", function () { showAdultView("main"); });
+      var openManagePageBtn = document.getElementById("openManagePage");
+      if (openManagePageBtn) openManagePageBtn.addEventListener("click", function () { showAdultView("manage"); });
+      var backFromManageBtn = document.getElementById("backFromManage");
+      if (backFromManageBtn) backFromManageBtn.addEventListener("click", function () { showAdultView("main"); });
       document.getElementById("adultBtn").addEventListener("click", function () { showAdultView("main"); });
       document.getElementById("adultClose").addEventListener("click", function () { showAdultView("main"); });
       updateAdultSummaries();
@@ -8778,6 +9161,7 @@
       var quizMode = false;
       var quizTarget = null;
       var quizLock = false;
+      var quizTried = false;   /* この問題で「最初の選択」を内部記録済みか（であいの深さ用。子どもには見せない） */
       var quizBtn = document.getElementById("quizBtn");
       var quizBar = document.getElementById("quizBar");
       var quizTxt = document.getElementById("quizTxt");
@@ -8824,9 +9208,18 @@
         if (!pool.length) { quizTarget = null; quizMsgEl.textContent = "ことばが みつからなかったよ。"; return; }
         var qpool = pool.map(function (id) { return { id: id, w: levelWeight(LEVEL[id]) }; });
         quizTarget = weightedPick(qpool, Math.random);
-        var others = shuffleArr(pool.filter(function (id) { return id !== quizTarget; })).slice(0, 3);
+        /* 一部の回（およそ半分弱）は、同じ分野の似た絵を選択肢に混ぜる。絵の手がかりは
+           残したまま、聞き分けの深さを見るため。同じ分野の言葉が3つ以上ないときは
+           通常の配り方にする */
+        var others = null;
+        if (Math.random() < 0.45) {
+          var sameCat = shuffleArr(pool.filter(function (id) { return id !== quizTarget && WORDS[id].c === WORDS[quizTarget].c; }));
+          if (sameCat.length >= 3) others = sameCat.slice(0, 3);
+        }
+        if (!others) others = shuffleArr(pool.filter(function (id) { return id !== quizTarget; })).slice(0, 3);
         shuffleArr([quizTarget].concat(others)).forEach(function (id) { quizCardsEl.appendChild(quizCardEl(id)); });
         quizLock = false;
+        quizTried = false;
         setTimeout(function () { if (quizMode) speakQuiz(); }, 350);
       }
       function pickQuiz() { if (quizMode) dealQuiz(); }
@@ -8859,6 +9252,8 @@
       function handleQuizTap(id, el) {
         if (!quizMode || quizLock) return;
         if (quizTarget == null) { dealQuiz(); return; }
+        /* 最初の選択だけを内部信号に記録する（表示・音声・ほめ方は従来どおり変えない） */
+        if (!quizTried) { quizTried = true; noteFirstPick(quizTarget, "quiz", id === quizTarget); }
         if (id === quizTarget) {
           quizLock = true;
           if (el) el.classList.add("good");
@@ -8884,6 +9279,82 @@
       document.getElementById("quizHomeBtn").addEventListener("click", function () { setQuiz(false); });
       document.getElementById("quizHearBtn").addEventListener("click", speakQuiz);
       document.getElementById("quizNextBtn").addEventListener("click", function () { if (quizMode) dealQuiz(); });
+
+      /* ===== なあに？（絵を見て言葉を声に出す産出型の遊び） =====
+         大きな絵カードを1枚出し、「これは なあに？」と読み上げて、子どもが
+         声に出すのを促す。お題の言葉そのものは読み上げない（言えるかの手がかりに
+         ならないようにするため）。判定は自動音声認識に頼らない: そばで聞いている
+         大人が下の小さい「いえたね」ボタンを押したら、その言葉に「こえに だせた」の
+         内部信号を付ける（保護者レポート「であいの深さ」段階4の材料。子どもの画面に
+         評価は出さない）。押さなくても「つぎの ことば」で進められ、遊びはほめる
+         だけで成立する。出題は今の語彙数範囲からで、遊んだ言葉は従来どおり
+         図鑑に集める（カードを出し終えるとき＝次へ進む／いえたねを押すときに登録）。 */
+      var naaniEl = document.getElementById("naaniEl");
+      var naaniId = null;
+      var naaniCounted = false;   /* 今のカードの言葉を図鑑に集め済みか */
+      var naaniSaidDone = false;  /* 今のカードで「いえたね」を押し済みか */
+      function naaniDeal() {
+        var pool = scopeList();
+        var card = document.getElementById("naaniCard");
+        var msg = document.getElementById("naaniMsg");
+        card.innerHTML = "";
+        msg.textContent = "";
+        document.getElementById("naaniSaidBtn").classList.remove("done");
+        naaniCounted = false;
+        naaniSaidDone = false;
+        if (!pool.length) { naaniId = null; msg.textContent = "ことばが みつからなかったよ。"; return; }
+        var qpool = pool.map(function (id) { return { id: id, w: levelWeight(LEVEL[id]) }; });
+        var next = weightedPick(qpool, Math.random);
+        if (next === naaniId && pool.length > 1) next = weightedPick(qpool, Math.random);
+        naaniId = next;
+        var w = WORDS[naaniId];
+        if (w.img) {
+          var im = document.createElement("img");
+          im.className = "naani-img"; im.src = w.img; im.alt = "";
+          card.appendChild(im);
+        } else {
+          var em = document.createElement("span");
+          em.className = "naani-em"; em.textContent = w.e;
+          card.appendChild(em);
+        }
+        noteDepthGame(naaniId, "naani");   /* 出会った遊びの種類（内部信号） */
+        setTimeout(function () { if (!naaniEl.hidden) speak("これは なあに？"); }, 350);
+      }
+      /* カードの言葉を図鑑に集める（1枚につき1回だけ。他の遊びと同じ記録の付け方） */
+      function naaniCollect() {
+        if (naaniId == null || naaniCounted) return;
+        naaniCounted = true;
+        shiriCollect(naaniId);
+      }
+      document.getElementById("naaniBtn").addEventListener("click", function () {
+        naaniId = null;
+        naaniDeal();
+        naaniEl.hidden = false;
+        naaniEl.scrollTop = 0;
+      });
+      document.getElementById("naaniHomeBtn").addEventListener("click", function () { naaniEl.hidden = true; });
+      document.getElementById("naaniNextBtn").addEventListener("click", function () {
+        naaniCollect();   /* 遊んだ言葉は図鑑に集まる */
+        naaniDeal();
+      });
+      document.getElementById("naaniSaidBtn").addEventListener("click", function () {
+        if (naaniId == null || naaniSaidDone) return;
+        naaniSaidDone = true;
+        this.classList.add("done");
+        noteDepthSaid(naaniId);   /* 「こえに だせた」の内部信号（大人だけが知る記録） */
+        naaniCollect();
+        var w = WORDS[naaniId];
+        /* 言えた確認として、ここで初めて言葉の文字を見せて読み上げる */
+        var card = document.getElementById("naaniCard");
+        var wd = document.createElement("div");
+        wd.className = "naani-word";
+        setWordHTML(wd, w);
+        card.appendChild(wd);
+        document.getElementById("naaniMsg").textContent = "じょうずに いえたね！";
+        celebrate("じょうず！", "🗣️");
+        sfx("good");
+        speak("じょうず！ " + w.h + "だね！");
+      });
 
       /* ===== おきにいり・シール（ずかんで使う） ===== */
       var favSet = {};
@@ -9582,7 +10053,7 @@
         collected.forEach(function (id) { collectedSet[id] = 1; });
         backStack = backStack.filter(function (id) { return allCustomIds.indexOf(id) < 0; });
         allCustomIds.forEach(function (id) {
-          delete seenOnBoard[id]; delete favSet[id]; delete stickerMap[id]; delete collectedDates[id]; delete todayFound[id]; delete saidFirst[id]; delete playCounts[id];
+          delete seenOnBoard[id]; delete favSet[id]; delete stickerMap[id]; delete collectedDates[id]; delete todayFound[id]; delete saidFirst[id]; delete playCounts[id]; delete depthSig[id];
         });
         if (allCustomIds.indexOf(centerId) >= 0) {
           centerId = IDX["いぬ"] != null ? IDX["いぬ"] : 0;
@@ -10003,6 +10474,51 @@
           });
           el.appendChild(ylist);
         }
+        /* であいの深さ（内部信号からの目安。大人向けのこのレポートの中だけに出し、
+           子どもの画面には一切出さない。段階は depthLevelOf で都度算出する） */
+        var h6 = document.createElement("p");
+        h6.className = "report-h";
+        h6.textContent = ST("d_repDepth");
+        el.appendChild(h6);
+        var dnote = document.createElement("p");
+        dnote.className = "report-line";
+        dnote.textContent = ST("d_repDepthNote");
+        el.appendChild(dnote);
+        var byLevel = { 1: [], 2: [], 3: [], 4: [] };
+        collected.forEach(function (id) {
+          if (!inScope(id)) return;
+          byLevel[depthLevelOf(id)].push(id);
+        });
+        [1, 2, 3, 4].forEach(function (lv) {
+          var ids = byLevel[lv];
+          var lh = document.createElement("p");
+          lh.className = "report-h";
+          lh.textContent = ST("d_repDepthLv", { lv: lv, name: ST("d_repDepth" + lv) }) + ST("d_catCount", { n: ids.length });
+          el.appendChild(lh);
+          if (!ids.length) {
+            var ln = document.createElement("p");
+            ln.className = "report-line";
+            ln.textContent = ST("d_repNone");
+            el.appendChild(ln);
+            return;
+          }
+          var dlist = document.createElement("div");
+          dlist.className = "report-list";
+          ids.slice(0, 12).forEach(function (id) {
+            var w = WORDS[id];
+            var chip = document.createElement("span");
+            chip.className = "report-chip";
+            fillReportChip(chip, w, (mode === "hira" ? w.h : w.d));
+            dlist.appendChild(chip);
+          });
+          el.appendChild(dlist);
+          if (ids.length > 12) {
+            var more = document.createElement("p");
+            more.className = "report-line";
+            more.textContent = ST("d_repDepthMore", { n: ids.length - 12 });
+            el.appendChild(more);
+          }
+        });
       }
       document.getElementById("adultBtn").addEventListener("click", function () {
         renderCustomUI();
@@ -11024,36 +11540,372 @@
         refreshPhotoEverywhere();
       });
 
+      /* ===== 集めた言葉の管理（大人用設定のサブページ） =====
+         今選んでいるプロフィールが図鑑に集めた言葉を、大人が1語ずつ確認して
+         消せる。入口は設定の中だけに置き、ずかん本体や子供の画面からは消せない。
+         削除は「消す」ボタン→確認（2段階）を経て実行し、一括削除は付けない。
+         消えるのは収集に付随する記録だけ: collected / collectedSet（集めた記録）、
+         collectedDates（集めた日）、playCounts（あそんだ回数）、favSet（お気に入り）、
+         stickerMap（シール）、saidFirst（はじめて言えた）、depthSig（であいの深さの
+         内部信号）、todayFound、seenOnBoard。
+         残るもの: もらったスタンプ（stampLog は既存仕様どおり一度もらったら消えない）、
+         言葉自体の設定である写真の差し替え（wordPhotos）と除外設定（exclCats/exclWords）。
+         ずかんの集計・保護者レポート・おはなばたけ（花の数と成長段階）は集めた数から
+         都度数える作りなので、保存すれば自動で追随する（花の数は減りうる）。
+         保存は既存の buildSaveData / saveState のまま（形式変更なし・バックアップ対象）。 */
+      var manageSearchInput = document.getElementById("manageSearch");
+      var manageListEl = document.getElementById("manageList");
+      var manageProfileEl = document.getElementById("manageProfileLine");
+      var manageCountEl = document.getElementById("manageCountLine");
+      var manageConfirmEl = document.getElementById("manageConfirm");
+      var manageConfirmTextEl = document.getElementById("manageConfirmText");
+      var manageMsgEl = document.getElementById("manageMsg");
+      var manageDeleteId = null;   /* 確認中の言葉の番号 */
+      var manageShowMax = 100;     /* 一覧の表示上限（「もっと見る」で100ずつ増やす） */
+      var manageQuery = "";        /* 読み・表示での検索文字列 */
+
+      function resetManageConfirm() {
+        manageDeleteId = null;
+        if (manageConfirmEl) manageConfirmEl.hidden = true;
+        if (manageMsgEl) manageMsgEl.textContent = "";
+      }
+      function manageFilteredIds() {
+        var q = manageQuery.trim();
+        var ids = collected.slice().reverse();   /* 新しく集めた順に並べる */
+        if (!q) return ids;
+        return ids.filter(function (id) {
+          var w = WORDS[id];
+          return w && (w.h.indexOf(q) >= 0 || w.d.indexOf(q) >= 0);
+        });
+      }
+      function renderManageUI() {
+        if (!manageListEl) return;
+        /* 対象は今選んでいるプロフィールだけであることを明示する */
+        if (manageProfileEl) {
+          var pname = (profileNames[activeProfile] || "").trim();
+          manageProfileEl.textContent = pname
+            ? ST("d_manageProfile", { name: pname })
+            : ST("d_manageProfileNum", { n: activeProfile + 1 });
+        }
+        if (manageCountEl) {
+          manageCountEl.textContent = collected.length
+            ? ST("d_manageSummary", { n: fmt(collected.length) })
+            : ST("d_manageSummaryNone");
+        }
+        /* 確認中の言葉がすでに消えていたら、確認欄を閉じる */
+        if (manageDeleteId != null && !collectedSet[manageDeleteId]) {
+          manageDeleteId = null;
+          if (manageConfirmEl) manageConfirmEl.hidden = true;
+        }
+        manageListEl.innerHTML = "";
+        if (!collected.length) {
+          var none = document.createElement("p");
+          none.className = "adult-note";
+          none.textContent = ST("d_manageSummaryNone");
+          manageListEl.appendChild(none);
+          return;
+        }
+        var ids = manageFilteredIds();
+        if (!ids.length) {
+          var nf = document.createElement("p");
+          nf.className = "adult-note";
+          nf.textContent = ST("d_notFound");
+          manageListEl.appendChild(nf);
+          return;
+        }
+        var show = ids.slice(0, manageShowMax);
+        show.forEach(function (id) { manageListEl.appendChild(manageRow(id)); });
+        if (ids.length > show.length) {
+          var more = document.createElement("button");
+          more.type = "button";
+          more.className = "morebtn";
+          more.textContent = ST("d_manageMore", { n: fmt(ids.length - show.length) });
+          more.addEventListener("click", function () { manageShowMax += 100; renderManageUI(); });
+          manageListEl.appendChild(more);
+        }
+      }
+      function manageRow(id) {
+        var w = WORDS[id];
+        var row = document.createElement("div");
+        row.className = "custom-item";
+        var em;
+        if (w.img) { em = document.createElement("img"); em.className = "photo-thumb"; em.src = w.img; em.alt = ""; }
+        else { em = document.createElement("span"); em.className = "em"; em.textContent = w.e; }
+        var main = document.createElement("div");
+        main.className = "manage-main";
+        var tx = document.createElement("span");
+        tx.textContent = photoNameLabel(w);   /* 同音異義語は「言葉の絵を変える」と同じく漢字形を併記して区別する */
+        var meta = document.createElement("span");
+        meta.className = "manage-meta";
+        var parts = [];
+        if (CATS[w.c]) parts.push(CATS[w.c]);
+        var dk = collectedDates[id];
+        parts.push(dk ? ST("d_manageDate", { date: fmtDateStr(dk) }) : ST("d_manageNoDate"));
+        parts.push(ST("d_manageTimes", { n: fmt(playCountOf(id)) }));
+        if (typeof favSet !== "undefined" && favSet && favSet[id]) parts.push("⭐ おきにいり");
+        if (typeof stickerMap !== "undefined" && stickerMap && stickerMap[id]) parts.push(stickerMap[id]);
+        meta.textContent = parts.join("　");
+        main.appendChild(tx); main.appendChild(meta);
+        var del = document.createElement("button");
+        del.type = "button"; del.className = "custom-del"; del.textContent = ST("d_delete");
+        del.setAttribute("aria-label", ST("d_deleteAria", { name: photoNameLabel(w) }));
+        del.addEventListener("click", function () { askDeleteCollected(id); });
+        row.appendChild(em); row.appendChild(main); row.appendChild(del);
+        return row;
+      }
+      function askDeleteCollected(id) {
+        if (!collectedSet[id]) return;
+        manageDeleteId = id;
+        if (manageMsgEl) manageMsgEl.textContent = "";
+        if (manageConfirmTextEl) manageConfirmTextEl.textContent = ST("d_manageConfirm", { name: photoNameLabel(WORDS[id]) });
+        if (manageConfirmEl) {
+          manageConfirmEl.hidden = false;
+          if (manageConfirmEl.scrollIntoView) { try { manageConfirmEl.scrollIntoView({ block: "nearest" }); } catch (eSivM) { /* スクロールできない環境ではそのまま */ } }
+        }
+      }
+      function deleteCollectedWord(id) {
+        if (!collectedSet[id]) return;
+        var name = photoNameLabel(WORDS[id]);
+        collected = collected.filter(function (x) { return x !== id; });
+        delete collectedSet[id];
+        delete collectedDates[id];
+        delete playCounts[id];
+        if (typeof favSet !== "undefined" && favSet) delete favSet[id];
+        if (typeof stickerMap !== "undefined" && stickerMap) delete stickerMap[id];
+        delete saidFirst[id];
+        delete depthSig[id];   /* であいの深さの内部信号も一緒に消す（残すと段階だけ残ってしまう） */
+        delete todayFound[id];
+        delete seenOnBoard[id];
+        if (typeof missionSeen !== "undefined" && missionSeen) delete missionSeen[id];
+        backStack = backStack.filter(function (x) { return x !== id; });
+        if (centerId === id) {
+          /* 盤面の中心は必ず集めた言葉である決まりを保つため、中心だった言葉を
+             消したときは「うちの子の言葉」削除の先例と同じく いぬ を中心にし直す */
+          var nid = (IDX["いぬ"] != null && WORDS[IDX["いぬ"]]) ? IDX["いぬ"] : (collected.length ? collected[0] : 0);
+          centerId = nid;
+          if (!collectedSet[nid]) { collectedSet[nid] = 1; collected.push(nid); }
+          backStack = [];
+        }
+        refreshKnownComplete();   /* 達成状態は静かに覚え直す（お祝いは出さない）。スタンプには触れない */
+        saveState();
+        render();
+        if (typeof renderZukan === "function" && typeof zukanEl !== "undefined" && zukanEl && !zukanEl.hidden) renderZukan();
+        if (typeof renderReport === "function") renderReport();
+        if (typeof renderGarden === "function" && typeof gardenEl !== "undefined" && gardenEl && !gardenEl.hidden) renderGarden();
+        if (typeof renderMap === "function" && typeof mapEl !== "undefined" && mapEl && !mapEl.hidden) renderMap();
+        updateAdultSummaries();
+        manageDeleteId = null;
+        if (manageConfirmEl) manageConfirmEl.hidden = true;
+        renderManageUI();
+        if (manageMsgEl) manageMsgEl.textContent = ST("d_manageDeleted", { name: name });
+      }
+      var manageSearchTimer = null;
+      if (manageSearchInput) manageSearchInput.addEventListener("input", function () {
+        var input = this;
+        if (manageSearchTimer) clearTimeout(manageSearchTimer);
+        manageSearchTimer = setTimeout(function () {
+          manageQuery = input.value;
+          manageShowMax = 100;
+          renderManageUI();
+        }, 200);
+      });
+      var manageDeleteDoBtn = document.getElementById("manageDeleteDoBtn");
+      if (manageDeleteDoBtn) manageDeleteDoBtn.addEventListener("click", function () {
+        if (manageDeleteId != null) deleteCollectedWord(manageDeleteId);
+      });
+      var manageDeleteCancelBtn = document.getElementById("manageDeleteCancelBtn");
+      if (manageDeleteCancelBtn) manageDeleteCancelBtn.addEventListener("click", function () {
+        manageDeleteId = null;
+        if (manageConfirmEl) manageConfirmEl.hidden = true;
+      });
+
       /* ===== 第3弾: ことばのおはなばたけ ===== */
       var gardenEl = document.getElementById("gardenEl");
       var gardenBody = document.getElementById("gardenBody");
-      var GARDEN_FLOWERS = ["🌸", "🌷", "🌼", "🌻", "🌺", "🌹", "💐", "🌱", "🍀", "🌾"];
+      var GARDEN_FLOWERS = ["🌸", "🌷", "🌹", "🌺", "🌻", "🌼"];
       var GARDEN_MILES = [10, 30, 50, 100, 200, 300, 500, 700, 1000, 1500, 2000, 3000, 5000, 8000, 12000, 20000, 30000];
       var GARDEN_SPECIAL = ["🌻", "🌹", "💐", "🌈", "🦋", "🐝", "🌟", "🎀", "👑", "🏆", "🌸", "🌷", "🌼", "🌺", "🍀", "✨", "🎉"];
+      /* ===== おはなばたけの成長（発展）の見せ方 =====
+         集めた数 n と、いまの語彙範囲で届く節目（GARDEN_MILES のうち scopeCount
+         以下のもの）から成長段階 1〜7 を決める。段階の区切りは節目の並びに重ね、
+         段階7は「範囲内で届く一番大きい節目」（満開スタンプ gardenFull の条件と
+         同じ数）にする。節目と節目の間も地面の種→芽→葉→花の割合が少しずつ
+         変わるよう、連続値 S（1〜7）で次の段階の絵の混ぜ具合を決める。
+         使う絵は昔からある絵文字だけ（蓮・ヒヤシンス、新しめの虫は使わない）。
+         種そのものの絵文字はないので 🌰 で代用する。端末で描けない絵は
+         emojiSupported で判定し、既存の代替の末尾（✨）に落とす。
+         地面に並ぶ数（表示上限120＋「ぜんぶで Nこ」注記）と、節目チップ・
+         満開スタンプ・節目到達日の記録は従来どおり変えない */
+      var GARDEN_PALETTES = [
+        ["🌰"],
+        ["🌰", "🌱", "🌱", "🌰", "🌱"],
+        ["🌱", "🌿", "🌱", "🌿", "🌿"],
+        ["🌿", "🌸", "🌷", "🌿", "🌸", "🌷"],
+        ["🌿", "🌸", "🌷", "🌹", "🌺", "🌻", "🌼"],
+        GARDEN_FLOWERS,
+        GARDEN_FLOWERS
+      ];
+      var GARDEN_STAGE_TEXT = [
+        { label: "たねの はたけ", sub: "たねが ねむっているよ。ことばを あつめると めが でるよ。" },
+        { label: "めが でたよ", sub: "ちいさな めが でてきたよ。" },
+        { label: "わかばの はたけ", sub: "わかばが ひろがって、てんとうむしと あおむしが あそびに きたよ。" },
+        { label: "さきはじめた はたけ", sub: "おはなが さきはじめて、ちょうちょと ありが あそびに きたよ。" },
+        { label: "はな いっぱいの はたけ", sub: "いろいろな おはなが さいたよ。みつばちと かたつむりも いるよ。" },
+        { label: "きの ある はたけ", sub: "おくに おおきな きが そだったよ。" },
+        { label: "まんかいの はたけ", sub: "にじが かかったよ。おはなばたけ まんかい！" }
+      ];
+      function gardenSafeEmoji(e) { return emojiSupported(e) ? e : "✨"; }
+      /* 成長段階: reach=範囲内で届く節目、full=その最大値（満開の数）、
+         reached=すでに届いた節目の数、S=段階の連続値（1〜7） */
+      function gardenStageInfo(n) {
+        var cap = 0;
+        try { cap = scopeCount(); } catch (err) { cap = 0; }
+        var reach = [];
+        for (var i = 0; i < GARDEN_MILES.length; i++) { if (GARDEN_MILES[i] <= cap) reach.push(GARDEN_MILES[i]); }
+        var R = reach.length;
+        var full = R ? reach[R - 1] : 0;
+        var kr = 0;
+        for (var j = 0; j < R; j++) { if (n >= reach[j]) kr++; }
+        var S = 1;
+        if (R > 0) {
+          var prev = kr > 0 ? reach[kr - 1] : 0;
+          var nxt = kr < R ? reach[kr] : null;
+          var frac = nxt == null ? 1 : (nxt > prev ? (n - prev) / (nxt - prev) : 0);
+          if (frac < 0) frac = 0;
+          if (frac > 1) frac = 1;
+          S = 1 + ((kr + frac) / R) * 6;
+          if (full > 0 && n >= full) S = 7;
+          if (S > 7) S = 7;
+          if (S < 1) S = 1;
+        }
+        var stage = Math.floor(S);
+        if (stage < 1) stage = 1;
+        if (stage > 7) stage = 7;
+        if (full > 0 && n >= full) stage = 7;
+        return { stage: stage, S: S, reach: reach, full: full, reached: kr };
+      }
+      /* 並びが再描画のたびに変わらないよう、位置から決まる決定的な疑似乱数 */
+      function gardenHash(i, salt) {
+        var x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      }
+      function gardenGroundEmoji(i, S) {
+        var base = Math.floor(S) - 1;
+        if (base < 0) base = 0;
+        if (base > 6) base = 6;
+        var frac = S - Math.floor(S);
+        var pal = GARDEN_PALETTES[base];
+        if (base < 6 && gardenHash(i, 1) < frac) pal = GARDEN_PALETTES[base + 1];
+        var idx = Math.floor(gardenHash(i, 2) * pal.length);
+        if (idx >= pal.length) idx = pal.length - 1;
+        return gardenSafeEmoji(pal[idx]);
+      }
+      /* 段階ごとに遊びに来る生き物（累積）。昔からある絵文字だけを使う:
+         段階3=てんとうむし・あおむし、段階4=ちょうちょ・あり、
+         段階5=みつばち・かたつむり（＋水滴のきらめきは buildGardenScene で付ける） */
+      function gardenVisitors(stage) {
+        var v = [];
+        if (stage >= 3) v.push({ e: "🐞", name: "てんとうむし" }, { e: "🐛", name: "あおむし" });
+        if (stage >= 4) v.push({ e: "🦋", name: "ちょうちょ" }, { e: "🐜", name: "あり" });
+        if (stage >= 5) v.push({ e: "🐝", name: "みつばち" }, { e: "🐌", name: "かたつむり" });
+        return v;
+      }
+      /* 花畑の景色を組み立てる（本体・子供用きろく共用）。
+         空（段階7で虹）／奥の木（段階6〜）／地面（集めた数だけ、種→芽→葉→花）／
+         生き物の行、の順に重ねる。地面の数は従来どおり min(n, 120) */
+      function buildGardenScene(n) {
+        var info = gardenStageInfo(n);
+        var scene = document.createElement("div");
+        scene.className = "garden-scene";
+        if (info.stage >= 7) {
+          var sky = document.createElement("div");
+          sky.className = "garden-sky";
+          sky.setAttribute("aria-hidden", "true");
+          sky.textContent = gardenSafeEmoji("🌈");
+          scene.appendChild(sky);
+        }
+        var field = document.createElement("div");
+        field.className = "garden-field garden-field-scene";
+        if (info.stage >= 6) {
+          var trees = document.createElement("div");
+          trees.className = "garden-trees";
+          trees.setAttribute("aria-hidden", "true");
+          var treeSet = info.stage >= 7 ? ["🌳", "🌲", "🌳", "🌲", "🌳"] : ["🌳", "🌲", "🌳"];
+          treeSet.forEach(function (te) {
+            var ts = document.createElement("span");
+            ts.textContent = gardenSafeEmoji(te);
+            trees.appendChild(ts);
+          });
+          field.appendChild(trees);
+        }
+        var ground = document.createElement("div");
+        ground.className = "garden-ground";
+        ground.setAttribute("aria-hidden", "true");
+        var show = Math.min(n, 120);
+        if (!show) {
+          for (var z = 0; z < 5; z++) {
+            var zs = document.createElement("span");
+            zs.className = "garden-flower";
+            zs.textContent = gardenSafeEmoji("🌰");
+            ground.appendChild(zs);
+          }
+        } else {
+          for (var i = 0; i < show; i++) {
+            var f = document.createElement("span");
+            f.className = "garden-flower";
+            f.textContent = gardenGroundEmoji(i, info.S);
+            ground.appendChild(f);
+          }
+        }
+        field.appendChild(ground);
+        var vis = gardenVisitors(info.stage);
+        if (vis.length || info.stage >= 5) {
+          var vrow = document.createElement("div");
+          vrow.className = "garden-visitors";
+          var names = [];
+          vis.forEach(function (v) {
+            var vs = document.createElement("span");
+            vs.setAttribute("aria-hidden", "true");
+            vs.textContent = gardenSafeEmoji(v.e);
+            vrow.appendChild(vs);
+            names.push(v.name);
+          });
+          if (info.stage >= 5) {
+            for (var d = 0; d < 2; d++) {
+              var ds = document.createElement("span");
+              ds.setAttribute("aria-hidden", "true");
+              ds.textContent = gardenSafeEmoji("💧");
+              vrow.appendChild(ds);
+            }
+          }
+          if (names.length) vrow.setAttribute("aria-label", "あそびに きた なかま: " + names.join("、"));
+          field.appendChild(vrow);
+        }
+        scene.appendChild(field);
+        var lab = document.createElement("p");
+        lab.className = "garden-stage-label";
+        lab.textContent = GARDEN_STAGE_TEXT[info.stage - 1].label;
+        scene.appendChild(lab);
+        var sub = document.createElement("p");
+        sub.className = "garden-stage-sub";
+        sub.textContent = GARDEN_STAGE_TEXT[info.stage - 1].sub;
+        scene.appendChild(sub);
+        return scene;
+      }
       function renderGarden() {
         if (!gardenBody) return;
         gardenBody.innerHTML = "";
         var n = collectedScopeCount();
+        var gInfo = gardenStageInfo(n);
         var info = document.createElement("p");
         info.className = "garden-count";
-        info.textContent = "あつめた ことば " + fmt(n) + "こ。おはなが " + fmt(n) + "こ さいたよ！";
+        if (!n) info.textContent = "まだ ことばを あつめていないよ。たねが まっているよ。";
+        else if (gInfo.stage <= 1) info.textContent = "あつめた ことば " + fmt(n) + "こ。たねが " + fmt(n) + "こ あるよ！";
+        else if (gInfo.stage === 2) info.textContent = "あつめた ことば " + fmt(n) + "こ。めが " + fmt(n) + "こ でたよ！";
+        else if (gInfo.stage === 3) info.textContent = "あつめた ことば " + fmt(n) + "こ。わかばが " + fmt(n) + "こ ひろがったよ！";
+        else info.textContent = "あつめた ことば " + fmt(n) + "こ。おはなが " + fmt(n) + "こ さいたよ！";
         gardenBody.appendChild(info);
-        var field = document.createElement("div");
-        field.className = "garden-field";
-        var show = Math.min(n, 120);
-        for (var i = 0; i < show; i++) {
-          var f = document.createElement("span");
-          f.className = "garden-flower";
-          f.textContent = GARDEN_FLOWERS[i % GARDEN_FLOWERS.length];
-          field.appendChild(f);
-        }
-        if (!show) {
-          var none = document.createElement("p");
-          none.className = "garden-none";
-          none.textContent = "まだ おはなは ないよ。ことばを あつめると さくよ。";
-          field.appendChild(none);
-        }
-        gardenBody.appendChild(field);
+        gardenBody.appendChild(buildGardenScene(n));
         if (n > 120) {
           var more = document.createElement("p");
           more.className = "garden-note2";
@@ -11400,7 +12252,8 @@
         { k: "oto", label: "おととことば", note: "本物の録音の音を聞いて言葉と合わせる神経衰弱（えあわせ）と、音を聞いて合うカードを選ぶ聞き取りで遊べます。そろった言葉は、ずかんに集まります。", noteKey: "d_featNoteOto" },
         { k: "tanken", label: "ことばたんけん", note: "場面に合う言葉を集める探検の遊びです。集めた言葉は、ずかんに集まります。", noteKey: "d_featNoteTanken" },
         { k: "moji", label: "もじあそび（あなうめ・ことば みっけ）", note: "抜けた文字を当てる・言葉を探す、の2種類で遊べる文字の遊びです。", noteKey: "d_featNoteMoji" },
-        { k: "narabe", label: "ごじゅうおん ならべ", note: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。", noteKey: "d_featNoteNarabe" }
+        { k: "narabe", label: "ごじゅうおん ならべ", note: "五十音の行の文字を順番に並べる遊びです。行がそろうと、その行の文字を含む言葉のカードが出て、ずかんに集まります。", noteKey: "d_featNoteNarabe" },
+        { k: "naani", label: "なあに？（声に出して言う）", note: "大きな絵を見て、その言葉を声に出して言う遊びです。そばで聞いている大人が「いえたね」ボタンを押すと、声に出して言えた記録が保護者レポートの「であいの深さ」に残ります。押さなくても、そのまま次の言葉へ進んで遊べます。", noteKey: "d_featNoteNaani" }
       ];
       function applyFeatures() {
         FEATURE_DEFS.forEach(function (d) {
@@ -11423,6 +12276,7 @@
         if (!features.tanken && typeof tankenEl !== "undefined" && tankenEl) tankenEl.hidden = true;
         if (!features.moji && typeof mojiEl !== "undefined" && mojiEl) mojiEl.hidden = true;
         if (!features.narabe && typeof narabeEl !== "undefined" && narabeEl) narabeEl.hidden = true;
+        if (!features.naani && typeof naaniEl !== "undefined" && naaniEl) naaniEl.hidden = true;
         if (!features.favboard && typeof favBoardMode !== "undefined" && favBoardMode && typeof setFavBoard === "function") setFavBoard(false);
         /* れんそうをオフにしたら盤面は使えないので、盤面を開いていたらホームへ戻す
            （ホーム画面側のスクリプトが読み込まれる前は showHomeScreen が無いので何もしない） */
@@ -11516,6 +12370,7 @@
           });
         }
         restorePlayCounts(rec.playCounts);   /* 累積回数（記録が無い言葉は1回から始める） */
+        restoreDepthSig(rec.depth);   /* であいの深さの内部信号（記録が無い言葉は信号なし） */
         saidFirst = {};
         if (rec.saidFirst && typeof rec.saidFirst === "object" && !Array.isArray(rec.saidFirst)) {
           Object.keys(rec.saidFirst).forEach(function (k) {
@@ -11783,6 +12638,8 @@
         }
         /* 遊んだ累積回数（記録が無い言葉は1回から始める） */
         restorePlayCounts(loadedSave.playCounts);
+        /* であいの深さの内部信号（記録が無い言葉は信号なしとして扱う） */
+        restoreDepthSig(loadedSave.depth);
         /* 「はじめて言えた」記録 */
         saidFirst = {};
         if (loadedSave.saidFirst && typeof loadedSave.saidFirst === "object" && !Array.isArray(loadedSave.saidFirst)) {
@@ -12390,6 +13247,9 @@
         if (hantaiLock || !hantaiPair) return;
         var toId = hantaiPair[1 - hantaiFrom];
         var fromId = hantaiPair[hantaiFrom];
+        /* ロックの仕組み上、ここを通るのは各問題の最初の選択だけ。その選択を
+           内部信号に記録する（表示・音声は従来どおり変えない） */
+        noteFirstPick(toId, "antonym", id === toId);
         speak(WORDS[id].h);
         hantaiLock = true;
         if (id === toId) {
@@ -12483,6 +13343,7 @@
       var shiriUsed = {};         /* いまの列で使った言葉（同じ列では繰り返さない） */
       var shiriMode = "start";    /* start=最初の言葉を選ぶ / play=つなげる / restart=続きがなく別の言葉から始める */
       var shiriLock = false;
+      var shiriTriedRound = false;   /* この回で「最初の選択」を内部記録済みか（であいの深さ用） */
       var SHIRI_SMALL = { "ぁ": "あ", "ぃ": "い", "ぅ": "う", "ぇ": "え", "ぉ": "お", "ゃ": "や", "ゅ": "ゆ", "ょ": "よ", "ゎ": "わ", "っ": "つ" };
       var SHIRI_DAKU = { "が": "か", "ぎ": "き", "ぐ": "く", "げ": "け", "ご": "こ", "ざ": "さ", "じ": "し", "ず": "す", "ぜ": "せ", "ぞ": "そ", "だ": "た", "ぢ": "ち", "づ": "つ", "で": "て", "ど": "と", "ば": "は", "び": "ひ", "ぶ": "ふ", "べ": "へ", "ぼ": "ほ", "ぱ": "は", "ぴ": "ひ", "ぷ": "ふ", "ぺ": "へ", "ぽ": "ほ", "ゔ": "う" };
       var SHIRI_VOWEL_ROWS = ["あかさたなはまやらわ", "いきしちにひみり", "うくすつぬふむゆる", "えけせてねへめれ", "おこそとのほもよろを"];
@@ -12638,6 +13499,7 @@
       }
       function shiriRenderRound(msg, speakText) {
         shiriLock = false;
+        shiriTriedRound = false;
         renderShiriChain();
         var curBox = document.getElementById("shiriCurrent");
         var promptEl = document.getElementById("shiriPrompt");
@@ -12690,6 +13552,12 @@
         if (shiriLock) return;
         if (shiriMode !== "play") { shiriStartWith(id); return; }
         var curId = shiriChain[shiriChain.length - 1];
+        /* この回の最初の選択が正しくつながる言葉だったら、その言葉について
+           内部信号に記録する（表示・音声は従来どおり変えない） */
+        if (!shiriTriedRound) {
+          shiriTriedRound = true;
+          if (shiriCanFollow(curId, id)) noteFirstPick(id, "shiritori", true);
+        }
         if (shiriCanFollow(curId, id)) {
           shiriLock = true;
           btn.classList.add("good");
@@ -12849,6 +13717,7 @@
       /* 遊んだ言葉を図鑑に集める（しりとり等と同じ記録の付け方） */
       function nazoriCollect(id) {
         if (id == null || !isValidId(id)) return;
+        noteDepthGame(id, "nazori");   /* 出会った遊びの種類（内部信号） */
         var wasNewPlay = !collectedSet[id];
         if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
@@ -13407,6 +14276,13 @@
          独立に鳴らす。端末の無音モード等の扱いはブラウザ標準に従う。 */
       var otoEl = document.getElementById("otoEl");
       var OTO_VACUUM_ART = '<svg viewBox="0 0 80 80" width="54" height="54" aria-hidden="true"><path d="M55 10c7 3 9 10 6 17L47 42" fill="none" stroke="#718391" stroke-width="6" stroke-linecap="round"/><path d="M47 40 30 58" stroke="#37485a" stroke-width="6" stroke-linecap="round"/><rect x="12" y="52" width="46" height="17" rx="8.5" fill="#d64e49"/><circle cx="23" cy="71" r="6" fill="#37485a"/><circle cx="49" cy="71" r="6" fill="#37485a"/><path d="M20 60h14" stroke="#ffb08b" stroke-width="3.5" stroke-linecap="round"/></svg>';
+      /* ぼんご専用イラスト: 🪘 は新しい絵文字で描けない端末が多く、カテゴリアイコン🎹への
+         差し替えでは ぴあの と絵が重なってしまうため、そうじきと同じ自作SVGで常時出す。
+         大小2つの手太鼓（ボンゴ）と、その上からたたく両手 */
+      var OTO_BONGO_ART = '<svg viewBox="0 0 80 80" width="54" height="54" aria-hidden="true"><path d="M41 41 L44 66 Q44.5 71 49 71 L62 71 Q66.5 71 67 66 L70 41 Z" fill="#a85a24" stroke="#37485a" stroke-width="3" stroke-linejoin="round"/><path d="M9 33 L13 66 Q13.6 71 19 71 L33 71 Q38.4 71 39 66 L43 33 Z" fill="#c96f2e" stroke="#37485a" stroke-width="3" stroke-linejoin="round"/><path d="M11.6 48 L40.4 48" stroke="#8a4d1c" stroke-width="3"/><path d="M42.8 54 L68.2 54" stroke="#6f3f16" stroke-width="3"/><ellipse cx="26" cy="33" rx="17" ry="6" fill="#f6e3c1" stroke="#37485a" stroke-width="3"/><ellipse cx="55.5" cy="41" rx="14.5" ry="5.5" fill="#f6e3c1" stroke="#37485a" stroke-width="3"/><circle cx="18" cy="14" r="6.5" fill="#f2c094" stroke="#37485a" stroke-width="3"/><circle cx="62" cy="23" r="6.5" fill="#f2c094" stroke="#37485a" stroke-width="3"/></svg>';
+      /* まらかす専用イラスト: 実物の絵文字が無いため🎵で代用していたのをやめ、
+         自作SVGで常時出す。高さをずらして並べた2本のマラカス（赤と橙、水玉模様） */
+      var OTO_MARACAS_ART = '<svg viewBox="0 0 80 80" width="54" height="54" aria-hidden="true"><path d="M71 8 q5 7 3 15" fill="none" stroke="#e8873a" stroke-width="3.5" stroke-linecap="round"/><path d="M9 14 q-4 7 -1 14" fill="none" stroke="#d64e49" stroke-width="3.5" stroke-linecap="round"/><rect x="50.5" y="45" width="7" height="25" rx="3.5" fill="#b07a3f" stroke="#37485a" stroke-width="3"/><ellipse cx="54" cy="31" rx="13" ry="16" fill="#e8873a" stroke="#37485a" stroke-width="3"/><circle cx="49" cy="27" r="2.6" fill="#ffd9a0"/><circle cx="59" cy="34" r="2.6" fill="#ffd9a0"/><circle cx="54" cy="21" r="2.6" fill="#ffd9a0"/><rect x="22.5" y="39" width="7" height="25" rx="3.5" fill="#b07a3f" stroke="#37485a" stroke-width="3"/><ellipse cx="26" cy="25" rx="13" ry="16" fill="#d64e49" stroke="#37485a" stroke-width="3"/><circle cx="21" cy="21" r="2.6" fill="#ffb08b"/><circle cx="31" cy="28" r="2.6" fill="#ffb08b"/><circle cx="26" cy="15" r="2.6" fill="#ffb08b"/></svg>';
       var OTO_CATS = [
         { name: "どうぶつ", icon: "🐾", items: [
           { h: "いぬ", e: "🐶", ono: "わん わん", f: "dog.mp3" },
@@ -13454,15 +14330,30 @@
           { h: "ぴあの", e: "🎹", ono: "ぽろん", f: "piano.mp3" },
           { h: "ぎたー", e: "🎸", ono: "じゃらん", f: "guitar.mp3" },
           { h: "らっぱ", e: "🎺", ono: "ぱぱぱ", f: "trumpet.mp3" },
-          { h: "まらかす", e: "🎵", ono: "しゃか しゃか", f: "maracas.mp3" },
-          { h: "ぼんご", e: "🪘", ono: "とん とん", f: "bongo.mp3" },
+          { h: "まらかす", e: "", art: OTO_MARACAS_ART, ono: "しゃか しゃか", f: "maracas.mp3" },
+          { h: "ぼんご", e: "", art: OTO_BONGO_ART, ono: "とん とん", f: "bongo.mp3" },
           { h: "ばいおりん", e: "🎻", ono: "きい きい", f: "violin.mp3" }
         ] }
       ];
-      /* おととことばの絵も、端末で描けないものは分野アイコン（それも描けなければ🔊）に差し替える */
+      /* おととことばの絵も、端末で描けないものは分野アイコン（それも使えなければ
+         🔊などの汎用の絵）に差し替える。ただし差し替え先が同じカテゴリ内の別の
+         言葉の絵と同一だと、絵合わせで同じ絵が2枚出て言葉と絵が合わなくなる
+         （例: しぜん の分野アイコン🌧️は あめ の絵そのもの。がっき の🎹は ぴあの の絵）。
+         そのため、カテゴリ内で実際に表示される絵と重ならないものだけを差し替え先にする */
       OTO_CATS.forEach(function (cat) {
+        var used = {};   /* このカテゴリで実際に表示される絵（重なり防止の記録） */
+        cat.items.forEach(function (it) { if (it.e) used[it.e] = 1; });
         cat.items.forEach(function (it) {
-          if (it.e) it.e = emojiSupported(it.e) ? it.e : (emojiSupported(cat.icon) ? cat.icon : "🔊");
+          if (!it.e || emojiSupported(it.e)) return;
+          if (emojiSupported(cat.icon) && !used[cat.icon]) it.e = cat.icon;
+          else {
+            var alt = ["🔊", "🎶", "🎵", "✨", "⭐", "❓"];
+            it.e = "🔊";
+            for (var ai = 0; ai < alt.length; ai++) {
+              if (!used[alt[ai]] && emojiSupported(alt[ai])) { it.e = alt[ai]; break; }
+            }
+          }
+          used[it.e] = 1;
         });
       });
       var otoCat = 0;
@@ -13477,6 +14368,7 @@
       var otoLastFile = null;
       var otoListenIdx = null;        /* ききとりの正解の項目番号 */
       var otoListenSolved = false;
+      var otoListenTried = false;     /* この問題で「最初の選択」を内部記録済みか（であいの深さ用） */
       function otoShuffleArr(a) {
         for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
         return a;
@@ -13594,6 +14486,7 @@
       function otoCollect(it) {
         var id = IDX[it.h];
         if (id == null || !isValidId(id)) return;
+        noteDepthGame(id, "oto");   /* 出会った遊びの種類（内部信号） */
         var wasNewPlay = !collectedSet[id];
         if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
@@ -13730,6 +14623,7 @@
         var items = otoItem();
         otoListenIdx = Math.floor(Math.random() * items.length);
         otoListenSolved = false;
+        otoListenTried = false;
         var picks = [otoListenIdx];
         while (picks.length < 3) {
           var r = Math.floor(Math.random() * items.length);
@@ -13757,6 +14651,12 @@
       function otoListenAnswer(pi, btn) {
         if (otoListenSolved || otoEl.hidden) return;
         var it = otoItem()[pi];
+        /* 最初の選択だけを内部信号に記録する（表示・音声は従来どおり変えない） */
+        if (!otoListenTried) {
+          otoListenTried = true;
+          var tId = IDX[otoItem()[otoListenIdx].h];
+          if (tId != null) noteFirstPick(tId, "oto", pi === otoListenIdx);
+        }
         otoPlay(it.f);
         if (pi === otoListenIdx) {
           otoListenSolved = true;
@@ -13879,6 +14779,7 @@
       /* 遊んだ言葉を図鑑に集める（しりとり・おととことば等と同じ記録の付け方） */
       function tankenCollect(id) {
         if (id == null || !isValidId(id)) return;
+        noteDepthGame(id, "tanken");   /* 出会った遊びの種類（内部信号） */
         var wasNewPlay = !collectedSet[id];
         if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
@@ -14110,6 +15011,7 @@
       /* 遊んだ言葉を図鑑に集める（たんけん・おととことば等と同じ記録の付け方） */
       function mojiCollect(id) {
         if (id == null || !isValidId(id)) return;
+        noteDepthGame(id, "moji");   /* 出会った遊びの種類（内部信号） */
         var wasNewPlay = !collectedSet[id];
         if (wasNewPlay) {
           collectedSet[id] = 1; collected.push(id);
@@ -14902,6 +15804,7 @@
       var anaChoices = [];
       var anaSolved = false;
       var anaTried = {};
+      var anaFirstDone = false;   /* この問題で「最初の選択」を内部記録済みか（であいの深さ用） */
       var anaHintShown = false;   /* まちがえたときだけ、絵の下に正解の言葉を出す */
       function anaStart(sayIt) {
         narabeSyncControls();
@@ -14909,6 +15812,7 @@
         anaId = mojiPick(pool, anaId);
         anaSolved = false;
         anaTried = {};
+        anaFirstDone = false;
         anaHintShown = false;
         if (anaId == null) {
           document.getElementById("mojiAnaTarget").innerHTML = "";
@@ -14966,6 +15870,8 @@
         if (anaSolved || anaId == null || mojiEl.hidden) return;
         var h = mojiCleanH(anaId);
         var correct = h.charAt(anaBlank);
+        /* 最初の選択だけを内部信号に記録する（表示・音声は従来どおり変えない） */
+        if (!anaFirstDone) { anaFirstDone = true; noteFirstPick(anaId, "anaume", c === correct); }
         if (c === correct) {
           anaSolved = true;
           sfx("good");
@@ -15817,21 +16723,13 @@
         body.appendChild(playSec);
 
         /* 4. おはなばたけの育ち具合（今の状態を絵で表示。おはなばたけ本体と
-           同じ花・節目の飾りを使い、集めた数に連動させる） */
-        var gardenSec = ckSection("🌷 おはなばたけ", n > 0 ? "あつめた ことばの かずだけ、おはなが さいているよ" : "");
+           同じ景色（buildGardenScene）を使い、集めた数に連動させる） */
+        var gardenSec = ckSection("🌷 おはなばたけ", n > 0 ? "あつめた ことばが ふえると、はたけが そだっていくよ" : "");
         if (!n) {
-          gardenSec.appendChild(ckGuide("ことばを あつめると、おはなが さくよ。\nこれから たのしみだね！"));
+          gardenSec.appendChild(ckGuide("ことばを あつめると、たねが そだって おはなが さくよ。\nこれから たのしみだね！"));
+          gardenSec.appendChild(buildGardenScene(0));
         } else {
-          var field = document.createElement("div");
-          field.className = "garden-field";
-          var showF = Math.min(n, 120);
-          for (var fi = 0; fi < showF; fi++) {
-            var f = document.createElement("span");
-            f.className = "garden-flower";
-            f.textContent = GARDEN_FLOWERS[fi % GARDEN_FLOWERS.length];
-            field.appendChild(f);
-          }
-          gardenSec.appendChild(field);
+          gardenSec.appendChild(buildGardenScene(n));
           if (n > 120) {
             var moreF = document.createElement("p");
             moreF.className = "ck-more";
@@ -15905,6 +16803,7 @@
         var HOME_PLAYS = [
           { k: "rensou", btn: null, icon: "🃏", title: "れんそう", desc: "ことばの カードを タップして、つながる ことばを あつめよう", board: true },
           { k: "quiz", btn: "quizBtn", icon: "👂", title: "ききとりクイズ", desc: "こえを きいて カードを さがそう" },
+          { k: "naani", btn: "naaniBtn", icon: "🗣️", title: "なあに？", desc: "えを みて ことばを こえに だそう" },
           { k: "nazori", btn: "nazoriBtn", icon: "✏️", title: "なぞりがき", desc: "もじを なぞって かこう" },
           { k: "oto", btn: "otoBtn", icon: "🔊", title: "おととことば", desc: "おとと ことばを あわせよう" },
           { k: "tanken", btn: "tankenBtn", icon: "🧭", title: "ことばたんけん", desc: "ばめんに あう ことばを あつめよう" },
@@ -15989,7 +16888,7 @@
            戻る）が先に走り、コース画面がホームの上に開くので、そのまま続けて遊べる。 */
         ["kazuClose", "hantaiClose", "clapClose", "clockClose", "courseClose", "shiritoriClose",
          "nazoriClose", "otoClose", "tankenClose", "mojiClose", "mapClose",
-         "gardenClose", "bedClose", "storyClose", "pickClose", "quizHomeBtn", "zukanClose", "ckirokuClose"].forEach(function (cid) {
+         "gardenClose", "bedClose", "storyClose", "pickClose", "quizHomeBtn", "naaniHomeBtn", "zukanClose", "ckirokuClose"].forEach(function (cid) {
           var el = document.getElementById(cid);
           if (el) el.addEventListener("click", window.showHomeScreen);
         });
